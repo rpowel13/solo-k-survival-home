@@ -28,32 +28,32 @@ const HeroSection = () => {
           </div>
           
           <div className="relative">
-            <div className="bg-white/10 rounded-lg p-6 backdrop-blur-md shadow-[0_20px_50px_rgba(8,28,86,0.5)] border border-white/20 transform hover:scale-[1.01] transition-all duration-300" 
+            <div 
+                className="bg-white rounded-xl p-8 shadow-[0_20px_50px_rgba(8,28,86,0.5)] border-4 border-survival-100 transform hover:scale-[1.01] transition-all duration-300" 
                 style={{ 
-                  background: "linear-gradient(145deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%)",
-                  boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 20px 50px rgba(8, 28, 86, 0.5)"
+                  boxShadow: "0 20px 50px rgba(8, 28, 86, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.3)"
                 }}>
-              <h3 className="text-2xl font-bold text-white mb-4">Why Professionals Choose Us</h3>
-              <ul className="space-y-3">
+              <h3 className="text-2xl font-bold text-survival-800 mb-6">Why Professionals Choose Us</h3>
+              <ul className="space-y-4">
                 <li className="flex items-start">
-                  <Check className="h-5 w-5 text-white mr-2 mt-1 flex-shrink-0" />
-                  <span className="text-gray-200">Specialized expertise in self-directed retirement plans</span>
+                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Specialized expertise in self-directed retirement plans</span>
                 </li>
                 <li className="flex items-start">
-                  <Check className="h-5 w-5 text-white mr-2 mt-1 flex-shrink-0" />
-                  <span className="text-gray-200">Tailored solutions for entrepreneurs and first responders</span>
+                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Tailored solutions for entrepreneurs and first responders</span>
                 </li>
                 <li className="flex items-start">
-                  <Check className="h-5 w-5 text-white mr-2 mt-1 flex-shrink-0" />
-                  <span className="text-gray-200">Personalized support throughout the entire process</span>
+                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Personalized support throughout the entire process</span>
                 </li>
                 <li className="flex items-start">
-                  <Check className="h-5 w-5 text-white mr-2 mt-1 flex-shrink-0" />
-                  <span className="text-gray-200">Transparent pricing with no hidden fees</span>
+                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Transparent pricing with no hidden fees</span>
                 </li>
                 <li className="flex items-start">
-                  <Check className="h-5 w-5 text-white mr-2 mt-1 flex-shrink-0" />
-                  <span className="text-gray-200">Educational resources to help you make informed decisions</span>
+                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                  <span className="text-gray-700 font-medium">Educational resources to help you make informed decisions</span>
                 </li>
               </ul>
             </div>
