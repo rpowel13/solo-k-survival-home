@@ -17,15 +17,24 @@ const PrequalificationBanner = () => {
           <p className="text-xl mb-8 text-gray-700">
             Answer a few quick questions to determine if you're eligible for the significant tax advantages and higher contribution limits of a Solo 401k plan.
           </p>
-          <Link to="/services/solo-401k#prequalification">
-            <Button 
-              size="lg" 
-              className="bg-survival-600 hover:bg-survival-700 shadow-md hover:shadow-lg transition-all"
-            >
-              Take the Eligibility Quiz
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="bg-survival-600 hover:bg-survival-700 shadow-md hover:shadow-lg transition-all"
+            onClick={() => {
+              const quizSection = document.getElementById('prequalification');
+              if (quizSection) {
+                quizSection.scrollIntoView({ behavior: 'smooth' });
+                // Also trigger the opening of the collapsible
+                const collapsibleTrigger = quizSection.querySelector('button');
+                if (collapsibleTrigger) {
+                  collapsibleTrigger.click();
+                }
+              }
+            }}
+          >
+            Take the Eligibility Quiz
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </div>
     </section>

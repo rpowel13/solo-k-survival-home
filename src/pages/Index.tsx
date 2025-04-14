@@ -9,6 +9,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import MetalPriceBanner from "@/components/MetalPriceBanner";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
+import PrequalificationSection from "@/components/solo401k/PrequalificationSection";
 import { Separator } from "@/components/ui/separator";
 
 const Index = () => {
@@ -28,6 +29,10 @@ const Index = () => {
         </div>
         
         <PrequalificationBanner />
+        
+        <div className="container mx-auto px-4">
+          <PrequalificationSection />
+        </div>
         
         <div className="py-12 bg-gradient-to-b from-white to-gray-50">
           <ComparisonSection />
