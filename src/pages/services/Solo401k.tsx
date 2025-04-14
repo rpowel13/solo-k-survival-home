@@ -44,7 +44,7 @@ const Solo401k = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Contribute up to $69,000 annually (2025), far exceeding traditional IRA limits, allowing you to accelerate your retirement savings.</p>
+                <p>Contribute up to $70,000 annually (2025), far exceeding traditional IRA limits, allowing you to accelerate your retirement savings.</p>
               </CardContent>
             </Card>
             <Card>

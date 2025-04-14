@@ -1,11 +1,10 @@
-
 import { Check, X } from "lucide-react";
 
 const ComparisonSection = () => {
   const comparisonData = [
     {
       feature: "2025 Contribution Limit",
-      solo401k: "$69,000",
+      solo401k: "$70,000",
       sepIra: "$66,000",
       simpleIra: "$30,500",
       traditionalIra: "$7,000",
