@@ -45,7 +45,7 @@ const Contact = () => {
                 <iframe 
                   src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
                   width="100%" 
-                  height="330" 
+                  height="500" 
                   scrolling="no" 
                   frameBorder="0"
                   title="Contact Form for Survival 401k"
