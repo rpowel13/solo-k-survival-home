@@ -9,19 +9,11 @@ type SectionHeadingProps = {
   highlightColor?: string;
 };
 
-/**
- * A reusable component for section headings that highlights specific terms with custom styling
- * 
- * @param children - The heading text content
- * @param className - Additional CSS classes
- * @param highlightTerm - The term to highlight (default: "401(k)" or "401k")
- * @param highlightColor - The color class for the highlighted term (default: text-[#F2FCE2])
- */
 const SectionHeading: React.FC<SectionHeadingProps> = ({
   children,
   className,
   highlightTerm = "401(k)",
-  highlightColor = "text-[#F2FCE2]"
+  highlightColor = "text-[#c9d9ff] font-bold" // Updated color and added font-bold
 }) => {
   if (typeof children !== 'string') {
     return <h2 className={className}>{children}</h2>;
