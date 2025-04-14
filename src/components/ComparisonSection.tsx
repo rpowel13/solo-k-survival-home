@@ -20,6 +20,14 @@ const ComparisonSection = () => {
       highlight: false
     },
     {
+      feature: "Total 2025 Contribution (Age 50+)",
+      solo401k: "$77,500",
+      sepIra: "$66,000",
+      simpleIra: "$34,000", 
+      traditionalIra: "$8,000",
+      highlight: true
+    },
+    {
       feature: "Roth Option Available",
       solo401k: <Check className="h-5 w-5 text-green-600 mx-auto" />,
       sepIra: <X className="h-5 w-5 text-red-500 mx-auto" />,
