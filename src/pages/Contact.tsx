@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Mail, Phone, MessageSquare, Calendar } from "lucide-react";
 import Header from "@/components/Header";
@@ -94,7 +93,7 @@ const Contact = () => {
               
               <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
                 <DialogContent 
-                  className="sm:max-w-[700px] md:max-w-[800px] p-6" 
+                  className="sm:max-w-[700px] md:max-w-[800px] p-6 z-50" 
                 >
                   <DialogHeader>
                     <DialogTitle>Schedule a Free Consultation</DialogTitle>

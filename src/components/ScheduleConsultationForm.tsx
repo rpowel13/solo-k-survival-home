@@ -191,7 +191,7 @@ const ScheduleConsultationForm = () => {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0 z-[100]" align="start">
                     <Calendar
                       mode="single"
                       selected={field.value}
@@ -218,7 +218,7 @@ const ScheduleConsultationForm = () => {
                       <SelectValue placeholder="Select a time" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="z-[100]">
                     {timeSlots.map((time) => (
                       <SelectItem key={time} value={time}>
                         {time}
