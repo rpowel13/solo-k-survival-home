@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Mail, Phone, MessageSquare } from "lucide-react";
 import Header from "@/components/Header";
@@ -9,6 +8,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, Di
 
 const Contact = () => {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -60,14 +60,17 @@ const Contact = () => {
                     Fill out our contact form and one of our retirement specialists will get back to you promptly.
                   </p>
                   
-                  <Dialog>
+                  <Dialog open={isContactFormOpen} onOpenChange={setIsContactFormOpen}>
                     <DialogTrigger asChild>
                       <Button className="w-full flex items-center gap-2" size="lg">
                         <MessageSquare className="h-5 w-5" />
                         Contact Us Now
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px] p-0 h-[600px]">
+                    <DialogContent 
+                      className="sm:max-w-[600px] p-0 overflow-hidden"
+                      style={{ height: '600px' }}
+                    >
                       <DialogHeader>
                         <DialogTitle className="sr-only">Contact Form</DialogTitle>
                         <DialogDescription className="sr-only">Fill out the contact form</DialogDescription>
@@ -78,8 +81,8 @@ const Contact = () => {
                         height="100%" 
                         frameBorder="0"
                         title="Contact Form for Survival 401k"
-                        className="border-0 rounded-md"
-                        scrolling="no"
+                        className="border-0"
+                        style={{ pointerEvents: 'auto', overflow: 'hidden' }}
                       />
                     </DialogContent>
                   </Dialog>
@@ -106,7 +109,10 @@ const Contact = () => {
               </Button>
               
               <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
-                <DialogContent className="sm:max-w-[600px] p-0 h-[600px]">
+                <DialogContent 
+                  className="sm:max-w-[600px] p-0 overflow-hidden" 
+                  style={{ height: '600px' }}
+                >
                   <DialogHeader>
                     <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
                     <DialogDescription className="sr-only">Schedule a free consultation with our specialists</DialogDescription>
@@ -117,8 +123,8 @@ const Contact = () => {
                     height="100%" 
                     frameBorder="0"
                     title="Schedule a Consultation with Survival 401k"
-                    className="border-0 rounded-md"
-                    scrolling="no"
+                    className="border-0"
+                    style={{ pointerEvents: 'auto', overflow: 'hidden' }}
                   />
                 </DialogContent>
               </Dialog>
