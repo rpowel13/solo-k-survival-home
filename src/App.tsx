@@ -16,6 +16,7 @@ import Solo401kApplication from "./pages/applications/Solo401kApplication";
 import LLCApplication from "./pages/applications/LLCApplication";
 import FirstResponderApplication from "./pages/applications/FirstResponderApplication";
 import AlternativeInvestmentsApplication from "./pages/applications/AlternativeInvestmentsApplication";
+import Solo401kPayment from "./pages/payments/Solo401kPayment";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/apply/llc" element={<LLCApplication />} />
           <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
           <Route path="/apply/alternative-investments" element={<AlternativeInvestmentsApplication />} />
+          <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

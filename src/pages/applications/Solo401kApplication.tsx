@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -18,6 +19,8 @@ import FormHeader from '@/components/solo401k/FormHeader';
 
 const Solo401kApplication = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  
   const form = useForm<SoloFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,9 +71,24 @@ const Solo401kApplication = () => {
       
       toast({
         title: "Application Submitted",
-        description: "We've received your Solo 401k application. Our team will contact you shortly.",
+        description: "We've received your Solo 401k application. Redirecting to payment...",
       });
+      
+      // Store application data in sessionStorage for the payment page
+      sessionStorage.setItem('solo401k_application', JSON.stringify({
+        name: `${values.firstName} ${values.lastName}`,
+        email: values.email,
+        applicationDate: new Date().toISOString()
+      }));
+      
+      // Reset form and redirect to payment page
       form.reset();
+      
+      // Redirect to payment page after a short delay
+      setTimeout(() => {
+        navigate('/payment/solo-401k');
+      }, 1500);
+      
     } catch (error) {
       console.error("Form submission error:", error);
       toast({
