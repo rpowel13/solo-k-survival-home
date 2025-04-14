@@ -29,9 +29,9 @@ const HeroSection = () => {
           
           <div className="relative">
             <div 
-                className="bg-white rounded-xl p-8 shadow-[0_20px_50px_rgba(8,28,86,0.5)] border-4 border-survival-100 transform hover:scale-[1.01] transition-all duration-300" 
+                className="bg-white rounded-xl p-10 shadow-2xl border-8 border-survival-100 transform hover:scale-[1.02] transition-all duration-300" 
                 style={{ 
-                  boxShadow: "0 20px 50px rgba(8, 28, 86, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.3)"
+                  boxShadow: "0 25px 60px rgba(8, 28, 86, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.4)"
                 }}>
               <h3 className="text-2xl font-bold text-survival-800 mb-6">Why Professionals Choose Us</h3>
               <ul className="space-y-4">
