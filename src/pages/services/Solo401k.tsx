@@ -1,0 +1,157 @@
+
+import React from 'react';
+import ServiceLayout from '@/components/ServiceLayout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CheckCircle2 } from 'lucide-react';
+
+const Solo401k = () => {
+  return (
+    <ServiceLayout
+      title="Solo 401k Plans"
+      description="Maximize your retirement savings with a personalized Solo 401k plan designed specifically for self-employed professionals and small business owners."
+    >
+      <div className="space-y-12">
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">What is a Solo 401k?</h2>
+          <div className="prose max-w-none">
+            <p className="text-lg">
+              A Solo 401k, also known as an Individual 401k, is a tax-advantaged retirement plan specifically designed for self-employed individuals and small business owners with no full-time employees (other than a spouse).
+            </p>
+            <p className="mt-4">
+              With a Solo 401k, you can contribute both as the employer and the employee, allowing for significantly higher contribution limits compared to traditional IRAs or even SEP IRAs.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Key Benefits</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                  Higher Contribution Limits
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Contribute up to $69,000 annually (2024), far exceeding traditional IRA limits, allowing you to accelerate your retirement savings.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                  Flexible Investment Options
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Invest in a wide range of assets beyond traditional stocks and bonds, including real estate, precious metals, private equity, and more.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                  Loan Provisions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Access to loan provisions allowing you to borrow up to 50% of your account value (maximum $50,000) for any purpose.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                  Roth Option Available
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Choose between traditional tax-deferred contributions or Roth contributions for tax-free growth and distributions in retirement.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                  Checkbook Control
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Maintain direct control over your retirement funds without requiring custodian approval for investments.</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                  Tax Advantages
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Reduce your current tax liability while building tax-advantaged retirement savings for your future.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Who Qualifies for a Solo 401k?</h2>
+          <div className="prose max-w-none">
+            <p>To qualify for a Solo 401k, you must:</p>
+            <ul className="mt-4 space-y-2">
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Have self-employment income (full-time or part-time)</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Have no full-time employees other than yourself and your spouse</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Generate self-employment income through a sole proprietorship, LLC, partnership, or corporation</span>
+              </li>
+            </ul>
+            <p className="mt-4">
+              Even if you have a full-time job with an employer-sponsored retirement plan, you can still establish a Solo 401k for your side business or freelance income.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Why Choose Survival 401k?</h2>
+          <div className="prose max-w-none">
+            <p className="text-lg">
+              At Survival 401k, we specialize in creating customized Solo 401k plans that provide maximum flexibility and investment options. Our services include:
+            </p>
+            <ul className="mt-4 space-y-2">
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Complete plan documentation and IRS compliance</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Ongoing support and consultation</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Educational resources and investment guidance</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Simplified administration and reporting</span>
+              </li>
+              <li className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                <span>Access to our network of investment professionals</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </ServiceLayout>
+  );
+};
+
+export default Solo401k;
