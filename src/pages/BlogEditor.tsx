@@ -38,12 +38,12 @@ const BlogEditor = () => {
         setIsLoading(true);
         
         // In production, this would fetch from Supabase
-        const { data, error } = await supabase
-          .from<BlogPost>('blog_posts')
+        const result = await supabase
+          .from('blog_posts')
           .eq('slug', slug)
           .single();
         
-        if (error) {
+        if (result.error) {
           toast({
             title: "Post not found",
             description: "The blog post you're trying to edit doesn't exist",
@@ -51,7 +51,7 @@ const BlogEditor = () => {
           });
           navigate("/blog");
         } else {
-          const post = data as BlogPost;
+          const post = result.data as BlogPost;
           setFormData({
             title: post.title,
             slug: post.slug,
@@ -126,16 +126,28 @@ const BlogEditor = () => {
         coverImage: formData.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
         author: formData.author || "Admin",
         authorTitle: formData.authorTitle || "Site Administrator",
-        publishedAt: isEditMode ? new Date().toISOString() : new Date().toISOString(),
+        publishedAt: new Date().toISOString(),
         tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean)
       };
       
       // In production, this would save to Supabase
-      // For now, we'll just simulate a success
       if (isEditMode) {
-        // const { error } = await supabase.from('blog_posts').update(newPost).eq('slug', slug);
+        const result = await supabase
+          .from('blog_posts')
+          .update(newPost)
+          .eq('slug', slug);
+          
+        if (result.error) {
+          throw new Error(result.error.message);
+        }
       } else {
-        // const { error } = await supabase.from('blog_posts').insert(newPost);
+        const result = await supabase
+          .from('blog_posts')
+          .insert(newPost);
+          
+        if (result.error) {
+          throw new Error(result.error.message);
+        }
       }
       
       toast({

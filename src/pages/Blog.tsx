@@ -21,20 +21,20 @@ const Blog = () => {
         setIsLoading(true);
         // In production, this would fetch from Supabase
         // For now, we're using our mock data
-        const { data, error } = await supabase.from<BlogPost>('blog_posts').select();
+        const result = await supabase.from('blog_posts').select();
         
-        if (error) {
+        if (result.error) {
           toast({
             title: "Error fetching blog posts",
-            description: error.message,
+            description: result.error.message,
             variant: "destructive",
           });
         } else {
           // If we have no data yet, use sample data
-          if (!data || data.length === 0) {
+          if (!result.data || result.data.length === 0) {
             setBlogPosts([]);
           } else {
-            setBlogPosts(data as BlogPost[]);
+            setBlogPosts(result.data as BlogPost[]);
           }
         }
       } catch (error) {
