@@ -8,6 +8,7 @@ export const submitContactForm = async (formData: {
   phone?: string;
   subject: string;
   message: string;
+  consent: boolean;
 }) => {
   try {
     const response = await fetch(`${VCITA_BASE_URL}/contact_requests`, {
@@ -25,6 +26,7 @@ export const submitContactForm = async (formData: {
         },
         subject: formData.subject,
         message: formData.message,
+        consent: formData.consent,
         source: window.location.href
       })
     });
