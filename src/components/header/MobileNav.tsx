@@ -31,6 +31,12 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
         <Link to="/apply/alternative-investments" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Alternative Investments</Link>
       </div>
 
+      <div className="border-b pb-2 mb-2">
+        <div className="font-medium mb-2">Payments</div>
+        <Link to="/payment/annual-fee" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Annual Fee ($200)</Link>
+        <Link to="/payment/reinstatement-fee" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Reinstatement Fee ($250)</Link>
+      </div>
+
       <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
       
       <a 

@@ -17,6 +17,8 @@ import LLCApplication from "./pages/applications/LLCApplication";
 import FirstResponderApplication from "./pages/applications/FirstResponderApplication";
 import AlternativeInvestmentsApplication from "./pages/applications/AlternativeInvestmentsApplication";
 import Solo401kPayment from "./pages/payments/Solo401kPayment";
+import AnnualFeePayment from "./pages/payments/AnnualFeePayment";
+import ReinstatementFeePayment from "./pages/payments/ReinstatementFeePayment";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,8 @@ const App = () => (
           <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
           <Route path="/apply/alternative-investments" element={<AlternativeInvestmentsApplication />} />
           <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
+          <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
+          <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,7 +1,8 @@
+
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, DollarSign } from 'lucide-react';
+import { CheckCircle2, DollarSign, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -154,17 +155,51 @@ const Solo401k = () => {
 
         <section>
           <h2 className="text-2xl font-bold mb-6 text-survival-800">Pricing</h2>
-          <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
-            <div className="flex items-center justify-center mb-4">
-              <DollarSign className="h-8 w-8 text-finance-600 mr-2" />
-              <h3 className="text-3xl font-bold text-survival-800">$1,200</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
+              <div className="flex items-center justify-center mb-4">
+                <DollarSign className="h-8 w-8 text-finance-600 mr-2" />
+                <h3 className="text-3xl font-bold text-survival-800">$1,200</h3>
+              </div>
+              <p className="text-lg mb-4 text-gray-600">
+                Comprehensive Solo 401k Plan Documentation and Setup
+              </p>
+              <Link to="/apply/solo-401k">
+                <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
+                  Get Started
+                </Button>
+              </Link>
             </div>
-            <p className="text-lg mb-4 text-gray-600">
-              Comprehensive Solo 401k Plan Documentation and Setup
-            </p>
-            <Link to="/apply/solo-401k">
+            
+            <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
+              <div className="flex items-center justify-center mb-4">
+                <Shield className="h-8 w-8 text-finance-600 mr-2" />
+                <h3 className="text-3xl font-bold text-survival-800">$200</h3>
+              </div>
+              <p className="text-lg mb-2 text-gray-600">
+                Annual Maintenance Fee
+              </p>
+              <p className="text-sm text-gray-500 mb-4">
+                For IRS compliance and unlimited support
+              </p>
+              <Link to="/payment/annual-fee">
+                <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
+                  Pay Annual Fee
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        
+        <section className="bg-gray-50 rounded-lg p-8 shadow-sm">
+          <h2 className="text-2xl font-bold mb-4 text-center text-survival-800">Need to Reinstate Your Plan?</h2>
+          <p className="text-center text-lg mb-6">
+            If your Solo 401k plan needs to be reinstated, we can help you bring it back into good standing.
+          </p>
+          <div className="flex justify-center">
+            <Link to="/payment/reinstatement-fee">
               <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
-                Get Started
+                Pay Reinstatement Fee ($250)
               </Button>
             </Link>
           </div>
