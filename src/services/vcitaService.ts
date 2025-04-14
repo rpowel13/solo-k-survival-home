@@ -1,6 +1,4 @@
 
-import { toast } from "@/components/ui/use-toast";
-
 const VCITA_API_TOKEN = 'a164a3828452ec6a557cb1dc9be8d66743b9b9223cfe0ed02f4cc62a810594b6';
 const VCITA_BASE_URL = 'https://www.vcita.com/api/v1';
 
@@ -12,7 +10,7 @@ export const submitContactForm = async (formData: {
   message: string;
 }) => {
   try {
-    const response = await fetch(`${VCITA_BASE_URL}/contact_form/izk040b42jnjcf3c/submit`, {
+    const response = await fetch(`${VCITA_BASE_URL}/contact_requests`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,6 +29,8 @@ export const submitContactForm = async (formData: {
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('VCita Error Response:', errorData);
       throw new Error('Failed to submit contact form');
     }
 
@@ -38,11 +38,6 @@ export const submitContactForm = async (formData: {
     return result;
   } catch (error) {
     console.error('VCita Contact Form Submission Error:', error);
-    toast({
-      title: "Error sending message",
-      description: "Please try again or contact us directly.",
-      variant: "destructive"
-    });
     throw error;
   }
 };
@@ -77,6 +72,8 @@ export const scheduleConsultation = async (formData: {
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('VCita Error Response:', errorData);
       throw new Error('Failed to schedule consultation');
     }
 
@@ -84,11 +81,6 @@ export const scheduleConsultation = async (formData: {
     return result;
   } catch (error) {
     console.error('VCita Scheduling Submission Error:', error);
-    toast({
-      title: "Error scheduling consultation",
-      description: "Please try again or contact us directly.",
-      variant: "destructive"
-    });
     throw error;
   }
 };

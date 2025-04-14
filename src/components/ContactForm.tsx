@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -54,7 +55,12 @@ const ContactForm = () => {
       
       form.reset();
     } catch (error) {
-      // Error handling is done in the service
+      console.error("Contact form submission error:", error);
+      toast({
+        title: "Error sending message",
+        description: "Please try again or contact us directly.",
+        variant: "destructive"
+      });
     } finally {
       setIsSubmitting(false);
     }

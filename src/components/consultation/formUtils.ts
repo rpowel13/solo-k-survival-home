@@ -32,7 +32,12 @@ export const handleScheduleSubmit = async (
     
     resetForm();
   } catch (error) {
-    // Error handling is done in the service
+    console.error("Consultation scheduling error:", error);
+    toast({
+      title: "Error scheduling consultation",
+      description: "Please try again or contact us directly.",
+      variant: "destructive"
+    });
   } finally {
     setIsSubmitting(false);
   }
