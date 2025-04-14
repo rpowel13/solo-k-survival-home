@@ -4,12 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, Square, CheckSquare } from "lucide-react";
 import { submitContactForm } from "@/services/vcitaService";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -17,6 +18,9 @@ const formSchema = z.object({
   phone: z.string().optional(),
   subject: z.string().min(2, { message: "Subject must be at least 2 characters." }),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+  consent: z.boolean().refine(val => val === true, {
+    message: "You must agree to the terms to submit the form."
+  })
 });
 
 type ContactFormValues = z.infer<typeof formSchema>;
@@ -33,6 +37,7 @@ const ContactForm = () => {
       phone: "",
       subject: "",
       message: "",
+      consent: false
     },
   });
 
@@ -45,7 +50,8 @@ const ContactForm = () => {
         email: data.email,
         phone: data.phone,
         subject: data.subject,
-        message: data.message
+        message: data.message,
+        consent: data.consent
       });
       
       // Always show success message since we're using no-cors mode
@@ -144,6 +150,27 @@ const ContactForm = () => {
                 />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="consent"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md p-4 border">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel className="text-sm font-normal">
+                  By clicking "submit", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our Privacy Policy and Terms and Conditions. Text "HELP" for help or contact us at (833) 224-5517. Text "STOP" to cancel.
+                </FormLabel>
+                <FormMessage />
+              </div>
             </FormItem>
           )}
         />
