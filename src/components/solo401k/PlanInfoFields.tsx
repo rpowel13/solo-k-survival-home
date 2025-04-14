@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FormField, FormControl, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -7,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { UseFormReturn } from 'react-hook-form';
 import { SoloFormValues } from './FormSchema';
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { InfoIcon } from "lucide-react";
+import { InfoIcon, DollarSign } from "lucide-react";
 
 interface PlanInfoFieldsProps {
   form: UseFormReturn<SoloFormValues>;
@@ -112,7 +111,6 @@ const PlanInfoFields = ({ form }: PlanInfoFieldsProps) => {
         )}
       />
 
-      {/* Combined Disclaimer Alert */}
       <Alert className="mb-8 bg-amber-50 border-amber-200">
         <InfoIcon className="h-5 w-5 text-amber-500" />
         <AlertDescription className="text-amber-800 space-y-4">
@@ -140,6 +138,25 @@ const PlanInfoFields = ({ form }: PlanInfoFieldsProps) => {
           <p>E. Survival 401k, LLC does not provide legal, tax, or investment advice. Nothing of the foregoing, or of any other written, electronic or oral statement or communication by Survival 401k, LLC or its representatives, is intended to be, or may be relied as, legal, tax or investment advice, statements, opinions or predictions. Prior to making any investment decisions, please consult with the appropriate legal, tax, and investment professionals for advice.</p>
           
           <p className="font-semibold">F. I acknowledge the set up fee of $1,200.00 is payable upon submitting application and the $200.00 annual maintenance fee will be automatically charged on the first day of the anniversary month for each year following the initial application via the same payment method as submitted with this application.</p>
+
+          <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
+            <div className="flex items-center justify-center mb-2">
+              <DollarSign className="h-6 w-6 text-finance-600 mr-2" />
+              <h3 className="text-2xl font-bold text-survival-800">Pricing Overview</h3>
+            </div>
+            <div className="space-y-2">
+              <p className="text-lg font-semibold">
+                <span className="text-survival-700">Setup Fee:</span> $1,200.00 (payable upon application submission)
+              </p>
+              <p className="text-lg font-semibold">
+                <span className="text-survival-700">Annual Maintenance Fee:</span> $200.00 (charged on the first day of the anniversary month)
+              </p>
+            </div>
+          </div>
+
+          <p className="font-semibold mt-4 text-center">
+            By checking the box below, I acknowledge the pricing and agree to the terms of service.
+          </p>
         </AlertDescription>
       </Alert>
 
@@ -156,7 +173,7 @@ const PlanInfoFields = ({ form }: PlanInfoFieldsProps) => {
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>
-                I agree to the terms and conditions and privacy policy
+                I agree to the terms and conditions, pricing, and privacy policy
               </FormLabel>
             </div>
             <FormMessage />
