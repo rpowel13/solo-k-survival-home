@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FormField, FormControl, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -109,6 +108,34 @@ const PlanInfoFields = ({ form }: PlanInfoFieldsProps) => {
           </FormItem>
         )}
       />
+
+      <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 space-y-4">
+        <h3 className="text-lg font-bold text-survival-800 mb-4">General Provisions</h3>
+        
+        <p className="text-sm text-gray-700">
+          A. Except as required by law or on account of SURVIVAL 401K's negligence or bad faith, SURVIVAL 401K shall not be responsible for the terms or validity of the Plan or any federal or state tax liability which may be imposed upon the Employer, the Plan Administrator, the Trustees or any participant under or beneficiary of the Plan. The Plan Administrator shall indemnify, protect and hold SURVIVAL 401K harmless of and from any losses, liabilities, claims and demands whatsoever, and expenses in connection therewith, including attorney's fees and court costs, which arise out of SURVIVAL 401K's Services and which are not due to SURVIVAL 401K's own negligence or bad faith.
+        </p>
+        
+        <p className="text-sm text-gray-700">
+          B. This Agreement is made in, and shall be construed, interpreted and enforced according to the laws of the State of Texas.
+        </p>
+        
+        <p className="text-sm text-gray-700">
+          C. This Agreement supersedes any prior agreement between the parties hereto concerning the performance of any of the Services specified herein.
+        </p>
+        
+        <p className="text-sm text-gray-700">
+          D. The parties agree that all calculations required/requested to be made under this Agreement shall be performed under uniform rules and methods applicable to all qualified retirement plans for which SURVIVAL 401K provides Services, and the Plan Administrator hereby adopts such rules and methods.
+        </p>
+        
+        <p className="text-sm text-gray-700">
+          E. Survival 401k, LLC does not provide legal, tax, or investment advice. Nothing of the foregoing, or of any other written, electronic or oral statement or communication by Survival 401k, LLC or its representatives, is intended to be, or may be relied as, legal, tax or investment advice, statements, opinions or predictions. Prior to making any investment decisions, please consult with the appropriate legal, tax, and investment professionals for advice.
+        </p>
+        
+        <p className="text-sm text-gray-700 font-semibold">
+          F. I acknowledge the set up fee of $1,200.00 is payable upon submitting application and the $200.00 annual maintenance fee will be automatically charged on the first day of the anniversary month for each year following the initial application via the same payment method as submitted with this application.
+        </p>
+      </div>
 
       <FormField
         control={form.control}
