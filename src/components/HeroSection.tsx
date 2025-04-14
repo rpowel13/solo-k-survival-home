@@ -10,7 +10,7 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-finance-600 p-4 rounded-lg">
               Retirement Plans for Entrepreneurs & 1st Responders
             </h1>
             <p className="mt-4 text-xl text-gray-600">
