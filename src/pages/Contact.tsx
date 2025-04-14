@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Mail, Phone, MessageSquare } from "lucide-react";
 import Header from "@/components/Header";
@@ -68,8 +69,7 @@ const Contact = () => {
                       </Button>
                     </DialogTrigger>
                     <DialogContent 
-                      className="sm:max-w-[600px] p-0 overflow-hidden"
-                      style={{ height: '600px' }}
+                      className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[1000px] p-0 overflow-hidden w-full h-[90vh]"
                     >
                       <DialogHeader>
                         <DialogTitle className="sr-only">Contact Form</DialogTitle>
@@ -82,7 +82,11 @@ const Contact = () => {
                         frameBorder="0"
                         title="Contact Form for Survival 401k"
                         className="border-0"
-                        style={{ pointerEvents: 'auto', overflow: 'hidden' }}
+                        style={{ 
+                          pointerEvents: 'auto', 
+                          overflow: 'hidden', 
+                          display: 'block'
+                        }}
                       />
                     </DialogContent>
                   </Dialog>
@@ -110,8 +114,7 @@ const Contact = () => {
               
               <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
                 <DialogContent 
-                  className="sm:max-w-[600px] p-0 overflow-hidden" 
-                  style={{ height: '600px' }}
+                  className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[1000px] p-0 overflow-hidden w-full h-[90vh]" 
                 >
                   <DialogHeader>
                     <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
@@ -124,7 +127,11 @@ const Contact = () => {
                     frameBorder="0"
                     title="Schedule a Consultation with Survival 401k"
                     className="border-0"
-                    style={{ pointerEvents: 'auto', overflow: 'hidden' }}
+                    style={{ 
+                      pointerEvents: 'auto', 
+                      overflow: 'hidden', 
+                      display: 'block'
+                    }}
                   />
                 </DialogContent>
               </Dialog>

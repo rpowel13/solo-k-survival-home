@@ -77,7 +77,7 @@ const Footer = () => {
                   Schedule a Free Consultation
                 </button>
                 <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
-                  <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                  <DialogContent className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[1000px] p-0 overflow-hidden w-full h-[90vh]">
                     <DialogHeader>
                       <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
                       <DialogDescription className="sr-only">Schedule a free consultation with our specialists</DialogDescription>
@@ -89,6 +89,11 @@ const Footer = () => {
                       frameBorder="0"
                       title="Schedule a Consultation with Survival 401k"
                       className="border-0 rounded-md"
+                      style={{ 
+                        pointerEvents: 'auto', 
+                        overflow: 'hidden', 
+                        display: 'block'
+                      }}
                     />
                   </DialogContent>
                 </Dialog>
