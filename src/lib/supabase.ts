@@ -86,58 +86,83 @@ const mockBlogPosts = [
   }
 ];
 
-// Create a function that creates a mock client for testing and development
+// Define type for our mock database
+interface MockDatabase {
+  blog_posts: BlogPost[];
+  solo401k_applications: any[];
+  [key: string]: any[];
+}
+
+// Initialize mock database
+const mockDatabase: MockDatabase = {
+  blog_posts: [...mockBlogPosts],
+  solo401k_applications: []
+};
+
+// Create a proper typed mock client
 function createMockSupabaseClient() {
   console.log('Using mock Supabase client for development');
   
-  // Simulated in-memory storage, initialize with sample data
-  let mockData = [...mockBlogPosts];
-
-  // Function to create a query builder
+  // Function to create a query builder with proper method chaining
   function from(table: string) {
     console.log(`Mock operation on table: ${table}`);
     
-    return {
-      data: mockData,
-      error: null,
+    // Get data from our mock database
+    const tableData = mockDatabase[table] || [];
+    
+    // Basic result with data
+    const baseResult = {
+      data: [...tableData],
+      error: null
+    };
+    
+    // Create a builder that properly chains methods
+    const builder = {
+      ...baseResult,
       
+      // Select method (chainable)
       select: function(columns?: string) {
         console.log(`Mock select ${columns || '*'}`);
         return this;
       },
       
+      // Filter by equality (chainable)
       eq: function(column: string, value: any) {
         console.log(`Mock filter: ${column} = ${value}`);
-        const filteredData = mockData.filter(item => item[column] === value);
+        const filteredData = tableData.filter(item => item[column] === value);
+        
+        // Return a new builder with filtered data
         return {
-          ...this,
+          ...baseResult,
           data: filteredData,
-          
-          single: function() {
-            console.log(`Mock single result`);
-            return {
-              data: filteredData.length > 0 ? filteredData[0] : null,
-              error: filteredData.length === 0 ? { message: 'No rows found' } : null
-            };
-          }
+          select: this.select,
+          eq: this.eq,
+          single: this.single,
+          update: this.update,
+          delete: this.delete,
+          insert: this.insert
         };
       },
       
+      // Get single result
       single: function() {
         console.log(`Mock single result`);
+        const singleData = this.data.length > 0 ? this.data[0] : null;
         return {
-          data: mockData.length > 0 ? mockData[0] : null,
-          error: mockData.length === 0 ? { message: 'No rows found' } : null
+          data: singleData,
+          error: this.data.length === 0 ? { message: 'No rows found' } : null
         };
       },
       
+      // Update records
       update: function(data: any) {
         console.log(`Mock update:`, data);
         
         return {
           eq: function(column: string, value: any) {
             console.log(`Mock update where ${column} = ${value}`);
-            mockData = mockData.map(item => 
+            // Update matching records in our mock database
+            mockDatabase[table] = mockDatabase[table].map(item => 
               item[column] === value ? { ...item, ...data } : item
             );
             return { data: null, error: null };
@@ -145,15 +170,16 @@ function createMockSupabaseClient() {
         };
       },
       
+      // Delete records
       delete: function() {
         console.log(`Mock delete`);
         
         return {
           eq: function(column: string, value: any) {
             console.log(`Mock delete where ${column} = ${value}`);
-            const initialLength = mockData.length;
-            mockData = mockData.filter(item => item[column] !== value);
-            const deleted = initialLength > mockData.length;
+            const initialLength = mockDatabase[table].length;
+            mockDatabase[table] = mockDatabase[table].filter(item => item[column] !== value);
+            const deleted = initialLength > mockDatabase[table].length;
             return { 
               data: deleted ? { success: true } : null, 
               error: !deleted ? { message: 'No matching records found' } : null 
@@ -162,6 +188,7 @@ function createMockSupabaseClient() {
         };
       },
       
+      // Insert records
       insert: function(data: any) {
         console.log(`Mock insert:`, data);
         const newData = Array.isArray(data) ? data : [data];
@@ -173,14 +200,22 @@ function createMockSupabaseClient() {
         }));
         
         // Add to mock database
-        mockData = [...mockData, ...recordsWithIds];
+        mockDatabase[table] = [...mockDatabase[table], ...recordsWithIds];
         
-        return { data: recordsWithIds, error: null };
+        return { 
+          data: recordsWithIds, 
+          error: null,
+          select: function() {
+            return { data: recordsWithIds, error: null };
+          } 
+        };
       }
     };
+    
+    return builder;
   }
   
-  // Return the mock client
+  // Return the mock client with properly chained methods
   return {
     from: from,
     functions: {

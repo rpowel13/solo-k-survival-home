@@ -72,7 +72,7 @@ const Solo401kApplication = () => {
       console.log("Email notification:", emailData);
       
       // Insert application data into Supabase
-      const { data, error } = await supabase
+      const result = await supabase
         .from('solo401k_applications')
         .insert([{
           first_name: values.firstName,
@@ -91,13 +91,15 @@ const Solo401kApplication = () => {
           additional_info: values.additionalInfo,
           status: 'submitted',
           application_date: new Date().toISOString()
-        }])
-        .select();
+        }]);
 
-      if (error) {
-        console.error("Supabase error:", error);
-        throw new Error(`Failed to submit application: ${error.message}`);
+      if (result.error) {
+        console.error("Supabase error:", result.error);
+        throw new Error(`Failed to submit application: ${result.error.message}`);
       }
+      
+      // Get the inserted data
+      const data = result.data;
       
       // Send email notification via Supabase function
       const { error: emailError } = await supabase.functions.invoke('send-email-notification', {
