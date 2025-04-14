@@ -1,12 +1,15 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { Mail, Phone, MessageSquare } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 
 const Contact = () => {
+  const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -65,6 +68,10 @@ const Contact = () => {
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                      <DialogHeader>
+                        <DialogTitle className="sr-only">Contact Form</DialogTitle>
+                        <DialogDescription className="sr-only">Fill out the contact form</DialogDescription>
+                      </DialogHeader>
                       <iframe 
                         src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
                         width="100%" 
@@ -89,9 +96,31 @@ const Contact = () => {
               <p className="text-gray-600 max-w-2xl mx-auto mb-6">
                 Want to discuss your retirement planning options in detail? Schedule a free 30-minute consultation with one of our Solo 401(k) specialists.
               </p>
-              <Button variant="outline" size="lg" className="bg-white">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="bg-white"
+                onClick={() => setIsSchedulerOpen(true)}
+              >
                 Book a Free Consultation
               </Button>
+              
+              <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
+                <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                  <DialogHeader>
+                    <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
+                    <DialogDescription className="sr-only">Schedule a free consultation with our specialists</DialogDescription>
+                  </DialogHeader>
+                  <iframe 
+                    src="https://www.vcita.com/widgets/scheduler/izk040b42jnjcf3c?frontage_iframe=true" 
+                    width="100%" 
+                    height="100%" 
+                    frameBorder="0"
+                    title="Schedule a Consultation with Survival 401k"
+                    className="border-0 rounded-md"
+                  />
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </section>

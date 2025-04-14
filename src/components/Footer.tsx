@@ -1,7 +1,7 @@
 
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
 import { useState } from "react";
 
 const Footer = () => {
@@ -78,6 +78,10 @@ const Footer = () => {
                 </button>
                 <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
                   <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                    <DialogHeader>
+                      <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
+                      <DialogDescription className="sr-only">Schedule a free consultation with our specialists</DialogDescription>
+                    </DialogHeader>
                     <iframe 
                       src="https://www.vcita.com/widgets/scheduler/izk040b42jnjcf3c?frontage_iframe=true" 
                       width="100%" 
