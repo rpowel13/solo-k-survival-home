@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CreditCard, DollarSign, ShieldCheck, Info } from 'lucide-react';
+import { CreditCard, DollarSign, ShieldCheck, Info, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,11 +38,27 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({
     });
   };
 
+  const handleGoBack = () => {
+    navigate(-1); // Go back to the previous page in history
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
+          <div className="mb-6">
+            <Button 
+              variant="ghost" 
+              onClick={handleGoBack}
+              className="text-gray-600 hover:text-survival-700"
+              size="sm"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Go Back
+            </Button>
+          </div>
+          
           <h1 className="text-3xl font-bold text-center mb-8 text-survival-800">{title}</h1>
           
           <Card className="shadow-md mb-8">
@@ -84,7 +100,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({
               </div>
             </CardContent>
             
-            <CardFooter>
+            <CardFooter className="flex flex-col gap-4">
               <Button 
                 onClick={handlePayment}
                 className="w-full bg-survival-600 hover:bg-survival-700 text-white"
@@ -93,18 +109,17 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({
                 <CreditCard className="mr-2 h-5 w-5" />
                 Pay Now
               </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={handleGoBack}
+                className="w-full text-gray-600"
+              >
+                <ArrowLeft className="mr-2 h-5 w-5" />
+                Go Back
+              </Button>
             </CardFooter>
           </Card>
-          
-          <div className="text-center">
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/')}
-              className="text-gray-600"
-            >
-              Return to Home
-            </Button>
-          </div>
         </div>
       </main>
       <Footer />
