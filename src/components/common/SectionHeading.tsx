@@ -13,7 +13,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
   children,
   className,
   highlightTerm = "401(k)",
-  highlightColor = "text-[#c9d9ff] font-bold" // Updated color and added font-bold
+  highlightColor = "text-survival-900 font-bold" // Updated to a darker blue from survival color palette
 }) => {
   if (typeof children !== 'string') {
     return <h2 className={className}>{children}</h2>;
