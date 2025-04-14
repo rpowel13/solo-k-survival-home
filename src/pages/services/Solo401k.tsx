@@ -1,8 +1,7 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -150,6 +149,24 @@ const Solo401k = () => {
                 <span>Access to our network of investment professionals</span>
               </li>
             </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Pricing</h2>
+          <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
+            <div className="flex items-center justify-center mb-4">
+              <DollarSign className="h-8 w-8 text-finance-600 mr-2" />
+              <h3 className="text-3xl font-bold text-survival-800">$1,200</h3>
+            </div>
+            <p className="text-lg mb-4 text-gray-600">
+              Comprehensive Solo 401k Plan Documentation and Setup
+            </p>
+            <Link to="/apply/solo-401k">
+              <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
+                Get Started
+              </Button>
+            </Link>
           </div>
         </section>
 

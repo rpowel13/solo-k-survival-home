@@ -1,8 +1,9 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Award, Briefcase, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Users, Award, Briefcase, ShieldCheck, CheckCircle2, DollarSign } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const FirstResponderPackage = () => {
   return (
@@ -169,6 +170,24 @@ const FirstResponderPackage = () => {
                 <span>Dedicated support team for ongoing assistance</span>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Pricing</h2>
+          <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
+            <div className="flex items-center justify-center mb-4">
+              <DollarSign className="h-8 w-8 text-finance-600 mr-2" />
+              <h3 className="text-3xl font-bold text-survival-800">$1,700</h3>
+            </div>
+            <p className="text-lg mb-4 text-gray-600">
+              Comprehensive First Responder Package (LLC + Solo 401k)
+            </p>
+            <Link to="/apply/first-responder">
+              <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
+                Get Started
+              </Button>
+            </Link>
           </div>
         </section>
       </div>
