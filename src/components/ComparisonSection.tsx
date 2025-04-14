@@ -1,3 +1,4 @@
+
 import { Check, X } from "lucide-react";
 
 const ComparisonSection = () => {
@@ -17,14 +18,6 @@ const ComparisonSection = () => {
       simpleIra: "$3,500",
       traditionalIra: "$1,000",
       highlight: false
-    },
-    {
-      feature: "Total 2025 Contribution (Age 50+)",
-      solo401k: "$77,500",
-      sepIra: "$66,000",
-      simpleIra: "$34,000", 
-      traditionalIra: "$8,000",
-      highlight: true
     },
     {
       feature: "Roth Option Available",
