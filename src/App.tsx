@@ -22,6 +22,9 @@ import AnnualFeePayment from "./pages/payments/AnnualFeePayment";
 import ReinstatementFeePayment from "./pages/payments/ReinstatementFeePayment";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import BlogEditor from "./pages/BlogEditor";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +52,11 @@ const App = () => (
           <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
           <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
+          {/* Blog Routes */}
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/blog/new" element={<BlogEditor />} />
+          <Route path="/blog/edit/:slug" element={<BlogEditor />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
