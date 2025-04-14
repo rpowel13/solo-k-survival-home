@@ -24,11 +24,6 @@ const HeroSection = () => {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/services/alternative-investments">
-                <Button variant="outline" className="border-white text-white hover:bg-survival-700/50">
-                  Alternative Investments
-                </Button>
-              </Link>
             </div>
           </div>
           
@@ -66,4 +61,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
