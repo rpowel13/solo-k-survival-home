@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   NavigationMenu,
@@ -186,7 +186,16 @@ const Header = () => {
               </NavigationMenuList>
             </NavigationMenu>
 
-            <a href="#faq" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">FAQ</a>
+            <a 
+              href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-gray-600 hover:text-survival-700 font-medium transition-colors flex items-center gap-2"
+            >
+              <User className="h-4 w-4" />
+              Customer Portal
+            </a>
+
             <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
             <Button className="bg-survival-600 hover:bg-survival-700 text-white">Get Started</Button>
           </nav>
@@ -224,7 +233,16 @@ const Header = () => {
               <Link to="/apply/alternative-investments" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Alternative Investments</Link>
             </div>
 
-            <a href="#faq" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">FAQ</a>
+            <a 
+              href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors flex items-center gap-2"
+            >
+              <User className="h-4 w-4" />
+              Customer Portal
+            </a>
+
             <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
             <Button className="w-full bg-survival-600 hover:bg-survival-700 text-white">Get Started</Button>
           </div>
