@@ -60,7 +60,19 @@ function createMockSupabaseClient() {
     functions: {
       invoke: (functionName: string, { body }: { body: any }) => {
         console.log(`Mock invoke function ${functionName} with:`, body);
-        return Promise.resolve({ data: null, error: null });
+        
+        // Special handling for email notification function
+        if (functionName === 'send-email-notification') {
+          console.log('MOCK EMAIL NOTIFICATION:');
+          console.log(`To: ${body.to.join(', ')}`);
+          console.log(`Subject: ${body.subject}`);
+          console.log(`Body: ${body.body.substring(0, 100)}...`);
+          
+          // In a real implementation, this would send an actual email
+          console.log(`Email would be sent to: ${body.to.join(', ')}`);
+        }
+        
+        return Promise.resolve({ data: { success: true }, error: null });
       }
     }
   };

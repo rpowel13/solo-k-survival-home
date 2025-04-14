@@ -77,10 +77,85 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-## Edge Function for Email Notifications (Optional)
+## Email Notification Edge Function
 
-To send email notifications, you can create an Edge Function in Supabase:
+To set up email notifications when a Solo 401k application is submitted, create an Edge Function in Supabase:
 
-1. Create a new Edge Function called `send-application-notification`
-2. Use a service like SendGrid, AWS SES, or another email provider
-3. Implement the email sending logic within the edge function
+1. Navigate to your Supabase project dashboard
+2. Go to Edge Functions in the sidebar
+3. Click "Create a new function"
+4. Name it "send-email-notification"
+5. Paste the following code:
+
+```typescript
+// Follow this Deno pattern for Edge Functions
+import { serve } from "https://deno.land/std@0.131.0/http/server.ts";
+import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
+
+// Get environment variables
+const SMTP_HOST = Deno.env.get("SMTP_HOST") || "";
+const SMTP_PORT = Number(Deno.env.get("SMTP_PORT")) || 587;
+const SMTP_USERNAME = Deno.env.get("SMTP_USERNAME") || "";
+const SMTP_PASSWORD = Deno.env.get("SMTP_PASSWORD") || "";
+const SENDER_EMAIL = Deno.env.get("SENDER_EMAIL") || "noreply@survival401k.com";
+
+serve(async (req) => {
+  try {
+    // Parse request
+    const { to, subject, body } = await req.json();
+    
+    if (!to || !Array.isArray(to) || !subject || !body) {
+      return new Response(
+        JSON.stringify({ error: "Missing required fields" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Configure SMTP client
+    const client = new SmtpClient();
+    await client.connectTLS({
+      hostname: SMTP_HOST,
+      port: SMTP_PORT,
+      username: SMTP_USERNAME,
+      password: SMTP_PASSWORD,
+    });
+
+    // Send email
+    await client.send({
+      from: SENDER_EMAIL,
+      to: to,
+      subject: subject,
+      content: body,
+      html: body,
+    });
+
+    await client.close();
+
+    return new Response(
+      JSON.stringify({ success: true, message: "Email sent successfully" }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  } catch (error) {
+    console.error("Error sending email:", error);
+    
+    return new Response(
+      JSON.stringify({ error: "Failed to send email", details: error.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
+  }
+});
+```
+
+6. Add the following secrets to your Supabase project in the Dashboard under Settings > API:
+
+```
+SMTP_HOST = your_smtp_host (e.g., smtp.gmail.com)
+SMTP_PORT = your_smtp_port (e.g., 587)
+SMTP_USERNAME = your_smtp_username
+SMTP_PASSWORD = your_smtp_password
+SENDER_EMAIL = noreply@survival401k.com (or your preferred sender)
+```
+
+7. Deploy the function
+
+This function will send email notifications to Ross Powell and Jill Powell whenever a Solo 401k application is submitted.

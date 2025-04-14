@@ -68,7 +68,8 @@ const Solo401kApplication = () => {
         `
       };
       
-      console.log("Form submission data:", emailData);
+      console.log("Form submission data:", values);
+      console.log("Email notification:", emailData);
       
       // Insert application data into Supabase
       const { data, error } = await supabase
@@ -100,18 +101,17 @@ const Solo401kApplication = () => {
         throw new Error(`Failed to submit application: ${error.message}`);
       }
       
-      // Send email notification via Supabase Edge Function
-      // Note: This is commented out until the edge function is created
-      /*
-      const { error: emailError } = await supabase.functions.invoke('send-application-notification', {
+      // Send email notification via Supabase function
+      const { error: emailError } = await supabase.functions.invoke('send-email-notification', {
         body: emailData
       });
       
       if (emailError) {
         console.error("Email notification error:", emailError);
         // Continue with the flow even if email fails
+      } else {
+        console.log("Email notification sent successfully");
       }
-      */
       
       toast({
         title: "Application Submitted",
