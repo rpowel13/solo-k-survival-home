@@ -17,30 +17,6 @@ const HeroSection = () => {
               Self-directed retirement solutions designed for entrepreneurs, small business owners, and independent professionals.
             </p>
             
-            <div className="mt-8 space-y-4">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 mt-1">
-                  <Check className="h-5 w-5 text-finance-600" />
-                </div>
-                <p className="ml-3 text-gray-600">Complete control over your investment choices</p>
-              </div>
-              <div className="flex items-start">
-                <div className="flex-shrink-0 mt-1">
-                  <Check className="h-5 w-5 text-finance-600" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900">Higher Contribution Limits</h4>
-                  <p className="text-gray-600">Contribute up to $70,000 annually (2025)</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <div className="flex-shrink-0 mt-1">
-                  <Check className="h-5 w-5 text-finance-600" />
-                </div>
-                <p className="ml-3 text-gray-600">Diversify with alternative assets like real estate and precious metals</p>
-              </div>
-            </div>
-            
             <div className="mt-8 flex flex-wrap gap-4">
               <Link to="/services/solo-401k">
                 <Button className="bg-finance-600 hover:bg-finance-700 text-white">
