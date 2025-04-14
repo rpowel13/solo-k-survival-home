@@ -85,6 +85,23 @@ const mockBlogPosts = [
   }
 ];
 
+// Type definitions for our mock client
+type MockQueryResult<T> = {
+  data: T | null;
+  error: { message: string } | null;
+};
+
+type MockQueryBuilder<T> = {
+  data: T[];
+  error: null;
+  eq: (column: string, value: any) => MockQueryBuilder<T>;
+  single: () => MockQueryResult<T>;
+  select: (columns?: string) => MockQueryBuilder<T>;
+  update: (data: any) => MockQueryBuilder<T>;
+  delete: () => MockQueryResult<{ success: boolean }>;
+  insert: (data: any) => MockQueryBuilder<T>;
+};
+
 // Mock implementation of Supabase client for development
 function createMockSupabaseClient() {
   console.log('Using mock Supabase client for development');
@@ -92,10 +109,10 @@ function createMockSupabaseClient() {
   // Simulated in-memory storage, initialize with sample data
   let mockData = [...mockBlogPosts];
 
-  // Create a function to generate a proper query builder with chainable methods
-  const createQueryBuilder = (tableData = mockData) => {
+  // Create a function to generate a properly typed query builder with chainable methods
+  const createQueryBuilder = <T>(tableData = mockData as T[]): MockQueryBuilder<T> => {
     // Basic query builder with chainable methods
-    const queryBuilder = {
+    const queryBuilder: MockQueryBuilder<T> = {
       data: tableData,
       error: null,
       
@@ -103,7 +120,7 @@ function createMockSupabaseClient() {
       eq: (column: string, value: any) => {
         console.log(`Mock filter: ${column} = ${value}`);
         const filteredData = tableData.filter(item => item[column] === value);
-        return createQueryBuilder(filteredData);
+        return createQueryBuilder<T>(filteredData);
       },
       
       // Get a single result
@@ -145,9 +162,9 @@ function createMockSupabaseClient() {
           ...record,
           id: record.id || crypto.randomUUID()
         }));
-        mockData = [...mockData, ...recordsWithIds];
+        mockData = [...mockData, ...recordsWithIds as any];
         
-        return createQueryBuilder(recordsWithIds);
+        return createQueryBuilder<T>(recordsWithIds as T[]);
       }
     };
     
@@ -155,9 +172,9 @@ function createMockSupabaseClient() {
   };
   
   return {
-    from: (table: string) => {
+    from: <T>(table: string): MockQueryBuilder<T> => {
       console.log(`Mock operation on table: ${table}`);
-      return createQueryBuilder();
+      return createQueryBuilder<T>();
     },
     functions: {
       invoke: (functionName: string, { body }: { body: any }) => {

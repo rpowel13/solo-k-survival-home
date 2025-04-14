@@ -36,7 +36,7 @@ const BlogPostPage = () => {
         
         // In production, this would fetch from Supabase
         const { data, error } = await supabase
-          .from('blog_posts')
+          .from<BlogPost>('blog_posts')
           .eq('slug', slug)
           .single();
         

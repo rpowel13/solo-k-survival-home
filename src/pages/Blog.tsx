@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,7 +21,7 @@ const Blog = () => {
         setIsLoading(true);
         // In production, this would fetch from Supabase
         // For now, we're using our mock data
-        const { data, error } = await supabase.from('blog_posts').select();
+        const { data, error } = await supabase.from<BlogPost>('blog_posts').select();
         
         if (error) {
           toast({
