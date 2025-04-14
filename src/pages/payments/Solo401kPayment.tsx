@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, CreditCard, DollarSign, ShieldCheck, Bank } from 'lucide-react';
+import { CheckCircle2, CreditCard, DollarSign, ShieldCheck, BookMarked } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -220,7 +219,7 @@ const Solo401kPayment = () => {
             <Tabs defaultValue="bank" className="w-full px-6 pb-6">
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="bank" className="flex items-center gap-2">
-                  <Bank className="h-4 w-4" />
+                  <BookMarked className="h-4 w-4" />
                   Bank Account
                 </TabsTrigger>
                 <TabsTrigger value="card" className="flex items-center gap-2">
