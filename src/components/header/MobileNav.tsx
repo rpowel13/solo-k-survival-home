@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { User } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface MobileNavProps {
@@ -31,18 +31,19 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
         <Link to="/apply/alternative-investments" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Alternative Investments</Link>
       </div>
 
+      <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
+      
       <a 
         href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
         target="_blank" 
         rel="noopener noreferrer" 
-        className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors flex items-center gap-2"
+        className="w-full block"
       >
-        <User className="h-4 w-4" />
-        Customer Portal
+        <Button className="w-full bg-survival-600 hover:bg-survival-700 text-white">
+          <LogIn className="mr-2 h-4 w-4" />
+          Customer Portal
+        </Button>
       </a>
-
-      <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
-      <Button className="w-full bg-survival-600 hover:bg-survival-700 text-white">Get Started</Button>
     </div>
   );
 };

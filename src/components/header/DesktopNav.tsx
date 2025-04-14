@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuList } from "@/components/ui/navigation-menu";
-import { User } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ServiceDropdown } from "./ServiceDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
@@ -23,18 +23,19 @@ export const DesktopNav = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
+      <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
+      
       <a 
         href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
         target="_blank" 
         rel="noopener noreferrer" 
-        className="text-gray-600 hover:text-survival-700 font-medium transition-colors flex items-center gap-2"
+        className="w-full"
       >
-        <User className="h-4 w-4" />
-        Customer Portal
+        <Button className="bg-survival-600 hover:bg-survival-700 text-white">
+          <LogIn className="mr-2 h-4 w-4" />
+          Customer Portal
+        </Button>
       </a>
-
-      <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
-      <Button className="bg-survival-600 hover:bg-survival-700 text-white">Get Started</Button>
     </nav>
   );
 };
