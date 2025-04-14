@@ -1,4 +1,3 @@
-
 import { ArrowRight, ShieldCheck, TrendingUp, PiggyBank, Ambulance, Shield, BadgeAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -38,7 +37,7 @@ const HeroSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">Higher Contribution Limits</h4>
-                    <p className="text-gray-600">Contribute up to $69,000 annually (2024)</p>
+                    <p className="text-gray-600">Contribute up to $69,000 annually (2025)</p>
                   </div>
                 </div>
                 

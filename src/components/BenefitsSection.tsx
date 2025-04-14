@@ -6,7 +6,7 @@ const benefitsData = [
   {
     icon: <TrendingUp className="h-6 w-6 text-white" />,
     title: "Higher Contribution Limits",
-    description: "Contribute up to $69,000 annually in 2024, much more than traditional IRAs or standard 401(k) plans."
+    description: "Contribute up to $69,000 annually in 2025, much more than traditional IRAs or standard 401(k) plans."
   },
   {
     icon: <BadgeDollarSign className="h-6 w-6 text-white" />,

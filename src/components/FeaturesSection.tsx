@@ -23,7 +23,7 @@ const FeaturesSection = () => {
             </CardHeader>
             <CardContent className="p-6 space-y-4">
               {[
-                "Employee and employer contributions up to $69,000 annually (2024)",
+                "Employee and employer contributions up to $69,000 annually (2025)",
                 "Traditional pre-tax and Roth after-tax contribution options",
                 "Access to a wide range of investment options",
                 "Loan provisions up to 50% of account balance or $50,000",
