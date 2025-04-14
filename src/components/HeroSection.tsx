@@ -28,7 +28,11 @@ const HeroSection = () => {
           </div>
           
           <div className="relative">
-            <div className="bg-white/10 rounded-lg p-6 backdrop-blur-md">
+            <div className="bg-white/10 rounded-lg p-6 backdrop-blur-md shadow-[0_20px_50px_rgba(8,28,86,0.5)] border border-white/20 transform hover:scale-[1.01] transition-all duration-300" 
+                style={{ 
+                  background: "linear-gradient(145deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%)",
+                  boxShadow: "inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 20px 50px rgba(8, 28, 86, 0.5)"
+                }}>
               <h3 className="text-2xl font-bold text-white mb-4">Why Professionals Choose Us</h3>
               <ul className="space-y-3">
                 <li className="flex items-start">
