@@ -5,6 +5,7 @@ import { CheckCircle2, DollarSign, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import PrequalificationSection from '@/components/solo401k/PrequalificationSection';
+import SectionHeading from '@/components/common/SectionHeading';
 
 const Solo401k = () => {
   return (
@@ -15,8 +16,9 @@ const Solo401k = () => {
     >
       <div className="space-y-12">
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">What is a Solo 
-            <span className="text-[#F2FCE2] ml-1">401k</span>?</h2>
+          <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
+            What is a Solo 401k?
+          </SectionHeading>
           <div className="prose max-w-none">
             <p className="text-lg">
               A Solo 401k, also known as an Individual 401k, is a tax-advantaged retirement plan specifically designed for self-employed individuals and small business owners with no full-time employees (other than a spouse).
@@ -30,8 +32,9 @@ const Solo401k = () => {
         <PrequalificationSection />
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Key Benefits 
-            <span className="text-[#F2FCE2] ml-1">401k</span></h2>
+          <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
+            Key Benefits
+          </SectionHeading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -103,8 +106,9 @@ const Solo401k = () => {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Who Qualifies for a Solo 
-            <span className="text-[#F2FCE2] ml-1">401k</span>?</h2>
+          <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
+            Who Qualifies for a Solo 401k?
+          </SectionHeading>
           <div className="prose max-w-none">
             <p>To qualify for a Solo 401k, you must:</p>
             <ul className="mt-4 space-y-2">
@@ -128,8 +132,9 @@ const Solo401k = () => {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Why Choose Survival 
-            <span className="text-[#F2FCE2] ml-1">401k</span>?</h2>
+          <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
+            Why Choose Survival 401k?
+          </SectionHeading>
           <div className="prose max-w-none">
             <p className="text-lg">
               At Survival 401k, we specialize in creating customized Solo 401k plans that provide maximum flexibility and investment options. Our services include:
