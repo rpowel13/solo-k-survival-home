@@ -15,6 +15,9 @@ const Solo401kPayment = () => {
     applicationDate: string;
   } | null>(null);
 
+  // VCita payment link
+  const paymentLink = "https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Solo%20401k%20Application&amount=1240&v_currency=USD";
+
   useEffect(() => {
     // Retrieve application data from sessionStorage
     const storedData = sessionStorage.getItem('solo401k_application');
@@ -27,9 +30,8 @@ const Solo401kPayment = () => {
   }, [navigate]);
 
   const handlePayment = () => {
-    // For demonstration purposes, we're linking to a payment processor
-    // In a real app, you'd integrate with Stripe or another payment processor
-    window.open('https://buy.stripe.com/test_00g3eqeoS4j50De9AA', '_blank');
+    // Open the VCita payment link in a new tab
+    window.open(paymentLink, '_blank');
   };
 
   const formatDate = (dateString: string) => {
@@ -86,7 +88,7 @@ const Solo401kPayment = () => {
                   <h3 className="font-medium">Solo 401k Setup Package</h3>
                   <p className="text-sm text-gray-500">Complete documentation and filing service</p>
                 </div>
-                <span className="font-bold text-xl">$1,200.00</span>
+                <span className="font-bold text-xl">$1,240.00</span>
               </div>
               
               <div className="pt-2">
@@ -114,10 +116,10 @@ const Solo401kPayment = () => {
               <div className="flex items-center justify-between pt-4 border-t">
                 <div className="flex items-center">
                   <ShieldCheck className="h-5 w-5 text-gray-600 mr-2" />
-                  <span className="text-sm text-gray-600">Secure payment processing</span>
+                  <span className="text-sm text-gray-600">Secure payment processing via VCita</span>
                 </div>
                 <div className="text-right">
-                  <div className="font-bold text-xl">Total: $1,200.00</div>
+                  <div className="font-bold text-xl">Total: $1,240.00</div>
                   <div className="text-sm text-gray-500">One-time payment</div>
                 </div>
               </div>
