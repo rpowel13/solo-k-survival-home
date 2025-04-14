@@ -14,7 +14,7 @@ const HeroSection = () => {
               Retirement Plans for Entrepreneurs & 1st Responders
             </h1>
             <p className="mt-4 text-xl text-gray-200">
-              Self-directed retirement solutions designed for entrepreneurs, small business owners, and independent professionals.
+              Self-directed retirement solutions designed for entrepreneurs, first responders, small business owners, independent professionals, and gig economy workers.
             </p>
             
             <div className="mt-8 flex flex-wrap gap-4">
