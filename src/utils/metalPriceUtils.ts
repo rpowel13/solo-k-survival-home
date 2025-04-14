@@ -20,3 +20,6 @@ export const formatChangePercentage = (percentage: number) => {
 export const getChangeColor = (change: number) => {
   return change > 0 ? 'text-green-600' : change < 0 ? 'text-red-600' : 'text-gray-600';
 };
+
+// Add this export as an alias for formatPrice
+export const formatCurrency = formatPrice;
