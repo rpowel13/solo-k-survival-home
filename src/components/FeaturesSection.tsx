@@ -7,7 +7,9 @@ const FeaturesSection = () => {
     <section id="features" className="section-padding">
       <div className="container mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="section-title">Features of Our Solo 401(k) Plans</h2>
+          <h2 className="section-title">Features of Our Solo 
+            <span className="text-[#F2FCE2] ml-1">401(k)</span> Plans
+          </h2>
           <p className="text-gray-600 text-lg">
             Survival 401k provides comprehensive solutions tailored to your unique needs.
           </p>

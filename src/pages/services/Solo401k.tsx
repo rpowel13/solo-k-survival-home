@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,7 +15,8 @@ const Solo401k = () => {
     >
       <div className="space-y-12">
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">What is a Solo 401k?</h2>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">What is a Solo 
+            <span className="text-[#F2FCE2] ml-1">401k</span>?</h2>
           <div className="prose max-w-none">
             <p className="text-lg">
               A Solo 401k, also known as an Individual 401k, is a tax-advantaged retirement plan specifically designed for self-employed individuals and small business owners with no full-time employees (other than a spouse).
@@ -30,7 +30,8 @@ const Solo401k = () => {
         <PrequalificationSection />
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Key Benefits</h2>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Key Benefits 
+            <span className="text-[#F2FCE2] ml-1">401k</span></h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -102,7 +103,8 @@ const Solo401k = () => {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Who Qualifies for a Solo 401k?</h2>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Who Qualifies for a Solo 
+            <span className="text-[#F2FCE2] ml-1">401k</span>?</h2>
           <div className="prose max-w-none">
             <p>To qualify for a Solo 401k, you must:</p>
             <ul className="mt-4 space-y-2">
@@ -126,7 +128,8 @@ const Solo401k = () => {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Why Choose Survival 401k?</h2>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Why Choose Survival 
+            <span className="text-[#F2FCE2] ml-1">401k</span>?</h2>
           <div className="prose max-w-none">
             <p className="text-lg">
               At Survival 401k, we specialize in creating customized Solo 401k plans that provide maximum flexibility and investment options. Our services include:
