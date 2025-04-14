@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { CheckCircle2, DollarSign, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import PrequalificationSection from '@/components/solo401k/PrequalificationSection';
 
 const Solo401k = () => {
   return (
@@ -25,6 +26,8 @@ const Solo401k = () => {
             </p>
           </div>
         </section>
+
+        <PrequalificationSection />
 
         <section>
           <h2 className="text-2xl font-bold mb-6 text-survival-800">Key Benefits</h2>
