@@ -12,7 +12,8 @@ export const Logo = () => {
         />
         <div>
           <div className="flex items-center">
-            <span className="text-2xl font-bold text-survival-800">Survival<span className="text-finance-600">401k</span></span>
+            <span className="text-2xl font-bold text-survival-800">Survival</span>
+            <span className="text-2xl font-bold text-finance-600 ml-1">401k</span>
           </div>
           <p className="text-xs text-gray-500 ml-1">Common Sense Wealth Management</p>
         </div>
