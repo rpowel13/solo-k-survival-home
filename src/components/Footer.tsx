@@ -1,4 +1,3 @@
-
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 
 const Footer = () => {
@@ -55,10 +54,10 @@ const Footer = () => {
           {/* Contact Info */}
           <div>
             <h3 className="text-white text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-3">
+            <div className="space-y-3">
               <li className="flex items-start">
                 <Phone className="h-5 w-5 mr-3 text-gray-400 mt-0.5" />
-                <span>(800) 401-5010</span>
+                <span>(833) 224-5517</span>
               </li>
               <li className="flex items-start">
                 <Mail className="h-5 w-5 mr-3 text-gray-400 mt-0.5" />
@@ -69,7 +68,7 @@ const Footer = () => {
                   Schedule a Free Consultation
                 </a>
               </li>
-            </ul>
+            </div>
           </div>
         </div>
 
