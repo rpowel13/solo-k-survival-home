@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
   return (
-    <section className="hero-gradient text-white">
-      <div className="container mx-auto section-padding">
+    <section className="hero-gradient text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djZoNnYtNmgtNnptMCAwdi02aC02djZoNnptNiAwaDZ2LTZoLTZ2NnptLTEyIDBoLTZ2LTZoNnY2em0tNiAwdi02aC02djZoNnptLTYgMGgtNnY2aDZ2LTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30 mix-blend-overlay"></div>
+      <div className="container mx-auto section-padding relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 md:pr-12">
+            <div className="inline-block px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-2 animate-fade-in">
+              Self-Employed Retirement Solutions
+            </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight animate-fade-in">
               Your Solo Career Deserves a Premium Retirement Plan
             </h1>
@@ -24,7 +28,7 @@ const HeroSection = () => {
             </div>
           </div>
           
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 animate-fade-in" style={{animationDelay: "0.3s"}}>
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 animate-fade-in shadow-xl" style={{animationDelay: "0.3s"}}>
             <div className="bg-white/95 shadow-xl rounded-xl p-8">
               <h3 className="text-survival-800 text-2xl font-bold mb-6">Why Entrepreneurs Choose Us</h3>
               <div className="space-y-5">

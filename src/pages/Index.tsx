@@ -9,6 +9,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import MetalPriceBanner from "@/components/MetalPriceBanner";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
+import { Separator } from "@/components/ui/separator";
 
 const Index = () => {
   return (
@@ -17,12 +18,26 @@ const Index = () => {
       <MetalPriceBanner />
       <main className="flex-grow">
         <HeroSection />
-        <BenefitsSection />
-        <FeaturesSection />
+        
+        <div className="py-12 bg-gray-50">
+          <BenefitsSection />
+        </div>
+        
+        <div className="py-12">
+          <FeaturesSection />
+        </div>
+        
         <PrequalificationBanner />
-        <ComparisonSection />
-        <FAQSection />
-        <CTASection />
+        
+        <div className="py-12 bg-gradient-to-b from-white to-gray-50">
+          <ComparisonSection />
+        </div>
+        
+        <div className="py-12">
+          <FAQSection />
+          <Separator className="max-w-5xl mx-auto my-12 bg-gray-200" />
+          <CTASection />
+        </div>
       </main>
       <Footer />
     </div>

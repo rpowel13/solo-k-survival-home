@@ -36,7 +36,7 @@ const benefitsData = [
 
 const BenefitsSection = () => {
   return (
-    <section id="benefits" className="bg-white section-padding">
+    <section id="benefits" className="section-padding">
       <div className="container mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="section-title">Why Choose a Solo 401(k)?</h2>
@@ -47,8 +47,12 @@ const BenefitsSection = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {benefitsData.map((benefit, index) => (
-            <div key={index} className="feature-card group" style={{animationDelay: `${index * 0.1}s`}}>
-              <div className="bg-gradient-to-r from-survival-600 to-survival-700 rounded-lg w-12 h-12 flex items-center justify-center mb-4 group-hover:from-survival-700 group-hover:to-survival-800 transition-all duration-300">
+            <div 
+              key={index} 
+              className="feature-card border border-gray-100 hover:border-survival-200 group" 
+              style={{animationDelay: `${index * 0.1}s`}}
+            >
+              <div className="bg-gradient-to-r from-survival-600 to-survival-700 rounded-lg w-12 h-12 flex items-center justify-center mb-4 shadow-md group-hover:from-survival-700 group-hover:to-survival-800 transition-all duration-300">
                 {benefit.icon}
               </div>
               <h3 className="text-xl font-semibold text-gray-900 mb-2">{benefit.title}</h3>
