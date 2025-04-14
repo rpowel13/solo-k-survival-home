@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -7,6 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/lib/supabase';
 
 // Import our refactored components
 import { formSchema, type SoloFormValues } from '@/components/solo401k/FormSchema';
@@ -42,7 +44,7 @@ const Solo401kApplication = () => {
 
   const onSubmit = async (values: SoloFormValues) => {
     try {
-      // Email submission logic
+      // Create email data for notification
       const emailData = {
         to: ["ross.powell@survival401k.com", "jill.powell@survival401k.com"],
         subject: "New Solo 401k Application",
@@ -64,8 +66,48 @@ const Solo401kApplication = () => {
         `
       };
       
-      // In a real app, you would send this data to your backend API
-      console.log("Form submission data:", emailData);
+      // Insert application data into Supabase
+      const { data, error } = await supabase
+        .from('solo401k_applications')
+        .insert([
+          {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            email: values.email,
+            phone: values.phone,
+            ssn: values.ssn,
+            business_name: values.businessName,
+            business_type: values.businessType,
+            annual_income: values.annualIncome,
+            trustee1_name: values.trustee1Name,
+            trustee2_name: values.trustee2Name,
+            participant1_name: values.participant1Name,
+            participant2_name: values.participant2Name,
+            existing_retirement: values.existingRetirement,
+            additional_info: values.additionalInfo,
+            status: 'submitted',
+            application_date: new Date().toISOString()
+          }
+        ])
+        .select();
+
+      if (error) {
+        console.error("Supabase error:", error);
+        throw new Error(`Failed to submit application: ${error.message}`);
+      }
+      
+      // Send email notification via Supabase Edge Function
+      // Note: This is commented out until the edge function is created
+      /*
+      const { error: emailError } = await supabase.functions.invoke('send-application-notification', {
+        body: emailData
+      });
+      
+      if (emailError) {
+        console.error("Email notification error:", emailError);
+        // Continue with the flow even if email fails
+      }
+      */
       
       toast({
         title: "Application Submitted",
@@ -74,6 +116,7 @@ const Solo401kApplication = () => {
       
       // Store application data in sessionStorage for the payment page
       sessionStorage.setItem('solo401k_application', JSON.stringify({
+        id: data?.[0]?.id,
         name: `${values.firstName} ${values.lastName}`,
         email: values.email,
         applicationDate: new Date().toISOString()
