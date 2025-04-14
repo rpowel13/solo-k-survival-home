@@ -1,5 +1,5 @@
-
 import React, { useState } from "react";
+import { format } from "date-fns";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -12,8 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2, CalendarClock } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format, addDays, addWeeks, setHours, setMinutes, isBefore, isAfter } from "date-fns";
+import { addWeeks, isBefore, isAfter } from "date-fns";
 import { cn } from "@/lib/utils";
+import { scheduleConsultation } from "@/services/vcitaService";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -72,34 +73,14 @@ const ScheduleConsultationForm = () => {
     setIsSubmitting(true);
     
     try {
-      // VCita API endpoint for scheduling 
-      // Note: This is a placeholder - you'll need to get the actual endpoint from VCita
-      const vcitaEndpoint = `https://www.vcita.com/api/v1/scheduling/izk040b42jnjcf3c/submit`;
+      // Format the selected date and time for VCita
+      const formattedDate = format(data.date, "yyyy-MM-dd");
       
-      // Format the selected date and time
-      const formattedDateTime = `${format(data.date, "yyyy-MM-dd")} ${data.time}`;
-      
-      const response = await fetch(vcitaEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contact: {
-            name: data.name,
-            email: data.email,
-            phone: data.phone,
-          },
-          appointment: {
-            requested_datetime: formattedDateTime,
-            notes: data.message || "No additional notes provided.",
-          },
-          source: window.location.href,
-        }),
-        mode: "no-cors", // This is needed for cross-origin requests
+      await scheduleConsultation({
+        ...data,
+        date: formattedDate,
       });
       
-      // Since we're using no-cors, we'll assume it worked and show a success message
       toast({
         title: "Consultation scheduled successfully",
         description: `We'll see you on ${format(data.date, "MMMM d, yyyy")} at ${data.time}.`,
@@ -107,12 +88,7 @@ const ScheduleConsultationForm = () => {
       
       form.reset();
     } catch (error) {
-      console.error("Error scheduling consultation:", error);
-      toast({
-        title: "Error scheduling consultation",
-        description: "Please try again or contact us directly.",
-        variant: "destructive",
-      });
+      // Error handling is done in the service
     } finally {
       setIsSubmitting(false);
     }

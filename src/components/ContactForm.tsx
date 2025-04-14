@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -9,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { submitContactForm } from "@/services/vcitaService";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -39,30 +39,8 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // VCita API endpoint for contact form submissions
-      // Note: This is a placeholder - you'll need to get the actual endpoint from VCita
-      const vcitaEndpoint = `https://www.vcita.com/api/v1/contact_form/izk040b42jnjcf3c/submit`;
+      await submitContactForm(data);
       
-      const response = await fetch(vcitaEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contact: {
-            name: data.name,
-            email: data.email,
-            phone: data.phone || "",
-          },
-          subject: data.subject,
-          message: data.message,
-          source: window.location.href,
-        }),
-        mode: "no-cors", // This is needed for cross-origin requests
-      });
-      
-      // Since we're using no-cors, we won't get a meaningful response status
-      // Instead, we'll just assume it worked and show a success message
       toast({
         title: "Message sent successfully",
         description: "We'll get back to you as soon as possible.",
@@ -70,12 +48,7 @@ const ContactForm = () => {
       
       form.reset();
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Error sending message",
-        description: "Please try again or contact us directly.",
-        variant: "destructive",
-      });
+      // Error handling is done in the service
     } finally {
       setIsSubmitting(false);
     }
