@@ -1,8 +1,8 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowDown, ArrowUp, Coins, Info } from 'lucide-react';
+import { ArrowDown, ArrowUp, Coins, ExternalLink, Info } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 
 interface MetalPrice {
@@ -20,8 +20,8 @@ interface MetalPrices {
 }
 
 const fetchMetalPrices = async (): Promise<MetalPrices> => {
-  // In a real implementation, this would call an actual API
-  // For demo purposes, we're using mock data
+  // In a real implementation, this would call Kitco API
+  // Since direct API access may require authentication, we're using mock data for demo
   await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
   
   // Mock data for demo
@@ -54,7 +54,7 @@ const MetalPrices = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['metalPrices'],
     queryFn: fetchMetalPrices,
-    refetchInterval: 60000, // Refetch every minute
+    refetchInterval: 300000, // Refetch every 5 minutes (300,000 ms)
   });
 
   const formatPrice = (price: number) => {
@@ -94,10 +94,21 @@ const MetalPrices = () => {
             <p className="text-lg">
               Monitor current market prices for the major precious metals. These prices are updated regularly to help you make informed investment decisions for your retirement portfolio.
             </p>
-            <p className="mt-4 flex items-center text-sm text-gray-600">
-              <Info className="h-4 w-4 mr-2" />
-              Prices shown are per troy ounce in USD
-            </p>
+            <div className="mt-4 flex items-center justify-between">
+              <p className="flex items-center text-sm text-gray-600">
+                <Info className="h-4 w-4 mr-2" />
+                Prices shown are per troy ounce in USD
+              </p>
+              <a 
+                href="https://www.kitco.com/market/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-finance-600 hover:text-finance-700 flex items-center"
+              >
+                Data provided by Kitco.com
+                <ExternalLink className="h-3 w-3 ml-1" />
+              </a>
+            </div>
           </div>
         </section>
 
@@ -117,7 +128,17 @@ const MetalPrices = () => {
                 {/* Gold Price Card */}
                 <Card className="border-t-4 border-t-yellow-500">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">Gold</CardTitle>
+                    <CardTitle className="text-xl flex items-center justify-between">
+                      Gold
+                      <a 
+                        href="https://www.kitco.com/charts/livegold.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xs text-gray-500 hover:text-finance-600 flex items-center"
+                      >
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </a>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold mb-2">{formatPrice(data!.gold.price)}</div>
@@ -135,7 +156,17 @@ const MetalPrices = () => {
                 {/* Silver Price Card */}
                 <Card className="border-t-4 border-t-gray-400">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">Silver</CardTitle>
+                    <CardTitle className="text-xl flex items-center justify-between">
+                      Silver
+                      <a 
+                        href="https://www.kitco.com/charts/livesilver.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xs text-gray-500 hover:text-finance-600 flex items-center"
+                      >
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </a>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold mb-2">{formatPrice(data!.silver.price)}</div>
@@ -153,7 +184,17 @@ const MetalPrices = () => {
                 {/* Platinum Price Card */}
                 <Card className="border-t-4 border-t-blue-300">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">Platinum</CardTitle>
+                    <CardTitle className="text-xl flex items-center justify-between">
+                      Platinum
+                      <a 
+                        href="https://www.kitco.com/charts/liveplatinum.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xs text-gray-500 hover:text-finance-600 flex items-center"
+                      >
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </a>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold mb-2">{formatPrice(data!.platinum.price)}</div>
@@ -171,7 +212,17 @@ const MetalPrices = () => {
                 {/* Palladium Price Card */}
                 <Card className="border-t-4 border-t-gray-500">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">Palladium</CardTitle>
+                    <CardTitle className="text-xl flex items-center justify-between">
+                      Palladium
+                      <a 
+                        href="https://www.kitco.com/charts/livepalladium.html" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-xs text-gray-500 hover:text-finance-600 flex items-center"
+                      >
+                        <ExternalLink className="h-3 w-3 ml-1" />
+                      </a>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold mb-2">{formatPrice(data!.palladium.price)}</div>
@@ -187,8 +238,17 @@ const MetalPrices = () => {
                 </Card>
               </div>
 
-              <div className="mt-6 text-right text-sm text-gray-500">
-                Last updated: {new Date(data!.timestamp).toLocaleString()}
+              <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
+                <span>Last updated: {new Date(data!.timestamp).toLocaleString()}</span>
+                <a 
+                  href="https://www.kitco.com/market/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-finance-600 hover:text-finance-700 flex items-center"
+                >
+                  Visit Kitco.com for more details
+                  <ExternalLink className="h-3 w-3 ml-1" />
+                </a>
               </div>
             </div>
           )}

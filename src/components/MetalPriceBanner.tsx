@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowDown, ArrowUp, Coins } from 'lucide-react';
+import { ArrowDown, ArrowUp, Coins, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface MetalPrice {
@@ -17,7 +17,8 @@ interface MetalPrices {
 }
 
 const fetchMetalPrices = async (): Promise<MetalPrices> => {
-  // Simulating API call with mock data
+  // In a real implementation, this would call Kitco API
+  // Since direct API access may require authentication, we're using mock data for demo
   await new Promise(resolve => setTimeout(resolve, 300));
   
   return {
@@ -39,7 +40,7 @@ const MetalPriceBanner = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['metalPricesBanner'],
     queryFn: fetchMetalPrices,
-    refetchInterval: 60000, // Refetch every minute
+    refetchInterval: 300000, // Refetch every 5 minutes (300,000 ms)
   });
 
   const formatPrice = (price: number) => {
@@ -79,7 +80,15 @@ const MetalPriceBanner = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Coins className="h-4 w-4 mr-2 text-yellow-600" />
-            <span className="text-sm font-medium text-gray-700">Live Precious Metals:</span>
+            <a 
+              href="https://www.kitco.com/market/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-gray-700 hover:text-survival-700 flex items-center"
+            >
+              Live Precious Metals
+              <ExternalLink className="h-3 w-3 ml-1" />
+            </a>
           </div>
           
           <div className="flex space-x-6">
@@ -113,8 +122,9 @@ const MetalPriceBanner = () => {
           </div>
           
           <div>
-            <Link to="/services/metal-prices" className="text-xs text-finance-600 hover:text-finance-700 font-medium">
-              View All Prices →
+            <Link to="/services/metal-prices" className="text-xs text-finance-600 hover:text-finance-700 font-medium flex items-center">
+              View All Prices
+              <ExternalLink className="h-3 w-3 ml-1" />
             </Link>
           </div>
         </div>

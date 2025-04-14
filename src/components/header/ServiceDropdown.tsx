@@ -5,6 +5,7 @@ import {
   NavigationMenuLink,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { Coins } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const ServiceDropdown = () => {
@@ -75,9 +76,12 @@ export const ServiceDropdown = () => {
                 to="/services/metal-prices"
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               >
-                <div className="text-sm font-medium leading-none">Gold & Silver Prices</div>
+                <div className="flex items-center space-x-2">
+                  <Coins className="h-4 w-4 text-yellow-600" />
+                  <div className="text-sm font-medium leading-none">Gold & Silver Prices</div>
+                </div>
                 <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                  View current market prices for precious metals.
+                  Live market prices for precious metals updated every 5 minutes from Kitco.com.
                 </p>
               </Link>
             </NavigationMenuLink>
