@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { supabase } from '@/lib/supabase';
+import AdditionalInfoFields from '@/components/solo401k/AdditionalInfoFields';
+import AgreementSection from '@/components/solo401k/AgreementSection';
 
 // Import our refactored components
 import { formSchema, type SoloFormValues } from '@/components/solo401k/FormSchema';
@@ -65,6 +67,8 @@ const Solo401kApplication = () => {
           <p><strong>Additional Information:</strong> ${values.additionalInfo || 'None provided'}</p>
         `
       };
+      
+      console.log("Form submission data:", emailData);
       
       // Insert application data into Supabase
       const { data, error } = await supabase
@@ -152,6 +156,8 @@ const Solo401kApplication = () => {
               <PersonalInfoFields form={form} />
               <BusinessInfoFields form={form} />
               <PlanInfoFields form={form} />
+              <AdditionalInfoFields form={form} />
+              <AgreementSection form={form} />
 
               <Button type="submit" className="w-full bg-survival-600 hover:bg-survival-700">
                 Submit Application

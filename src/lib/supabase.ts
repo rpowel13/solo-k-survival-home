@@ -1,15 +1,17 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// These environment variables should be set in your Supabase project
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// For development purposes, provide fallback values
+// In production, these would be proper environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables. Check your project settings.');
-}
+// Add mock data handling for development
+const isMockMode = true; // Set to false when connecting to a real Supabase instance
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = isMockMode 
+  ? createMockSupabaseClient() 
+  : createClient(supabaseUrl, supabaseAnonKey);
 
 // Helper function to handle Supabase errors consistently
 export const handleSupabaseError = (error: any) => {
@@ -19,3 +21,47 @@ export const handleSupabaseError = (error: any) => {
   }
   return null;
 };
+
+// Mock implementation of Supabase client for development
+function createMockSupabaseClient() {
+  console.log('Using mock Supabase client for development');
+  
+  // Simulated in-memory storage
+  let mockData: any[] = [];
+  
+  return {
+    from: (table: string) => ({
+      insert: (data: any) => {
+        console.log(`Mock insert into ${table}:`, data);
+        const newData = Array.isArray(data) ? data : [data];
+        const recordsWithIds = newData.map((record) => ({
+          ...record,
+          id: crypto.randomUUID()
+        }));
+        mockData = [...mockData, ...recordsWithIds];
+        
+        return {
+          select: () => ({
+            data: recordsWithIds,
+            error: null
+          }),
+          then: (callback: (result: {data: any[], error: null}) => void) => 
+            callback({ data: recordsWithIds, error: null })
+        };
+      },
+      select: () => {
+        console.log(`Mock select from ${table}`);
+        return {
+          data: mockData,
+          error: null
+        };
+      }
+    }),
+    functions: {
+      invoke: (functionName: string, { body }: { body: any }) => {
+        console.log(`Mock invoke function ${functionName} with:`, body);
+        return Promise.resolve({ data: null, error: null });
+      }
+    }
+  };
+}
