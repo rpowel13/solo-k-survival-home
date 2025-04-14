@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,7 +13,6 @@ import { formSchema, type SoloFormValues } from '@/components/solo401k/FormSchem
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
-import DisclaimerAlert from '@/components/solo401k/DisclaimerAlert';
 import FormHeader from '@/components/solo401k/FormHeader';
 
 const Solo401kApplication = () => {
@@ -105,7 +103,6 @@ const Solo401kApplication = () => {
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <FormHeader />
-          <DisclaimerAlert />
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
