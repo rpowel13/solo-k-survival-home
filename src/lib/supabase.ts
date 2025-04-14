@@ -91,75 +91,73 @@ function createMockSupabaseClient() {
   
   // Simulated in-memory storage, initialize with sample data
   let mockData = [...mockBlogPosts];
+
+  // Create a function to generate a proper query builder with chainable methods
+  const createQueryBuilder = (tableData = mockData) => {
+    // Basic query builder with chainable methods
+    const queryBuilder = {
+      data: tableData,
+      error: null,
+      
+      // Filter by equality
+      eq: (column: string, value: any) => {
+        console.log(`Mock filter: ${column} = ${value}`);
+        const filteredData = tableData.filter(item => item[column] === value);
+        return createQueryBuilder(filteredData);
+      },
+      
+      // Get a single result
+      single: () => {
+        console.log(`Mock single result`);
+        return {
+          data: tableData.length > 0 ? tableData[0] : null,
+          error: tableData.length === 0 ? { message: 'No rows found' } : null
+        };
+      },
+      
+      // Select specific columns (just returns all data for now)
+      select: (columns?: string) => {
+        console.log(`Mock select ${columns || '*'}`);
+        return queryBuilder;
+      },
+      
+      // Update records
+      update: (data: any) => {
+        console.log(`Mock update:`, data);
+        // In a real implementation, this would update the data
+        return queryBuilder;
+      },
+      
+      // Delete records
+      delete: () => {
+        console.log(`Mock delete`);
+        return {
+          data: { success: true },
+          error: null
+        };
+      },
+      
+      // Insert records
+      insert: (data: any) => {
+        console.log(`Mock insert:`, data);
+        const newData = Array.isArray(data) ? data : [data];
+        const recordsWithIds = newData.map((record) => ({
+          ...record,
+          id: record.id || crypto.randomUUID()
+        }));
+        mockData = [...mockData, ...recordsWithIds];
+        
+        return createQueryBuilder(recordsWithIds);
+      }
+    };
+    
+    return queryBuilder;
+  };
   
   return {
     from: (table: string) => {
       console.log(`Mock operation on table: ${table}`);
-      
-      // Object that supports chaining methods
-      const buildFilterableResponse = (currentData: any[]) => {
-        return {
-          data: currentData,
-          error: null,
-          select: () => {
-            console.log(`Mock select from ${table}`);
-            return {
-              data: currentData,
-              error: null
-            };
-          },
-          eq: (column: string, value: any) => {
-            console.log(`Mock filter: ${column} = ${value}`);
-            const filteredData = currentData.filter(item => item[column] === value);
-            return buildFilterableResponse(filteredData);
-          },
-          single: () => {
-            console.log(`Mock single result from ${table}`);
-            return {
-              data: currentData.length > 0 ? currentData[0] : null,
-              error: currentData.length === 0 ? { message: 'No rows found' } : null
-            };
-          },
-          update: (data: any) => {
-            console.log(`Mock update on ${table}:`, data);
-            // In a real implementation, this would update the data
-            return buildFilterableResponse(currentData);
-          },
-          delete: () => {
-            console.log(`Mock delete from ${table}`);
-            return {
-              data: { success: true },
-              error: null
-            };
-          }
-        };
-      };
-      
-      return {
-        insert: (data: any) => {
-          console.log(`Mock insert into ${table}:`, data);
-          const newData = Array.isArray(data) ? data : [data];
-          const recordsWithIds = newData.map((record) => ({
-            ...record,
-            id: record.id || crypto.randomUUID()
-          }));
-          mockData = [...mockData, ...recordsWithIds];
-          
-          return buildFilterableResponse(recordsWithIds);
-        },
-        select: () => {
-          console.log(`Mock select all from ${table}`);
-          return {
-            data: mockData,
-            error: null
-          };
-        },
-        eq: (column: string, value: any) => {
-          console.log(`Mock filter: ${column} = ${value}`);
-          const filteredData = mockData.filter(item => item[column] === value);
-          return buildFilterableResponse(filteredData);
-        }
-      };
+      return createQueryBuilder();
     },
     functions: {
       invoke: (functionName: string, { body }: { body: any }) => {
