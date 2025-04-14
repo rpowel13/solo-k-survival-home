@@ -3,12 +3,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { InfoIcon } from "lucide-react";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -17,9 +19,14 @@ const formSchema = z.object({
   lastName: z.string().min(2, { message: 'Last name is required' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
   phone: z.string().min(10, { message: 'Please enter a valid phone number' }),
+  ssn: z.string().min(9, { message: 'Please enter a valid Social Security Number' }),
   businessName: z.string().min(2, { message: 'Business name is required' }),
   businessType: z.string().min(1, { message: 'Please select a business type' }),
   annualIncome: z.string().min(1, { message: 'Annual income information is required' }),
+  trustee1Name: z.string().min(2, { message: 'Trustee name is required' }),
+  trustee2Name: z.string().optional(),
+  participant1Name: z.string().min(2, { message: 'Participant name is required' }),
+  participant2Name: z.string().optional(),
   existingRetirement: z.boolean().optional(),
   additionalInfo: z.string().optional(),
   agreeToTerms: z.boolean().refine(val => val === true, {
@@ -36,23 +43,61 @@ const Solo401kApplication = () => {
       lastName: '',
       email: '',
       phone: '',
+      ssn: '',
       businessName: '',
       businessType: '',
       annualIncome: '',
+      trustee1Name: '',
+      trustee2Name: '',
+      participant1Name: '',
+      participant2Name: '',
       existingRetirement: false,
       additionalInfo: '',
       agreeToTerms: false,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    // Here you would typically send the form data to your server
-    toast({
-      title: "Application Submitted",
-      description: "We've received your Solo 401k application. Our team will contact you shortly.",
-    });
-    form.reset();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      // Email submission logic
+      const emailData = {
+        to: ["ross.powell@survival401k.com", "jill.powell@survival401k.com"],
+        subject: "New Solo 401k Application",
+        body: `
+          <h2>New Solo 401k Application Submission</h2>
+          <p><strong>Name:</strong> ${values.firstName} ${values.lastName}</p>
+          <p><strong>Email:</strong> ${values.email}</p>
+          <p><strong>Phone:</strong> ${values.phone}</p>
+          <p><strong>SSN:</strong> ${values.ssn}</p>
+          <p><strong>Business Name:</strong> ${values.businessName}</p>
+          <p><strong>Business Type:</strong> ${values.businessType}</p>
+          <p><strong>Annual Income:</strong> ${values.annualIncome}</p>
+          <p><strong>Trustee 1:</strong> ${values.trustee1Name}</p>
+          <p><strong>Trustee 2:</strong> ${values.trustee2Name || 'N/A'}</p>
+          <p><strong>Participant 1:</strong> ${values.participant1Name}</p>
+          <p><strong>Participant 2:</strong> ${values.participant2Name || 'N/A'}</p>
+          <p><strong>Has Existing Retirement:</strong> ${values.existingRetirement ? 'Yes' : 'No'}</p>
+          <p><strong>Additional Information:</strong> ${values.additionalInfo || 'None provided'}</p>
+        `
+      };
+      
+      // In a real app, you would send this data to your backend API
+      // For demonstration, we'll just log it and show success
+      console.log("Form submission data:", emailData);
+      
+      toast({
+        title: "Application Submitted",
+        description: "We've received your Solo 401k application. Our team will contact you shortly.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Submission Error",
+        description: "There was a problem submitting your application. Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -66,6 +111,14 @@ const Solo401kApplication = () => {
               Complete the form below to apply for your personalized Solo 401k plan. Our team will review your information and contact you to discuss the next steps.
             </p>
           </div>
+
+          <Alert className="mb-8 bg-amber-50 border-amber-200">
+            <InfoIcon className="h-5 w-5 text-amber-500" />
+            <AlertDescription className="text-amber-800">
+              <strong>Disclaimer:</strong> Survival 401k is not a law firm, accounting firm, or financial advisory firm, and cannot act as your fiduciary. We provide 
+              plan documentation services and general information about retirement plans. Please consult with your attorney, accountant, or financial advisor regarding your specific situation.
+            </AlertDescription>
+          </Alert>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -129,6 +182,23 @@ const Solo401kApplication = () => {
 
               <FormField
                 control={form.control}
+                name="ssn"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Social Security Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="xxx-xx-xxxx" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Your SSN is required for plan documentation. This information is kept secure.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="businessName"
                 render={({ field }) => (
                   <FormItem>
@@ -188,6 +258,64 @@ const Solo401kApplication = () => {
                   </FormItem>
                 )}
               />
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="trustee1Name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Trustee 1 Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Primary Trustee Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="trustee2Name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Trustee 2 Name (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Secondary Trustee Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="participant1Name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Participant 1 Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Primary Participant Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="participant2Name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Participant 2 Name (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Secondary Participant Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
