@@ -2,11 +2,11 @@
 import { format } from "date-fns";
 import { ScheduleFormValues } from "./types";
 import { scheduleConsultation } from "@/services/vcitaService";
-import { toast } from "@/hooks/use-toast";
+import { toast as toastFunction } from "@/hooks/use-toast";
 
 export const handleScheduleSubmit = async (
   data: ScheduleFormValues,
-  toast: typeof toast,
+  toast: typeof toastFunction,
   setIsSubmitting: (value: boolean) => void,
   resetForm: () => void
 ) => {
