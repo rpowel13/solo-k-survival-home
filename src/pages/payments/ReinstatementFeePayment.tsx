@@ -17,7 +17,7 @@ const ReinstatementFeePayment = () => {
       amount={250}
       paymentType="Reinstatement Fee"
       features={features}
-      paymentLink="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard"
+      paymentLink="https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Plan%20Reinstatement%20Fee&amount=250&v_currency=USD"
     />
   );
 };
