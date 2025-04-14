@@ -18,7 +18,7 @@ const AnnualFeePayment = () => {
       amount={200}
       paymentType="Annual Maintenance Fee"
       features={features}
-      paymentLink="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard"
+      paymentLink="https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Annual%20Fee&amount=200&v_currency=U"
     />
   );
 };
