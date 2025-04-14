@@ -11,7 +11,7 @@ const HeroSection = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
-              Take Control of Your Retirement
+              Retirement Plans for Entrepreneurs & 1st Responders
             </h1>
             <p className="mt-4 text-xl text-gray-600">
               Self-directed retirement solutions designed for entrepreneurs, small business owners, and independent professionals.
@@ -57,17 +57,30 @@ const HeroSection = () => {
           </div>
           
           <div className="relative">
-            {/* Image or illustration would go here */}
-            <div className="bg-gradient-to-br from-finance-100 to-survival-100 rounded-lg aspect-[4/3] flex items-center justify-center">
-              <div className="text-center p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">Financial Freedom Starts Here</h3>
-                <p className="text-gray-600 mb-6">Take the first step toward a secure retirement with our personalized solutions.</p>
-                <Link to="/tools/retirement-calculator">
-                  <Button variant="outline" className="border-finance-600 text-finance-600 hover:bg-finance-50">
-                    Try Our Calculator
-                  </Button>
-                </Link>
-              </div>
+            <div className="bg-gradient-to-br from-finance-100 to-survival-100 rounded-lg p-6 shadow-md">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Professionals Choose Us</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                  <span>Specialized expertise in self-directed retirement plans</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                  <span>Tailored solutions for entrepreneurs and first responders</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                  <span>Personalized support throughout the entire process</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                  <span>Transparent pricing with no hidden fees</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+                  <span>Educational resources to help you make informed decisions</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
