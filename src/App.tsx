@@ -12,6 +12,10 @@ import LLCCreation from "./pages/services/LLCCreation";
 import FirstResponderPackage from "./pages/services/FirstResponderPackage";
 import AlternativeInvestments from "./pages/services/AlternativeInvestments";
 import MetalPrices from "./pages/services/MetalPrices";
+import Solo401kApplication from "./pages/applications/Solo401kApplication";
+import LLCApplication from "./pages/applications/LLCApplication";
+import FirstResponderApplication from "./pages/applications/FirstResponderApplication";
+import AlternativeInvestmentsApplication from "./pages/applications/AlternativeInvestmentsApplication";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +33,10 @@ const App = () => (
           <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />
           <Route path="/services/alternative-investments" element={<AlternativeInvestments />} />
           <Route path="/services/metal-prices" element={<MetalPrices />} />
+          <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
+          <Route path="/apply/llc" element={<LLCApplication />} />
+          <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
+          <Route path="/apply/alternative-investments" element={<AlternativeInvestmentsApplication />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

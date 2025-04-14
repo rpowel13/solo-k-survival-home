@@ -3,12 +3,15 @@ import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Solo401k = () => {
   return (
     <ServiceLayout
       title="Solo 401k Plans"
       description="Maximize your retirement savings with a personalized Solo 401k plan designed specifically for self-employed professionals and small business owners."
+      callToAction={{ text: "Apply Now", link: "/apply/solo-401k" }}
     >
       <div className="space-y-12">
         <section>
@@ -147,6 +150,20 @@ const Solo401k = () => {
                 <span>Access to our network of investment professionals</span>
               </li>
             </ul>
+          </div>
+        </section>
+
+        <section className="text-center">
+          <div className="bg-gray-50 rounded-lg p-8 shadow-sm">
+            <h2 className="text-2xl font-bold mb-4 text-survival-800">Ready to Get Started?</h2>
+            <p className="text-lg mb-6">
+              Take the first step toward financial independence and retirement security with a Solo 401k.
+            </p>
+            <Link to="/apply/solo-401k">
+              <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
+                Apply for Your Solo 401k Today
+              </Button>
+            </Link>
           </div>
         </section>
       </div>
