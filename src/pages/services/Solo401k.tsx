@@ -1,7 +1,7 @@
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2, DollarSign, Shield } from 'lucide-react';
+import { CheckCircle2, DollarSign, Shield, CalendarCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import PrequalificationSection from '@/components/solo401k/PrequalificationSection';
@@ -44,7 +44,7 @@ const Solo401k = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p>Contribute up to $69,000 annually (2024), far exceeding traditional IRA limits, allowing you to accelerate your retirement savings.</p>
+                <p>Contribute up to $69,000 annually (2025), far exceeding traditional IRA limits, allowing you to accelerate your retirement savings.</p>
               </CardContent>
             </Card>
             <Card>
@@ -175,6 +175,10 @@ const Solo401k = () => {
               <p className="text-lg mb-4 text-gray-600">
                 Comprehensive Solo 401k Plan Documentation and Setup
               </p>
+              <div className="flex items-center justify-center text-finance-600 text-sm mb-4">
+                <CalendarCheck className="h-4 w-4 mr-1" />
+                <span>2025 Contribution Year Ready</span>
+              </div>
               <Link to="/apply/solo-401k">
                 <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
                   Get Started

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle2, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, ShieldCheck, CalendarCheck } from 'lucide-react';
 
 const PaymentDetailsCard: React.FC = () => {
   return (
@@ -9,6 +9,10 @@ const PaymentDetailsCard: React.FC = () => {
         <div>
           <h3 className="font-medium">Solo 401k Setup Package</h3>
           <p className="text-sm text-gray-500">Complete documentation and filing service</p>
+          <div className="flex items-center mt-1 text-xs text-finance-600">
+            <CalendarCheck className="h-3.5 w-3.5 mr-1" />
+            <span>2025 Contribution Year Ready</span>
+          </div>
         </div>
         <span className="font-bold text-xl">$1,240.00</span>
       </div>

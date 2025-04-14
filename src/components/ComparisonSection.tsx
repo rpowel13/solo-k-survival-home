@@ -4,7 +4,7 @@ import { Check, X } from "lucide-react";
 const ComparisonSection = () => {
   const comparisonData = [
     {
-      feature: "2024 Contribution Limit",
+      feature: "2025 Contribution Limit",
       solo401k: "$69,000",
       sepIra: "$66,000",
       simpleIra: "$30,500",
@@ -102,7 +102,7 @@ const ComparisonSection = () => {
         </div>
         
         <div className="mt-8 text-center text-sm text-gray-500">
-          * Contribution limits shown are for 2024 and subject to change based on IRS guidelines.
+          * Contribution limits shown are for 2025 and subject to change based on IRS guidelines.
         </div>
       </div>
     </section>

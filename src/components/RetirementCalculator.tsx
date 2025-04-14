@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,11 +20,8 @@ const RetirementCalculator = () => {
     let totalSavings = currentSavings;
     
     for (let i = 0; i < yearsToRetirement; i++) {
-      // Add annual contribution
       totalSavings += annualContribution;
-      // Apply investment return
       totalSavings *= (1 + expectedReturn / 100);
-      // Adjust for inflation
       totalSavings /= (1 + inflationRate / 100);
     }
     
@@ -180,7 +176,7 @@ const RetirementCalculator = () => {
                   </p>
                   <div className="mt-6 p-4 bg-survival-50 rounded-lg">
                     <p className="text-survival-800 font-medium">
-                      With a Solo 401k, you could potentially contribute up to {formatCurrency(Math.min(61000, annualContribution * 2))} per year 
+                      With a Solo 401k, you could potentially contribute up to {formatCurrency(Math.min(69000, annualContribution * 2))} per year for 2025
                       (compared to {formatCurrency(annualContribution)} in your current projection).
                     </p>
                     <p className="mt-2 text-survival-600">
