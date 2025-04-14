@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -40,16 +39,13 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Ensure data is properly typed for submitContactForm
-      const contactData = {
+      await submitContactForm({
         name: data.name,
         email: data.email,
         phone: data.phone,
         subject: data.subject,
         message: data.message
-      };
-      
-      await submitContactForm(contactData);
+      });
       
       toast({
         title: "Message sent successfully",
