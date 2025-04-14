@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,9 +13,9 @@ const Header = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="#" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <span className="text-2xl font-bold text-survival-800">Survival<span className="text-finance-600">401k</span></span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -23,6 +24,7 @@ const Header = () => {
             <a href="#features" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Features</a>
             <a href="#comparison" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Comparison</a>
             <a href="#faq" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">FAQ</a>
+            <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
             <Button className="bg-survival-600 hover:bg-survival-700 text-white">Get Started</Button>
           </nav>
 
@@ -44,6 +46,7 @@ const Header = () => {
             <a href="#features" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Features</a>
             <a href="#comparison" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Comparison</a>
             <a href="#faq" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">FAQ</a>
+            <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
             <Button className="w-full bg-survival-600 hover:bg-survival-700 text-white">Get Started</Button>
           </div>
         )}
