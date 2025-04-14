@@ -1,4 +1,6 @@
+
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -31,7 +33,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Home</a></li>
+              <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
               <li><a href="#benefits" className="text-gray-400 hover:text-white transition-colors">Benefits</a></li>
               <li><a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
               <li><a href="#comparison" className="text-gray-400 hover:text-white transition-colors">Plan Comparison</a></li>
@@ -43,7 +45,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white text-lg font-semibold mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Retirement Calculator</a></li>
+              <li><Link to="/tools/retirement-calculator" className="text-gray-400 hover:text-white transition-colors">Retirement Calculator</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Tax Guides</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Investment Options</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
