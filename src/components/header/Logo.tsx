@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import BrandText from "@/components/common/BrandText";
 
 export const Logo = () => {
   return (
@@ -11,10 +12,7 @@ export const Logo = () => {
           className="h-10 mr-2"
         />
         <div>
-          <div className="flex items-center">
-            <span className="text-2xl font-bold text-survival-800">Survival</span>
-            <span className="text-2xl font-bold text-finance-600 ml-1">401k</span>
-          </div>
+          <BrandText className="text-2xl" />
           <p className="text-xs text-gray-500 ml-1">Common Sense Wealth Management</p>
         </div>
       </Link>
