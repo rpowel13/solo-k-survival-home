@@ -1,14 +1,13 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Square, CheckSquare } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { submitContactForm } from "@/services/vcitaService";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link } from "react-router-dom";
@@ -16,7 +15,7 @@ import { Link } from "react-router-dom";
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().min(10, { message: "Please enter a valid phone number." }), // Changed from optional to required
+  phone: z.string().min(10, { message: "Please enter a valid phone number." }),
   subject: z.string().min(2, { message: "Subject must be at least 2 characters." }),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
   consent: z.boolean().refine(val => val === true, {
@@ -35,7 +34,7 @@ const ContactForm = () => {
     defaultValues: {
       name: "",
       email: "",
-      phone: "", // Ensure phone is no longer optional in default values
+      phone: "",
       subject: "",
       message: "",
       consent: false
@@ -55,7 +54,6 @@ const ContactForm = () => {
         consent: data.consent
       });
       
-      // Always show success message since we're using no-cors mode
       toast({
         title: "Message sent successfully",
         description: "We'll get back to you as soon as possible.",
@@ -113,7 +111,7 @@ const ContactForm = () => {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone (Optional)</FormLabel>
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
                   <Input placeholder="(123) 456-7890" type="tel" {...field} />
                 </FormControl>
