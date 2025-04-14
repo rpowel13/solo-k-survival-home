@@ -67,7 +67,7 @@ const Contact = () => {
                         Contact Us Now
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                    <DialogContent className="sm:max-w-[600px] p-0 h-[600px]">
                       <DialogHeader>
                         <DialogTitle className="sr-only">Contact Form</DialogTitle>
                         <DialogDescription className="sr-only">Fill out the contact form</DialogDescription>
@@ -76,10 +76,10 @@ const Contact = () => {
                         src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
                         width="100%" 
                         height="100%" 
-                        scrolling="no" 
                         frameBorder="0"
                         title="Contact Form for Survival 401k"
                         className="border-0 rounded-md"
+                        scrolling="no"
                       />
                     </DialogContent>
                   </Dialog>
@@ -106,7 +106,7 @@ const Contact = () => {
               </Button>
               
               <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
-                <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                <DialogContent className="sm:max-w-[600px] p-0 h-[600px]">
                   <DialogHeader>
                     <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
                     <DialogDescription className="sr-only">Schedule a free consultation with our specialists</DialogDescription>
@@ -118,6 +118,7 @@ const Contact = () => {
                     frameBorder="0"
                     title="Schedule a Consultation with Survival 401k"
                     className="border-0 rounded-md"
+                    scrolling="no"
                   />
                 </DialogContent>
               </Dialog>
