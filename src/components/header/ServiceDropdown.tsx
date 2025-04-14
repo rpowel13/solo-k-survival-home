@@ -9,6 +9,11 @@ import { Coins } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const ServiceDropdown = () => {
+  // Function to scroll to top when a link is clicked
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <NavigationMenuItem>
       <NavigationMenuTrigger className="text-gray-600 hover:text-survival-700 font-medium bg-transparent">
@@ -21,6 +26,7 @@ export const ServiceDropdown = () => {
               <Link
                 className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-survival-50 to-survival-100 p-6 no-underline outline-none focus:shadow-md"
                 to="/services/solo-401k"
+                onClick={scrollToTop}
               >
                 <div className="mb-2 mt-4 text-lg font-medium text-survival-800">
                   Solo 401k
@@ -35,6 +41,7 @@ export const ServiceDropdown = () => {
             <NavigationMenuLink asChild>
               <Link
                 to="/services/llc-creation"
+                onClick={scrollToTop}
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               >
                 <div className="text-sm font-medium leading-none">LLC Creation</div>
@@ -48,6 +55,7 @@ export const ServiceDropdown = () => {
             <NavigationMenuLink asChild>
               <Link
                 to="/services/first-responder-package"
+                onClick={scrollToTop}
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               >
                 <div className="text-sm font-medium leading-none">First Responder Package</div>
@@ -61,6 +69,7 @@ export const ServiceDropdown = () => {
             <NavigationMenuLink asChild>
               <Link
                 to="/services/alternative-investments"
+                onClick={scrollToTop}
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               >
                 <div className="text-sm font-medium leading-none">Alternative Investments</div>
@@ -74,6 +83,7 @@ export const ServiceDropdown = () => {
             <NavigationMenuLink asChild>
               <Link
                 to="/services/metal-prices"
+                onClick={scrollToTop}
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
               >
                 <div className="flex items-center space-x-2">
