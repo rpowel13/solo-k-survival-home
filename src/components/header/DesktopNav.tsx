@@ -5,10 +5,11 @@ import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ServiceDropdown } from "./ServiceDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
+import { PaymentDropdown } from "./PaymentDropdown";
 
 export const DesktopNav = () => {
   return (
-    <nav className="hidden md:flex items-center space-x-8">
+    <nav className="hidden md:flex items-center space-x-6">
       <Link to="/" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Home</Link>
       
       <NavigationMenu>
@@ -20,6 +21,12 @@ export const DesktopNav = () => {
       <NavigationMenu>
         <NavigationMenuList>
           <ApplicationDropdown />
+        </NavigationMenuList>
+      </NavigationMenu>
+
+      <NavigationMenu>
+        <NavigationMenuList>
+          <PaymentDropdown />
         </NavigationMenuList>
       </NavigationMenu>
 
