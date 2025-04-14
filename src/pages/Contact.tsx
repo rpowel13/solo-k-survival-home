@@ -1,21 +1,21 @@
 
 import React, { useState } from "react";
-import { Mail, Phone, MessageSquare } from "lucide-react";
+import { Mail, Phone, MessageSquare, Calendar } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import ContactForm from "@/components/ContactForm";
 
 const Contact = () => {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
-  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
-        <section className="container mx-auto section-padding">
+        <section className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">Contact Us</h1>
             <p className="text-lg text-gray-600 text-center mb-12">
@@ -47,6 +47,21 @@ const Contact = () => {
                         <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
                       </div>
                     </div>
+                    
+                    <div className="flex items-start">
+                      <Calendar className="h-5 w-5 mr-3 text-survival-600 mt-0.5" />
+                      <div>
+                        <h3 className="font-medium">Schedule a Call</h3>
+                        <p className="text-gray-600">Book a free consultation</p>
+                        <Button 
+                          variant="link" 
+                          className="p-0 h-auto text-survival-600 mt-1" 
+                          onClick={() => setIsSchedulerOpen(true)}
+                        >
+                          Choose a time →
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -56,44 +71,8 @@ const Contact = () => {
                   <CardTitle className="text-2xl font-semibold">Send a Message</CardTitle>
                   <CardDescription>Get in touch with our team</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-gray-600">
-                    Fill out our contact form and one of our retirement specialists will get back to you promptly.
-                  </p>
-                  
-                  <Dialog open={isContactFormOpen} onOpenChange={setIsContactFormOpen}>
-                    <DialogTrigger asChild>
-                      <Button className="w-full flex items-center gap-2" size="lg">
-                        <MessageSquare className="h-5 w-5" />
-                        Contact Us Now
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent 
-                      className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[1000px] p-0 overflow-hidden w-full h-[90vh]"
-                    >
-                      <DialogHeader>
-                        <DialogTitle className="sr-only">Contact Form</DialogTitle>
-                        <DialogDescription className="sr-only">Fill out the contact form</DialogDescription>
-                      </DialogHeader>
-                      <iframe 
-                        src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
-                        width="100%" 
-                        height="100%" 
-                        frameBorder="0"
-                        title="Contact Form for Survival 401k"
-                        className="border-0"
-                        style={{ 
-                          pointerEvents: 'auto', 
-                          overflow: 'hidden', 
-                          display: 'block'
-                        }}
-                      />
-                    </DialogContent>
-                  </Dialog>
-                  
-                  <p className="text-xs text-gray-500 mt-2 text-center">
-                    Your information is secure and will never be shared with third parties.
-                  </p>
+                <CardContent>
+                  <ContactForm />
                 </CardContent>
               </Card>
             </div>
