@@ -137,8 +137,6 @@ const PlanInfoFields = ({ form }: PlanInfoFieldsProps) => {
           
           <p>E. Survival 401k, LLC does not provide legal, tax, or investment advice. Nothing of the foregoing, or of any other written, electronic or oral statement or communication by Survival 401k, LLC or its representatives, is intended to be, or may be relied as, legal, tax or investment advice, statements, opinions or predictions. Prior to making any investment decisions, please consult with the appropriate legal, tax, and investment professionals for advice.</p>
           
-          <p className="font-semibold">F. I acknowledge the set up fee of $1,200.00 is payable upon submitting application and the $200.00 annual maintenance fee will be automatically charged on the first day of the anniversary month for each year following the initial application via the same payment method as submitted with this application.</p>
-
           <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
             <div className="flex items-center justify-center mb-2">
               <DollarSign className="h-6 w-6 text-finance-600 mr-2" />
