@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Loader2, Square, CheckSquare } from "lucide-react";
 import { submitContactForm } from "@/services/vcitaService";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Link } from "react-router-dom";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -167,7 +168,7 @@ const ContactForm = () => {
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel className="text-sm font-normal">
-                  By clicking "submit", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our Privacy Policy and Terms and Conditions. Text "HELP" for help or contact us at (833) 224-5517. Text "STOP" to cancel.
+                  By clicking "submit", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our <Link to="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</Link> and Privacy Policy. Text "HELP" for help or contact us at (833) 224-5517. Text "STOP" to cancel.
                 </FormLabel>
                 <FormMessage />
               </div>
