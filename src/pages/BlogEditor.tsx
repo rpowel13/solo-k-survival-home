@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -33,41 +32,24 @@ const BlogEditor = () => {
 
   useEffect(() => {
     const fetchBlogPost = async () => {
-      if (!isEditMode) return;
+      if (!isEditMode || !slug) return;
       
       try {
         setIsLoading(true);
         
         // In production, this would fetch from Supabase
-        // For now, we use our sample data
         const { data, error } = await supabase
           .from('blog_posts')
-          .select('*')
           .eq('slug', slug)
           .single();
         
         if (error) {
-          // Fallback to sample data
-          const samplePost = sampleBlogPosts.find(post => post.slug === slug);
-          if (samplePost) {
-            setFormData({
-              title: samplePost.title,
-              slug: samplePost.slug,
-              excerpt: samplePost.excerpt,
-              content: samplePost.content,
-              coverImage: samplePost.coverImage,
-              author: samplePost.author,
-              authorTitle: samplePost.authorTitle,
-              tags: samplePost.tags.join(", ")
-            });
-          } else {
-            toast({
-              title: "Post not found",
-              description: "The blog post you're trying to edit doesn't exist",
-              variant: "destructive",
-            });
-            navigate("/blog");
-          }
+          toast({
+            title: "Post not found",
+            description: "The blog post you're trying to edit doesn't exist",
+            variant: "destructive",
+          });
+          navigate("/blog");
         } else {
           const post = data as BlogPost;
           setFormData({
@@ -88,6 +70,7 @@ const BlogEditor = () => {
           description: "Please try again later",
           variant: "destructive",
         });
+        navigate("/blog");
       } finally {
         setIsLoading(false);
       }

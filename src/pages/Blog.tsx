@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -21,7 +20,7 @@ const Blog = () => {
         setIsLoading(true);
         // In production, this would fetch from Supabase
         // For now, we're using our mock data
-        const { data, error } = await supabase.from('blog_posts').select('*');
+        const { data, error } = await supabase.from('blog_posts').select();
         
         if (error) {
           toast({
@@ -32,7 +31,7 @@ const Blog = () => {
         } else {
           // If we have no data yet, use sample data
           if (!data || data.length === 0) {
-            setBlogPosts(sampleBlogPosts);
+            setBlogPosts([]);
           } else {
             setBlogPosts(data as BlogPost[]);
           }
@@ -44,8 +43,8 @@ const Blog = () => {
           description: "Please try again later",
           variant: "destructive",
         });
-        // Fallback to sample data on error
-        setBlogPosts(sampleBlogPosts);
+        // Fallback to empty array on error
+        setBlogPosts([]);
       } finally {
         setIsLoading(false);
       }
@@ -112,45 +111,5 @@ const Blog = () => {
     </div>
   );
 };
-
-// Sample blog posts for development
-const sampleBlogPosts: BlogPost[] = [
-  {
-    id: "1",
-    title: "Understanding Solo 401(k) Contribution Limits for 2025",
-    slug: "understanding-solo-401k-contribution-limits-2025",
-    excerpt: "Learn about the updated contribution limits for Solo 401(k) plans and how they can benefit your retirement strategy.",
-    content: "Full detailed article content would go here...",
-    coverImage: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
-    author: "Jane Doe",
-    authorTitle: "Financial Advisor",
-    publishedAt: "2025-04-10T10:00:00Z",
-    tags: ["Solo 401(k)", "Retirement Planning", "Tax Strategies"]
-  },
-  {
-    id: "2",
-    title: "Retirement Strategies for First Responders",
-    slug: "retirement-strategies-first-responders",
-    excerpt: "First responders face unique challenges when planning for retirement. Here's what you need to know.",
-    content: "Full detailed article content would go here...",
-    coverImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070",
-    author: "John Smith",
-    authorTitle: "Retirement Specialist",
-    publishedAt: "2025-04-05T15:30:00Z",
-    tags: ["First Responders", "Pension Plans", "Early Retirement"]
-  },
-  {
-    id: "3",
-    title: "Tax Advantages of Self-Directed Retirement Plans",
-    slug: "tax-advantages-self-directed-retirement-plans",
-    excerpt: "Discover the powerful tax benefits of self-directed retirement accounts and how they can accelerate your wealth growth.",
-    content: "Full detailed article content would go here...",
-    coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2026",
-    author: "Sarah Johnson",
-    authorTitle: "Tax Planning Expert",
-    publishedAt: "2025-04-01T09:15:00Z",
-    tags: ["Tax Planning", "Self-Directed IRA", "Investment Strategy"]
-  }
-];
 
 export default Blog;

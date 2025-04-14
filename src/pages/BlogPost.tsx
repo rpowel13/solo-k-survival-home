@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -30,30 +29,24 @@ const BlogPostPage = () => {
 
   useEffect(() => {
     const fetchBlogPost = async () => {
+      if (!slug) return;
+      
       try {
         setIsLoading(true);
         
         // In production, this would fetch from Supabase
-        // For now, we search through our sample data
         const { data, error } = await supabase
           .from('blog_posts')
-          .select('*')
           .eq('slug', slug)
           .single();
         
         if (error) {
-          // Fallback to sample data in development
-          const samplePost = sampleBlogPosts.find(post => post.slug === slug);
-          if (samplePost) {
-            setPost(samplePost);
-          } else {
-            toast({
-              title: "Post not found",
-              description: "The blog post you're looking for doesn't exist",
-              variant: "destructive",
-            });
-            navigate("/blog");
-          }
+          toast({
+            title: "Post not found",
+            description: "The blog post you're looking for doesn't exist",
+            variant: "destructive",
+          });
+          navigate("/blog");
         } else {
           setPost(data as BlogPost);
         }
@@ -64,14 +57,13 @@ const BlogPostPage = () => {
           description: "Please try again later",
           variant: "destructive",
         });
+        navigate("/blog");
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (slug) {
-      fetchBlogPost();
-    }
+    fetchBlogPost();
   }, [slug, navigate, toast]);
 
   const handleDelete = async () => {
