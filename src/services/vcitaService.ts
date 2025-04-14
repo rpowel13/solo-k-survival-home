@@ -1,7 +1,6 @@
+
 const VCITA_API_TOKEN = 'a164a3828452ec6a557cb1dc9be8d66743b9b9223cfe0ed02f4cc62a810594b6';
 const VCITA_BASE_URL = 'https://www.vcita.com/api/v1';
-
-import { AxiosResponse } from 'axios';
 
 export interface ContactFormData {
   name: string;
@@ -12,7 +11,11 @@ export interface ContactFormData {
   consent: boolean;
 }
 
-export const submitContactForm = async (data: ContactFormData): Promise<AxiosResponse> => {
+interface VCitaResponse {
+  success: boolean;
+}
+
+export const submitContactForm = async (data: ContactFormData): Promise<VCitaResponse> => {
   try {
     const response = await fetch(`${VCITA_BASE_URL}/contact_requests`, {
       method: 'POST',
@@ -48,7 +51,7 @@ export const scheduleConsultation = async (formData: {
   date: string;
   time: string;
   message?: string;
-}) => {
+}): Promise<VCitaResponse> => {
   try {
     const response = await fetch(`${VCITA_BASE_URL}/scheduling/izk040b42jnjcf3c/submit`, {
       method: 'POST',
