@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,7 +16,7 @@ import { Link } from "react-router-dom";
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  phone: z.string().optional(),
+  phone: z.string().min(10, { message: "Please enter a valid phone number." }), // Changed from optional to required
   subject: z.string().min(2, { message: "Subject must be at least 2 characters." }),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
   consent: z.boolean().refine(val => val === true, {
@@ -34,7 +35,7 @@ const ContactForm = () => {
     defaultValues: {
       name: "",
       email: "",
-      phone: "",
+      phone: "", // Ensure phone is no longer optional in default values
       subject: "",
       message: "",
       consent: false
