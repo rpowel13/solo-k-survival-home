@@ -48,6 +48,7 @@ const ContactForm = () => {
         message: data.message
       });
       
+      // Always show success message since we're using no-cors mode
       toast({
         title: "Message sent successfully",
         description: "We'll get back to you as soon as possible.",

@@ -25,6 +25,7 @@ export const handleScheduleSubmit = async (
       message: data.message
     });
     
+    // Always show success message since we're using no-cors mode
     toast({
       title: "Consultation scheduled successfully",
       description: `We'll see you on ${format(data.date, "MMMM d, yyyy")} at ${data.time}.`,
