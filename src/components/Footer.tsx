@@ -1,7 +1,12 @@
+
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useState } from "react";
 
 const Footer = () => {
+  const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -65,9 +70,24 @@ const Footer = () => {
                 <span>info@survival401k.com</span>
               </li>
               <li className="mt-4 pt-4 border-t border-gray-700">
-                <a href="#" className="text-survival-400 hover:text-survival-300 font-medium">
+                <button 
+                  onClick={() => setIsSchedulerOpen(true)}
+                  className="text-survival-400 hover:text-survival-300 font-medium cursor-pointer"
+                >
                   Schedule a Free Consultation
-                </a>
+                </button>
+                <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
+                  <DialogContent className="sm:max-w-[600px] p-0 h-[600px] max-h-[80vh]">
+                    <iframe 
+                      src="https://www.vcita.com/widgets/scheduler/izk040b42jnjcf3c?frontage_iframe=true" 
+                      width="100%" 
+                      height="100%" 
+                      frameBorder="0"
+                      title="Schedule a Consultation with Survival 401k"
+                      className="border-0 rounded-md"
+                    />
+                  </DialogContent>
+                </Dialog>
               </li>
             </div>
           </div>
