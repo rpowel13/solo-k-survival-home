@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -168,7 +167,7 @@ const ContactForm = () => {
               </FormControl>
               <div className="space-y-1 leading-none">
                 <FormLabel className="text-sm font-normal">
-                  By clicking "submit", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our <Link to="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</Link> and Privacy Policy. Text "HELP" for help or contact us at (833) 224-5517. Text "STOP" to cancel.
+                  By clicking "submit", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our <Link to="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> and <Link to="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</Link>. Text "HELP" for help or contact us at (833) 224-5517. Text "STOP" to cancel.
                 </FormLabel>
                 <FormMessage />
               </div>

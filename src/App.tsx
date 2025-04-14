@@ -21,6 +21,7 @@ import Solo401kPayment from "./pages/payments/Solo401kPayment";
 import AnnualFeePayment from "./pages/payments/AnnualFeePayment";
 import ReinstatementFeePayment from "./pages/payments/ReinstatementFeePayment";
 import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/services/solo-401k" element={<Solo401k />} />
           <Route path="/services/llc-creation" element={<LLCCreation />} />
           <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />

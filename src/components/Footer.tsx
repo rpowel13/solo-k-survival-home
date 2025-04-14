@@ -95,7 +95,7 @@ const Footer = () => {
           <p>&copy; {new Date().getFullYear()} Survival 401k. All rights reserved.</p>
           <div className="mt-2 space-x-4">
             <Link to="/terms-of-service" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
-            <a href="#" className="hover:text-gray-300 transition-colors">Privacy Policy</a>
+            <Link to="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
             <a href="#" className="hover:text-gray-300 transition-colors">Legal Disclosures</a>
           </div>
           <p className="mt-4 max-w-2xl mx-auto">
