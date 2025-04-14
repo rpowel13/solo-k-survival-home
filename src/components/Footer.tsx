@@ -1,8 +1,8 @@
-
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
 import { useState } from "react";
+import ScheduleConsultationForm from "./ScheduleConsultationForm";
 
 const Footer = () => {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
@@ -77,24 +77,12 @@ const Footer = () => {
                   Schedule a Free Consultation
                 </button>
                 <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
-                  <DialogContent className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[1000px] p-0 overflow-hidden w-full h-[90vh]">
+                  <DialogContent className="sm:max-w-[700px] md:max-w-[800px] p-6">
                     <DialogHeader>
-                      <DialogTitle className="sr-only">Schedule a Consultation</DialogTitle>
-                      <DialogDescription className="sr-only">Schedule a free consultation with our specialists</DialogDescription>
+                      <DialogTitle>Schedule a Free Consultation</DialogTitle>
+                      <DialogDescription>Select a date and time that works for you. Our specialist will call you at the scheduled time.</DialogDescription>
                     </DialogHeader>
-                    <iframe 
-                      src="https://www.vcita.com/widgets/scheduler/izk040b42jnjcf3c?frontage_iframe=true" 
-                      width="100%" 
-                      height="100%" 
-                      frameBorder="0"
-                      title="Schedule a Consultation with Survival 401k"
-                      className="border-0 rounded-md"
-                      style={{ 
-                        pointerEvents: 'auto', 
-                        overflow: 'hidden', 
-                        display: 'block'
-                      }}
-                    />
+                    <ScheduleConsultationForm />
                   </DialogContent>
                 </Dialog>
               </li>
