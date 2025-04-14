@@ -32,6 +32,7 @@ const ServiceLayout = ({
           <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
+                <p className="text-sm text-white/70 mb-2">Common Sense Wealth Management</p>
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">{title}</h1>
                 <p className="text-lg text-white/80 mb-8">{description}</p>
                 <Link to={callToAction.link}>
@@ -58,3 +59,4 @@ const ServiceLayout = ({
 };
 
 export default ServiceLayout;
+

@@ -18,7 +18,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          {/* Logo */}
+          {/* Logo and Tagline */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <img 
@@ -26,7 +26,12 @@ const Header = () => {
                 alt="Survival 401k Logo" 
                 className="h-10 mr-2"
               />
-              <span className="text-2xl font-bold text-survival-800">Survival<span className="text-finance-600">401k</span></span>
+              <div>
+                <div className="flex items-center">
+                  <span className="text-2xl font-bold text-survival-800">Survival<span className="text-finance-600">401k</span></span>
+                </div>
+                <p className="text-xs text-gray-500 ml-1">Common Sense Wealth Management</p>
+              </div>
             </Link>
           </div>
 
