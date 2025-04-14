@@ -8,6 +8,7 @@ import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import MetalPriceBanner from "@/components/MetalPriceBanner";
+import PrequalificationBanner from "@/components/PrequalificationBanner";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
         <HeroSection />
         <BenefitsSection />
         <FeaturesSection />
+        <PrequalificationBanner />
         <ComparisonSection />
         <FAQSection />
         <CTASection />
