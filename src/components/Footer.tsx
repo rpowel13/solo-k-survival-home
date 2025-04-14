@@ -1,4 +1,3 @@
-
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -11,7 +10,7 @@ const Footer = () => {
           <div>
             <h3 className="text-white text-lg font-semibold mb-4">Survival 401k</h3>
             <p className="mb-4 text-sm text-gray-400">
-              Providing customized Solo 401(k) solutions for self-employed professionals and small business owners since 2010.
+              Providing customized Solo 401(k) solutions for self-employed professionals and small business owners since 2014.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
