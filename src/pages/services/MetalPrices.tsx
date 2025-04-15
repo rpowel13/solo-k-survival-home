@@ -13,6 +13,7 @@ const MetalPrices = () => {
     <ServiceLayout
       title="Precious Metal Prices"
       description="Monitor current market prices for gold, silver, platinum, and palladium to inform your investment decisions."
+      image="https://images.unsplash.com/photo-1610375461369-d5c68fce41a1?auto=format&fit=crop&q=80&w=1200"
     >
       <div className="space-y-12">
         <IntroSection />
