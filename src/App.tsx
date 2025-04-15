@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Services from "./pages/Services";
 import Solo401k from "./pages/services/Solo401k";
 import LLCCreation from "./pages/services/LLCCreation";
 import FirstResponderPackage from "./pages/services/FirstResponderPackage";
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/services/solo-401k" element={<Solo401k />} />
           <Route path="/services/llc-creation" element={<LLCCreation />} />
           <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />
