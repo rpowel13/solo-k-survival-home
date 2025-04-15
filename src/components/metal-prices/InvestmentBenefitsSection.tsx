@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Coins } from 'lucide-react';
 
@@ -54,7 +55,7 @@ const InvestmentBenefitsSection = () => {
         <div className="flex items-center justify-center">
           <div className="rounded-xl overflow-hidden shadow-xl border-4 border-white">
             <img 
-              src="https://images.unsplash.com/photo-1618186448927-69f6de29cf5d?auto=format&fit=crop&q=80&w=800" 
+              src="https://images.unsplash.com/photo-1500673922987-e212871fec22" 
               alt="Gold and silver investments" 
               className="w-full h-auto"
             />
@@ -67,7 +68,7 @@ const InvestmentBenefitsSection = () => {
           <div className="md:w-1/3">
             <div className="rounded-xl overflow-hidden shadow-md">
               <img 
-                src="https://images.unsplash.com/photo-1579532536935-9022e93d5c34?auto=format&fit=crop&q=80&w=1200" 
+                src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" 
                 alt="Professional financial planning with precious metals" 
                 className="w-full h-auto object-cover"
               />
