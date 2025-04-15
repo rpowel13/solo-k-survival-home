@@ -5,11 +5,9 @@ import { useForm } from "react-hook-form";
 import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/ContactFormSchema";
 import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
-import ZapierConfig from "./contact/ZapierConfig";
 
 const ContactForm = () => {
-  // Start with iframeError as true to show the fallback form by default
-  const [iframeError, setIframeError] = useState(true);
+  const [iframeError, setIframeError] = useState(false);
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -20,12 +18,13 @@ const ContactForm = () => {
     setIframeError(true);
   };
 
-  // Always use the fallback form for now until we fix the iframe
   return (
     <div className="relative">
-      {/* ZapierConfig works silently in the background */}
-      <ZapierConfig hidden={true} />
-      <FallbackContactForm form={form} />
+      {iframeError ? (
+        <FallbackContactForm form={form} />
+      ) : (
+        <VCitaIframe onError={handleIframeError} />
+      )}
     </div>
   );
 };
