@@ -1,10 +1,8 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
-import { submitContactForm } from "@/services/vcitaService";
 import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/ContactFormSchema";
 import NameField from "./contact/NameField";
 import EmailField from "./contact/EmailField";
@@ -16,12 +14,43 @@ import SubmitButton from "./contact/SubmitButton";
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [widgetLoaded, setWidgetLoaded] = useState(false);
   const { toast } = useToast();
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues,
   });
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://secure.vcita.com/widgets/api/vcita_widget.js";
+    script.async = true;
+    script.onload = () => {
+      if (window.vcita_widgets) {
+        window.vcita_widgets.init({
+          business_id: "izk040b42jnjcf3c",
+          widget_type: "Contact",
+          api_integration: true,
+          show_consent_checkbox: true,
+          invitation_texts: { 
+            consent_checkbox_text: "By clicking \"submit\", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our Privacy Policy and Terms of Service. Text \"HELP\" for help or contact us at (833) 224-5517. Text \"STOP\" to cancel."
+          },
+          elementsIds: {
+            widget: "vcita-contact-widget"
+          }
+        });
+        setWidgetLoaded(true);
+      }
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
@@ -58,6 +87,10 @@ const ContactForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (widgetLoaded) {
+    return <div id="vcita-contact-widget" className="w-full min-h-[500px]"></div>;
+  }
 
   return (
     <Form {...form}>
