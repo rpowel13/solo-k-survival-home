@@ -33,8 +33,8 @@ const IntroSection = () => {
         <div className="md:col-span-2">
           <div className="rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
             <img 
-              src="https://images.unsplash.com/photo-1589758438368-0ad531db3366" 
-              alt="Gold bars and investment metals" 
+              src="/lovable-uploads/3ea14a6f-f998-4247-a671-5618c5b588cf.png" 
+              alt="Gold coins stacked on US dollar bills" 
               className="w-full h-auto object-cover"
             />
           </div>

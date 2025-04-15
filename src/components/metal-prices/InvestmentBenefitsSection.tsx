@@ -55,8 +55,8 @@ const InvestmentBenefitsSection = () => {
         <div className="flex items-center justify-center">
           <div className="rounded-xl overflow-hidden shadow-xl border-4 border-white">
             <img 
-              src="https://images.unsplash.com/photo-1610375461369-d5c68fce41a1" 
-              alt="Gold and silver investments" 
+              src="/lovable-uploads/be71559b-7615-4648-886f-57d84b585d2e.png" 
+              alt="Gold bars and coins with scale of justice" 
               className="w-full h-auto"
             />
           </div>
@@ -68,8 +68,8 @@ const InvestmentBenefitsSection = () => {
           <div className="md:w-1/3">
             <div className="rounded-xl overflow-hidden shadow-md">
               <img 
-                src="https://images.unsplash.com/photo-1551260627-fd1b6daa6224" 
-                alt="Professional financial planning with precious metals" 
+                src="/lovable-uploads/e164ff79-885d-4285-ac7e-9a75934bfa19.png" 
+                alt="Stacks of gold coins" 
                 className="w-full h-auto object-cover"
               />
             </div>
