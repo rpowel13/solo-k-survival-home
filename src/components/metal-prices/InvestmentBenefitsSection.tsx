@@ -1,5 +1,7 @@
+
 import React from 'react';
-import { Coins } from 'lucide-react';
+import { Coins, TrendingUp, BadgeDollarSign, ShieldCheck, PiggyBank } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const InvestmentBenefitsSection = () => {
   return (
@@ -14,37 +16,41 @@ const InvestmentBenefitsSection = () => {
             </p>
             
             <h3 className="text-xl font-semibold mt-6 mb-3">Benefits of Precious Metals in Your Retirement Portfolio</h3>
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-2 space-y-4">
               <li className="flex items-start">
-                <div className="bg-yellow-100 p-1 rounded-full mr-3 mt-1">
-                  <Coins className="h-4 w-4 text-yellow-600" />
+                <div className="bg-blue-100 p-2 rounded-full mr-4 mt-1">
+                  <TrendingUp className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <strong>Portfolio Diversification:</strong> Precious metals often move independently of stocks and bonds, providing true diversification.
+                  <Badge className="mb-1 bg-blue-100 text-blue-800 hover:bg-blue-200 border-none">Portfolio Diversification</Badge>
+                  <p className="text-gray-700">Precious metals often move independently of stocks and bonds, providing true diversification.</p>
                 </div>
               </li>
               <li className="flex items-start">
-                <div className="bg-yellow-100 p-1 rounded-full mr-3 mt-1">
-                  <Coins className="h-4 w-4 text-yellow-600" />
+                <div className="bg-yellow-100 p-2 rounded-full mr-4 mt-1">
+                  <BadgeDollarSign className="h-5 w-5 text-yellow-600" />
                 </div>
                 <div>
-                  <strong>Inflation Protection:</strong> Physical gold and silver have historically maintained purchasing power through periods of high inflation.
+                  <Badge className="mb-1 bg-yellow-100 text-yellow-800 hover:bg-yellow-200 border-none">Inflation Protection</Badge>
+                  <p className="text-gray-700">Physical gold and silver have historically maintained purchasing power through periods of high inflation.</p>
                 </div>
               </li>
               <li className="flex items-start">
-                <div className="bg-yellow-100 p-1 rounded-full mr-3 mt-1">
-                  <Coins className="h-4 w-4 text-yellow-600" />
+                <div className="bg-red-100 p-2 rounded-full mr-4 mt-1">
+                  <ShieldCheck className="h-5 w-5 text-red-600" />
                 </div>
                 <div>
-                  <strong>Crisis Hedge:</strong> Precious metals often perform well during periods of economic uncertainty or geopolitical crisis.
+                  <Badge className="mb-1 bg-red-100 text-red-800 hover:bg-red-200 border-none">Crisis Hedge</Badge>
+                  <p className="text-gray-700">Precious metals often perform well during periods of economic uncertainty or geopolitical crisis.</p>
                 </div>
               </li>
               <li className="flex items-start">
-                <div className="bg-yellow-100 p-1 rounded-full mr-3 mt-1">
-                  <Coins className="h-4 w-4 text-yellow-600" />
+                <div className="bg-green-100 p-2 rounded-full mr-4 mt-1">
+                  <PiggyBank className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <strong>Tangible Assets:</strong> Unlike paper assets, physical precious metals represent tangible wealth that cannot be printed or diluted.
+                  <Badge className="mb-1 bg-green-100 text-green-800 hover:bg-green-200 border-none">Tangible Assets</Badge>
+                  <p className="text-gray-700">Unlike paper assets, physical precious metals represent tangible wealth that cannot be printed or diluted.</p>
                 </div>
               </li>
             </ul>
