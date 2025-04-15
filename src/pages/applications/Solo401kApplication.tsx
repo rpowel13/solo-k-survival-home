@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 
 const Solo401kApplication = () => {
   return (
-    <div className="min-h-screen flex flex-flex-col">
+    <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto">
@@ -17,9 +17,9 @@ const Solo401kApplication = () => {
               style={{ border: "0px #ffffff none" }} 
               name="myiFrame" 
               scrolling="no" 
-              frameBorder="1" 
-              marginHeight="0" 
-              marginWidth="0" 
+              frameBorder={1} 
+              marginHeight={0} 
+              marginWidth={0} 
               height="2400px" 
               width="1000px" 
               title="Solo 401k Application Form"
