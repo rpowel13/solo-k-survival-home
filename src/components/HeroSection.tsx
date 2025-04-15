@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -19,10 +18,10 @@ const HeroSection = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 bg-opacity-80 p-4 rounded-lg shadow-lg">
-              Retirement Plans for Entrepreneurs & 1st Responders
+              Retirement Plans for Entrepreneurs & First Responders
             </h1>
             <p className="mt-4 text-xl text-gray-200 bg-survival-900 bg-opacity-50 p-3 rounded-md">
-              Self-directed retirement solutions designed for entrepreneurs, first responders, small business owners, independent professionals, and gig economy workers.
+              Self-directed retirement solutions designed for entrepreneurs, First Responders, small business owners, independent professionals, and gig economy workers.
             </p>
             
             <div className="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
@@ -49,7 +48,7 @@ const HeroSection = () => {
                 </li>
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">Tailored solutions for entrepreneurs and first responders</span>
+                  <span className="text-gray-700 font-medium">Tailored solutions for entrepreneurs and First Responders</span>
                 </li>
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
@@ -65,7 +64,6 @@ const HeroSection = () => {
                 </li>
               </ul>
 
-              {/* Financial image - replaced with uploaded image */}
               <div className="mt-6 rounded-lg overflow-hidden shadow-md">
                 <img 
                   src="/lovable-uploads/03c2b188-6efe-4b43-840a-f5b7fcbac2f0.png" 
