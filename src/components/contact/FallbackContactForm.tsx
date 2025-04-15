@@ -62,12 +62,6 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="p-4 mb-4 bg-amber-50 border border-amber-200 rounded-md">
-          <p className="text-amber-700 text-sm">
-            The contact widget could not be loaded. You can still use this form to send us a message.
-          </p>
-        </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NameField form={form} />
           <EmailField form={form} />
