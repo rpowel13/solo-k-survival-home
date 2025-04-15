@@ -72,14 +72,14 @@ const ContactForm = () => {
     return (
       <div className="w-full">
         <iframe 
-          src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
+          src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true&show_consent_checkbox=true&consent_checkbox_text=By%20clicking%20%22submit%22%2C%20I%20consent%20to%20join%20the%20email%20list%20and%20receive%20SMS%20from%20Survival%20401k%2C%20with%20access%20to%20latest%20offers%20and%20services.%20Message%20and%20data%20rates%20may%20apply.%20Message%20frequency%20varies.%20More%20details%20on%20this%20are%20in%20our%20Privacy%20Policy%20and%20Terms%20of%20Service.%20Text%20%22HELP%22%20for%20help%20or%20contact%20us%20at%20(833)%20224-5517.%20Text%20%22STOP%22%20to%20cancel." 
           width="100%" 
-          height="500" 
+          height="550" 
           scrolling="no" 
           frameBorder="0" 
           onError={handleIframeError}
           title="Contact Form"
-          className="w-full min-h-[500px]"
+          className="w-full min-h-[550px]"
         >
           <p>Please contact me via my contact form at vcita:</p>
           <a href='https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c'>
