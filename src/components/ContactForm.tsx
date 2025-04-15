@@ -17,6 +17,7 @@ import SubmitButton from "./contact/SubmitButton";
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [widgetLoaded, setWidgetLoaded] = useState(false);
+  const [widgetError, setWidgetError] = useState(false);
   const { toast } = useToast();
   
   const form = useForm<ContactFormValues>({
@@ -25,33 +26,62 @@ const ContactForm = () => {
   });
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://secure.vcita.com/widgets/api/vcita_widget.js";
-    script.async = true;
-    script.onload = () => {
-      if (window.vcita_widgets) {
-        window.vcita_widgets.init({
-          business_id: "izk040b42jnjcf3c",
-          widget_type: "Contact",
-          api_integration: true,
-          show_consent_checkbox: true,
-          invitation_texts: { 
-            consent_checkbox_text: "By clicking \"submit\", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our Privacy Policy and Terms of Service. Text \"HELP\" for help or contact us at (833) 224-5517. Text \"STOP\" to cancel."
-          },
-          elementsIds: {
-            widget: "vcita-contact-widget"
+    const loadWidget = () => {
+      const script = document.createElement('script');
+      script.src = "https://secure.vcita.com/widgets/api/vcita_widget.js";
+      script.async = true;
+      
+      let timeoutId: number;
+      
+      const handleLoad = () => {
+        clearTimeout(timeoutId);
+        if (window.vcita_widgets) {
+          try {
+            window.vcita_widgets.init({
+              business_id: "izk040b42jnjcf3c",
+              widget_type: "Contact",
+              api_integration: true,
+              show_consent_checkbox: true,
+              invitation_texts: { 
+                consent_checkbox_text: "By clicking \"submit\", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our Privacy Policy and Terms of Service. Text \"HELP\" for help or contact us at (833) 224-5517. Text \"STOP\" to cancel."
+              },
+              elementsIds: {
+                widget: "vcita-contact-widget"
+              }
+            });
+            setWidgetLoaded(true);
+          } catch (error) {
+            console.error("Error initializing vCita widget:", error);
+            setWidgetError(true);
           }
-        });
-        setWidgetLoaded(true);
-      }
+        } else {
+          setWidgetError(true);
+        }
+      };
+      
+      script.onload = handleLoad;
+      script.onerror = () => {
+        console.error("Failed to load vCita widget script");
+        setWidgetError(true);
+      };
+      
+      // Set a timeout to fall back to the form if widget doesn't load quickly
+      timeoutId = window.setTimeout(() => {
+        console.log("Widget load timeout - falling back to form");
+        setWidgetError(true);
+      }, 5000);
+      
+      document.body.appendChild(script);
+      
+      return () => {
+        clearTimeout(timeoutId);
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
     };
-    document.body.appendChild(script);
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
+    
+    loadWidget();
   }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
@@ -71,7 +101,7 @@ const ContactForm = () => {
       if (result.success) {
         toast({
           title: "Message sent successfully",
-          description: "We'll get back to you as soon as possible.",
+          description: result.message || "We'll get back to you as soon as possible.",
         });
         
         form.reset();
@@ -82,7 +112,9 @@ const ContactForm = () => {
       console.error("Contact form submission error:", error);
       toast({
         title: "Error sending message",
-        description: error instanceof Error ? error.message : "Please try again or contact us directly.",
+        description: error instanceof Error 
+          ? error.message 
+          : "Please try again or contact us directly at (833) 224-5517.",
         variant: "destructive"
       });
     } finally {
@@ -90,13 +122,21 @@ const ContactForm = () => {
     }
   };
 
-  if (widgetLoaded) {
+  if (widgetLoaded && !widgetError) {
     return <div id="vcita-contact-widget" className="w-full min-h-[500px]"></div>;
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {widgetError && (
+          <div className="p-4 mb-4 bg-amber-50 border border-amber-200 rounded-md">
+            <p className="text-amber-700 text-sm">
+              The contact widget could not be loaded. You can still use this form to send us a message.
+            </p>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NameField form={form} />
           <EmailField form={form} />
