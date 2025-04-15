@@ -23,63 +23,69 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
   const [vCitaUrl, setVCitaUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    const createOverlay = () => {
-      const iframe = document.querySelector('iframe');
-      if (!iframe) return;
-      
-      const overlay = document.createElement('div');
-      overlay.id = 'vcita-overlay';
-      overlay.style.position = 'absolute';
-      overlay.style.top = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '100%';
-      overlay.style.background = 'transparent';
-      overlay.style.zIndex = '10000';
-      overlay.style.cursor = 'pointer';
-      
-      overlay.addEventListener('click', (e) => {
-        const rect = iframe.getBoundingClientRect();
-        
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        if (y > rect.height * 0.7) {
-          console.log('Potential submit button click detected at:', { x, y });
-          e.preventDefault();
-          e.stopPropagation();
-          
-          setShowConsentDialog(true);
-          return false;
-        }
-      });
-      
-      const container = iframe.parentElement;
-      if (container) {
-        container.style.position = 'relative';
-        container.appendChild(overlay);
+    const iframe = document.querySelector('iframe');
+    if (!iframe) return;
+    
+    // Listen for form submission
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'vcita_form_submit') {
+        setShowConsentDialog(true);
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
       }
     };
     
-    const overlayTimer = setTimeout(() => {
-      console.log("Setting up vCita overlay");
-      createOverlay();
-    }, 3000);
+    window.addEventListener('message', handleMessage);
     
-    const handleGlobalClick = (e: MouseEvent) => {
+    // Monitor form submit buttons instead of using an overlay
+    const checkForSubmitButtons = () => {
+      try {
+        const iframeDocument = (iframe as HTMLIFrameElement).contentDocument || 
+                              (iframe as HTMLIFrameElement).contentWindow?.document;
+                              
+        if (iframeDocument) {
+          const submitButtons = iframeDocument.querySelectorAll('button[type="submit"], input[type="submit"]');
+          
+          submitButtons.forEach(button => {
+            if (!button.getAttribute('data-consent-monitored')) {
+              button.setAttribute('data-consent-monitored', 'true');
+              button.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowConsentDialog(true);
+                return false;
+              });
+            }
+          });
+        }
+      } catch (e) {
+        // Cross-origin restrictions may prevent accessing iframe content
+        console.log("Could not access iframe content due to cross-origin policy");
+      }
+    };
+    
+    // Check for submit buttons periodically
+    const buttonCheckInterval = setInterval(checkForSubmitButtons, 2000);
+    
+    // Listen for clicks on the iframe
+    const handleIframeClick = (e: MouseEvent) => {
       const iframe = document.querySelector('iframe');
       if (!iframe) return;
       
       const rect = iframe.getBoundingClientRect();
+      const y = e.clientY - rect.top;
       
-      if (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      ) {
-        if (e.clientY > rect.top + (rect.height * 0.7)) {
-          console.log('Global click handler detected potential form submission');
+      // Only intercept clicks in the bottom area (likely submit button)
+      if (y > rect.height * 0.8) {
+        const target = e.target as HTMLElement;
+        const buttonText = target.textContent?.toLowerCase() || '';
+        
+        // Check if the clicked element is likely a submit button
+        if (buttonText.includes('submit') || 
+            buttonText.includes('send') || 
+            target.tagName === 'BUTTON' || 
+            target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'submit') {
           e.preventDefault();
           e.stopPropagation();
           setShowConsentDialog(true);
@@ -88,13 +94,26 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
       }
     };
     
-    document.addEventListener('click', handleGlobalClick, true);
+    iframe.addEventListener('load', () => {
+      try {
+        // Try to add event listener to iframe content
+        const iframeDocument = (iframe as HTMLIFrameElement).contentDocument || 
+                              (iframe as HTMLIFrameElement).contentWindow?.document;
+                               
+        if (iframeDocument) {
+          iframeDocument.addEventListener('click', handleIframeClick);
+        }
+      } catch (e) {
+        // Fallback for cross-origin restrictions
+        console.log("Adding click listener to iframe instead");
+        iframe.addEventListener('click', handleIframeClick);
+      }
+    });
     
     return () => {
-      clearTimeout(overlayTimer);
-      document.removeEventListener('click', handleGlobalClick, true);
-      const overlay = document.getElementById('vcita-overlay');
-      if (overlay) overlay.remove();
+      window.removeEventListener('message', handleMessage);
+      clearInterval(buttonCheckInterval);
+      iframe.removeEventListener('click', handleIframeClick);
     };
   }, []);
 
