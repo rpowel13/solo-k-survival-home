@@ -9,11 +9,9 @@ const HeroSection = () => {
     <section className="relative overflow-hidden bg-survival-800 py-12 md:py-20">
       {/* Background Image with Overlay */}
       <div 
-        className="absolute inset-0 z-0 opacity-15" 
+        className="absolute inset-0 z-0 opacity-15 bg-cover bg-center"
         style={{ 
-          backgroundImage: "url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80')", 
-          backgroundSize: "cover",
-          backgroundPosition: "center"
+          backgroundImage: "url('https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')"
         }}
       ></div>
       
@@ -67,10 +65,10 @@ const HeroSection = () => {
                 </li>
               </ul>
 
-              {/* Updated to a financial image */}
+              {/* Financial image */}
               <div className="mt-6 rounded-lg overflow-hidden shadow-md">
                 <img 
-                  src="https://images.unsplash.com/photo-1565514020179-026b92b9f660?auto=format&fit=crop&q=80" 
+                  src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&auto=format&fit=crop&q=80" 
                   alt="Financial planning and investment" 
                   className="w-full h-auto object-cover"
                 />
