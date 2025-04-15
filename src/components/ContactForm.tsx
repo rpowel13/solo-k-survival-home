@@ -25,7 +25,8 @@ const ContactForm = () => {
   return (
     <div className="relative">
       <WooSenderConfig />
-      <ZapierConfig />
+      {/* ZapierConfig is still included but works silently in the background */}
+      <ZapierConfig hidden={true} />
       <FallbackContactForm form={form} />
     </div>
   );
