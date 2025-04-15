@@ -65,10 +65,10 @@ const HeroSection = () => {
                 </li>
               </ul>
 
-              {/* Financial image */}
+              {/* Financial image - replaced with uploaded image */}
               <div className="mt-6 rounded-lg overflow-hidden shadow-md">
                 <img 
-                  src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&auto=format&fit=crop&q=80" 
+                  src="/lovable-uploads/03c2b188-6efe-4b43-840a-f5b7fcbac2f0.png" 
                   alt="Financial planning and investment" 
                   className="w-full h-auto object-cover"
                 />
