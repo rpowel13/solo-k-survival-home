@@ -1,12 +1,15 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const PrequalificationBanner = () => {
+interface PrequalificationBannerProps {
+  className?: string;
+}
+
+const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ className = '' }) => {
   return (
-    <section className="bg-gradient-to-r from-survival-50 to-finance-50 py-16 border-y border-gray-100">
+    <section className={`bg-gradient-to-r from-survival-50 to-finance-50 py-16 border-y border-gray-100 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-6">
