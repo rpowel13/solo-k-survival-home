@@ -6,6 +6,7 @@ import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/C
 import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
 import WooSenderConfig from "./contact/WooSenderConfig";
+import ZapierConfig from "./contact/ZapierConfig";
 
 const ContactForm = () => {
   // Start with iframeError as true to show the fallback form by default
@@ -24,6 +25,7 @@ const ContactForm = () => {
   return (
     <div className="relative">
       <WooSenderConfig />
+      <ZapierConfig />
       <FallbackContactForm form={form} />
     </div>
   );

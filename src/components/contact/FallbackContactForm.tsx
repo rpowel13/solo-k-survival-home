@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { ContactFormValues } from "./ContactFormSchema";
 import { submitContactForm } from "@/services/vcitaService";
 import { submitToWooSender } from "@/services/wooSenderService";
+import { triggerZapierWebhook } from "@/services/zapierService";
 import { UseFormReturn } from "react-hook-form";
 import NameField from "./NameField";
 import EmailField from "./EmailField";
@@ -37,8 +38,8 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         consent: data.consent
       });
       
-      // Submit to WooSender in parallel
-      const wooSenderResult = await submitToWooSender({
+      // Submit to WooSender through Zapier webhook
+      const zapierResult = await triggerZapierWebhook({
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -48,7 +49,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       });
       
       // Check if at least one submission was successful
-      if (vcitaResult.success || wooSenderResult.success) {
+      if (vcitaResult.success || zapierResult.success) {
         toast({
           title: "Message sent successfully",
           description: "We'll get back to you as soon as possible.",
@@ -56,7 +57,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         
         form.reset();
       } else {
-        throw new Error(vcitaResult.message || wooSenderResult.message || "Failed to send message");
+        throw new Error(vcitaResult.message || zapierResult.message || "Failed to send message");
       }
     } catch (error) {
       console.error("Contact form submission error:", error);
