@@ -19,27 +19,27 @@ const Index = () => {
       <main className="flex-grow">
         <HeroSection />
         
-        <ServicesSection />
+        <ServicesSection className="bg-soft-purple/20" />
         
-        <div className="py-12 bg-gray-50">
+        <div className="py-12 bg-soft-green/30">
           <BenefitsSection />
         </div>
         
-        <div className="py-12">
+        <div className="py-12 bg-soft-yellow/30">
           <FeaturesSection />
         </div>
         
-        <PrequalificationBanner />
+        <PrequalificationBanner className="bg-soft-peach/30" />
         
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 bg-soft-blue/20">
           <PrequalificationSection />
         </div>
         
-        <div className="py-12 bg-gradient-to-b from-white to-gray-50">
+        <div className="py-12 bg-gradient-to-b from-white to-soft-pink/30">
           <ComparisonSection />
         </div>
         
-        <div className="py-12">
+        <div className="py-12 bg-soft-gray/20">
           <FAQSection />
           <Separator className="max-w-5xl mx-auto my-12 bg-gray-200" />
           <CTASection />
