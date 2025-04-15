@@ -11,7 +11,7 @@ const HeroSection = () => {
       <div 
         className="absolute inset-0 z-0 opacity-15" 
         style={{ 
-          backgroundImage: "url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80')", 
+          backgroundImage: "url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80')", 
           backgroundSize: "cover",
           backgroundPosition: "center"
         }}
@@ -67,11 +67,11 @@ const HeroSection = () => {
                 </li>
               </ul>
 
-              {/* Added financial image */}
+              {/* Updated to a financial image */}
               <div className="mt-6 rounded-lg overflow-hidden shadow-md">
                 <img 
-                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80" 
-                  alt="Financial planning" 
+                  src="https://images.unsplash.com/photo-1565514020179-026b92b9f660?auto=format&fit=crop&q=80" 
+                  alt="Financial planning and investment" 
                   className="w-full h-auto object-cover"
                 />
               </div>
