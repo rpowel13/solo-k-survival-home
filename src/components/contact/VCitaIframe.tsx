@@ -126,15 +126,15 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
     <div className="w-full relative">
       <div className="w-full">
         <iframe 
-          src="https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&v=3" 
+          src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
           width="100%" 
-          height="700" 
+          height="400" 
           scrolling="no" 
           frameBorder="0" 
           onError={handleIframeError}
           onLoad={handleIframeLoad}
           title="Contact Form"
-          className="w-full min-h-[700px]"
+          className="w-full min-h-[400px]"
         >
           <p>Please contact me via my contact form at vcita:</p>
           <a href='https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c'>
