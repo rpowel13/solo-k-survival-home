@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Coins } from 'lucide-react';
 
@@ -68,8 +67,8 @@ const InvestmentBenefitsSection = () => {
           <div className="md:w-1/3">
             <div className="rounded-xl overflow-hidden shadow-md">
               <img 
-                src="/lovable-uploads/f0d45096-3476-4105-8995-90bd243c4aa7.png" 
-                alt="Gold coins stacked progressively on dollar bills" 
+                src="/lovable-uploads/1a9cd712-eda5-4c0c-8082-4f6a8d41ef09.png" 
+                alt="Gold bars with trading chart in background" 
                 className="w-full h-auto object-cover"
               />
             </div>
