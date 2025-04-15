@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/ContactFormSchema";
 import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
-import WooSenderConfig from "./contact/WooSenderConfig";
 import ZapierConfig from "./contact/ZapierConfig";
 
 const ContactForm = () => {
@@ -24,8 +23,7 @@ const ContactForm = () => {
   // Always use the fallback form for now until we fix the iframe
   return (
     <div className="relative">
-      <WooSenderConfig />
-      {/* ZapierConfig is still included but works silently in the background */}
+      {/* ZapierConfig works silently in the background */}
       <ZapierConfig hidden={true} />
       <FallbackContactForm form={form} />
     </div>
