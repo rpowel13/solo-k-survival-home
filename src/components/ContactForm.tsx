@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -39,88 +38,79 @@ const ContactForm = () => {
     defaultValues,
   });
 
-  // Create an effect to listen for messages from parent window
   useEffect(() => {
-    // Add a click event listener to the document to capture all clicks
-    const handleClick = (event: MouseEvent) => {
-      // Check if clicked on or inside the iframe
-      const iframe = document.querySelector('iframe');
-      if (iframe && event.target) {
-        const target = event.target as HTMLElement;
-        
-        // Look for submit buttons
-        if (
-          target.tagName === 'BUTTON' || 
-          target.tagName === 'INPUT' && target.getAttribute('type') === 'submit' ||
-          target.closest('button') ||
-          target.closest('input[type="submit"]')
-        ) {
-          // Check if the click is within the iframe boundaries
-          const iframeRect = iframe.getBoundingClientRect();
-          
-          if (
-            event.clientX >= iframeRect.left &&
-            event.clientX <= iframeRect.right &&
-            event.clientY >= iframeRect.top &&
-            event.clientY <= iframeRect.bottom
-          ) {
-            console.log("Click detected inside iframe area, likely a form submission");
-            event.preventDefault();
-            event.stopPropagation();
-            setShowConsentDialog(true);
-            return false;
-          }
-        }
-      }
-    };
-    
-    document.addEventListener('click', handleClick, true);
-    
-    // Create a temporary overlay div to intercept clicks
     const createOverlay = () => {
       const iframe = document.querySelector('iframe');
-      if (iframe) {
-        const overlay = document.createElement('div');
-        overlay.id = 'vcita-form-overlay';
-        overlay.style.position = 'absolute';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.zIndex = '10';
-        overlay.style.cursor = 'pointer';
+      if (!iframe) return;
+      
+      const overlay = document.createElement('div');
+      overlay.id = 'vcita-overlay';
+      overlay.style.position = 'absolute';
+      overlay.style.top = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '100%';
+      overlay.style.background = 'transparent';
+      overlay.style.zIndex = '10000';
+      overlay.style.cursor = 'pointer';
+      
+      overlay.addEventListener('click', (e) => {
+        const rect = iframe.getBoundingClientRect();
         
-        overlay.addEventListener('click', (e) => {
-          // Only show consent for clicks that appear to be in submit button areas
-          // This is a heuristic since we can't directly access iframe content
-          const rect = iframe.getBoundingClientRect();
-          const relativeY = e.clientY - rect.top;
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        if (y > rect.height * 0.7) {
+          console.log('Potential submit button click detected at:', { x, y });
+          e.preventDefault();
+          e.stopPropagation();
           
-          // Bottom area of forms typically have submit buttons
-          if (relativeY > rect.height * 0.8) {
-            console.log("Potential submit button click detected");
-            setShowConsentDialog(true);
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        });
-        
-        const container = iframe.parentElement;
-        if (container) {
-          container.style.position = 'relative';
-          container.appendChild(overlay);
+          setShowConsentDialog(true);
+          return false;
+        }
+      });
+      
+      const container = iframe.parentElement;
+      if (container) {
+        container.style.position = 'relative';
+        container.appendChild(overlay);
+      }
+    };
+    
+    const overlayTimer = setTimeout(() => {
+      console.log("Setting up vCita overlay");
+      createOverlay();
+    }, 3000);
+    
+    const handleGlobalClick = (e: MouseEvent) => {
+      const iframe = document.querySelector('iframe');
+      if (!iframe) return;
+      
+      const rect = iframe.getBoundingClientRect();
+      
+      if (
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+      ) {
+        if (e.clientY > rect.top + (rect.height * 0.7)) {
+          console.log('Global click handler detected potential form submission');
+          e.preventDefault();
+          e.stopPropagation();
+          setShowConsentDialog(true);
+          return false;
         }
       }
     };
     
-    // Set a timeout to add overlay after iframe has loaded
-    const timer = setTimeout(createOverlay, 2000);
+    document.addEventListener('click', handleGlobalClick, true);
     
     return () => {
-      document.removeEventListener('click', handleClick, true);
-      const overlay = document.getElementById('vcita-form-overlay');
+      clearTimeout(overlayTimer);
+      document.removeEventListener('click', handleGlobalClick, true);
+      const overlay = document.getElementById('vcita-overlay');
       if (overlay) overlay.remove();
-      clearTimeout(timer);
     };
   }, []);
 
@@ -171,31 +161,25 @@ const ContactForm = () => {
     console.log("vCita iframe loaded");
   };
 
-  // Function to handle consent acceptance and continue with form submission
   const handleConsentAccept = () => {
     console.log("Consent accepted, proceeding with form submission");
     setConsentAccepted(true);
     setShowConsentDialog(false);
     
-    // Store the URL for redirection
     setVCitaUrl('https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c');
   };
 
-  // Effect to handle redirection after consent
   useEffect(() => {
     if (consentAccepted && vCitaUrl) {
-      // Open in new tab to avoid cross-origin issues
       window.open(vCitaUrl, '_blank');
-      // Reset for future submissions
       setVCitaUrl(null);
     }
   }, [consentAccepted, vCitaUrl]);
 
-  // If we're showing the iframe-based contact form
   if (!iframeError) {
     return (
-      <div className="w-full">
-        <div className="relative w-full">
+      <div className="w-full relative">
+        <div className="w-full">
           <iframe 
             src="https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&v=3" 
             width="100%" 
@@ -214,7 +198,6 @@ const ContactForm = () => {
           </iframe>
         </div>
         
-        {/* Consent Dialog */}
         <AlertDialog open={showConsentDialog} onOpenChange={setShowConsentDialog}>
           <AlertDialogContent className="sm:max-w-[425px]">
             <AlertDialogHeader>
@@ -254,7 +237,6 @@ const ContactForm = () => {
     );
   }
 
-  // Fallback to our custom form if iframe fails
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -291,10 +273,8 @@ const ContactForm = () => {
 
 export default ContactForm;
 
-// Add a global declaration for the form reference
 declare global {
   interface Window {
     vcitaFormToSubmit: any;
   }
 }
-
