@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   AlertDialog, 
   AlertDialogAction, 
@@ -21,71 +21,102 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
   const [showConsentDialog, setShowConsentDialog] = useState(false);
   const [consentAccepted, setConsentAccepted] = useState(false);
   const [vCitaUrl, setVCitaUrl] = useState<string | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    const iframe = document.querySelector('iframe');
-    if (!iframe) return;
-    
-    // Listen for form submission
+    // Handle postMessage events from the iframe
     const handleMessage = (event: MessageEvent) => {
-      if (event.data && event.data.type === 'vcita_form_submit') {
+      console.log("Received message from iframe:", event.data);
+      
+      // Check for form submission events
+      if (event.data && 
+         (event.data.type === 'vcita_form_submit' || 
+          event.data.action === 'form_submit' ||
+          event.data.event === 'submit')) {
+        console.log("Form submission detected via postMessage");
         setShowConsentDialog(true);
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
+        return;
       }
     };
     
     window.addEventListener('message', handleMessage);
     
-    // Monitor form submit buttons instead of using an overlay
-    const checkForSubmitButtons = () => {
+    // Add a MutationObserver to detect when the iframe's content changes
+    const setupFormInterception = () => {
+      if (!iframeRef.current) return;
+      
       try {
-        const iframeDocument = (iframe as HTMLIFrameElement).contentDocument || 
-                              (iframe as HTMLIFrameElement).contentWindow?.document;
-                              
+        // Try to access iframe document
+        const iframeDocument = iframeRef.current.contentDocument || 
+                              iframeRef.current.contentWindow?.document;
+        
         if (iframeDocument) {
-          const submitButtons = iframeDocument.querySelectorAll('button[type="submit"], input[type="submit"]');
+          console.log("Successfully accessed iframe document");
           
-          submitButtons.forEach(button => {
-            if (!button.getAttribute('data-consent-monitored')) {
-              button.setAttribute('data-consent-monitored', 'true');
+          // Find the form element in the iframe
+          const formElement = iframeDocument.querySelector('form');
+          if (formElement) {
+            console.log("Found form element in iframe");
+            
+            // Add submit event listener to the form
+            formElement.addEventListener('submit', (e) => {
+              console.log("Form submit event captured");
+              e.preventDefault();
+              e.stopPropagation();
+              setShowConsentDialog(true);
+              return false;
+            });
+            
+            // Find submit buttons and add click listeners
+            const submitButtons = iframeDocument.querySelectorAll('button[type="submit"], input[type="submit"], button.submit-button, .vcita-submit-button');
+            console.log(`Found ${submitButtons.length} submit buttons`);
+            
+            submitButtons.forEach(button => {
               button.addEventListener('click', (e) => {
+                console.log("Submit button clicked");
                 e.preventDefault();
                 e.stopPropagation();
                 setShowConsentDialog(true);
                 return false;
               });
-            }
-          });
+            });
+          }
         }
       } catch (e) {
-        // Cross-origin restrictions may prevent accessing iframe content
-        console.log("Could not access iframe content due to cross-origin policy");
+        console.log("Could not access iframe content due to cross-origin policy:", e);
       }
     };
     
-    // Check for submit buttons periodically
-    const buttonCheckInterval = setInterval(checkForSubmitButtons, 2000);
+    // Try to set up interception after iframe loads
+    if (iframeRef.current) {
+      iframeRef.current.addEventListener('load', setupFormInterception);
+    }
     
-    // Listen for clicks on the iframe
+    // Fallback: Add click listener to the iframe itself
     const handleIframeClick = (e: MouseEvent) => {
-      const iframe = document.querySelector('iframe');
-      if (!iframe) return;
+      if (!iframeRef.current) return;
       
+      const iframe = iframeRef.current;
       const rect = iframe.getBoundingClientRect();
-      const y = e.clientY - rect.top;
       
-      // Only intercept clicks in the bottom area (likely submit button)
-      if (y > rect.height * 0.8) {
+      // Check if click is in the bottom part of the iframe (likely submit button area)
+      const y = e.clientY - rect.top;
+      if (y > rect.height * 0.7) {
+        console.log("Click in bottom area of iframe detected - likely submit button");
+        // Analyze target element
         const target = e.target as HTMLElement;
-        const buttonText = target.textContent?.toLowerCase() || '';
+        const tagName = target.tagName;
+        const classList = target.classList ? Array.from(target.classList).join(' ') : '';
+        const text = target.textContent || '';
         
-        // Check if the clicked element is likely a submit button
-        if (buttonText.includes('submit') || 
-            buttonText.includes('send') || 
-            target.tagName === 'BUTTON' || 
-            target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'submit') {
+        // Check if it resembles a submit button
+        if (tagName === 'BUTTON' || 
+            tagName === 'INPUT' && (target as HTMLInputElement).type === 'submit' ||
+            classList.includes('submit') ||
+            classList.includes('button') && text.toLowerCase().includes('submit') ||
+            text.toLowerCase().includes('submit') || 
+            text.toLowerCase().includes('send')) {
+          console.log("Submit button click detected");
           e.preventDefault();
           e.stopPropagation();
           setShowConsentDialog(true);
@@ -94,26 +125,25 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
       }
     };
     
-    iframe.addEventListener('load', () => {
-      try {
-        // Try to add event listener to iframe content
-        const iframeDocument = (iframe as HTMLIFrameElement).contentDocument || 
-                              (iframe as HTMLIFrameElement).contentWindow?.document;
-                               
-        if (iframeDocument) {
-          iframeDocument.addEventListener('click', handleIframeClick);
-        }
-      } catch (e) {
-        // Fallback for cross-origin restrictions
-        console.log("Adding click listener to iframe instead");
-        iframe.addEventListener('click', handleIframeClick);
-      }
-    });
+    // Add click listener to the iframe
+    if (iframeRef.current) {
+      iframeRef.current.addEventListener('click', handleIframeClick as EventListener);
+    }
+    
+    // Set up an interval to periodically check for form elements
+    // This is useful when iframe content loads dynamically
+    const checkInterval = setInterval(() => {
+      setupFormInterception();
+    }, 2000);
     
     return () => {
       window.removeEventListener('message', handleMessage);
-      clearInterval(buttonCheckInterval);
-      iframe.removeEventListener('click', handleIframeClick);
+      clearInterval(checkInterval);
+      
+      if (iframeRef.current) {
+        iframeRef.current.removeEventListener('load', setupFormInterception);
+        iframeRef.current.removeEventListener('click', handleIframeClick as EventListener);
+      }
     };
   }, []);
 
@@ -145,6 +175,7 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
     <div className="w-full relative">
       <div className="w-full">
         <iframe 
+          ref={iframeRef}
           src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
           width="100%" 
           height="400" 
