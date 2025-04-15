@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -88,19 +87,23 @@ const ContactForm = () => {
         const iframeWindow = iframe.contentWindow;
         
         // Attempt to add an event listener to the iframe's form
-        const originalSubmit = iframeWindow.HTMLFormElement.prototype.submit;
-        iframeWindow.HTMLFormElement.prototype.submit = function() {
-          // Show consent dialog before submitting
-          setShowConsentDialog(true);
+        if (iframeWindow.document && iframeWindow.document.forms.length > 0) {
+          const form = iframeWindow.document.forms[0];
+          const originalSubmit = form.submit;
           
-          // Store the original form reference for later submission
-          window.vcitaFormToSubmit = this;
+          form.onsubmit = (e) => {
+            if (e) e.preventDefault();
+            // Show consent dialog before submitting
+            setShowConsentDialog(true);
+            
+            // Store the form reference for later submission
+            window.vcitaFormToSubmit = form;
+            
+            return false;
+          };
           
-          // Prevent default submission
-          return false;
-        };
-        
-        console.log("Successfully set up iframe form interception");
+          console.log("Successfully set up iframe form interception");
+        }
       }
     } catch (e) {
       console.error("Failed to intercept iframe form submission:", e);
@@ -116,7 +119,7 @@ const ContactForm = () => {
     document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       // Check if the clicked element is a submit button within the iframe
-      if (target.tagName === 'BUTTON' && target.type === 'submit') {
+      if (target.tagName === 'BUTTON' && target.hasAttribute('type') && target.getAttribute('type') === 'submit') {
         // Show consent dialog
         setShowConsentDialog(true);
         e.preventDefault();
@@ -132,8 +135,13 @@ const ContactForm = () => {
     
     // Now update our record of consent and allow the form to be submitted
     if (window.vcitaFormToSubmit) {
-      const originalSubmit = window.vcitaFormToSubmit.submit;
-      window.vcitaFormToSubmit.submit();
+      try {
+        window.vcitaFormToSubmit.submit();
+      } catch (e) {
+        console.error("Error submitting form:", e);
+        // Fallback to open vCita directly
+        window.open('https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c', '_blank');
+      }
     } else {
       console.log("Form reference not found, redirecting to vCita directly");
       window.open('https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c', '_blank');
