@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -35,12 +36,13 @@ const BlogPostPage = () => {
         setIsLoading(true);
         
         // In production, this would fetch from Supabase
-        const result = await supabase
+        const { data, error } = await supabase
           .from('blog_posts')
+          .select()
           .eq('slug', slug)
           .single();
         
-        if (result.error) {
+        if (error) {
           toast({
             title: "Post not found",
             description: "The blog post you're looking for doesn't exist",
@@ -48,7 +50,7 @@ const BlogPostPage = () => {
           });
           navigate("/blog");
         } else {
-          setPost(result.data as BlogPost);
+          setPost(data as BlogPost);
         }
       } catch (error) {
         console.error("Error fetching blog post:", error);
@@ -71,15 +73,15 @@ const BlogPostPage = () => {
       if (!slug) return;
       
       // In production, this would delete from Supabase
-      const result = await supabase
+      const { error } = await supabase
         .from('blog_posts')
         .delete()
         .eq('slug', slug);
       
-      if (result.error) {
+      if (error) {
         toast({
           title: "Error deleting blog post",
-          description: result.error.message,
+          description: error.message,
           variant: "destructive",
         });
       } else {

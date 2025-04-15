@@ -38,12 +38,13 @@ const BlogEditor = () => {
         setIsLoading(true);
         
         // In production, this would fetch from Supabase
-        const result = await supabase
+        const { data, error } = await supabase
           .from('blog_posts')
+          .select()
           .eq('slug', slug)
           .single();
         
-        if (result.error) {
+        if (error) {
           toast({
             title: "Post not found",
             description: "The blog post you're trying to edit doesn't exist",
@@ -51,7 +52,7 @@ const BlogEditor = () => {
           });
           navigate("/blog");
         } else {
-          const post = result.data as BlogPost;
+          const post = data as BlogPost;
           setFormData({
             title: post.title,
             slug: post.slug,
@@ -78,29 +79,6 @@ const BlogEditor = () => {
 
     fetchBlogPost();
   }, [slug, isEditMode, navigate, toast]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    // Auto-generate slug from title if in create mode and slug hasn't been manually edited
-    if (name === "title" && !isEditMode && formData.slug === "") {
-      const generatedSlug = value
-        .toLowerCase()
-        .replace(/[^\w\s]/g, "")
-        .replace(/\s+/g, "-");
-      
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
-        slug: generatedSlug
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,21 +110,21 @@ const BlogEditor = () => {
       
       // In production, this would save to Supabase
       if (isEditMode) {
-        const result = await supabase
+        const { error } = await supabase
           .from('blog_posts')
           .update(newPost)
           .eq('slug', slug);
           
-        if (result.error) {
-          throw new Error(result.error.message);
+        if (error) {
+          throw new Error(error.message);
         }
       } else {
-        const result = await supabase
+        const { error } = await supabase
           .from('blog_posts')
           .insert(newPost);
           
-        if (result.error) {
-          throw new Error(result.error.message);
+        if (error) {
+          throw new Error(error.message);
         }
       }
       
@@ -167,6 +145,29 @@ const BlogEditor = () => {
       });
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    // Auto-generate slug from title if in create mode and slug hasn't been manually edited
+    if (name === "title" && !isEditMode && formData.slug === "") {
+      const generatedSlug = value
+        .toLowerCase()
+        .replace(/[^\w\s]/g, "")
+        .replace(/\s+/g, "-");
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        slug: generatedSlug
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
     }
   };
 
@@ -346,29 +347,5 @@ const BlogEditor = () => {
     </div>
   );
 };
-
-// Sample blog posts for development
-const sampleBlogPosts: BlogPost[] = [
-  {
-    id: "1",
-    title: "Understanding Solo 401(k) Contribution Limits for 2025",
-    slug: "understanding-solo-401k-contribution-limits-2025",
-    excerpt: "Learn about the updated contribution limits for Solo 401(k) plans and how they can benefit your retirement strategy.",
-    content: `<p>The IRS has announced new contribution limits for retirement plans in 2025, bringing significant opportunities for self-employed individuals and small business owners using Solo 401(k) plans.</p>
-    <h2>Key Contribution Limits for 2025</h2>
-    <p>As an entrepreneur or small business owner, you can now contribute up to:</p>
-    <ul>
-      <li>$22,500 as an employee contribution (with an additional $7,500 for those 50 and older)</li>
-      <li>Up to 25% of your compensation as an employer contribution</li>
-      <li>Total combined limit of $66,000 ($73,500 for those 50 and older)</li>
-    </ul>
-    <p>These increased limits provide an excellent opportunity to accelerate your retirement savings while enjoying valuable tax benefits.</p>`,
-    coverImage: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
-    author: "Jane Doe",
-    authorTitle: "Financial Advisor",
-    publishedAt: "2025-04-10T10:00:00Z",
-    tags: ["Solo 401(k)", "Retirement Planning", "Tax Strategies"]
-  }
-];
 
 export default BlogEditor;
