@@ -24,96 +24,183 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
   const [vCitaUrl, setVCitaUrl] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const iframeWrapperRef = useRef<HTMLDivElement>(null);
+  const [submitButtonSelector] = useState(".button-container button, .vcita-form-submit, [type='submit'], button.submit-button");
+
+  // Function to show the consent dialog
+  const showConsent = () => {
+    console.log("✅ Showing consent dialog");
+    setShowConsentDialog(true);
+  };
 
   useEffect(() => {
-    // Handle postMessage events from the iframe
+    // Force check for buttons after iframe loads
+    const checkForSubmitButtons = () => {
+      try {
+        if (!iframeRef.current || !iframeRef.current.contentDocument) return;
+        
+        const buttons = iframeRef.current.contentDocument.querySelectorAll(submitButtonSelector);
+        console.log(`Found ${buttons.length} potential submit buttons in iframe`);
+        
+        buttons.forEach(button => {
+          button.addEventListener('click', (e) => {
+            console.log("Submit button clicked inside iframe");
+            setTimeout(showConsent, 100);
+          });
+        });
+      } catch (e) {
+        console.log("CORS prevented direct submit button access", e);
+      }
+    };
+
+    // Enhanced message event handling
     const handleMessage = (event: MessageEvent) => {
       console.log("Received message from iframe:", event.data);
       
-      // Check for form submission events from vCita
-      if (event.data && 
-         (event.data.type === 'vcita_form_submit' || 
-          event.data.action === 'form_submit' ||
-          event.data.event === 'submit' ||
-          (typeof event.data === 'string' && event.data.includes('submit')))) {
-        console.log("Form submission detected via postMessage");
-        setShowConsentDialog(true);
+      // Check for ANY form-related events from vCita
+      if (typeof event.data === 'object') {
+        const eventStr = JSON.stringify(event.data).toLowerCase();
+        if (eventStr.includes('submit') || 
+            eventStr.includes('form') || 
+            eventStr.includes('success') || 
+            eventStr.includes('complete')) {
+          console.log("Form-related message detected:", eventStr);
+          showConsent();
+          return;
+        }
+      }
+      
+      // Check for string messages
+      if (typeof event.data === 'string') {
+        const dataStr = event.data.toLowerCase();
+        if (dataStr.includes('submit') || 
+            dataStr.includes('form') || 
+            dataStr.includes('success') || 
+            dataStr.includes('complete')) {
+          console.log("Form-related string message detected:", dataStr);
+          showConsent();
+          return;
+        }
       }
     };
     
     window.addEventListener('message', handleMessage);
     
-    // Since we can't directly access the iframe due to CORS, 
-    // let's monitor clicks on the iframe element itself
+    // Monitor for clicks in the iframe container
     const handleIframeWrapperClick = (e: MouseEvent) => {
       if (!iframeWrapperRef.current || !iframeRef.current) return;
       
       const iframe = iframeRef.current;
       const rect = iframe.getBoundingClientRect();
       
-      // Check if click is in the bottom part of the iframe (likely submit button area)
+      // Check if click is in the bottom 40% of the iframe (likely submit button area)
       const y = e.clientY - rect.top;
-      if (y > rect.height * 0.7) {
-        // The click is in the bottom 30% of the iframe, which is likely where submit buttons are
-        console.log("Click detected in the submit button area");
-        
-        // Set a short timeout to allow the actual click to process in the iframe
+      const threshold = rect.height * 0.6; // Bottom 40% of iframe
+      
+      if (y > threshold) {
+        console.log("Click detected in the likely submit button area");
+        // Use a debounced approach to allow the real click to process
         setTimeout(() => {
-          setShowConsentDialog(true);
-        }, 200);
+          try {
+            // Try to directly check for submission indicators in the iframe
+            if (iframeRef.current && iframeRef.current.contentWindow) {
+              const iframeDoc = iframeRef.current.contentWindow.document;
+              const formElements = iframeDoc.querySelectorAll('form');
+              
+              // If only one form exists, this is likely a submission
+              if (formElements.length === 1) {
+                console.log("Single form detected, likely submission");
+                showConsent();
+              }
+            }
+          } catch (e) {
+            // Silent catch for CORS
+            console.log("Click in submit area - showing consent dialog");
+            showConsent();
+          }
+        }, 300);
       }
     };
     
-    // Add click listeners to the iframe wrapper div
     if (iframeWrapperRef.current) {
       iframeWrapperRef.current.addEventListener('click', handleIframeWrapperClick as EventListener);
     }
     
-    // Monitor for specific URL changes in the iframe that might indicate form submission
-    const checkIframeUrl = () => {
+    // Monitor window URL changes that might indicate a form submission
+    const handleLocationChange = () => {
+      if (window.location.href.includes("success") || 
+          window.location.href.includes("thank-you") || 
+          window.location.href.includes("submitted")) {
+        console.log("URL change indicating submission:", window.location.href);
+        showConsent();
+      }
+    };
+    
+    window.addEventListener('popstate', handleLocationChange);
+    
+    // Set up a periodic checker to detect form submission
+    const intervalCheck = setInterval(() => {
       try {
         if (iframeRef.current && iframeRef.current.contentWindow) {
-          const url = iframeRef.current.contentWindow.location.href;
-          // If URL contains success or thank you parameters, it might indicate form submission
-          if (url.includes('success=true') || url.includes('thank_you') || url.includes('submitted')) {
-            console.log("Form submission detected via URL change:", url);
-            setShowConsentDialog(true);
+          // Try to access the iframe content - if it's a new URL this could indicate submission
+          const currentUrl = iframeRef.current.contentWindow.location.href;
+          if (currentUrl.includes("success") || 
+              currentUrl.includes("thank-you") || 
+              currentUrl.includes("submitted")) {
+            console.log("Iframe URL change indicating submission:", currentUrl);
+            showConsent();
+          }
+          
+          // Look for success messages in the iframe content
+          try {
+            const iframeDoc = iframeRef.current.contentWindow.document;
+            const successElements = iframeDoc.querySelectorAll('.success-message, .thank-you-message, .form-submitted');
+            if (successElements.length > 0) {
+              console.log("Success elements found in iframe");
+              showConsent();
+            }
+            
+            // Force check for submit buttons periodically
+            checkForSubmitButtons();
+          } catch (e) {
+            // Silent catch for CORS errors
           }
         }
       } catch (e) {
         // Silent catch for CORS errors
       }
-    };
+    }, 1000);
     
-    // Create a MutationObserver to detect when the iframe reloads or changes
-    let observer: MutationObserver;
-    if (iframeRef.current) {
-      observer = new MutationObserver(() => {
-        try {
-          checkIframeUrl();
-        } catch (e) {
-          // Silent catch for CORS errors
-        }
-      });
-      
-      observer.observe(iframeRef.current, { attributes: true });
-    }
-    
-    // Monitor the iframe for load events that might indicate form submission
+    // Handle iframe load event to attach button listeners and check content
     const handleIframeLoad = () => {
-      try {
-        checkIframeUrl();
-      } catch (e) {
-        // Silent catch for CORS errors
-      }
+      console.log("Iframe loaded");
+      setTimeout(checkForSubmitButtons, 1000);
+      setTimeout(checkForSubmitButtons, 2000);
+      setTimeout(checkForSubmitButtons, 3000);
     };
     
     if (iframeRef.current) {
       iframeRef.current.addEventListener('load', handleIframeLoad);
     }
     
+    // Create a Mutation Observer to monitor for changes in the iframe's attributes
+    // This can help detect when iframe content changes after submission
+    let observer: MutationObserver;
+    if (iframeRef.current) {
+      observer = new MutationObserver(() => {
+        console.log("Iframe mutation detected");
+        setTimeout(checkForSubmitButtons, 500);
+      });
+      
+      observer.observe(iframeRef.current, { 
+        attributes: true,
+        childList: false,
+        subtree: false
+      });
+    }
+    
     return () => {
       window.removeEventListener('message', handleMessage);
+      window.removeEventListener('popstate', handleLocationChange);
       
       if (iframeWrapperRef.current) {
         iframeWrapperRef.current.removeEventListener('click', handleIframeWrapperClick as EventListener);
@@ -126,8 +213,10 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
       if (iframeRef.current) {
         iframeRef.current.removeEventListener('load', handleIframeLoad);
       }
+      
+      clearInterval(intervalCheck);
     };
-  }, []);
+  }, [submitButtonSelector]);
 
   const handleIframeError = () => {
     console.error("Failed to load vCita iframe");
@@ -174,9 +263,8 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
           if (iframeWrapperRef.current) {
             const rect = iframeWrapperRef.current.getBoundingClientRect();
             const y = e.clientY - rect.top;
-            if (y > rect.height * 0.75) {
+            if (y > rect.height * 0.7) {
               console.log("Bottom area click detected in wrapper");
-              // Set a short timeout to check if the form is valid before showing consent
               setTimeout(() => {
                 setShowConsentDialog(true);
               }, 300);
