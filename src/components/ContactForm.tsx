@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
@@ -16,73 +16,13 @@ import SubmitButton from "./contact/SubmitButton";
 
 const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [widgetLoaded, setWidgetLoaded] = useState(false);
-  const [widgetError, setWidgetError] = useState(false);
+  const [iframeError, setIframeError] = useState(false);
   const { toast } = useToast();
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues,
   });
-
-  useEffect(() => {
-    const loadWidget = () => {
-      const script = document.createElement('script');
-      script.src = "https://secure.vcita.com/widgets/api/vcita_widget.js";
-      script.async = true;
-      
-      let timeoutId: number;
-      
-      const handleLoad = () => {
-        clearTimeout(timeoutId);
-        if (window.vcita_widgets) {
-          try {
-            window.vcita_widgets.init({
-              business_id: "izk040b42jnjcf3c",
-              widget_type: "Contact",
-              api_integration: true,
-              show_consent_checkbox: true,
-              invitation_texts: { 
-                consent_checkbox_text: "By clicking \"submit\", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our Privacy Policy and Terms of Service. Text \"HELP\" for help or contact us at (833) 224-5517. Text \"STOP\" to cancel."
-              },
-              elementsIds: {
-                widget: "vcita-contact-widget"
-              }
-            });
-            setWidgetLoaded(true);
-          } catch (error) {
-            console.error("Error initializing vCita widget:", error);
-            setWidgetError(true);
-          }
-        } else {
-          setWidgetError(true);
-        }
-      };
-      
-      script.onload = handleLoad;
-      script.onerror = () => {
-        console.error("Failed to load vCita widget script");
-        setWidgetError(true);
-      };
-      
-      // Set a timeout to fall back to the form if widget doesn't load quickly
-      timeoutId = window.setTimeout(() => {
-        console.log("Widget load timeout - falling back to form");
-        setWidgetError(true);
-      }, 5000);
-      
-      document.body.appendChild(script);
-      
-      return () => {
-        clearTimeout(timeoutId);
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
-      };
-    };
-    
-    loadWidget();
-  }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
@@ -122,14 +62,39 @@ const ContactForm = () => {
     }
   };
 
-  if (widgetLoaded && !widgetError) {
-    return <div id="vcita-contact-widget" className="w-full min-h-[500px]"></div>;
+  const handleIframeError = () => {
+    console.error("Failed to load vCita iframe");
+    setIframeError(true);
+  };
+
+  // If we're showing the iframe-based contact form
+  if (!iframeError) {
+    return (
+      <div className="w-full">
+        <iframe 
+          src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
+          width="100%" 
+          height="500" 
+          scrolling="no" 
+          frameBorder="0" 
+          onError={handleIframeError}
+          title="Contact Form"
+          className="w-full min-h-[500px]"
+        >
+          <p>Please contact me via my contact form at vcita:</p>
+          <a href='https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c'>
+            Contact Form for Survival 401k, LLC
+          </a>
+        </iframe>
+      </div>
+    );
   }
 
+  // Fallback to our custom form if iframe fails
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {widgetError && (
+        {iframeError && (
           <div className="p-4 mb-4 bg-amber-50 border border-amber-200 rounded-md">
             <p className="text-amber-700 text-sm">
               The contact widget could not be loaded. You can still use this form to send us a message.
