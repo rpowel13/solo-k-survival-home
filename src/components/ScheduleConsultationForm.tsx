@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { scheduleFormSchema, ScheduleFormValues } from "./consultation/types";
-import { handleScheduleSubmit } from "./consultation/formUtils";
+import { scheduleConsultation } from "@/services/vcitaService";
+import { format } from "date-fns";
 import ContactFields from "./consultation/ContactFields";
 import DateSelector from "./consultation/DateSelector";
 import TimeSelector from "./consultation/TimeSelector";
@@ -27,12 +28,41 @@ const ScheduleConsultationForm = () => {
   });
 
   const onSubmit = async (data: ScheduleFormValues) => {
-    await handleScheduleSubmit(
-      data,
-      toast,
-      setIsSubmitting,
-      () => form.reset()
-    );
+    setIsSubmitting(true);
+    
+    try {
+      // Format the selected date and time for VCita
+      const formattedDate = format(data.date, "yyyy-MM-dd");
+      
+      const result = await scheduleConsultation({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        date: formattedDate,
+        time: data.time,
+        message: data.message
+      });
+      
+      if (result.success) {
+        toast({
+          title: "Consultation scheduled successfully",
+          description: `We'll see you on ${format(data.date, "MMMM d, yyyy")} at ${data.time}.`,
+        });
+        
+        form.reset();
+      } else {
+        throw new Error(result.message || "Failed to schedule consultation");
+      }
+    } catch (error) {
+      console.error("Consultation scheduling error:", error);
+      toast({
+        title: "Error scheduling consultation",
+        description: "Please try again or contact us directly.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
