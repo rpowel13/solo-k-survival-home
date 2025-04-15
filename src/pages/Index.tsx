@@ -1,6 +1,7 @@
 
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import ServicesSection from "@/components/ServicesSection";
 import BenefitsSection from "@/components/BenefitsSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import ComparisonSection from "@/components/ComparisonSection";
@@ -17,6 +18,8 @@ const Index = () => {
       <Header />
       <main className="flex-grow">
         <HeroSection />
+        
+        <ServicesSection />
         
         <div className="py-12 bg-gray-50">
           <BenefitsSection />
