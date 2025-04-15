@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/ContactFormSchema";
 import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
+import WooSenderConfig from "./contact/WooSenderConfig";
 
 const ContactForm = () => {
   // Start with iframeError as true to show the fallback form by default
@@ -20,7 +21,12 @@ const ContactForm = () => {
   };
 
   // Always use the fallback form for now until we fix the iframe
-  return <FallbackContactForm form={form} />;
+  return (
+    <div className="relative">
+      <WooSenderConfig />
+      <FallbackContactForm form={form} />
+    </div>
+  );
 };
 
 export default ContactForm;
