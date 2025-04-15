@@ -28,8 +28,23 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({
   setConsentAccepted,
   onAccept
 }) => {
+  console.log("Dialog render state:", { showConsentDialog, consentAccepted });
+  
+  const handleAccept = () => {
+    console.log("Accept button clicked, consent state:", consentAccepted);
+    if (consentAccepted) {
+      onAccept();
+    }
+  };
+  
   return (
-    <AlertDialog open={showConsentDialog} onOpenChange={setShowConsentDialog}>
+    <AlertDialog 
+      open={showConsentDialog} 
+      onOpenChange={(open) => {
+        console.log("Dialog open state changing to:", open);
+        setShowConsentDialog(open);
+      }}
+    >
       <AlertDialogContent className="sm:max-w-[425px]">
         <AlertDialogHeader>
           <AlertDialogTitle>Consent Required</AlertDialogTitle>
@@ -42,7 +57,10 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({
           <Checkbox 
             id="consent-checkbox" 
             checked={consentAccepted} 
-            onCheckedChange={(checked) => setConsentAccepted(checked as boolean)}
+            onCheckedChange={(checked) => {
+              console.log("Checkbox changed to:", checked);
+              setConsentAccepted(checked as boolean);
+            }}
           />
           <div className="space-y-1 leading-none">
             <label htmlFor="consent-checkbox" className="text-sm font-normal cursor-pointer">
@@ -52,11 +70,14 @@ const ConsentDialog: React.FC<ConsentDialogProps> = ({
         </div>
         
         <AlertDialogFooter className="mt-4">
-          <AlertDialogCancel onClick={() => setShowConsentDialog(false)}>
+          <AlertDialogCancel onClick={() => {
+            console.log("Cancel button clicked");
+            setShowConsentDialog(false);
+          }}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction 
-            onClick={onAccept} 
+            onClick={handleAccept} 
             disabled={!consentAccepted}
           >
             Submit
