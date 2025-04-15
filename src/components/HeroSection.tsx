@@ -7,19 +7,29 @@ import { ArrowRight, Check } from "lucide-react";
 const HeroSection = () => {
   return (
     <section className="relative overflow-hidden bg-survival-800 py-12 md:py-20">
+      {/* Background Image with Overlay */}
+      <div 
+        className="absolute inset-0 z-0 opacity-15" 
+        style={{ 
+          backgroundImage: "url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80')", 
+          backgroundSize: "cover",
+          backgroundPosition: "center"
+        }}
+      ></div>
+      
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 p-4 rounded-lg">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 bg-opacity-80 p-4 rounded-lg shadow-lg">
               Retirement Plans for Entrepreneurs & 1st Responders
             </h1>
-            <p className="mt-4 text-xl text-gray-200">
+            <p className="mt-4 text-xl text-gray-200 bg-survival-900 bg-opacity-50 p-3 rounded-md">
               Self-directed retirement solutions designed for entrepreneurs, first responders, small business owners, independent professionals, and gig economy workers.
             </p>
             
             <div className="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
               <Link to="/services/solo-401k">
-                <Button className="bg-white text-survival-800 hover:bg-gray-100">
+                <Button className="bg-white text-survival-800 hover:bg-gray-100 shadow-md">
                   Explore Solo 401k
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -56,6 +66,15 @@ const HeroSection = () => {
                   <span className="text-gray-700 font-medium">Educational resources to help you make informed decisions</span>
                 </li>
               </ul>
+
+              {/* Added financial image */}
+              <div className="mt-6 rounded-lg overflow-hidden shadow-md">
+                <img 
+                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80" 
+                  alt="Financial planning" 
+                  className="w-full h-auto object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
