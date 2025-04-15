@@ -11,7 +11,6 @@ import Solo401k from "./pages/services/Solo401k";
 import LLCCreation from "./pages/services/LLCCreation";
 import FirstResponderPackage from "./pages/services/FirstResponderPackage";
 import AlternativeInvestments from "./pages/services/AlternativeInvestments";
-import MetalPrices from "./pages/services/MetalPrices";
 import RetirementCalculator from "./pages/RetirementCalculator";
 import Solo401kApplication from "./pages/applications/Solo401kApplication";
 import LLCApplication from "./pages/applications/LLCApplication";
@@ -43,7 +42,6 @@ const App = () => (
           <Route path="/services/llc-creation" element={<LLCCreation />} />
           <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />
           <Route path="/services/alternative-investments" element={<AlternativeInvestments />} />
-          <Route path="/services/metal-prices" element={<MetalPrices />} />
           <Route path="/tools/retirement-calculator" element={<RetirementCalculator />} />
           <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
           <Route path="/apply/llc" element={<LLCApplication />} />
