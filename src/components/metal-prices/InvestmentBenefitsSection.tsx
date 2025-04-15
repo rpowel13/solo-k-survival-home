@@ -68,8 +68,8 @@ const InvestmentBenefitsSection = () => {
           <div className="md:w-1/3">
             <div className="rounded-xl overflow-hidden shadow-md">
               <img 
-                src="/lovable-uploads/e164ff79-885d-4285-ac7e-9a75934bfa19.png" 
-                alt="Stacks of gold coins" 
+                src="/lovable-uploads/f0d45096-3476-4105-8995-90bd243c4aa7.png" 
+                alt="Gold coins stacked progressively on dollar bills" 
                 className="w-full h-auto object-cover"
               />
             </div>
