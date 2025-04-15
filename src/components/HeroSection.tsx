@@ -3,15 +3,11 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check } from "lucide-react";
-import { Logo } from './header/Logo';
 
 const HeroSection = () => {
   return (
     <section className="relative overflow-hidden bg-survival-800 py-12 md:py-20">
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-10">
-          <Logo className="mx-auto mb-6 scale-150" />
-        </div>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 p-4 rounded-lg">
@@ -69,3 +65,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
