@@ -25,9 +25,10 @@ const ContactForm = () => {
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
+    console.log("Form submitted with data:", data);
     
     try {
-      await submitContactForm({
+      const result = await submitContactForm({
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -36,17 +37,21 @@ const ContactForm = () => {
         consent: data.consent
       });
       
-      toast({
-        title: "Message sent successfully",
-        description: "We'll get back to you as soon as possible.",
-      });
-      
-      form.reset();
+      if (result.success) {
+        toast({
+          title: "Message sent successfully",
+          description: "We'll get back to you as soon as possible.",
+        });
+        
+        form.reset();
+      } else {
+        throw new Error(result.message || "Failed to send message");
+      }
     } catch (error) {
       console.error("Contact form submission error:", error);
       toast({
         title: "Error sending message",
-        description: "Please try again or contact us directly.",
+        description: error instanceof Error ? error.message : "Please try again or contact us directly.",
         variant: "destructive"
       });
     } finally {

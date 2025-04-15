@@ -13,34 +13,50 @@ export interface ContactFormData {
 
 interface VCitaResponse {
   success: boolean;
+  message?: string;
 }
 
 export const submitContactForm = async (data: ContactFormData): Promise<VCitaResponse> => {
   try {
+    console.log('Submitting contact form to vCita:', data);
+    
     const response = await fetch(`${VCITA_BASE_URL}/contact_requests`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${VCITA_API_TOKEN}`
       },
-      mode: 'no-cors',
       body: JSON.stringify({
-        contact: {
-          name: data.name,
-          email: data.email,
-          phone: data.phone
-        },
-        subject: data.subject,
-        message: data.message,
-        consent: data.consent,
-        source: window.location.href
+        contact_request: {
+          client: {
+            name: data.name,
+            email: data.email,
+            phone: data.phone
+          },
+          subject: data.subject,
+          message: data.message,
+          consent: data.consent,
+          source: window.location.href
+        }
       })
     });
 
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error('vCita API Error:', response.status, errorData);
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    const responseData = await response.json().catch(() => null);
+    console.log('vCita API Response:', responseData);
+    
     return { success: true };
   } catch (error) {
-    console.error('VCita Contact Form Submission Error:', error);
-    throw error;
+    console.error('vCita Contact Form Submission Error:', error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
   }
 };
 
@@ -53,30 +69,45 @@ export const scheduleConsultation = async (formData: {
   message?: string;
 }): Promise<VCitaResponse> => {
   try {
+    console.log('Scheduling consultation with vCita:', formData);
+    
     const response = await fetch(`${VCITA_BASE_URL}/scheduling/izk040b42jnjcf3c/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${VCITA_API_TOKEN}`
       },
-      mode: 'no-cors',
       body: JSON.stringify({
-        contact: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone
-        },
-        appointment: {
-          requested_datetime: `${formData.date} ${formData.time}`,
-          notes: formData.message || 'No additional notes'
-        },
-        source: window.location.href
+        scheduling_request: {
+          client: {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone
+          },
+          appointment: {
+            requested_datetime: `${formData.date} ${formData.time}`,
+            notes: formData.message || 'No additional notes'
+          },
+          source: window.location.href
+        }
       })
     });
 
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error('vCita Scheduling API Error:', response.status, errorData);
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    const responseData = await response.json().catch(() => null);
+    console.log('vCita Scheduling API Response:', responseData);
+    
     return { success: true };
   } catch (error) {
-    console.error('VCita Scheduling Submission Error:', error);
-    throw error;
+    console.error('vCita Scheduling Submission Error:', error);
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
+    };
   }
 };
