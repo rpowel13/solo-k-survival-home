@@ -1,13 +1,15 @@
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/ContactFormSchema";
 import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
+import WooSenderConfig from "./contact/WooSenderConfig";
 
 const ContactForm = () => {
-  const [iframeError, setIframeError] = useState(false);
+  // Start with iframeError as true to show the fallback form by default
+  const [iframeError, setIframeError] = useState(true);
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -18,13 +20,11 @@ const ContactForm = () => {
     setIframeError(true);
   };
 
+  // Always use the fallback form for now until we fix the iframe
   return (
     <div className="relative">
-      {iframeError ? (
-        <FallbackContactForm form={form} />
-      ) : (
-        <VCitaIframe onError={handleIframeError} />
-      )}
+      <WooSenderConfig />
+      <FallbackContactForm form={form} />
     </div>
   );
 };
