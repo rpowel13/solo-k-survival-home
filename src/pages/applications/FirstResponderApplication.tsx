@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Phone } from 'lucide-react';
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: 'First name is required' }),
@@ -53,7 +53,6 @@ const FirstResponderApplication = () => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
-    // Here you would typically send the form data to your server
     toast({
       title: "Application Submitted",
       description: "We've received your First Responder Package application. Our team will prioritize your application and contact you shortly.",
@@ -77,6 +76,13 @@ const FirstResponderApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      
+      <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
+        <Phone className="h-5 w-5 mr-2 text-finance-600" />
+        Questions? Call Our Dedicated First Responder Support Line: 
+        <span className="ml-2 text-finance-600 font-bold">1-800-SURVIVAL</span>
+      </div>
+
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10 text-center">
