@@ -77,11 +77,7 @@ const FirstResponderApplication = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
-        <Phone className="h-5 w-5 mr-2 text-finance-600" />
-        Questions? Call Our Dedicated First Responder Support Line: 
-        <span className="ml-2 text-finance-600 font-bold">1-800-SURVIVAL</span>
-      </div>
+      {/* Removed the phone number banner */}
 
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
