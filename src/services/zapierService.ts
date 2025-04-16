@@ -1,6 +1,7 @@
 
 import { SoloFormValues } from '@/components/solo401k/FormSchema';
 import { ContactFormValues } from '@/components/contact/ContactFormSchema';
+import { ScheduleFormValues } from '@/components/consultation/types';
 import { z } from 'zod';
 
 // Define types for the LLC and First Responder forms based on their structure
@@ -43,7 +44,7 @@ interface EmailResponse {
   message?: string;
 }
 
-type FormData = SoloFormValues | ContactFormValues | LLCFormValues | FirstResponderFormValues;
+type FormData = SoloFormValues | ContactFormValues | LLCFormValues | FirstResponderFormValues | ScheduleFormValues;
 
 // Zapier webhook URL - you should replace this with your actual Zapier webhook URL
 const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
@@ -65,6 +66,10 @@ function isLLCForm(data: FormData): data is LLCFormValues {
 
 function isFirstResponderForm(data: FormData): data is FirstResponderFormValues {
   return 'firstName' in data && 'occupation' in data && 'department' in data;
+}
+
+function isScheduleForm(data: FormData): data is ScheduleFormValues {
+  return 'name' in data && 'date' in data && 'time' in data;
 }
 
 /**
@@ -158,6 +163,20 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         source: window.location.href
       };
       emailSubject = "New First Responder Package Application";
+    } else if (isScheduleForm(data)) {
+      // This is Schedule Consultation form data
+      formattedData = {
+        formType: 'Schedule_Consultation',
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        requestedDate: data.date instanceof Date ? data.date.toLocaleDateString() : data.date,
+        requestedTime: data.time,
+        message: data.message || 'N/A',
+        submissionDate: new Date().toLocaleString(),
+        source: window.location.href
+      };
+      emailSubject = "New Consultation Request";
     } else {
       throw new Error("Unknown form data type");
     }
@@ -165,6 +184,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Add recipient emails to the data (multiple recipients)
     formattedData.recipientEmails = ["ross.powell@survival401k.com", "jill.powell@survival401k.com"];
     formattedData.emailSubject = emailSubject;
+    formattedData.targetService = "WooSender"; // This identifies that the data should be sent to WooSender
     
     // Send data to Zapier webhook
     const response = await fetch(webhookUrl, {

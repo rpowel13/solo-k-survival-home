@@ -1,42 +1,54 @@
 
-import { format } from "date-fns";
 import { ScheduleFormValues } from "./types";
-import { scheduleConsultation } from "@/services/vcitaService";
-import { toast as toastFunction } from "@/hooks/use-toast";
+import { ToastType } from "@/components/ui/use-toast";
+import { triggerZapierWebhook } from "@/services/zapierService";
 
 export const handleScheduleSubmit = async (
   data: ScheduleFormValues,
-  toast: typeof toastFunction,
+  toast: ToastType,
   setIsSubmitting: (value: boolean) => void,
   resetForm: () => void
 ) => {
   setIsSubmitting(true);
   
   try {
-    // Format the selected date and time for VCita
-    const formattedDate = format(data.date, "yyyy-MM-dd");
+    console.log("Schedule form data:", data);
     
-    await scheduleConsultation({
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      date: formattedDate,
-      time: data.time,
-      message: data.message
-    });
+    // Format the date for display if it's a Date object
+    const formattedDate = data.date instanceof Date 
+      ? data.date.toLocaleDateString() 
+      : data.date;
     
-    // Always show success message since we're using no-cors mode
-    toast({
-      title: "Consultation scheduled successfully",
-      description: `We'll see you on ${format(data.date, "MMMM d, yyyy")} at ${data.time}.`,
-    });
+    // First try to send via Zapier to WooSender
+    const zapierResult = await triggerZapierWebhook(data);
     
-    resetForm();
+    if (zapierResult.success) {
+      toast({
+        title: "Consultation Scheduled!",
+        description: `Your consultation is scheduled for ${formattedDate} at ${data.time}. We'll call you at the provided number.`,
+      });
+      
+      resetForm();
+      
+      // Close the dialog after a successful submission
+      const closeDialogTimeout = setTimeout(() => {
+        const dialogCloseButton = document.querySelector('[data-dialog-close="true"]');
+        if (dialogCloseButton instanceof HTMLElement) {
+          dialogCloseButton.click();
+        }
+      }, 3000);
+      
+      return () => clearTimeout(closeDialogTimeout);
+    } else {
+      throw new Error(zapierResult.message || "Failed to schedule consultation");
+    }
   } catch (error) {
-    console.error("Consultation scheduling error:", error);
+    console.error("Schedule consultation error:", error);
     toast({
       title: "Error scheduling consultation",
-      description: "Please try again or contact us directly.",
+      description: error instanceof Error 
+        ? error.message 
+        : "Please try again or contact us directly at (833) 224-5517.",
       variant: "destructive"
     });
   } finally {

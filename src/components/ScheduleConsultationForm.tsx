@@ -11,6 +11,7 @@ import DateSelector from "./consultation/DateSelector";
 import TimeSelector from "./consultation/TimeSelector";
 import MessageField from "./consultation/MessageField";
 import SubmitButton from "./consultation/SubmitButton";
+import ZapierConfig from "./consultation/ZapierConfig";
 
 const ScheduleConsultationForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,20 +37,23 @@ const ScheduleConsultationForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <ContactFields form={form} />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <DateSelector form={form} />
-          <TimeSelector form={form} />
-        </div>
-        
-        <MessageField form={form} />
-        
-        <SubmitButton isSubmitting={isSubmitting} />
-      </form>
-    </Form>
+    <>
+      <ZapierConfig />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <ContactFields form={form} />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <DateSelector form={form} />
+            <TimeSelector form={form} />
+          </div>
+          
+          <MessageField form={form} />
+          
+          <SubmitButton isSubmitting={isSubmitting} />
+        </form>
+      </Form>
+    </>
   );
 };
 
