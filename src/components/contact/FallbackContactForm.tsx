@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
@@ -88,9 +87,9 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         
         <MessageField form={form} />
         
-        <SubmitButton isSubmitting={isSubmitting} />
-        
         <OptInCheckbox form={form} />
+        
+        <SubmitButton isSubmitting={isSubmitting} />
         
         <p className="text-xs text-gray-500 text-center mt-2">
           Your information is secure and will never be shared with third parties.

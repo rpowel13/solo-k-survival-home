@@ -7,7 +7,7 @@ import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
 
 const ContactForm = () => {
-  const [iframeError, setIframeError] = useState(false);
+  const [iframeError, setIframeError] = useState(true); // Set to true to always show our form for now
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
