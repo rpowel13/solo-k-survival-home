@@ -7,7 +7,7 @@ import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
 
 const ContactForm = () => {
-  // Always show our form in production to ensure data is captured in Supabase
+  // Always show our form - VCita iframe is completely disabled now to ensure data is captured in Supabase
   const [iframeError, setIframeError] = useState(true);
   
   const form = useForm<ContactFormValues>({

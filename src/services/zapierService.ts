@@ -39,9 +39,9 @@ const firstResponderFormSchema = z.object({
   agreeToTerms: z.boolean(),
 });
 
-interface EmailResponse {
+export interface EmailResponse {
   success: boolean;
-  message?: string;
+  message: string;
 }
 
 type FormData = SoloFormValues | ContactFormValues | LLCFormValues | FirstResponderFormValues | ScheduleFormValues;
@@ -200,7 +200,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Instead, we'll assume it worked if no error was thrown
     return { 
       success: true,
-      message: 'Form submitted successfully'
+      message: 'Form submitted successfully to Zapier'
     };
   } catch (error) {
     console.error('Email sending error:', error);

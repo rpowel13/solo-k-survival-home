@@ -28,7 +28,10 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log("Form submitted with data:", data);
     
     try {
-      // Submit data to Supabase first to ensure database persistence
+      // Explicitly log submission attempt
+      console.log("ATTEMPTING SUPABASE SUBMISSION", new Date().toISOString());
+      
+      // Submit data to Supabase first as the primary method
       const supabaseResult = await submitContactForm(data);
       console.log("Supabase submission result:", supabaseResult);
       
@@ -36,8 +39,16 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         console.error("Supabase submission error:", supabaseResult.error);
       }
       
-      // Secondary submission to WooSender through Zapier
-      let zapierResult = { success: false, message: "" };
+      // Log Supabase result details for debugging
+      console.log("SUPABASE SUBMISSION COMPLETED", {
+        success: supabaseResult.success,
+        id: supabaseResult.id || "no-id",
+        error: supabaseResult.error || "no-error",
+        timestamp: new Date().toISOString()
+      });
+      
+      // Try Zapier as secondary backup
+      let zapierResult = { success: false, message: "Zapier not attempted" };
       try {
         zapierResult = await triggerZapierWebhook(data);
         console.log("Zapier submission result:", zapierResult);

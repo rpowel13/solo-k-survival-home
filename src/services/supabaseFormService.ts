@@ -12,6 +12,7 @@ type TableName = 'contacts' | 'scheduled_consultations' | 'llc_applications' |
 export const submitFormToSupabase = async (tableName: TableName, data: any) => {
   try {
     console.log(`Submitting to ${tableName}:`, data);
+    console.log("Supabase URL:", supabase.supabaseUrl);
     
     // 1. Submit to Supabase table
     const response = await supabase
@@ -107,6 +108,7 @@ const sendNewSubmissionEmail = async (tableName: TableName, data: any, submissio
     
     // For production, use the Supabase Edge Function to send email
     try {
+      console.log('Sending email notification via Supabase Edge Function');
       const { data: emailResult, error } = await supabase.functions.invoke('send-email-notification', {
         body: {
           to: ADMIN_EMAILS,
@@ -122,13 +124,16 @@ const sendNewSubmissionEmail = async (tableName: TableName, data: any, submissio
       
       if (error) {
         console.error('Error invoking send-email-notification function:', error);
-        throw error;
+        console.log('Email notification error details:', JSON.stringify(error));
+        // Don't throw here - we don't want to break form submission if email fails
+      } else {
+        console.log('Email notification sent successfully:', emailResult);
       }
       
-      console.log('Email notification sent successfully:', emailResult);
       return emailResult;
     } catch (emailError) {
       console.error('Error sending email notification:', emailError);
+      console.log('Email exception details:', JSON.stringify(emailError));
       // Don't throw here - we don't want to break form submission if email fails
     }
   } catch (error) {
@@ -139,6 +144,12 @@ const sendNewSubmissionEmail = async (tableName: TableName, data: any, submissio
 
 // Specialized functions for each form type
 export const submitContactForm = async (data: any) => {
+  console.log("Contact form submission starting with data:", {
+    name: data.name,
+    email: data.email,
+    subject: data.subject || null
+  });
+  
   // Format data for contacts table
   const formattedData = {
     name: data.name,
