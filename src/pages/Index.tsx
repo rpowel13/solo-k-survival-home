@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -11,8 +10,8 @@ import Footer from "@/components/Footer";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
 import PrequalificationSection from "@/components/solo401k/PrequalificationSection";
 import { Separator } from "@/components/ui/separator";
+import { Phone } from "lucide-react";
 
-// Configuration object for section backgrounds
 const sectionBackgrounds = {
   services: "bg-gradient-to-br from-soft-purple/20 to-soft-blue/20",
   benefits: "bg-gradient-to-br from-soft-green/30 to-soft-yellow/30",
@@ -27,6 +26,13 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      
+      <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
+        <Phone className="h-5 w-5 mr-2 text-survival-600" />
+        Questions? Call Our Support Line: 
+        <span className="ml-2 text-survival-600 font-bold">(833) 224-5517</span>
+      </div>
+      
       <main className="flex-grow">
         <HeroSection />
         
