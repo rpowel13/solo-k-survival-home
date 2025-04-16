@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Clock, Edit, Trash, FileText, ExternalLink, AlertCircle } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Edit, Trash, FileText, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
@@ -27,7 +27,6 @@ const BlogPostPage = () => {
   const [post, setPost] = useState<BlogPost & { pdfUrl?: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [pdfError, setPdfError] = useState(false);
 
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -100,22 +99,6 @@ const BlogPostPage = () => {
         variant: "destructive",
       });
     }
-  };
-
-  // New function to handle PDF link click
-  const handlePdfClick = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
-    // Check if the URL is relative (our new format) or absolute
-    if (url.startsWith('/assets/')) {
-      e.preventDefault();
-      // For development/demo, show a message that the PDF would be available in production
-      toast({
-        title: "PDF Not Available in Demo",
-        description: "In a production environment, this would display the actual PDF document.",
-        variant: "default",
-      });
-      console.log(`In production, would load PDF from: ${url}`);
-    }
-    // If it's an absolute URL, let the browser handle it normally
   };
 
   if (isLoading) {
@@ -232,7 +215,7 @@ const BlogPostPage = () => {
               
               {post.pdfUrl ? (
                 <div className="bg-gray-50 border rounded-lg p-6 my-8">
-                  <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <FileText className="h-8 w-8 text-survival-600 mr-3" />
                       <div>
@@ -245,21 +228,10 @@ const BlogPostPage = () => {
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-survival-600 hover:bg-survival-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-survival-500"
-                      onClick={(e) => handlePdfClick(e, post.pdfUrl || '')}
                     >
                       View PDF <ExternalLink className="ml-2 h-4 w-4" />
                     </a>
                   </div>
-                  
-                  {pdfError && (
-                    <div className="mt-4 flex items-start bg-amber-50 p-3 rounded border border-amber-200">
-                      <AlertCircle className="h-5 w-5 text-amber-500 mr-2 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm text-amber-700">
-                        <p className="font-medium">Note:</p>
-                        <p>This is a demo environment. In production, this would access the actual PDF document.</p>
-                      </div>
-                    </div>
-                  )}
                 </div>
               ) : post.content ? (
                 <div dangerouslySetInnerHTML={{ __html: post.content }} />

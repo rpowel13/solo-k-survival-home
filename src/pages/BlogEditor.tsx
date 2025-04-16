@@ -192,8 +192,7 @@ const BlogEditor = () => {
       
       if (pdfFile) {
         const fileName = `blog_${formData.slug}_${Date.now()}.pdf`;
-        finalPdfUrl = `/assets/pdfs/${fileName}`;
-        console.log(`PDF would be uploaded as: ${finalPdfUrl}`);
+        finalPdfUrl = `https://storage.example.com/blog-pdfs/${fileName}`;
       }
       
       const newPost: BlogPost & { pdfUrl: string } = {
