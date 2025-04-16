@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,13 +56,13 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      // Send the form data via email
+      // Send the form data via Zapier webhook
       const emailResult = await triggerZapierWebhook(data);
       
       if (emailResult.success) {
         toast({
           title: "Application Submitted",
-          description: "Your Solo 401k application has been prepared for email. Please complete sending the email from your email client. Redirecting to payment...",
+          description: "Your Solo 401k application has been submitted successfully. Redirecting to payment...",
         });
         
         // Redirect to payment page after a short delay
@@ -69,7 +70,7 @@ const Solo401kApplication = () => {
           navigate('/payment/solo-401k');
         }, 3000);
       } else {
-        throw new Error(emailResult.message || "Failed to prepare email");
+        throw new Error(emailResult.message || "Failed to submit application");
       }
     } catch (error) {
       console.error("Application submission error:", error);
