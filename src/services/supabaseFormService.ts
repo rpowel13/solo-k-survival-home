@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 
 // Email addresses to notify (could be moved to environment variables)
@@ -10,8 +11,10 @@ type TableName = 'contacts' | 'scheduled_consultations' | 'llc_applications' |
 // Generic function to submit form data to Supabase
 export const submitFormToSupabase = async (tableName: TableName, data: any) => {
   try {
-    console.log(`Submitting to ${tableName}:`, data);
-    console.log("Attempting to insert data into Supabase table:", tableName);
+    console.log(`[${new Date().toISOString()}] Submitting to ${tableName} table:`, data);
+    
+    // Log the Supabase connection info without accessing protected properties
+    console.log(`[${new Date().toISOString()}] Supabase client initialized and attempting to insert data`);
     
     // 1. Submit to Supabase table
     const response = await supabase
@@ -20,21 +23,30 @@ export const submitFormToSupabase = async (tableName: TableName, data: any) => {
       .select('id');
     
     if (response.error) {
-      console.error(`Error inserting into ${tableName}:`, response.error);
+      console.error(`[${new Date().toISOString()}] Error inserting into ${tableName}:`, response.error);
+      console.error(`Error details:`, JSON.stringify(response.error, null, 2));
       throw response.error;
     }
     
     const result = response.data && response.data.length > 0 ? { id: response.data[0].id } : null;
-    if (!result) throw new Error('No ID returned from insert operation');
+    if (!result) {
+      console.error(`[${new Date().toISOString()}] No ID returned from insert operation`);
+      throw new Error('No ID returned from insert operation');
+    }
     
-    console.log(`Successfully inserted into ${tableName} with ID:`, result.id);
+    console.log(`[${new Date().toISOString()}] Successfully inserted into ${tableName} with ID:`, result.id);
+    console.log(`Complete response:`, JSON.stringify(response, null, 2));
     
     // 2. Send email notification
     await sendNewSubmissionEmail(tableName, data, result.id);
     
     return { success: true, id: result.id };
   } catch (error) {
-    console.error(`Error submitting to ${tableName}:`, error);
+    console.error(`[${new Date().toISOString()}] Error submitting to ${tableName}:`, error);
+    // Log more details about the error for debugging
+    console.error('Error type:', typeof error);
+    console.error('Error stringify:', JSON.stringify(error, null, 2));
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack available');
     return { success: false, error };
   }
 };
@@ -143,7 +155,7 @@ const sendNewSubmissionEmail = async (tableName: TableName, data: any, submissio
 
 // Specialized functions for each form type
 export const submitContactForm = async (data: any) => {
-  console.log("Contact form submission starting with data:", {
+  console.log(`[${new Date().toISOString()}] Contact form submission starting with data:`, {
     name: data.name,
     email: data.email,
     subject: data.subject || null
@@ -159,6 +171,7 @@ export const submitContactForm = async (data: any) => {
     opt_in: data.consent || false
   };
   
+  console.log(`[${new Date().toISOString()}] Formatted data for Supabase:`, formattedData);
   return submitFormToSupabase('contacts', formattedData);
 };
 

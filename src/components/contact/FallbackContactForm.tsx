@@ -25,22 +25,22 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
-    console.log("Form submitted with data:", data);
+    console.log(`[${new Date().toISOString()}] Form submitted with data:`, data);
     
     try {
       // Explicitly log submission attempt
-      console.log("ATTEMPTING SUPABASE SUBMISSION", new Date().toISOString());
+      console.log(`[${new Date().toISOString()}] ATTEMPTING SUPABASE SUBMISSION`);
       
       // Submit data to Supabase first as the primary method
       const supabaseResult = await submitContactForm(data);
-      console.log("Supabase submission result:", supabaseResult);
+      console.log(`[${new Date().toISOString()}] Supabase submission result:`, supabaseResult);
       
       if (!supabaseResult.success) {
-        console.error("Supabase submission error:", supabaseResult.error);
+        console.error(`[${new Date().toISOString()}] Supabase submission error:`, supabaseResult.error);
       }
       
       // Log Supabase result details for debugging
-      console.log("SUPABASE SUBMISSION COMPLETED", {
+      console.log(`[${new Date().toISOString()}] SUPABASE SUBMISSION COMPLETED`, {
         success: supabaseResult.success,
         id: supabaseResult.id || "no-id",
         error: supabaseResult.error || "no-error",
@@ -50,15 +50,17 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       // Try Zapier as secondary backup
       let zapierResult = { success: false, message: "Zapier not attempted" };
       try {
+        console.log(`[${new Date().toISOString()}] Attempting Zapier submission as backup`);
         zapierResult = await triggerZapierWebhook(data);
-        console.log("Zapier submission result:", zapierResult);
+        console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
       } catch (zapierError) {
-        console.error("Zapier submission error:", zapierError);
+        console.error(`[${new Date().toISOString()}] Zapier submission error:`, zapierError);
         // Continue execution even if Zapier fails
       }
       
       // Check if at least one submission was successful
       if (supabaseResult.success || zapierResult.success) {
+        console.log(`[${new Date().toISOString()}] At least one submission method succeeded`);
         toast({
           title: "Message sent successfully",
           description: "We'll get back to you as soon as possible.",
@@ -66,10 +68,15 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         
         form.reset();
       } else {
+        // If both failed, throw an error to be caught by the catch block
+        console.error(`[${new Date().toISOString()}] All submission methods failed`);
         throw new Error(supabaseResult.error?.message || zapierResult.message || "Failed to send message");
       }
     } catch (error) {
-      console.error("Contact form submission error:", error);
+      console.error(`[${new Date().toISOString()}] Contact form submission error:`, error);
+      console.error('Error stringify:', JSON.stringify(error, null, 2));
+      console.error('Error stack:', error instanceof Error ? error.stack : 'No stack available');
+      
       toast({
         title: "Error sending message",
         description: error instanceof Error 

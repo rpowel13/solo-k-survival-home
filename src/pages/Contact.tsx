@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Mail, Phone, MessageSquare, Calendar } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -7,9 +8,37 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import ContactForm from "@/components/ContactForm";
 import ScheduleConsultationForm from "@/components/ScheduleConsultationForm";
+import { testSupabaseConnection, logSupabaseInfo } from "@/services/debugService";
+import { useToast } from "@/components/ui/use-toast";
 
 const Contact = () => {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+  const { toast } = useToast();
+  
+  useEffect(() => {
+    // Log Supabase client info on page load
+    console.log(`[${new Date().toISOString()}] Contact page mounted, testing Supabase connection`);
+    logSupabaseInfo();
+    
+    // Test Supabase connection on page load
+    const testConnection = async () => {
+      const result = await testSupabaseConnection();
+      
+      if (!result.success) {
+        console.error(`[${new Date().toISOString()}] Supabase connection test failed on Contact page load`);
+        toast({
+          title: "Database Connection Issue",
+          description: "There may be an issue connecting to our database. Your message will still be received through backup systems.",
+          variant: "destructive",
+          duration: 5000
+        });
+      } else {
+        console.log(`[${new Date().toISOString()}] Supabase connection test successful on Contact page load`);
+      }
+    };
+    
+    testConnection();
+  }, [toast]);
   
   return (
     <div className="min-h-screen flex flex-col">
