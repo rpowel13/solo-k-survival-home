@@ -7,7 +7,8 @@ import VCitaIframe from "./contact/VCitaIframe";
 import FallbackContactForm from "./contact/FallbackContactForm";
 
 const ContactForm = () => {
-  const [iframeError, setIframeError] = useState(true); // Set to true to always show our form for now
+  // Always show our form in production to ensure data is captured in Supabase
+  const [iframeError, setIframeError] = useState(true);
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),

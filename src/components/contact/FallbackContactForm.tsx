@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
@@ -27,14 +28,26 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log("Form submitted with data:", data);
     
     try {
-      // Primary submission to WooSender through Zapier
-      const zapierResult = await triggerZapierWebhook(data);
-      
-      // Secondary submission to Supabase (for database storage and email notification)
+      // Submit data to Supabase first to ensure database persistence
       const supabaseResult = await submitContactForm(data);
+      console.log("Supabase submission result:", supabaseResult);
+      
+      if (!supabaseResult.success) {
+        console.error("Supabase submission error:", supabaseResult.error);
+      }
+      
+      // Secondary submission to WooSender through Zapier
+      let zapierResult = { success: false, message: "" };
+      try {
+        zapierResult = await triggerZapierWebhook(data);
+        console.log("Zapier submission result:", zapierResult);
+      } catch (zapierError) {
+        console.error("Zapier submission error:", zapierError);
+        // Continue execution even if Zapier fails
+      }
       
       // Check if at least one submission was successful
-      if (zapierResult.success || supabaseResult.success) {
+      if (supabaseResult.success || zapierResult.success) {
         toast({
           title: "Message sent successfully",
           description: "We'll get back to you as soon as possible.",
@@ -42,7 +55,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         
         form.reset();
       } else {
-        throw new Error(zapierResult.message || supabaseResult.error?.message || "Failed to send message");
+        throw new Error(supabaseResult.error?.message || zapierResult.message || "Failed to send message");
       }
     } catch (error) {
       console.error("Contact form submission error:", error);

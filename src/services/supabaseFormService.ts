@@ -19,10 +19,15 @@ export const submitFormToSupabase = async (tableName: TableName, data: any) => {
       .insert(data)
       .select('id');
     
-    if (response.error) throw response.error;
+    if (response.error) {
+      console.error(`Error inserting into ${tableName}:`, response.error);
+      throw response.error;
+    }
     
     const result = response.data && response.data.length > 0 ? { id: response.data[0].id } : null;
     if (!result) throw new Error('No ID returned from insert operation');
+    
+    console.log(`Successfully inserted into ${tableName} with ID:`, result.id);
     
     // 2. Send email notification
     await sendNewSubmissionEmail(tableName, data, result.id);
@@ -101,24 +106,33 @@ const sendNewSubmissionEmail = async (tableName: TableName, data: any, submissio
     }
     
     // For production, use the Supabase Edge Function to send email
-    const { data: emailResult, error } = await supabase.functions.invoke('send-email-notification', {
-      body: {
-        to: ADMIN_EMAILS,
-        subject: subject,
-        body: `
-          <h2>${subject}</h2>
-          <p>Submission ID: ${submissionId}</p>
-          <pre>${details}</pre>
-          <p>View full details in your Supabase dashboard.</p>
-        `,
-      },
-    });
-    
-    if (error) throw error;
-    
-    return emailResult;
+    try {
+      const { data: emailResult, error } = await supabase.functions.invoke('send-email-notification', {
+        body: {
+          to: ADMIN_EMAILS,
+          subject: subject,
+          body: `
+            <h2>${subject}</h2>
+            <p>Submission ID: ${submissionId}</p>
+            <pre>${details}</pre>
+            <p>View full details in your Supabase dashboard.</p>
+          `,
+        },
+      });
+      
+      if (error) {
+        console.error('Error invoking send-email-notification function:', error);
+        throw error;
+      }
+      
+      console.log('Email notification sent successfully:', emailResult);
+      return emailResult;
+    } catch (emailError) {
+      console.error('Error sending email notification:', emailError);
+      // Don't throw here - we don't want to break form submission if email fails
+    }
   } catch (error) {
-    console.error('Error sending notification email:', error);
+    console.error('Error preparing notification email:', error);
     // Don't throw here - we don't want to break form submission if email fails
   }
 };
