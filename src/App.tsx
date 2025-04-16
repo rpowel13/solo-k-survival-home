@@ -22,25 +22,8 @@ import ReinstatementFeePayment from "./pages/payments/ReinstatementFeePayment";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import LegalDisclosures from "./pages/LegalDisclosures";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import BlogEditor from "./pages/BlogEditor";
 
 const queryClient = new QueryClient();
-
-// Protected route component to check for blog admin authentication
-const ProtectedBlogRoute = ({ children }: { children: JSX.Element }) => {
-  const isAuthenticated = sessionStorage.getItem("blogAdminAuthenticated") === "true";
-  
-  // If user is not authenticated and trying to access admin routes, redirect to login
-  if (!isAuthenticated) {
-    // The BlogEditor component will handle showing the login form
-    return children;
-  }
-  
-  // If authenticated, render the requested route
-  return children;
-};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -66,12 +49,6 @@ const App = () => (
           <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
           <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
-          {/* Blog Routes */}
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          {/* Protected Blog Editor Routes */}
-          <Route path="/blog/new" element={<ProtectedBlogRoute><BlogEditor /></ProtectedBlogRoute>} />
-          <Route path="/blog/edit/:slug" element={<ProtectedBlogRoute><BlogEditor /></ProtectedBlogRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

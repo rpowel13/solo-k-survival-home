@@ -29,8 +29,6 @@ export const DesktopNav = () => {
           <PaymentDropdown />
         </NavigationMenuList>
       </NavigationMenu>
-
-      <Link to="/blog" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Blog</Link>
       
       <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
       
