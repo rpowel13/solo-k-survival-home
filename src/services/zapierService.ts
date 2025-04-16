@@ -1,8 +1,8 @@
 
 import { ContactFormData } from './vcitaService';
 
-// Set this to your Zapier webhook URL that forwards to your email
-const ZAPIER_EMAIL_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/YOUR_ZAPPIER_HOOK_ID/';
+// Use an environment variable for the Zapier webhook URL
+const ZAPIER_EMAIL_WEBHOOK = import.meta.env.VITE_ZAPIER_EMAIL_WEBHOOK || 'https://hooks.zapier.com/hooks/catch/YOUR_ZAPPIER_HOOK_ID/';
 
 interface ZapierResponse {
   success: boolean;
@@ -10,7 +10,7 @@ interface ZapierResponse {
 }
 
 /**
- * Gets the Zapier webhook URL - preferring the fixed URL
+ * Gets the Zapier webhook URL - preferring the environment variable
  */
 const getWebhookUrl = (): string => {
   return ZAPIER_EMAIL_WEBHOOK;
@@ -30,15 +30,28 @@ export const triggerZapierWebhook = async (data: ContactFormData): Promise<Zapie
       name: data.name,
       email: data.email,
       phone: data.phone,
-      subject: data.subject || "Form Submission",
-      message: data.message,
+      subject: data.subject || "Solo 401k Application Submission",
+      message: `
+Solo 401k Application Details:
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+
+Additional Details:
+Business Name: ${data.businessName}
+Business Type: ${data.businessType}
+Annual Income: ${data.annualIncome}
+Trustees: ${data.trustee1Name}, ${data.trustee2Name || 'N/A'}
+Participants: ${data.participant1Name}, ${data.participant2Name || 'N/A'}
+Additional Info: ${data.additionalInfo || 'N/A'}
+      `,
       consent: data.consent,
       source: window.location.href,
       timestamp: new Date().toISOString()
     };
     
     // In development, we'll simulate a successful response
-    if (process.env.NODE_ENV !== 'production') {
+    if (import.meta.env.DEV) {
       console.log('Development mode: Simulating Zapier webhook submission');
       return { 
         success: true,
