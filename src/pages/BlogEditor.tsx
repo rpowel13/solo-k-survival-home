@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
@@ -7,10 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Save, Upload, File } from "lucide-react";
+import { ArrowLeft, Save, Upload, File, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
+
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "password123";
 
 const BlogEditor = () => {
   const { slug } = useParams();
@@ -33,10 +35,22 @@ const BlogEditor = () => {
   const [pdfUrl, setPdfUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    const authStatus = sessionStorage.getItem("blogAdminAuthenticated");
+    if (authStatus === "true") {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchBlogPost = async () => {
       if (!isEditMode || !slug) return;
+      
+      if (!isAuthenticated) return;
       
       try {
         setIsLoading(true);
@@ -66,7 +80,6 @@ const BlogEditor = () => {
             tags: post.tags.join(", ")
           });
           
-          // Set PDF URL if it exists
           if (post.pdfUrl) {
             setPdfUrl(post.pdfUrl);
           }
@@ -84,8 +97,10 @@ const BlogEditor = () => {
       }
     };
 
-    fetchBlogPost();
-  }, [slug, isEditMode, navigate, toast]);
+    if (isAuthenticated) {
+      fetchBlogPost();
+    }
+  }, [slug, isEditMode, navigate, toast, isAuthenticated]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -99,7 +114,7 @@ const BlogEditor = () => {
         return;
       }
       
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+      if (file.size > 10 * 1024 * 1024) {
         toast({
           title: "File too large",
           description: "PDF file must be less than 10MB",
@@ -112,8 +127,45 @@ const BlogEditor = () => {
     }
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem("blogAdminAuthenticated", "true");
+      toast({
+        title: "Authentication successful",
+        description: "You are now authorized to create and edit blog posts",
+      });
+    } else {
+      toast({
+        title: "Authentication failed",
+        description: "Invalid username or password",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("blogAdminAuthenticated");
+    toast({
+      title: "Logged out",
+      description: "You have been logged out successfully",
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isAuthenticated) {
+      toast({
+        title: "Unauthorized action",
+        description: "You must be logged in to create or edit blog posts",
+        variant: "destructive",
+      });
+      return;
+    }
     
     if (!formData.title || !formData.slug || !formData.excerpt) {
       toast({
@@ -124,7 +176,6 @@ const BlogEditor = () => {
       return;
     }
     
-    // Require PDF file for new posts
     if (!isEditMode && !pdfFile && !pdfUrl) {
       toast({
         title: "PDF required",
@@ -137,25 +188,11 @@ const BlogEditor = () => {
     try {
       setIsSaving(true);
       
-      let finalPdfUrl = pdfUrl; // Start with existing URL if any
+      let finalPdfUrl = pdfUrl;
       
-      // Upload PDF file if new one is selected
       if (pdfFile) {
-        // In a real implementation, this would upload to Supabase storage
-        // For now, we'll create a local URL
         const fileName = `blog_${formData.slug}_${Date.now()}.pdf`;
-        
-        // In production, this would use Supabase storage
-        // const { data, error } = await supabase.storage
-        //   .from('blog-pdfs')
-        //   .upload(fileName, pdfFile);
-        
-        // For development, we'll just use a mock URL
         finalPdfUrl = `https://storage.example.com/blog-pdfs/${fileName}`;
-        
-        // In real implementation, the URL would be from Supabase
-        // if (error) throw new Error(error.message);
-        // finalPdfUrl = data.publicUrl;
       }
       
       const newPost: BlogPost & { pdfUrl: string } = {
@@ -163,7 +200,7 @@ const BlogEditor = () => {
         title: formData.title,
         slug: formData.slug,
         excerpt: formData.excerpt,
-        content: "", // We're not using content anymore, but keeping for backward compatibility
+        content: "",
         coverImage: formData.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
         author: formData.author || "Admin",
         authorTitle: formData.authorTitle || "Site Administrator",
@@ -172,7 +209,6 @@ const BlogEditor = () => {
         pdfUrl: finalPdfUrl
       };
       
-      // In production, this would save to Supabase
       if (isEditMode) {
         const { error } = await supabase
           .from('blog_posts')
@@ -215,7 +251,6 @@ const BlogEditor = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     
-    // Auto-generate slug from title if in create mode and slug hasn't been manually edited
     if (name === "title" && !isEditMode && formData.slug === "") {
       const generatedSlug = value
         .toLowerCase()
@@ -238,6 +273,72 @@ const BlogEditor = () => {
   const handleClickUpload = () => {
     fileInputRef.current?.click();
   };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow">
+          <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white py-10">
+            <div className="container mx-auto px-4">
+              <div className="max-w-3xl mx-auto">
+                <Button 
+                  variant="link" 
+                  className="text-white p-0 mb-4" 
+                  onClick={() => navigate("/blog")}
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Blog
+                </Button>
+                <h1 className="text-3xl font-bold">
+                  Admin Authentication Required
+                </h1>
+              </div>
+            </div>
+          </div>
+
+          <div className="container mx-auto px-4 py-8">
+            <div className="max-w-md mx-auto border rounded-lg p-6 shadow-md">
+              <div className="flex items-center mb-6 bg-amber-50 p-4 rounded border border-amber-200">
+                <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
+                <p className="text-amber-700 text-sm">
+                  This area is restricted to administrators only. Please log in to continue.
+                </p>
+              </div>
+              
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="username">Username</Label>
+                  <Input 
+                    id="username" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)} 
+                    required 
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required 
+                  />
+                </div>
+                
+                <Button type="submit" className="w-full bg-survival-600 hover:bg-survival-700">
+                  Log In
+                </Button>
+              </form>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -264,18 +365,27 @@ const BlogEditor = () => {
       <main className="flex-grow">
         <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white py-10">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-3xl mx-auto flex justify-between items-center">
+              <div>
+                <Button 
+                  variant="link" 
+                  className="text-white p-0 mb-4" 
+                  onClick={() => navigate("/blog")}
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Blog
+                </Button>
+                <h1 className="text-3xl font-bold">
+                  {isEditMode ? "Edit Blog Post" : "Create New Blog Post"}
+                </h1>
+              </div>
               <Button 
-                variant="link" 
-                className="text-white p-0 mb-4" 
-                onClick={() => navigate("/blog")}
+                variant="outline" 
+                className="text-white border-white hover:bg-white/10" 
+                onClick={handleLogout}
               >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Blog
+                Log Out
               </Button>
-              <h1 className="text-3xl font-bold">
-                {isEditMode ? "Edit Blog Post" : "Create New Blog Post"}
-              </h1>
             </div>
           </div>
         </div>
