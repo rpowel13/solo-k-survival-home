@@ -10,6 +10,20 @@ interface EmailResponse {
 type FormData = SoloFormValues | ContactFormValues;
 
 /**
+ * Checks if the data is from Solo401k form
+ */
+function isSolo401kForm(data: FormData): data is SoloFormValues {
+  return 'firstName' in data;
+}
+
+/**
+ * Checks if the data is from Contact form
+ */
+function isContactForm(data: FormData): data is ContactFormValues {
+  return 'name' in data;
+}
+
+/**
  * Sends the form data directly via email using the browser's mailto mechanism
  */
 export const triggerZapierWebhook = async (data: FormData): Promise<EmailResponse> => {
@@ -18,8 +32,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     // Determine the type of form data and format accordingly
     let emailBody: string;
+    let emailSubject: string;
     
-    if ('firstName' in data) {
+    if (isSolo401kForm(data)) {
       // This is Solo401k form data
       emailBody = `
 Solo 401k Application Details:
@@ -46,8 +61,9 @@ ${data.additionalInfo || 'N/A'}
 Submission Date: ${new Date().toLocaleString()}
 Source: ${window.location.href}
 `;
+      emailSubject = "New Solo 401k Application";
       
-    } else {
+    } else if (isContactForm(data)) {
       // This is Contact form data
       emailBody = `
 Contact Form Submission:
@@ -63,13 +79,14 @@ Consent: ${data.consent ? 'Yes' : 'No'}
 Submission Date: ${new Date().toLocaleString()}
 Source: ${window.location.href}
 `;
+      emailSubject = "New Contact Form Submission";
+    } else {
+      throw new Error("Unknown form data type");
     }
     
     // Encode the email body for mailto URL
     const encodedBody = encodeURIComponent(emailBody);
-    const encodedSubject = encodeURIComponent(
-      'firstName' in data ? "New Solo 401k Application" : "New Contact Form Submission"
-    );
+    const encodedSubject = encodeURIComponent(emailSubject);
     
     // Create mailto link
     const mailtoLink = `mailto:your-email@example.com?subject=${encodedSubject}&body=${encodedBody}`;
