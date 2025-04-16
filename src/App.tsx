@@ -21,6 +21,7 @@ import AnnualFeePayment from "./pages/payments/AnnualFeePayment";
 import ReinstatementFeePayment from "./pages/payments/ReinstatementFeePayment";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import LegalDisclosures from "./pages/LegalDisclosures";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogEditor from "./pages/BlogEditor";
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/legal-disclosures" element={<LegalDisclosures />} />
           <Route path="/services/solo-401k" element={<Solo401k />} />
           <Route path="/services/llc-creation" element={<LLCCreation />} />
           <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />

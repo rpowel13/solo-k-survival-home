@@ -1,3 +1,4 @@
+
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
@@ -95,7 +96,7 @@ const Footer = () => {
           <div className="mt-2 space-x-4">
             <Link to="/terms-of-service" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
             <Link to="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
-            <a href="#" className="hover:text-gray-300 transition-colors">Legal Disclosures</a>
+            <Link to="/legal-disclosures" className="hover:text-gray-300 transition-colors">Legal Disclosures</Link>
           </div>
           <p className="mt-4 max-w-2xl mx-auto">
             The information provided is for general informational purposes only and should not be considered legal or tax advice. 
