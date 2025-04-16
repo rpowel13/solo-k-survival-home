@@ -30,23 +30,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log(`[${new Date().toISOString()}] Supabase client status:`, supabase ? "Initialized" : "Not initialized");
     
     try {
-      // Test Supabase connection first
-      console.log(`[${new Date().toISOString()}] Testing Supabase connection before submission...`);
-      const { data: testData, error: testError } = await supabase
-        .from('contacts')
-        .select('id')
-        .limit(1);
-        
-      if (testError) {
-        console.error(`[${new Date().toISOString()}] Pre-submission connection test failed:`, testError);
-      } else {
-        console.log(`[${new Date().toISOString()}] Pre-submission connection test successful`);
-      }
-      
-      // Explicitly log submission attempt
-      console.log(`[${new Date().toISOString()}] ATTEMPTING DIRECT SUPABASE SUBMISSION`);
-      
-      // Try direct submission to Supabase first, bypassing the service
+      // Format the data for direct insertion
       const formattedData = {
         name: data.name,
         email: data.email,
@@ -56,89 +40,56 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         opt_in: data.consent || false
       };
       
-      console.log(`[${new Date().toISOString()}] Direct Supabase submission data:`, formattedData);
+      console.log(`[${new Date().toISOString()}] Attempting direct Supabase insertion with data:`, formattedData);
       
-      const { data: directResult, error: directError } = await supabase
+      // Try direct submission to Supabase first
+      const { data: insertResult, error: insertError } = await supabase
         .from('contacts')
         .insert(formattedData)
         .select();
         
-      if (directError) {
-        console.error(`[${new Date().toISOString()}] Direct Supabase submission failed:`, directError);
-        console.error('Direct submission error details:', JSON.stringify(directError, null, 2));
+      if (insertError) {
+        console.error(`[${new Date().toISOString()}] Direct Supabase insertion failed:`, insertError);
+        console.error('Error details:', JSON.stringify(insertError, null, 2));
         
-        // Check if it's an RLS error
-        if (directError.message?.includes('new row violates row-level security policy')) {
-          console.error(`[${new Date().toISOString()}] RLS POLICY ERROR DETECTED! This suggests Row Level Security is blocking the insert.`);
-          
-          // We'll continue with other submission methods, but log this important error
+        // Try fallback methods
+        const supabaseResult = await submitContactForm(data);
+        console.log(`[${new Date().toISOString()}] Fallback service submission result:`, supabaseResult);
+        
+        // Try Zapier as secondary backup
+        let zapierResult = { success: false, message: "Zapier not attempted" };
+        try {
+          console.log(`[${new Date().toISOString()}] Attempting Zapier submission as backup`);
+          zapierResult = await triggerZapierWebhook(data);
+          console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
+        } catch (zapierError) {
+          console.error(`[${new Date().toISOString()}] Zapier submission error:`, zapierError);
+        }
+        
+        // Check if at least one fallback method was successful
+        if (supabaseResult.success || zapierResult.success) {
+          console.log(`[${new Date().toISOString()}] At least one fallback submission method succeeded`);
           toast({
-            title: "Database Permission Issue",
-            description: "Form will be submitted through backup channels. Technical details: Row Level Security is preventing direct database insertion.",
-            variant: "destructive",
-            duration: 5000
+            title: "Message sent successfully",
+            description: "We'll get back to you as soon as possible.",
           });
+          
+          form.reset();
+        } else {
+          throw new Error(insertError.message || supabaseResult.error?.message || "Failed to send message");
         }
       } else {
-        console.log(`[${new Date().toISOString()}] Direct Supabase submission successful:`, directResult);
+        console.log(`[${new Date().toISOString()}] Direct Supabase insertion successful:`, insertResult);
         toast({
           title: "Message sent successfully",
           description: "Your message has been received. We'll get back to you as soon as possible.",
         });
         
         form.reset();
-        setIsSubmitting(false);
-        return; // Exit early if direct submission worked
-      }
-      
-      // If direct submission failed, try the service approach
-      console.log(`[${new Date().toISOString()}] Attempting submission via service...`);
-      
-      // Submit data to Supabase first as the primary method
-      const supabaseResult = await submitContactForm(data);
-      console.log(`[${new Date().toISOString()}] Supabase submission result:`, supabaseResult);
-      
-      if (!supabaseResult.success) {
-        console.error(`[${new Date().toISOString()}] Supabase submission error:`, supabaseResult.error);
-      }
-      
-      // Log Supabase result details for debugging
-      console.log(`[${new Date().toISOString()}] SUPABASE SUBMISSION COMPLETED`, {
-        success: supabaseResult.success,
-        id: supabaseResult.id || "no-id",
-        error: supabaseResult.error || "no-error",
-        timestamp: new Date().toISOString()
-      });
-      
-      // Try Zapier as secondary backup
-      let zapierResult = { success: false, message: "Zapier not attempted" };
-      try {
-        console.log(`[${new Date().toISOString()}] Attempting Zapier submission as backup`);
-        zapierResult = await triggerZapierWebhook(data);
-        console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
-      } catch (zapierError) {
-        console.error(`[${new Date().toISOString()}] Zapier submission error:`, zapierError);
-        // Continue execution even if Zapier fails
-      }
-      
-      // Check if at least one submission was successful
-      if (supabaseResult.success || zapierResult.success) {
-        console.log(`[${new Date().toISOString()}] At least one submission method succeeded`);
-        toast({
-          title: "Message sent successfully",
-          description: "We'll get back to you as soon as possible.",
-        });
-        
-        form.reset();
-      } else {
-        // If both failed, throw an error to be caught by the catch block
-        console.error(`[${new Date().toISOString()}] All submission methods failed`);
-        throw new Error(supabaseResult.error?.message || zapierResult.message || "Failed to send message");
       }
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Contact form submission error:`, error);
       console.error('Error stringify:', JSON.stringify(error, null, 2));
-      console.error('Error stack:', error instanceof Error ? error.stack : 'No stack available');
       
       toast({
         title: "Error sending message",
