@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -10,7 +11,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Phone } from 'lucide-react';
+import { Loader2, Phone } from 'lucide-react';
+import { triggerZapierWebhook } from '@/services/zapierService';
+import ZapierConfig from '@/components/firstresponder/ZapierConfig';
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: 'First name is required' }),
@@ -32,7 +35,10 @@ const formSchema = z.object({
 });
 
 const FirstResponderApplication = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,13 +57,44 @@ const FirstResponderApplication = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
     console.log(values);
-    toast({
-      title: "Application Submitted",
-      description: "We've received your First Responder Package application. Our team will prioritize your application and contact you shortly.",
-    });
-    form.reset();
+    
+    try {
+      // Store application data in sessionStorage for payment process
+      sessionStorage.setItem('first_responder_application', JSON.stringify({
+        name: `${values.firstName} ${values.lastName}`,
+        email: values.email,
+        applicationDate: new Date().toISOString()
+      }));
+      
+      // Send the form data via Zapier webhook
+      const emailResult = await triggerZapierWebhook(values);
+      
+      if (emailResult.success) {
+        toast({
+          title: "Application Submitted",
+          description: "We've received your First Responder Package application and notification sent to our team. We'll prioritize your application and contact you shortly.",
+        });
+        
+        // Redirect to payment page after a short delay
+        setTimeout(() => {
+          navigate('/payment/first-responder');
+        }, 1500);
+      } else {
+        throw new Error(emailResult.message || "Failed to submit application");
+      }
+    } catch (error) {
+      console.error("Application submission error:", error);
+      toast({
+        title: "Submission Error",
+        description: "There was a problem processing your application. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const states = [
@@ -76,9 +113,8 @@ const FirstResponderApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      <ZapierConfig />
       
-      {/* Removed the phone number banner */}
-
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="mb-10 text-center">
@@ -311,8 +347,19 @@ const FirstResponderApplication = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full bg-survival-600 hover:bg-survival-700">
-                Submit Application
+              <Button 
+                type="submit" 
+                className="w-full bg-survival-600 hover:bg-survival-700"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Application"
+                )}
               </Button>
             </form>
           </Form>
