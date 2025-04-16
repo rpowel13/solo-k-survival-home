@@ -53,7 +53,7 @@ const Footer = () => {
               <li><Link to="/tools/retirement-calculator" className="text-gray-400 hover:text-white transition-colors">Retirement Calculator</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Tax Guides</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Investment Options</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+              <li><Link to="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link></li>
               <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Webinars</a></li>
             </ul>
           </div>
@@ -91,14 +91,26 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-sm text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Survival 401k. All rights reserved.</p>
-          <div className="mt-2 space-x-4">
-            <Link to="/terms-of-service" className="hover:text-gray-300 transition-colors">Terms of Service</Link>
-            <Link to="/privacy-policy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>
-            <Link to="/legal-disclosures" className="hover:text-gray-300 transition-colors">Legal Disclosures</Link>
+        {/* Bottom Footer with Legal Links - Made more prominent */}
+        <div className="border-t border-gray-800 mt-12 pt-8">
+          {/* Legal Links - More visible now */}
+          <div className="flex flex-wrap justify-center gap-6 mb-6">
+            <Link to="/terms-of-service" className="text-gray-300 hover:text-white transition-colors font-medium">
+              Terms of Service
+            </Link>
+            <Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors font-medium">
+              Privacy Policy
+            </Link>
+            <Link to="/legal-disclosures" className="text-gray-300 hover:text-white transition-colors font-medium">
+              Legal Disclosures
+            </Link>
           </div>
-          <p className="mt-4 max-w-2xl mx-auto">
+          
+          <p className="text-sm text-center text-gray-500">
+            &copy; {new Date().getFullYear()} Survival 401k. All rights reserved.
+          </p>
+          
+          <p className="mt-4 max-w-2xl mx-auto text-sm text-center text-gray-500">
             The information provided is for general informational purposes only and should not be considered legal or tax advice. 
             Consult with a qualified professional regarding your specific situation.
           </p>
