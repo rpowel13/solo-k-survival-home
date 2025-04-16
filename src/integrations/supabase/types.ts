@@ -9,7 +9,303 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      bank_payments: {
+        Row: {
+          account_name: string
+          account_number: string
+          account_type: string
+          amount: number
+          application_id: string | null
+          created_at: string | null
+          customer_email: string
+          customer_name: string
+          id: string
+          routing_number: string
+          status: string | null
+        }
+        Insert: {
+          account_name: string
+          account_number: string
+          account_type: string
+          amount: number
+          application_id?: string | null
+          created_at?: string | null
+          customer_email: string
+          customer_name: string
+          id?: string
+          routing_number: string
+          status?: string | null
+        }
+        Update: {
+          account_name?: string
+          account_number?: string
+          account_type?: string
+          amount?: number
+          application_id?: string | null
+          created_at?: string | null
+          customer_email?: string
+          customer_name?: string
+          id?: string
+          routing_number?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      contacts: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          message: string
+          name: string
+          opt_in: boolean | null
+          phone: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          message: string
+          name: string
+          opt_in?: boolean | null
+          phone?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          opt_in?: boolean | null
+          phone?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      first_responder_applications: {
+        Row: {
+          additional_info: string | null
+          agree_to_terms: boolean | null
+          application_date: string | null
+          created_at: string | null
+          department: string
+          desired_llc_name: string
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          occupation: string
+          payment_status: string | null
+          phone: string
+          state: string
+          status: string | null
+          verify_401k_interest: boolean | null
+          years_of_service: string
+        }
+        Insert: {
+          additional_info?: string | null
+          agree_to_terms?: boolean | null
+          application_date?: string | null
+          created_at?: string | null
+          department: string
+          desired_llc_name: string
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          occupation: string
+          payment_status?: string | null
+          phone: string
+          state: string
+          status?: string | null
+          verify_401k_interest?: boolean | null
+          years_of_service: string
+        }
+        Update: {
+          additional_info?: string | null
+          agree_to_terms?: boolean | null
+          application_date?: string | null
+          created_at?: string | null
+          department?: string
+          desired_llc_name?: string
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          occupation?: string
+          payment_status?: string | null
+          phone?: string
+          state?: string
+          status?: string | null
+          verify_401k_interest?: boolean | null
+          years_of_service?: string
+        }
+        Relationships: []
+      }
+      llc_applications: {
+        Row: {
+          additional_info: string | null
+          agree_to_terms: boolean | null
+          alternative_name1: string | null
+          alternative_name2: string | null
+          application_date: string | null
+          business_purpose: string
+          created_at: string | null
+          desired_llc_name: string
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          member_count: string
+          payment_status: string | null
+          phone: string
+          state: string
+          status: string | null
+        }
+        Insert: {
+          additional_info?: string | null
+          agree_to_terms?: boolean | null
+          alternative_name1?: string | null
+          alternative_name2?: string | null
+          application_date?: string | null
+          business_purpose: string
+          created_at?: string | null
+          desired_llc_name: string
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          member_count: string
+          payment_status?: string | null
+          phone: string
+          state: string
+          status?: string | null
+        }
+        Update: {
+          additional_info?: string | null
+          agree_to_terms?: boolean | null
+          alternative_name1?: string | null
+          alternative_name2?: string | null
+          application_date?: string | null
+          business_purpose?: string
+          created_at?: string | null
+          desired_llc_name?: string
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          member_count?: string
+          payment_status?: string | null
+          phone?: string
+          state?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      scheduled_consultations: {
+        Row: {
+          consultation_date: string
+          consultation_time: string
+          created_at: string | null
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string
+          status: string | null
+        }
+        Insert: {
+          consultation_date: string
+          consultation_time: string
+          created_at?: string | null
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone: string
+          status?: string | null
+        }
+        Update: {
+          consultation_date?: string
+          consultation_time?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      solo401k_applications: {
+        Row: {
+          additional_info: string | null
+          annual_income: string
+          application_date: string | null
+          business_name: string
+          business_type: string
+          created_at: string | null
+          email: string
+          existing_retirement: boolean | null
+          first_name: string
+          id: string
+          last_name: string
+          participant1_name: string
+          participant2_name: string | null
+          phone: string
+          ssn: string
+          status: string | null
+          trustee1_name: string
+          trustee2_name: string | null
+        }
+        Insert: {
+          additional_info?: string | null
+          annual_income: string
+          application_date?: string | null
+          business_name: string
+          business_type: string
+          created_at?: string | null
+          email: string
+          existing_retirement?: boolean | null
+          first_name: string
+          id?: string
+          last_name: string
+          participant1_name: string
+          participant2_name?: string | null
+          phone: string
+          ssn: string
+          status?: string | null
+          trustee1_name: string
+          trustee2_name?: string | null
+        }
+        Update: {
+          additional_info?: string | null
+          annual_income?: string
+          application_date?: string | null
+          business_name?: string
+          business_type?: string
+          created_at?: string | null
+          email?: string
+          existing_retirement?: boolean | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          participant1_name?: string
+          participant2_name?: string | null
+          phone?: string
+          ssn?: string
+          status?: string | null
+          trustee1_name?: string
+          trustee2_name?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

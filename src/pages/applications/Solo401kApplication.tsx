@@ -17,6 +17,7 @@ import AgreementSection from '@/components/solo401k/AgreementSection';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { triggerZapierWebhook } from '@/services/zapierService';
+import { submitSolo401kApplication } from '@/services/supabaseFormService';
 
 const Solo401kApplication = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,13 +57,17 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      // Send the form data via Zapier webhook
-      const emailResult = await triggerZapierWebhook(data);
+      // Primary submission to Zapier webhook
+      const zapierResult = await triggerZapierWebhook(data);
       
-      if (emailResult.success) {
+      // Secondary submission to Supabase
+      const supabaseResult = await submitSolo401kApplication(data);
+      
+      // Check if at least one submission was successful
+      if (zapierResult.success || supabaseResult.success) {
         toast({
           title: "Application Submitted",
-          description: "Your Solo 401k application has been submitted successfully and notification sent to our team. Redirecting to payment...",
+          description: "Your Solo 401k application has been submitted successfully. Redirecting to payment...",
         });
         
         // Redirect to payment page after a short delay
@@ -70,7 +75,7 @@ const Solo401kApplication = () => {
           navigate('/payment/solo-401k');
         }, 1500);
       } else {
-        throw new Error(emailResult.message || "Failed to submit application");
+        throw new Error(zapierResult.message || "Failed to submit application");
       }
     } catch (error) {
       console.error("Application submission error:", error);

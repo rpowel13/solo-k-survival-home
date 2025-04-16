@@ -1,5 +1,5 @@
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 // Email addresses to notify (could be moved to environment variables)
 const ADMIN_EMAILS = ['info@survival401k.com'];
