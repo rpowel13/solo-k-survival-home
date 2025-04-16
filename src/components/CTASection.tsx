@@ -1,6 +1,7 @@
 
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const CTASection = () => {
   return (
@@ -17,12 +18,16 @@ const CTASection = () => {
             </p>
             
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white text-survival-800 hover:bg-gray-100">
-                Get Started Today <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                Schedule a Consultation
-              </Button>
+              <Link to="/apply/solo-401k">
+                <Button size="lg" className="bg-white text-survival-800 hover:bg-gray-100">
+                  Get Started Today <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                  Schedule a Consultation
+                </Button>
+              </Link>
             </div>
             
             <p className="text-sm opacity-80 mt-6">
