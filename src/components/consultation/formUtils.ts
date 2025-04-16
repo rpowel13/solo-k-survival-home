@@ -1,7 +1,10 @@
 
 import { ScheduleFormValues } from "./types";
-import { ToastType } from "@/components/ui/use-toast";
+import { toast as toastType } from "@/hooks/use-toast";
 import { triggerZapierWebhook } from "@/services/zapierService";
+
+// Define a type for the toast function
+type ToastType = typeof toastType;
 
 export const handleScheduleSubmit = async (
   data: ScheduleFormValues,
