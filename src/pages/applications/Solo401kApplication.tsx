@@ -68,7 +68,7 @@ const Solo401kApplication = () => {
         // Redirect to payment page after a short delay
         setTimeout(() => {
           navigate('/payment/solo-401k');
-        }, 3000);
+        }, 1500);
       } else {
         throw new Error(emailResult.message || "Failed to submit application");
       }
