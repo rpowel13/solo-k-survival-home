@@ -44,7 +44,7 @@ const mockBlogPosts = [
     authorTitle: "Financial Advisor",
     publishedAt: "2025-04-10T10:00:00Z",
     tags: ["Solo 401(k)", "Retirement Planning", "Tax Strategies"],
-    pdfUrl: "https://storage.example.com/blog-pdfs/contribution-limits-2025.pdf"
+    pdfUrl: "/assets/pdfs/contribution-limits-2025.pdf"
   },
   {
     id: "2",
@@ -65,7 +65,7 @@ const mockBlogPosts = [
     authorTitle: "Retirement Specialist",
     publishedAt: "2025-04-05T15:30:00Z",
     tags: ["First Responders", "Pension Plans", "Early Retirement"],
-    pdfUrl: "https://storage.example.com/blog-pdfs/first-responders-retirement.pdf"
+    pdfUrl: "/assets/pdfs/first-responders-retirement.pdf"
   },
   {
     id: "3",
@@ -85,7 +85,7 @@ const mockBlogPosts = [
     authorTitle: "Tax Planning Expert",
     publishedAt: "2025-04-01T09:15:00Z",
     tags: ["Tax Planning", "Self-Directed IRA", "Investment Strategy"],
-    pdfUrl: "https://storage.example.com/blog-pdfs/tax-advantages.pdf"
+    pdfUrl: "/assets/pdfs/tax-advantages.pdf"
   }
 ];
 
