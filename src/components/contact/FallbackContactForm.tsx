@@ -12,7 +12,7 @@ import EmailField from "./EmailField";
 import PhoneField from "./PhoneField";
 import SubjectField from "./SubjectField";
 import MessageField from "./MessageField";
-import ConsentField from "./ConsentField";
+import OptInCheckbox from "./OptInCheckbox";
 import SubmitButton from "./SubmitButton";
 
 interface FallbackContactFormProps {
@@ -87,9 +87,10 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         </div>
         
         <MessageField form={form} />
-        <ConsentField form={form} />
         
         <SubmitButton isSubmitting={isSubmitting} />
+        
+        <OptInCheckbox form={form} />
         
         <p className="text-xs text-gray-500 text-center mt-2">
           Your information is secure and will never be shared with third parties.
