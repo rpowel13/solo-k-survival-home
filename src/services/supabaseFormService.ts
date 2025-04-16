@@ -4,8 +4,12 @@ import { supabase } from '@/integrations/supabase/client';
 // Email addresses to notify (could be moved to environment variables)
 const ADMIN_EMAILS = ['info@survival401k.com'];
 
+// Type for table names to ensure type safety when accessing tables
+type TableName = 'contacts' | 'scheduled_consultations' | 'llc_applications' | 
+                'first_responder_applications' | 'solo401k_applications' | 'bank_payments';
+
 // Generic function to submit form data to Supabase
-export const submitFormToSupabase = async (tableName: string, data: any) => {
+export const submitFormToSupabase = async (tableName: TableName, data: any) => {
   try {
     console.log(`Submitting to ${tableName}:`, data);
     
@@ -31,7 +35,7 @@ export const submitFormToSupabase = async (tableName: string, data: any) => {
 };
 
 // Function to send email notification
-const sendNewSubmissionEmail = async (tableName: string, data: any, submissionId: string) => {
+const sendNewSubmissionEmail = async (tableName: TableName, data: any, submissionId: string) => {
   try {
     // Prepare email content based on table type
     let subject = `New ${tableName} submission`;

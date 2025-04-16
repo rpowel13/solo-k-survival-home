@@ -75,7 +75,7 @@ const Solo401kApplication = () => {
           navigate('/payment/solo-401k');
         }, 1500);
       } else {
-        throw new Error(zapierResult.message || "Failed to submit application");
+        throw new Error(zapierResult.message || supabaseResult.error?.message || "Failed to submit application");
       }
     } catch (error) {
       console.error("Application submission error:", error);
