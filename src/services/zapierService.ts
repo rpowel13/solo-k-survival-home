@@ -1,8 +1,8 @@
 
 import { ContactFormData } from './vcitaService';
 
-// Fixed webhook URL that connects to WooSender
-const FIXED_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/YOUR_ZAPPIER_HOOK_ID/';
+// Set this to your Zapier webhook URL that forwards to your email
+const ZAPIER_EMAIL_WEBHOOK = 'https://hooks.zapier.com/hooks/catch/YOUR_ZAPPIER_HOOK_ID/';
 
 interface ZapierResponse {
   success: boolean;
@@ -13,11 +13,11 @@ interface ZapierResponse {
  * Gets the Zapier webhook URL - preferring the fixed URL
  */
 const getWebhookUrl = (): string => {
-  return FIXED_WEBHOOK_URL;
+  return ZAPIER_EMAIL_WEBHOOK;
 };
 
 /**
- * Sends contact form data to Zapier webhook which can connect to WooSender
+ * Sends form data to Zapier webhook which can forward to email
  */
 export const triggerZapierWebhook = async (data: ContactFormData): Promise<ZapierResponse> => {
   try {
@@ -30,7 +30,7 @@ export const triggerZapierWebhook = async (data: ContactFormData): Promise<Zapie
       name: data.name,
       email: data.email,
       phone: data.phone,
-      subject: data.subject,
+      subject: data.subject || "Form Submission",
       message: data.message,
       consent: data.consent,
       source: window.location.href,

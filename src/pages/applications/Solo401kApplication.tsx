@@ -1,77 +1,155 @@
 
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useToast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabase';
-import { useIframeSubmitDetection } from '@/hooks/useIframeSubmitDetection';
+import { Form } from "@/components/ui/form";
+import { formSchema, SoloFormValues } from '@/components/solo401k/FormSchema';
+import FormHeader from '@/components/solo401k/FormHeader';
+import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
+import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
+import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
+import AdditionalInfoFields from '@/components/solo401k/AdditionalInfoFields';
+import AgreementSection from '@/components/solo401k/AgreementSection';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
+import { triggerZapierWebhook } from '@/services/zapierService';
 
 const Solo401kApplication = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  // Handle iframe form submission
-  const handleFormSubmitted = async () => {
+  const form = useForm<SoloFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      ssn: "",
+      businessName: "",
+      businessType: "",
+      annualIncome: "",
+      trustee1Name: "",
+      trustee2Name: "",
+      participant1Name: "",
+      participant2Name: "",
+      existingRetirement: false,
+      additionalInfo: "",
+      agreeToTerms: false
+    }
+  });
+
+  const onSubmit = async (data: SoloFormValues) => {
+    setIsSubmitting(true);
+    console.log("Form submitted with data:", data);
+    
     try {
-      console.log("Form submission detected in iframe!");
-      
-      // Store basic application data in sessionStorage
-      // Since we don't have direct access to the form values, we'll store minimal info
+      // Store application data in sessionStorage for payment process
       sessionStorage.setItem('solo401k_application', JSON.stringify({
-        name: 'Applicant',
-        email: 'applicant@example.com',
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
         applicationDate: new Date().toISOString()
       }));
       
-      toast({
-        title: "Application Submitted",
-        description: "We've received your Solo 401k application. Redirecting to payment...",
+      // Submit the form data to Zapier webhook (which can forward to email)
+      const zapierResult = await triggerZapierWebhook({
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        phone: data.phone,
+        subject: "New Solo 401k Application",
+        message: `
+Business Name: ${data.businessName}
+Business Type: ${data.businessType}
+Annual Income: ${data.annualIncome}
+Trustee Name: ${data.trustee1Name}
+SSN: ${data.ssn}
+${data.additionalInfo ? `Additional Information: ${data.additionalInfo}` : ''}
+        `,
+        consent: data.agreeToTerms
       });
       
-      // Redirect to payment page after a short delay
-      setTimeout(() => {
-        navigate('/payment/solo-401k');
-      }, 1500);
-      
+      if (zapierResult.success) {
+        toast({
+          title: "Application Submitted",
+          description: "We've received your Solo 401k application. Redirecting to payment...",
+        });
+        
+        // Redirect to payment page after a short delay
+        setTimeout(() => {
+          navigate('/payment/solo-401k');
+        }, 1500);
+      } else {
+        throw new Error(zapierResult.message || "Failed to submit application");
+      }
     } catch (error) {
-      console.error("Form submission handling error:", error);
+      console.error("Application submission error:", error);
       toast({
         title: "Submission Error",
         description: "There was a problem processing your application. Please try again later.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
-  // Use the iframe submission detection hook
-  const { iframeRef, iframeWrapperRef } = useIframeSubmitDetection({
-    onSubmitDetected: handleFormSubmitted,
-    submitButtonSelector: "input[type='submit'], button[type='submit'], .button, .submit"
-  });
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold mb-6 text-center text-survival-800">Solo 401k Application</h1>
-          <p className="text-lg mb-8 text-center">Please complete the form below to apply for your Solo 401k plan.</p>
+          <FormHeader />
           
-          <div ref={iframeWrapperRef} className="mb-8 rounded-lg overflow-hidden shadow-lg">
-            <iframe 
-              ref={iframeRef}
-              src="https://survival401k.coffeecup.com/Survival401k%20Application/" 
-              name="myiFrame" 
-              scrolling="no" 
-              frameBorder={0}
-              marginHeight={0}
-              marginWidth={0}
-              height={2400}
-              width="100%"
-              allowFullScreen
-              className="w-full border-0"
-            />
+          <div className="bg-white p-8 rounded-lg shadow-lg">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
+                  <PersonalInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
+                  <BusinessInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
+                  <PlanInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
+                  <AdditionalInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Agreement</h2>
+                  <AgreementSection form={form} />
+                </div>
+                
+                <div className="pt-4 text-center">
+                  <Button type="submit" size="lg" disabled={isSubmitting} className="w-full md:w-auto">
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Application"
+                    )}
+                  </Button>
+                  <p className="mt-2 text-sm text-gray-500">
+                    By submitting this form, you'll be redirected to our payment page to complete your application.
+                  </p>
+                </div>
+              </form>
+            </Form>
           </div>
         </div>
       </main>
