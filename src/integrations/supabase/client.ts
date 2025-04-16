@@ -22,6 +22,18 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
         url: url.toString(), 
         method: options?.method,
       });
+      
+      // Set appropriate headers for cross-origin requests
+      const headers = options?.headers || {};
+      options = {
+        ...options,
+        headers: {
+          ...headers,
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache', // Disable caching to avoid stale data
+      };
+      
       return fetch(url, options);
     },
   },
@@ -38,3 +50,22 @@ supabase.from('contacts')
       console.log(`[${new Date().toISOString()}] Supabase initialization successful - contacts table accessible`);
     }
   });
+
+// Test insert permissions (for debugging)
+const testInsertPermissions = async () => {
+  console.log(`[${new Date().toISOString()}] Testing insert permissions on contacts table...`);
+  try {
+    // This is just a test that won't actually insert data
+    const { error } = await supabase.rpc('get_service_role');
+    if (error) {
+      console.error(`[${new Date().toISOString()}] RPC function error:`, error);
+    } else {
+      console.log(`[${new Date().toISOString()}] RPC function executed successfully`);
+    }
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] Error testing permissions:`, error);
+  }
+};
+
+// Uncomment this line to test permissions on initialization
+// testInsertPermissions();

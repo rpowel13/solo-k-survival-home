@@ -27,10 +27,9 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
     console.log(`[${new Date().toISOString()}] Form submitted with data:`, data);
-    console.log(`[${new Date().toISOString()}] Supabase client status:`, supabase ? "Initialized" : "Not initialized");
     
     try {
-      // Format the data for direct insertion
+      // Format the data for insertion
       const formattedData = {
         name: data.name,
         email: data.email,
@@ -40,53 +39,48 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         opt_in: data.consent || false
       };
       
-      console.log(`[${new Date().toISOString()}] Attempting direct Supabase insertion with data:`, formattedData);
+      console.log(`[${new Date().toISOString()}] Attempting to submit contact form...`);
       
-      // Try direct submission to Supabase first
-      const { data: insertResult, error: insertError } = await supabase
-        .from('contacts')
-        .insert(formattedData)
-        .select();
+      // First try using the service method (which might handle auth differently)
+      const supabaseResult = await submitContactForm(data);
+      console.log(`[${new Date().toISOString()}] Service submission result:`, supabaseResult);
+      
+      // If service method failed, try direct insertion as fallback
+      if (!supabaseResult.success) {
+        console.log(`[${new Date().toISOString()}] Service method failed, trying direct insertion`);
         
-      if (insertError) {
-        console.error(`[${new Date().toISOString()}] Direct Supabase insertion failed:`, insertError);
-        console.error('Error details:', JSON.stringify(insertError, null, 2));
-        
-        // Try fallback methods
-        const supabaseResult = await submitContactForm(data);
-        console.log(`[${new Date().toISOString()}] Fallback service submission result:`, supabaseResult);
-        
-        // Try Zapier as secondary backup
-        let zapierResult = { success: false, message: "Zapier not attempted" };
-        try {
-          console.log(`[${new Date().toISOString()}] Attempting Zapier submission as backup`);
-          zapierResult = await triggerZapierWebhook(data);
-          console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
-        } catch (zapierError) {
-          console.error(`[${new Date().toISOString()}] Zapier submission error:`, zapierError);
-        }
-        
-        // Check if at least one fallback method was successful
-        if (supabaseResult.success || zapierResult.success) {
-          console.log(`[${new Date().toISOString()}] At least one fallback submission method succeeded`);
-          toast({
-            title: "Message sent successfully",
-            description: "We'll get back to you as soon as possible.",
-          });
+        const { data: insertResult, error: insertError } = await supabase
+          .from('contacts')
+          .insert(formattedData)
+          .select();
           
-          form.reset();
+        if (insertError) {
+          console.error(`[${new Date().toISOString()}] Direct insertion failed:`, insertError);
+          console.error('Error details:', JSON.stringify(insertError, null, 2));
+          
+          // Try Zapier as last resort backup
+          console.log(`[${new Date().toISOString()}] Attempting Zapier submission as final backup`);
+          const zapierResult = await triggerZapierWebhook(data);
+          console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
+          
+          if (!zapierResult.success) {
+            throw new Error(insertError.message || "Failed to send message through any channel");
+          } else {
+            console.log(`[${new Date().toISOString()}] Zapier submission successful`);
+          }
         } else {
-          throw new Error(insertError.message || supabaseResult.error?.message || "Failed to send message");
+          console.log(`[${new Date().toISOString()}] Direct insertion successful:`, insertResult);
         }
-      } else {
-        console.log(`[${new Date().toISOString()}] Direct Supabase insertion successful:`, insertResult);
-        toast({
-          title: "Message sent successfully",
-          description: "Your message has been received. We'll get back to you as soon as possible.",
-        });
-        
-        form.reset();
       }
+      
+      // If we reached here, the submission was successful through one of the channels
+      toast({
+        title: "Message sent successfully",
+        description: "Your message has been received. We'll get back to you as soon as possible.",
+      });
+      
+      form.reset();
+      
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Contact form submission error:`, error);
       console.error('Error stringify:', JSON.stringify(error, null, 2));
