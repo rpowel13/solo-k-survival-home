@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -29,7 +30,7 @@ const Index = () => {
       
       <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
         <Phone className="h-5 w-5 mr-2 text-survival-600" />
-        Questions? Call Our Support Line: 
+        Sales and Support Line: 
         <span className="ml-2 text-survival-600 font-bold">(833) 224-5517</span>
       </div>
       
