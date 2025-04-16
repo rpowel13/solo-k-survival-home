@@ -1,5 +1,5 @@
-
 import Header from "@/components/Header";
+import LogoBanner from "@/components/LogoBanner";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
 import BenefitsSection from "@/components/BenefitsSection";
@@ -27,6 +27,8 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      
+      <LogoBanner />
       
       <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
         <Phone className="h-5 w-5 mr-2 text-survival-600" />
