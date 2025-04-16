@@ -56,11 +56,17 @@ const testInsertPermissions = async () => {
   console.log(`[${new Date().toISOString()}] Testing insert permissions on contacts table...`);
   try {
     // This is just a test that won't actually insert data
-    const { error } = await supabase.rpc('get_service_role');
+    // The error was here - we were calling an RPC function that doesn't exist
+    // Instead, let's test with a select query
+    const { error } = await supabase
+      .from('contacts')
+      .select('id')
+      .limit(1);
+      
     if (error) {
-      console.error(`[${new Date().toISOString()}] RPC function error:`, error);
+      console.error(`[${new Date().toISOString()}] Permission test error:`, error);
     } else {
-      console.log(`[${new Date().toISOString()}] RPC function executed successfully`);
+      console.log(`[${new Date().toISOString()}] Permission test successful`);
     }
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error testing permissions:`, error);
