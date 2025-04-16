@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -56,35 +55,21 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      // Submit the form data to Zapier webhook (which can forward to email)
-      const zapierResult = await triggerZapierWebhook({
-        name: `${data.firstName} ${data.lastName}`,
-        email: data.email,
-        phone: data.phone,
-        subject: "New Solo 401k Application",
-        message: `
-Business Name: ${data.businessName}
-Business Type: ${data.businessType}
-Annual Income: ${data.annualIncome}
-Trustee Name: ${data.trustee1Name}
-SSN: ${data.ssn}
-${data.additionalInfo ? `Additional Information: ${data.additionalInfo}` : ''}
-        `,
-        consent: data.agreeToTerms
-      });
+      // Send the form data via email
+      const emailResult = await triggerZapierWebhook(data);
       
-      if (zapierResult.success) {
+      if (emailResult.success) {
         toast({
           title: "Application Submitted",
-          description: "We've received your Solo 401k application. Redirecting to payment...",
+          description: "Your Solo 401k application has been prepared for email. Please complete sending the email from your email client. Redirecting to payment...",
         });
         
         // Redirect to payment page after a short delay
         setTimeout(() => {
           navigate('/payment/solo-401k');
-        }, 1500);
+        }, 3000);
       } else {
-        throw new Error(zapierResult.message || "Failed to submit application");
+        throw new Error(emailResult.message || "Failed to prepare email");
       }
     } catch (error) {
       console.error("Application submission error:", error);
