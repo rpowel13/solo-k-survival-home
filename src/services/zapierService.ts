@@ -1,20 +1,27 @@
 
 import { SoloFormValues } from '@/components/solo401k/FormSchema';
+import { ContactFormValues } from '@/components/contact/ContactFormSchema';
 
 interface EmailResponse {
   success: boolean;
   message?: string;
 }
 
+type FormData = SoloFormValues | ContactFormValues;
+
 /**
  * Sends the form data directly via email using the browser's mailto mechanism
  */
-export const triggerZapierWebhook = async (data: SoloFormValues): Promise<EmailResponse> => {
+export const triggerZapierWebhook = async (data: FormData): Promise<EmailResponse> => {
   try {
     console.log('Sending email with data:', data);
     
-    // Format email body with form data
-    const emailBody = `
+    // Determine the type of form data and format accordingly
+    let emailBody: string;
+    
+    if ('firstName' in data) {
+      // This is Solo401k form data
+      emailBody = `
 Solo 401k Application Details:
 Name: ${data.firstName} ${data.lastName}
 Email: ${data.email}
@@ -38,11 +45,31 @@ ${data.additionalInfo || 'N/A'}
 
 Submission Date: ${new Date().toLocaleString()}
 Source: ${window.location.href}
-    `;
+`;
+      
+    } else {
+      // This is Contact form data
+      emailBody = `
+Contact Form Submission:
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Subject: ${data.subject}
+
+Message:
+${data.message}
+
+Consent: ${data.consent ? 'Yes' : 'No'}
+Submission Date: ${new Date().toLocaleString()}
+Source: ${window.location.href}
+`;
+    }
     
     // Encode the email body for mailto URL
     const encodedBody = encodeURIComponent(emailBody);
-    const encodedSubject = encodeURIComponent("New Solo 401k Application");
+    const encodedSubject = encodeURIComponent(
+      'firstName' in data ? "New Solo 401k Application" : "New Contact Form Submission"
+    );
     
     // Create mailto link
     const mailtoLink = `mailto:your-email@example.com?subject=${encodedSubject}&body=${encodedBody}`;
