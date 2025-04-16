@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import ContactForm from "@/components/ContactForm";
 import ScheduleConsultationForm from "@/components/ScheduleConsultationForm";
-import { testSupabaseConnection, logSupabaseInfo } from "@/services/debugService";
+import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
 
 const Contact = () => {
@@ -16,28 +16,48 @@ const Contact = () => {
   const { toast } = useToast();
   
   useEffect(() => {
-    // Log Supabase client info on page load
-    console.log(`[${new Date().toISOString()}] Contact page mounted, testing Supabase connection`);
+    // Run comprehensive diagnostics on page load
+    console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
     logSupabaseInfo();
     
     // Test Supabase connection on page load
-    const testConnection = async () => {
-      const result = await testSupabaseConnection();
+    const runDiagnostics = async () => {
+      // Test connection
+      const connectionResult = await testSupabaseConnection();
       
-      if (!result.success) {
-        console.error(`[${new Date().toISOString()}] Supabase connection test failed on Contact page load`);
-        toast({
-          title: "Database Connection Issue",
-          description: "There may be an issue connecting to our database. Your message will still be received through backup systems.",
-          variant: "destructive",
-          duration: 5000
-        });
+      if (!connectionResult.success) {
+        console.error(`[${new Date().toISOString()}] Supabase connection test failed on Contact page load:`, connectionResult.error);
+        
+        // Check for RLS policy issues
+        if (connectionResult.error?.message?.includes('new row violates row-level security policy')) {
+          toast({
+            title: "Database Permission Issue",
+            description: "Row Level Security is preventing data insertion. This is a configuration issue that needs to be addressed in Supabase.",
+            variant: "destructive",
+            duration: 10000
+          });
+        } else {
+          toast({
+            title: "Database Connection Issue",
+            description: "There may be an issue connecting to our database. Your message will still be received through backup systems.",
+            variant: "destructive",
+            duration: 5000
+          });
+        }
       } else {
         console.log(`[${new Date().toISOString()}] Supabase connection test successful on Contact page load`);
       }
+      
+      // Attempt a direct insert as a final test
+      const insertResult = await insertTestContact();
+      if (insertResult.success) {
+        console.log(`[${new Date().toISOString()}] Direct test insert successful on page load`);
+      } else {
+        console.error(`[${new Date().toISOString()}] Direct test insert failed on page load:`, insertResult.error);
+      }
     };
     
-    testConnection();
+    runDiagnostics();
   }, [toast]);
   
   return (

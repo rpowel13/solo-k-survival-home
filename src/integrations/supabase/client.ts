@@ -8,7 +8,33 @@ const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiO
 
 console.log(`[${new Date().toISOString()}] Initializing Supabase client with URL:`, SUPABASE_URL);
 
-// Import the supabase client like this:
-// import { supabase } from "@/integrations/supabase/client";
+// Anonymous client - USE THIS FOR PUBLIC ACCESS
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  auth: {
+    persistSession: false, // We don't need persistent sessions for anonymous users
+    autoRefreshToken: false, // Disable token auto-refresh for anonymous users
+  },
+  global: {
+    // Adding fetch options to debug
+    fetch: (url, options) => {
+      // Log fetch requests for debugging
+      console.log(`[${new Date().toISOString()}] Supabase fetch request:`, { 
+        url: url.toString(), 
+        method: options?.method,
+      });
+      return fetch(url, options);
+    },
+  },
+});
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+// Add initialization success check
+supabase.from('contacts')
+  .select('id')
+  .limit(1)
+  .then(({ data, error }) => {
+    if (error) {
+      console.error(`[${new Date().toISOString()}] Supabase initialization test failed:`, error);
+    } else {
+      console.log(`[${new Date().toISOString()}] Supabase initialization successful - contacts table accessible`);
+    }
+  });

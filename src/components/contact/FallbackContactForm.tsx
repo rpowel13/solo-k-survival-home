@@ -14,6 +14,7 @@ import SubjectField from "./SubjectField";
 import MessageField from "./MessageField";
 import OptInCheckbox from "./OptInCheckbox";
 import SubmitButton from "./SubmitButton";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FallbackContactFormProps {
   form: UseFormReturn<ContactFormValues>;
@@ -26,10 +27,72 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
     console.log(`[${new Date().toISOString()}] Form submitted with data:`, data);
+    console.log(`[${new Date().toISOString()}] Supabase client status:`, supabase ? "Initialized" : "Not initialized");
     
     try {
+      // Test Supabase connection first
+      console.log(`[${new Date().toISOString()}] Testing Supabase connection before submission...`);
+      const { data: testData, error: testError } = await supabase
+        .from('contacts')
+        .select('id')
+        .limit(1);
+        
+      if (testError) {
+        console.error(`[${new Date().toISOString()}] Pre-submission connection test failed:`, testError);
+      } else {
+        console.log(`[${new Date().toISOString()}] Pre-submission connection test successful`);
+      }
+      
       // Explicitly log submission attempt
-      console.log(`[${new Date().toISOString()}] ATTEMPTING SUPABASE SUBMISSION`);
+      console.log(`[${new Date().toISOString()}] ATTEMPTING DIRECT SUPABASE SUBMISSION`);
+      
+      // Try direct submission to Supabase first, bypassing the service
+      const formattedData = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        subject: data.subject || null,
+        message: data.message,
+        opt_in: data.consent || false
+      };
+      
+      console.log(`[${new Date().toISOString()}] Direct Supabase submission data:`, formattedData);
+      
+      const { data: directResult, error: directError } = await supabase
+        .from('contacts')
+        .insert(formattedData)
+        .select();
+        
+      if (directError) {
+        console.error(`[${new Date().toISOString()}] Direct Supabase submission failed:`, directError);
+        console.error('Direct submission error details:', JSON.stringify(directError, null, 2));
+        
+        // Check if it's an RLS error
+        if (directError.message?.includes('new row violates row-level security policy')) {
+          console.error(`[${new Date().toISOString()}] RLS POLICY ERROR DETECTED! This suggests Row Level Security is blocking the insert.`);
+          
+          // We'll continue with other submission methods, but log this important error
+          toast({
+            title: "Database Permission Issue",
+            description: "Form will be submitted through backup channels. Technical details: Row Level Security is preventing direct database insertion.",
+            variant: "destructive",
+            duration: 5000
+          });
+        }
+      } else {
+        console.log(`[${new Date().toISOString()}] Direct Supabase submission successful:`, directResult);
+        toast({
+          title: "Message sent successfully",
+          description: "Your message has been received. We'll get back to you as soon as possible.",
+        });
+        
+        form.reset();
+        setIsSubmitting(false);
+        return; // Exit early if direct submission worked
+      }
+      
+      // If direct submission failed, try the service approach
+      console.log(`[${new Date().toISOString()}] Attempting submission via service...`);
       
       // Submit data to Supabase first as the primary method
       const supabaseResult = await submitContactForm(data);
