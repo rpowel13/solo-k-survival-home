@@ -10,4 +10,5 @@ export interface BlogPost {
   authorTitle: string;
   publishedAt: string;
   tags: string[];
+  pdfUrl?: string;
 }

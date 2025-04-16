@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Clock, Edit, Trash } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Edit, Trash, FileText, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
@@ -24,7 +24,7 @@ const BlogPostPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [post, setPost] = useState<BlogPost | null>(null);
+  const [post, setPost] = useState<BlogPost & { pdfUrl?: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -50,7 +50,7 @@ const BlogPostPage = () => {
           });
           navigate("/blog");
         } else {
-          setPost(data as BlogPost);
+          setPost(data as BlogPost & { pdfUrl?: string });
         }
       } catch (error) {
         console.error("Error fetching blog post:", error);
@@ -210,9 +210,34 @@ const BlogPostPage = () => {
               </Button>
             </div>
 
-            <div className="prose prose-lg max-w-none">
-              <p className="text-lg text-gray-600 mb-8 font-medium">{post.excerpt}</p>
-              <div dangerouslySetInnerHTML={{ __html: post.content || "Full article content would go here..." }} />
+            <div className="prose prose-lg max-w-none mb-8">
+              <p className="text-lg text-gray-600 mb-6 font-medium">{post.excerpt}</p>
+              
+              {post.pdfUrl ? (
+                <div className="bg-gray-50 border rounded-lg p-6 my-8">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <FileText className="h-8 w-8 text-survival-600 mr-3" />
+                      <div>
+                        <h3 className="font-medium text-gray-900 mb-1">Full Article PDF</h3>
+                        <p className="text-sm text-gray-500">View or download the complete article</p>
+                      </div>
+                    </div>
+                    <a 
+                      href={post.pdfUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-survival-600 hover:bg-survival-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-survival-500"
+                    >
+                      View PDF <ExternalLink className="ml-2 h-4 w-4" />
+                    </a>
+                  </div>
+                </div>
+              ) : post.content ? (
+                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              ) : (
+                <p className="text-gray-500 italic">No content available for this post.</p>
+              )}
             </div>
 
             <div className="mt-8 pt-6 border-t">
