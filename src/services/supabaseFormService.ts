@@ -7,14 +7,18 @@ const ADMIN_EMAILS = ['info@survival401k.com'];
 // Generic function to submit form data to Supabase
 export const submitFormToSupabase = async (tableName: string, data: any) => {
   try {
+    console.log(`Submitting to ${tableName}:`, data);
+    
     // 1. Submit to Supabase table
-    const { data: result, error } = await supabase
+    const response = await supabase
       .from(tableName)
       .insert(data)
-      .select('id')
-      .single();
+      .select('id');
     
-    if (error) throw error;
+    if (response.error) throw response.error;
+    
+    const result = response.data && response.data.length > 0 ? { id: response.data[0].id } : null;
+    if (!result) throw new Error('No ID returned from insert operation');
     
     // 2. Send email notification
     await sendNewSubmissionEmail(tableName, data, result.id);

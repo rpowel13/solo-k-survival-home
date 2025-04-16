@@ -4,8 +4,10 @@ import { useToast } from "@/hooks/use-toast";
 import { triggerZapierWebhook } from "@/services/zapierService";
 import { submitConsultationForm } from "@/services/supabaseFormService";
 
-// Define the toast function type
-type ToastFunction = typeof useToast extends () => infer R ? R : never;
+// Define a type for the toast function that matches how we need to use it
+type ToastFunction = {
+  (props: { title: string; description: string; variant?: "default" | "destructive" }): void;
+};
 
 export const handleScheduleSubmit = async (
   data: ScheduleFormValues,

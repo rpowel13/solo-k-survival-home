@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { scheduleFormSchema, ScheduleFormValues } from "./consultation/types";
 import { handleScheduleSubmit } from "./consultation/formUtils";
 import ContactFields from "./consultation/ContactFields";
@@ -30,7 +30,8 @@ const ScheduleConsultationForm = () => {
   const onSubmit = async (data: ScheduleFormValues) => {
     await handleScheduleSubmit(
       data,
-      toast,
+      // Pass the toast function directly
+      (props) => toast(props),
       setIsSubmitting,
       () => form.reset()
     );

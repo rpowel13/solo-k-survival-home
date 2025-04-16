@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { BlogPost } from '@/types/blog';
 
@@ -90,13 +89,21 @@ const mockBlogPosts = [
 interface MockDatabase {
   blog_posts: BlogPost[];
   solo401k_applications: any[];
+  contacts: any[];
+  scheduled_consultations: any[];
+  llc_applications: any[];
+  first_responder_applications: any[];
   [key: string]: any[];
 }
 
-// Initialize mock database
+// Initialize mock database with empty collections
 const mockDatabase: MockDatabase = {
   blog_posts: [...mockBlogPosts],
-  solo401k_applications: []
+  solo401k_applications: [],
+  contacts: [],
+  scheduled_consultations: [],
+  llc_applications: [],
+  first_responder_applications: []
 };
 
 // Create a proper typed mock client
@@ -110,15 +117,10 @@ function createMockSupabaseClient() {
     // Get data from our mock database
     const tableData = mockDatabase[table] || [];
     
-    // Basic result with data
-    const baseResult = {
-      data: [...tableData],
-      error: null
-    };
-    
     // Create a builder that properly chains methods
-    const builder = {
-      ...baseResult,
+    const builder: any = {
+      data: [...tableData],
+      error: null,
       
       // Select method (chainable)
       select: function(columns?: string) {
@@ -131,16 +133,9 @@ function createMockSupabaseClient() {
         console.log(`Mock filter: ${column} = ${value}`);
         const filteredData = tableData.filter(item => item[column] === value);
         
-        // Return a new builder with filtered data
         return {
-          ...baseResult,
-          data: filteredData,
-          select: this.select,
-          eq: this.eq,
-          single: this.single,
-          update: this.update,
-          delete: this.delete,
-          insert: this.insert
+          ...this,
+          data: filteredData
         };
       },
       
@@ -206,7 +201,10 @@ function createMockSupabaseClient() {
           data: recordsWithIds, 
           error: null,
           select: function() {
-            return { data: recordsWithIds, error: null };
+            return { 
+              data: recordsWithIds, 
+              error: null 
+            };
           } 
         };
       }
