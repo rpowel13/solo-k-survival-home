@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { ContactFormValues } from "./ContactFormSchema";
-import { submitContactForm } from "@/services/vcitaService";
+import { submitContactForm } from "@/services/supabaseFormService";
 import { submitToWooSender } from "@/services/wooSenderService";
 import { triggerZapierWebhook } from "@/services/zapierService";
 import { UseFormReturn } from "react-hook-form";
@@ -27,28 +27,14 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log("Form submitted with data:", data);
     
     try {
-      // Submit to vCita
-      const vcitaResult = await submitContactForm({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        subject: data.subject,
-        message: data.message,
-        consent: data.consent
-      });
+      // Primary submission to WooSender through Zapier
+      const zapierResult = await triggerZapierWebhook(data);
       
-      // Submit to WooSender through Zapier webhook
-      const zapierResult = await triggerZapierWebhook({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        subject: data.subject,
-        message: data.message,
-        consent: data.consent
-      });
+      // Secondary submission to Supabase (for database storage and email notification)
+      const supabaseResult = await submitContactForm(data);
       
       // Check if at least one submission was successful
-      if (vcitaResult.success || zapierResult.success) {
+      if (zapierResult.success || supabaseResult.success) {
         toast({
           title: "Message sent successfully",
           description: "We'll get back to you as soon as possible.",
@@ -56,7 +42,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         
         form.reset();
       } else {
-        throw new Error(vcitaResult.message || zapierResult.message || "Failed to send message");
+        throw new Error(zapierResult.message || supabaseResult.error?.message || "Failed to send message");
       }
     } catch (error) {
       console.error("Contact form submission error:", error);

@@ -1,14 +1,15 @@
 
 import { ScheduleFormValues } from "./types";
-import { toast as toastType } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { triggerZapierWebhook } from "@/services/zapierService";
+import { submitConsultationForm } from "@/services/supabaseFormService";
 
-// Define a type for the toast function
-type ToastType = typeof toastType;
+// Define the toast function type
+type ToastFunction = typeof useToast extends () => infer R ? R : never;
 
 export const handleScheduleSubmit = async (
   data: ScheduleFormValues,
-  toast: ToastType,
+  toast: ToastFunction,
   setIsSubmitting: (value: boolean) => void,
   resetForm: () => void
 ) => {
@@ -22,10 +23,13 @@ export const handleScheduleSubmit = async (
       ? data.date.toLocaleDateString() 
       : data.date;
     
-    // First try to send via Zapier to WooSender
+    // Primary submission via Zapier for WooSender notifications
     const zapierResult = await triggerZapierWebhook(data);
     
-    if (zapierResult.success) {
+    // Secondary submission to Supabase for data storage and email notification
+    const supabaseResult = await submitConsultationForm(data);
+    
+    if (zapierResult.success || supabaseResult.success) {
       toast({
         title: "Consultation Scheduled!",
         description: `Your consultation is scheduled for ${formattedDate} at ${data.time}. We'll call you at the provided number.`,
