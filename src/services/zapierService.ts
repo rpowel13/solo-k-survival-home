@@ -77,8 +77,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       throw new Error("Unknown form data type");
     }
     
-    // Add recipient email to the data
-    formattedData.recipientEmail = "ross.powell@survival401k.com";
+    // Add recipient emails to the data (multiple recipients)
+    formattedData.recipientEmails = ["ross.powell@survival401k.com", "jill.powell@survival401k.com"];
     formattedData.emailSubject = emailSubject;
     
     // Send data to Zapier webhook

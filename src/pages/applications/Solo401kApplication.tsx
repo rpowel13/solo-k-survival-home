@@ -62,7 +62,7 @@ const Solo401kApplication = () => {
       if (emailResult.success) {
         toast({
           title: "Application Submitted",
-          description: "Your Solo 401k application has been submitted successfully. Redirecting to payment...",
+          description: "Your Solo 401k application has been submitted successfully and notification sent to our team. Redirecting to payment...",
         });
         
         // Redirect to payment page after a short delay
