@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 // Email addresses to notify (could be moved to environment variables)
@@ -12,7 +11,7 @@ type TableName = 'contacts' | 'scheduled_consultations' | 'llc_applications' |
 export const submitFormToSupabase = async (tableName: TableName, data: any) => {
   try {
     console.log(`Submitting to ${tableName}:`, data);
-    console.log("Supabase URL:", supabase.supabaseUrl);
+    console.log("Attempting to insert data into Supabase table:", tableName);
     
     // 1. Submit to Supabase table
     const response = await supabase
