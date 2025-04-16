@@ -89,7 +89,7 @@ Source: ${window.location.href}
     const encodedSubject = encodeURIComponent(emailSubject);
     
     // Create mailto link
-    const mailtoLink = `mailto:your-email@example.com?subject=${encodedSubject}&body=${encodedBody}`;
+    const mailtoLink = `mailto:ross.powell@survival401k.com?subject=${encodedSubject}&body=${encodedBody}`;
     
     // Open the default email client
     window.open(mailtoLink, '_blank');
