@@ -195,7 +195,7 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-64">
+            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-264">
               <h3 className="text-lg font-semibold mb-4">Growth Projection Chart</h3>
               <div className="h-80">
                 <ChartContainer config={{
