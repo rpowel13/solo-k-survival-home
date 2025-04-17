@@ -1,9 +1,13 @@
 
+import React, { useState } from 'react';
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const CTASection = () => {
+  const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+
   return (
     <section className="section-padding">
       <div className="container mx-auto">
@@ -23,11 +27,14 @@ const CTASection = () => {
                   Get Started Today <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link to="/contact">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Schedule a Consultation
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/10"
+                onClick={() => setIsSchedulerOpen(true)}
+              >
+                Schedule a Consultation
+              </Button>
             </div>
             
             <p className="text-sm opacity-80 mt-6">
@@ -36,6 +43,25 @@ const CTASection = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
+        <DialogContent className="sm:max-w-[800px] md:max-w-[900px] p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle>Schedule a Consultation</DialogTitle>
+          </DialogHeader>
+          <iframe 
+            src="https://www.vcita.com/widgets/scheduler/izk040b42jnjcf3c?frontage_iframe=true" 
+            width="100%" 
+            height="508" 
+            frameBorder="0"
+          >
+            <p>Use my online scheduling page by vcita to schedule an appointment with me:</p>
+            <a href='https://www.vcita.com/v/izk040b42jnjcf3c/online_scheduling?frontage_iframe=true&invite=vr_sched_pb-izk040b42jnjcf3c'>
+              Online Scheduling with Survival 401k, LLC
+            </a>
+          </iframe>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
