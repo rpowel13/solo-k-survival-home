@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Mail, Phone, MessageSquare, Calendar } from "lucide-react";
 import Header from "@/components/Header";
@@ -84,7 +83,7 @@ const Contact = () => {
                       <div>
                         <h3 className="font-medium">Phone</h3>
                         <p className="text-gray-600">(833) 224-5517</p>
-                        <p className="text-sm text-gray-500 mt-1">Monday-Friday, 9am-5pm ET</p>
+                        <p className="text-sm text-gray-500 mt-1">Monday-Friday, 9am-6pm CT</p>
                       </div>
                     </div>
                     
