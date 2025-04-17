@@ -25,6 +25,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import LegalDisclosures from "./pages/LegalDisclosures";
 import ZapierSettings from "./pages/admin/ZapierSettings";
 import FirstResponderPayment from "./pages/payments/FirstResponderPayment";
+import RMDCalculator from "./pages/tools/RMDCalculator";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
           <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
           <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
+          <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

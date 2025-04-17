@@ -50,6 +50,12 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
             Loan Calculator
           </span>
         </Link>
+        <Link to="/tools/rmd-calculator" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">
+          <span className="flex items-center gap-2">
+            <Calculator className="h-4 w-4" />
+            RMD Calculator
+          </span>
+        </Link>
       </div>
 
       <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>

@@ -28,6 +28,13 @@ export const ToolsDropdown = () => {
             <DollarSign className="h-4 w-4" />
             <span>Loan Calculator</span>
           </Link>
+          <Link 
+            to="/tools/rmd-calculator" 
+            className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-gray-100 text-gray-700"
+          >
+            <Calculator className="h-4 w-4" />
+            <span>RMD Calculator</span>
+          </Link>
         </div>
       </NavigationMenuContent>
     </NavigationMenuItem>
