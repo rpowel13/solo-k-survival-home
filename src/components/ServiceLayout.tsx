@@ -33,7 +33,7 @@ const ServiceLayout = ({
           <div 
             className="absolute inset-0 z-0 opacity-30 bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')"
+              backgroundImage: "url('/lovable-uploads/0192c769-67ac-4656-90ad-daf796d94668.png')"
             }}
           ></div>
 
