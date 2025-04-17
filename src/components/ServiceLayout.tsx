@@ -31,9 +31,9 @@ const ServiceLayout = ({
         <div className="relative bg-gradient-to-r from-survival-800 to-survival-900">
           {/* Background Image with Overlay */}
           <div 
-            className="absolute inset-0 z-0 opacity-15 bg-cover bg-center"
+            className="absolute inset-0 z-0 opacity-30 bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('https://images.unsplash.com/photo-1633158929876-42640a2fcb40?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')"
+              backgroundImage: "url('https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')"
             }}
           ></div>
 
