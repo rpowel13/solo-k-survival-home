@@ -30,7 +30,7 @@ export function formatFormData(data: FormData) {
       existingRetirement: data.existingRetirement ? 'Yes' : 'No',
       additionalInfo: data.additionalInfo || 'N/A',
       submissionDate: new Date().toLocaleString(),
-      source: window.location.href,
+      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
     emailSubject = "New Solo 401k Application";
@@ -44,7 +44,7 @@ export function formatFormData(data: FormData) {
       message: data.message,
       consent: data.consent ? 'Yes' : 'No',
       submissionDate: new Date().toLocaleString(),
-      source: window.location.href,
+      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
     emailSubject = "New Contact Form Submission";
@@ -62,7 +62,7 @@ export function formatFormData(data: FormData) {
       businessPurpose: data.businessPurpose,
       additionalInfo: data.additionalInfo || 'N/A',
       submissionDate: new Date().toLocaleString(),
-      source: window.location.href,
+      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
     emailSubject = "New LLC Formation Application";
@@ -80,26 +80,32 @@ export function formatFormData(data: FormData) {
       verify401kInterest: data.verify401kInterest ? 'Yes' : 'No',
       additionalInfo: data.additionalInfo || 'N/A',
       submissionDate: new Date().toLocaleString(),
-      source: window.location.href,
+      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
     emailSubject = "New First Responder Package Application";
   } else if (isScheduleForm(data)) {
+    const formattedDate = data.date instanceof Date 
+      ? data.date.toLocaleDateString() 
+      : typeof data.date === 'string' ? data.date : 'Invalid date';
+    
     formattedData = {
       formType: 'Schedule_Consultation',
       name: data.name,
       email: data.email,
       phone: data.phone,
-      requestedDate: data.date instanceof Date ? data.date.toLocaleDateString() : data.date,
+      requestedDate: formattedDate,
       requestedTime: data.time,
       message: data.message || 'N/A',
       submissionDate: new Date().toLocaleString(),
-      source: window.location.href,
+      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource: 'Consultation Scheduler',
       leadType: 'Hot Lead - Consultation Request',
       priority: 'High',
       nextAction: 'Schedule Follow-up Call',
-      nextActionDue: data.date instanceof Date ? data.date.toISOString() : new Date(data.date).toISOString()
+      nextActionDue: data.date instanceof Date 
+        ? data.date.toISOString() 
+        : typeof data.date === 'string' ? new Date(data.date).toISOString() : new Date().toISOString()
     };
     emailSubject = "New Consultation Request - Priority Lead";
   } else {

@@ -1,8 +1,43 @@
 
 import { z } from 'zod';
-import { SoloFormValues } from '@/components/solo401k/FormSchema';
-import { ContactFormValues } from '@/components/contact/ContactFormSchema';
-import { ScheduleFormValues } from '@/components/consultation/types';
+
+// Define explicit schema for Solo 401k forms
+export const soloFormSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  ssn: z.string(),
+  businessName: z.string(),
+  businessType: z.string(),
+  annualIncome: z.string(),
+  trustee1Name: z.string(),
+  trustee2Name: z.string().optional(),
+  participant1Name: z.string(),
+  participant2Name: z.string().optional(),
+  existingRetirement: z.boolean(),
+  additionalInfo: z.string().optional(),
+});
+
+// Schema for Contact forms
+export const contactFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  subject: z.string(),
+  message: z.string(),
+  consent: z.boolean(),
+});
+
+// Schema for Schedule consultation forms
+export const scheduleFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  date: z.union([z.string(), z.date()]),
+  time: z.string(),
+  message: z.string().optional(),
+});
 
 // Simplified schema definitions for LLC forms
 export const llcFormSchema = z.object({
@@ -36,6 +71,10 @@ export const firstResponderFormSchema = z.object({
   agreeToTerms: z.boolean(),
 });
 
+// Export all form value types
+export type SoloFormValues = z.infer<typeof soloFormSchema>;
+export type ContactFormValues = z.infer<typeof contactFormSchema>;
+export type ScheduleFormValues = z.infer<typeof scheduleFormSchema>;
 export type LLCFormValues = z.infer<typeof llcFormSchema>;
 export type FirstResponderFormValues = z.infer<typeof firstResponderFormSchema>;
 

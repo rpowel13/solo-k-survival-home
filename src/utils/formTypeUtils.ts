@@ -9,15 +9,15 @@ import type {
 } from '@/types/formTypes';
 
 export function isSolo401kForm(data: FormData): data is SoloFormValues {
-  return 'firstName' in data && 'ssn' in data;
+  return 'firstName' in data && 'ssn' in data && 'businessName' in data;
 }
 
 export function isContactForm(data: FormData): data is ContactFormValues {
-  return 'name' in data && 'message' in data;
+  return 'name' in data && 'message' in data && 'subject' in data && !('date' in data);
 }
 
 export function isLLCForm(data: FormData): data is LLCFormValues {
-  return 'firstName' in data && 'desiredLLCName' in data && 'businessPurpose' in data;
+  return 'firstName' in data && 'desiredLLCName' in data && 'businessPurpose' in data && !('occupation' in data);
 }
 
 export function isFirstResponderForm(data: FormData): data is FirstResponderFormValues {
