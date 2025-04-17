@@ -161,6 +161,7 @@ export type Database = {
           email: string
           first_name: string
           id: string
+          is_first_responder: boolean | null
           last_name: string
           member_count: string
           payment_status: string | null
@@ -183,6 +184,7 @@ export type Database = {
           email: string
           first_name: string
           id?: string
+          is_first_responder?: boolean | null
           last_name: string
           member_count: string
           payment_status?: string | null
@@ -205,6 +207,7 @@ export type Database = {
           email?: string
           first_name?: string
           id?: string
+          is_first_responder?: boolean | null
           last_name?: string
           member_count?: string
           payment_status?: string | null
@@ -267,6 +270,7 @@ export type Database = {
           first_name: string
           id: string
           last_name: string
+          linked_llc_application_id: string | null
           participant1_name: string
           participant2_name: string | null
           phone: string
@@ -293,6 +297,7 @@ export type Database = {
           first_name: string
           id?: string
           last_name: string
+          linked_llc_application_id?: string | null
           participant1_name: string
           participant2_name?: string | null
           phone: string
@@ -319,6 +324,7 @@ export type Database = {
           first_name?: string
           id?: string
           last_name?: string
+          linked_llc_application_id?: string | null
           participant1_name?: string
           participant2_name?: string | null
           phone?: string
@@ -331,7 +337,15 @@ export type Database = {
           trustee2_name?: string | null
           zipcode?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "solo401k_applications_linked_llc_application_id_fkey"
+            columns: ["linked_llc_application_id"]
+            isOneToOne: false
+            referencedRelation: "llc_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
