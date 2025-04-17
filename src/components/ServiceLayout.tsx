@@ -4,6 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { AspectRatio } from './ui/aspect-ratio';
 
 interface ServiceLayoutProps {
   children: React.ReactNode;
@@ -33,7 +34,9 @@ const ServiceLayout = ({
           <div 
             className="absolute inset-0 z-0 opacity-30 bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('/lovable-uploads/0192c769-67ac-4656-90ad-daf796d94668.png')"
+              backgroundImage: `url('/lovable-uploads/0192c769-67ac-4656-90ad-daf796d94668.png')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
             }}
           ></div>
 
