@@ -9,17 +9,15 @@ import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
-import PrequalificationSection from "@/components/solo401k/PrequalificationSection";
 import { Separator } from "@/components/ui/separator";
 import { Phone } from "lucide-react";
 
 const sectionBackgrounds = {
-  services: "bg-gradient-to-br from-soft-purple/20 to-soft-blue/20",
-  benefits: "bg-gradient-to-br from-soft-green/30 to-soft-yellow/30",
-  features: "bg-gradient-to-br from-soft-peach/30 to-soft-pink/30",
+  services: "bg-gradient-to-br from-soft-blue/20 to-soft-blue/10",
+  benefits: "bg-gradient-to-br from-[#D3E4FD]/30 to-[#e1ebff]/30", // Light blue gradient
+  features: "bg-gradient-to-br from-[#C9D9FF]/30 to-[#A4BEFE]/30", // Another light blue variant
   prequalificationBanner: "bg-gradient-to-r from-soft-orange/30 to-soft-yellow/30",
-  prequalificationSection: "bg-gradient-to-br from-soft-blue/20 to-soft-purple/20",
-  comparison: "bg-gradient-to-b from-white to-soft-pink/30",
+  comparison: "bg-gradient-to-b from-[#e7f0fd]/20 to-[#accbee]/20", // Soft blue gradient
   faq: "bg-gradient-to-br from-soft-gray/20 to-soft-purple/20",
 };
 
@@ -48,10 +46,6 @@ const Index = () => {
         </div>
         
         <PrequalificationBanner className={sectionBackgrounds.prequalificationBanner} />
-        
-        <div className={`container mx-auto px-4 ${sectionBackgrounds.prequalificationSection}`}>
-          <PrequalificationSection />
-        </div>
         
         <div className={`py-12 ${sectionBackgrounds.comparison}`}>
           <ComparisonSection />
