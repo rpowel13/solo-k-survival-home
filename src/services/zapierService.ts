@@ -1,4 +1,3 @@
-
 import { SoloFormValues } from '@/components/solo401k/FormSchema';
 import { ContactFormValues } from '@/components/contact/ContactFormSchema';
 import { ScheduleFormValues } from '@/components/consultation/types';
@@ -166,7 +165,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       };
       emailSubject = "New First Responder Package Application";
     } else if (isScheduleForm(data)) {
-      // This is Schedule Consultation form data
+      // Enhanced Schedule Consultation form data
       formattedData = {
         formType: 'Schedule_Consultation',
         name: data.name,
@@ -177,9 +176,13 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         message: data.message || 'N/A',
         submissionDate: new Date().toLocaleString(),
         source: window.location.href,
-        leadSource: leadSource
+        leadSource: 'Consultation Scheduler',
+        leadType: 'Hot Lead - Consultation Request',
+        priority: 'High',
+        nextAction: 'Schedule Follow-up Call',
+        nextActionDue: data.date instanceof Date ? data.date.toISOString() : new Date(data.date).toISOString()
       };
-      emailSubject = "New Consultation Request";
+      emailSubject = "New Consultation Request - Priority Lead";
     } else {
       throw new Error("Unknown form data type");
     }
