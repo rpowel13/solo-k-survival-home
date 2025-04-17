@@ -13,7 +13,7 @@ export const formSchema = z.object({
   state: z.string().min(1, { message: 'State is required' }),
   zipCode: z.string().min(5, { message: 'Please enter a valid ZIP code' }),
   businessName: z.string().min(2, { message: 'Business name is required' }),
-  sponsorEin: z.string().min(9, { message: 'Please enter a valid EIN' }),
+  sponsorEin: z.string().optional(), // Changed from min(9) to optional
   businessType: z.string().min(1, { message: 'Please select a business type' }),
   annualIncome: z.string().min(1, { message: 'Annual income information is required' }),
   trustee1Name: z.string().min(2, { message: 'Trustee name is required' }),
