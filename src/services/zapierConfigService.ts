@@ -1,4 +1,3 @@
-
 /**
  * Zapier Configuration Service
  * Handles Zapier webhook URL configuration and retrieval for multiple integration types
@@ -15,7 +14,8 @@ export type WebhookType =
   | 'consultation' 
   | 'solo401k' 
   | 'llc' 
-  | 'first_responder';
+  | 'first_responder'
+  | 'alternative_investments';
 
 // Default webhook URL if not configured in env or localStorage
 const DEFAULT_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";

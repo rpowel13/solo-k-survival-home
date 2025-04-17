@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,13 +6,14 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// Updated to support multiple webhook types
+// Updated to include alternative investments
 const WEBHOOK_TYPES = [
   { id: 'crm', label: 'CRM Integration' },
   { id: 'consultation', label: 'Consultation Scheduling' },
   { id: 'solo401k', label: 'Solo 401k Applications' },
   { id: 'llc', label: 'LLC Applications' },
-  { id: 'first_responder', label: 'First Responder Applications' }
+  { id: 'first_responder', label: 'First Responder Applications' },
+  { id: 'alternative_investments', label: 'Alternative Investment Applications' }
 ] as const;
 
 type WebhookType = typeof WEBHOOK_TYPES[number]['id'];
@@ -104,4 +104,3 @@ const ZapierWebhookConfig: React.FC = () => {
 };
 
 export default ZapierWebhookConfig;
-
