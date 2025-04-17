@@ -11,7 +11,7 @@ import { ToolsDropdown } from "./ToolsDropdown";
 export const DesktopNav = () => {
   return (
     <nav className="hidden md:flex items-center space-x-6">
-      <Link to="/" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Home</Link>
+      <Link to="/" className="text-gray-600 hover:text-survival-700 hover:bg-survival-50 rounded-md px-2 py-1 transition-colors">Home</Link>
       
       <NavigationMenu>
         <NavigationMenuList>
@@ -37,7 +37,7 @@ export const DesktopNav = () => {
         </NavigationMenuList>
       </NavigationMenu>
       
-      <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
+      <Link to="/contact" className="text-gray-600 hover:text-survival-700 hover:bg-survival-50 rounded-md px-2 py-1 transition-colors">Contact</Link>
       
       <a 
         href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
