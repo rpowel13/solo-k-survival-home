@@ -26,8 +26,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      {/* Add padding-top to push content below the fixed header */}
-      <div className="pt-16 bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
+      <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
         <Phone className="h-5 w-5 mr-2 text-survival-600" />
         Sales and Support Line: 
         <span className="ml-2 text-survival-600 font-bold">(833) 224-5517</span>
