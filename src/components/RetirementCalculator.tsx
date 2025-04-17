@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { formatCurrency } from '@/utils/metalPriceUtils';
 import { Button } from "@/components/ui/button";
@@ -99,14 +98,22 @@ export const RetirementCalculator = () => {
             <Label htmlFor="initialBalance" className="block text-sm font-medium text-gray-700 mb-1">
               Current Retirement Savings
             </Label>
-            <Input
-              type="number"
-              id="initialBalance"
-              value={initialBalance}
-              onChange={(e) => setInitialBalance(Number(e.target.value))}
-              className="w-full"
-              min="0"
-            />
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <Input
+                type="number"
+                id="initialBalance"
+                value={initialBalance}
+                onChange={(e) => setInitialBalance(Number(e.target.value))}
+                className="pl-7 w-full bg-soft-gray border-neutral-300 focus:ring-survival-500 focus:border-survival-500"
+                min="0"
+                placeholder="Enter current savings"
+                step="1000"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Include 401(k), IRAs, and other retirement accounts
+            </p>
           </div>
           
           <div>
