@@ -188,7 +188,7 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-8">
+            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-12">
               <h3 className="text-lg font-semibold mb-4">Growth Projection Chart</h3>
               <div className="h-80">
                 <ChartContainer config={{
@@ -226,6 +226,7 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
+            {/* Move the Solo 401k plan information outside and below the chart */}
             <div className="p-6 bg-gradient-to-r from-soft-orange/30 to-soft-yellow/30 rounded-lg">
               <h3 className="font-semibold text-xl mb-3">With a Solo 401(k) Plan:</h3>
               <p className="mb-3 text-lg">
