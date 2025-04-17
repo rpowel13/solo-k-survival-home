@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,6 +31,11 @@ const Solo401kApplication = () => {
       email: "",
       phone: "",
       ssn: "",
+      dateOfBirth: "",
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
       businessName: "",
       businessType: "",
       annualIncome: "",
@@ -102,6 +106,11 @@ const Solo401kApplication = () => {
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
                   <PersonalInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
+                  <AddressFields form={form} />
                 </div>
                 
                 <div className="space-y-6">

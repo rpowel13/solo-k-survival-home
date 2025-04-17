@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { FormField, FormControl, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -40,6 +39,20 @@ const PersonalInfoFields = ({ form }: PersonalInfoFieldsProps) => {
           )}
         />
       </div>
+
+      <FormField
+        control={form.control}
+        name="dateOfBirth"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Date of Birth</FormLabel>
+            <FormControl>
+              <Input type="date" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <FormField

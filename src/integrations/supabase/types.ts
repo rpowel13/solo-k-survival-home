@@ -259,7 +259,9 @@ export type Database = {
           application_date: string | null
           business_name: string
           business_type: string
+          city: string | null
           created_at: string | null
+          date_of_birth: string | null
           email: string
           existing_retirement: boolean | null
           first_name: string
@@ -269,9 +271,12 @@ export type Database = {
           participant2_name: string | null
           phone: string
           ssn: string
+          state: string | null
           status: string | null
+          street: string | null
           trustee1_name: string
           trustee2_name: string | null
+          zipcode: string | null
         }
         Insert: {
           additional_info?: string | null
@@ -279,7 +284,9 @@ export type Database = {
           application_date?: string | null
           business_name: string
           business_type: string
+          city?: string | null
           created_at?: string | null
+          date_of_birth?: string | null
           email: string
           existing_retirement?: boolean | null
           first_name: string
@@ -289,9 +296,12 @@ export type Database = {
           participant2_name?: string | null
           phone: string
           ssn: string
+          state?: string | null
           status?: string | null
+          street?: string | null
           trustee1_name: string
           trustee2_name?: string | null
+          zipcode?: string | null
         }
         Update: {
           additional_info?: string | null
@@ -299,7 +309,9 @@ export type Database = {
           application_date?: string | null
           business_name?: string
           business_type?: string
+          city?: string | null
           created_at?: string | null
+          date_of_birth?: string | null
           email?: string
           existing_retirement?: boolean | null
           first_name?: string
@@ -309,9 +321,12 @@ export type Database = {
           participant2_name?: string | null
           phone?: string
           ssn?: string
+          state?: string | null
           status?: string | null
+          street?: string | null
           trustee1_name?: string
           trustee2_name?: string | null
+          zipcode?: string | null
         }
         Relationships: []
       }
