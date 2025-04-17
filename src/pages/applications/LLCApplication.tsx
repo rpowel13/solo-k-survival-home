@@ -73,7 +73,7 @@ const LLCApplication = () => {
       if (emailResult.success) {
         toast({
           title: "Application Submitted",
-          description: "We've received your LLC formation application and notification sent to our team. Our team will contact you shortly.",
+          description: "We've received your LLC formation application and notification sent to our team. Please proceed to payment.",
         });
         
         // Redirect to payment page after a short delay
