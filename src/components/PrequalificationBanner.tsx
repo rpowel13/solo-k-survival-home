@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
@@ -11,10 +12,10 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   return (
     <section className={`bg-gradient-to-r from-survival-50 to-finance-50 py-16 border-y border-gray-100 ${className}`}>
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-6">
-            <CheckCircle className="h-4 w-4 text-survival-600" />
-            <span className="text-sm font-medium text-gray-700">Quick Eligibility Check</span>
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-md mb-8">
+            <CheckCircle className="h-5 w-5 text-survival-600" />
+            <span className="text-base font-medium text-gray-700">Quick Eligibility Check</span>
           </div>
           <h2 className="text-3xl font-bold mb-4 text-survival-800">See If You Qualify for a Solo 401k</h2>
           <p className="text-xl mb-8 text-gray-700">
