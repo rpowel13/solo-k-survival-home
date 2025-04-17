@@ -23,6 +23,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import LegalDisclosures from "./pages/LegalDisclosures";
 import ZapierSettings from "./pages/admin/ZapierSettings";
+import FirstResponderPayment from "./pages/payments/FirstResponderPayment";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
           <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
+          <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
