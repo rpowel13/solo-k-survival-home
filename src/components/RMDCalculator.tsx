@@ -68,7 +68,7 @@ const RMDCalculator = () => {
     let projectedBalance = accountBalance;
     const currentYear = new Date().getFullYear();
 
-    for (let age = currentAge; age <= Math.min(currentAge + 10, 120); age++) {
+    for (let age = currentAge; age <= Math.min(90, 120); age++) {
       const yearFactor = getDistributionFactor(age);
       const rmdAmount = projectedBalance / yearFactor;
       const remainingBalance = projectedBalance - rmdAmount;
