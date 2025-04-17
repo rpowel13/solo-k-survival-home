@@ -39,6 +39,7 @@ const Solo401kApplication = () => {
       state: "",
       zipCode: "",
       businessName: "",
+      sponsorEin: "",
       businessType: "",
       annualIncome: "",
       trustee1Name: "",

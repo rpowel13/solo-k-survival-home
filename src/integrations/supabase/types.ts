@@ -270,6 +270,7 @@ export type Database = {
           participant1_name: string
           participant2_name: string | null
           phone: string
+          sponsor_ein: string | null
           ssn: string
           state: string | null
           status: string | null
@@ -295,6 +296,7 @@ export type Database = {
           participant1_name: string
           participant2_name?: string | null
           phone: string
+          sponsor_ein?: string | null
           ssn: string
           state?: string | null
           status?: string | null
@@ -320,6 +322,7 @@ export type Database = {
           participant1_name?: string
           participant2_name?: string | null
           phone?: string
+          sponsor_ein?: string | null
           ssn?: string
           state?: string | null
           status?: string | null

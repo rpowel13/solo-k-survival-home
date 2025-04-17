@@ -11,20 +11,39 @@ interface BusinessInfoFieldsProps {
 
 const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
   return (
-    <>
-      <FormField
-        control={form.control}
-        name="businessName"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Business Name</FormLabel>
-            <FormControl>
-              <Input placeholder="Your Business LLC" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <FormField
+          control={form.control}
+          name="businessName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Business Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Your Business LLC" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="sponsorEin"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sponsor EIN</FormLabel>
+              <FormControl>
+                <Input placeholder="XX-XXXXXXX" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter your 9-digit Employer Identification Number
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <FormField
         control={form.control}
@@ -73,7 +92,7 @@ const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
           </FormItem>
         )}
       />
-    </>
+    </div>
   );
 };
 
