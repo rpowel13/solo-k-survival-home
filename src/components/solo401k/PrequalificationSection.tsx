@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -101,15 +100,15 @@ const PrequalificationSection = () => {
         <Collapsible
           open={isOpen}
           onOpenChange={setIsOpen}
-          className="w-full max-w-3xl mx-auto"
+          className="w-full max-w-4xl mx-auto"
         >
           <CollapsibleTrigger asChild>
             <Button 
               variant="outline" 
-              className="w-full lg:w-auto mb-6 border-2 border-survival-600 text-survival-800 hover:bg-survival-100"
+              className="w-full lg:w-auto mb-6 border-2 border-survival-600 text-survival-800 hover:bg-survival-100 text-lg px-8 py-4 rounded-xl"
             >
               {isOpen ? "Hide Eligibility Quiz" : "Check Your Eligibility for a Solo 401k"}
-              <ArrowRight className={`ml-2 h-4 w-4 transform transition-transform ${isOpen ? 'rotate-90' : ''}`} />
+              <ArrowRight className={`ml-2 h-5 w-5 transform transition-transform ${isOpen ? 'rotate-90' : ''}`} />
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>
