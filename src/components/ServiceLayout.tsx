@@ -28,16 +28,8 @@ const ServiceLayout = ({
       <Header />
       <main className="flex-grow">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-r from-survival-800 to-survival-900">
-          {/* Background Image with Overlay */}
-          <div 
-            className="absolute inset-0 z-0 opacity-15 bg-cover bg-center"
-            style={{ 
-              backgroundImage: "url('https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')"
-            }}
-          ></div>
-
-          <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8 sm:py-24 relative z-10">
+        <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white">
+          <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8 sm:py-24">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
                 <p className="text-sm text-white/70 mb-2">Common Sense Wealth Management</p>
@@ -67,3 +59,4 @@ const ServiceLayout = ({
 };
 
 export default ServiceLayout;
+
