@@ -2,7 +2,7 @@ import { SoloFormValues } from '@/components/solo401k/FormSchema';
 import { ContactFormValues } from '@/components/contact/ContactFormSchema';
 import { ScheduleFormValues } from '@/components/consultation/types';
 import { z } from 'zod';
-import { getZapierWebhookUrl } from './zapierConfigService';
+import { getZapierWebhookUrl, WebhookType } from './zapierConfigService';
 
 // Define types for the LLC and First Responder forms based on their structure
 export type LLCFormValues = z.infer<typeof llcFormSchema>;
