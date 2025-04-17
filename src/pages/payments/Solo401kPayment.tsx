@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +20,7 @@ const Solo401kPayment = () => {
   } | null>(null);
   
   // VCita payment link
-  const paymentLink = "https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Solo%20401k%20Application&amount=1240&v_currency=USD";
+  const paymentLink = "https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Solo%20401k%20Application&amount=1240";
 
   useEffect(() => {
     // Retrieve application data from sessionStorage

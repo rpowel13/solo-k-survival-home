@@ -39,9 +39,17 @@ const PaymentTabs: React.FC<PaymentTabsProps> = ({ applicationData, paymentLink,
           <Button 
             onClick={handlePayment} 
             className="w-full bg-survival-600 hover:bg-survival-700 gap-2"
+            asChild
           >
-            <CreditCard className="h-5 w-5" />
-            Proceed to Card Payment
+            <a 
+              href={paymentLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center"
+            >
+              <CreditCard className="h-5 w-5" />
+              Pay with Card
+            </a>
           </Button>
         </div>
       </TabsContent>
