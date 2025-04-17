@@ -37,7 +37,7 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
       </div>
 
       <div className="border-b pb-2 mb-2">
-        <div className="font-medium mb-2">Tools</div>
+        <div className="font-medium mb-2">Retirement Tools</div>
         <Link to="/tools/retirement-calculator" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">
           <span className="flex items-center gap-2">
             <Calculator className="h-4 w-4" />

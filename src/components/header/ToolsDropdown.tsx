@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 export const ToolsDropdown = () => {
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="h-9">Tools</NavigationMenuTrigger>
+      <NavigationMenuTrigger className="h-9">Retirement Tools</NavigationMenuTrigger>
       <NavigationMenuContent className="bg-white min-w-[200px]">
         <div className="p-1.5 space-y-1">
           <Link 
