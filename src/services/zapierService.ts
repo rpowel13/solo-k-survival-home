@@ -78,8 +78,16 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
   try {
     console.log(`[${new Date().toISOString()}] Sending form data to Zapier:`, data);
     
+    // Determine the type of webhook to use based on the form type
+    let webhookType: WebhookType = 'crm';
+    if (isSolo401kForm(data)) webhookType = 'solo401k';
+    else if (isContactForm(data)) webhookType = 'crm';
+    else if (isLLCForm(data)) webhookType = 'llc';
+    else if (isFirstResponderForm(data)) webhookType = 'first_responder';
+    else if (isScheduleForm(data)) webhookType = 'consultation';
+    
     // Get the configured Zapier webhook URL
-    const webhookUrl = getZapierWebhookUrl();
+    const webhookUrl = getZapierWebhookUrl(webhookType);
     
     // Determine the type of form data and format accordingly
     let formattedData: Record<string, any>;
@@ -210,7 +218,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     console.log(`[${new Date().toISOString()}] Zapier webhook triggered successfully`);
     return { 
       success: true,
-      message: 'Form submitted successfully to Zapier and CRM'
+      message: `Form submitted successfully to Zapier via ${webhookType} webhook`
     };
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, error);
