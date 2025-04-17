@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ServiceDropdown } from "./ServiceDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
 import { PaymentDropdown } from "./PaymentDropdown";
+import { ToolsDropdown } from "./ToolsDropdown";
 
 export const DesktopNav = () => {
   return (
@@ -27,6 +28,12 @@ export const DesktopNav = () => {
       <NavigationMenu>
         <NavigationMenuList>
           <PaymentDropdown />
+        </NavigationMenuList>
+      </NavigationMenu>
+
+      <NavigationMenu>
+        <NavigationMenuList>
+          <ToolsDropdown />
         </NavigationMenuList>
       </NavigationMenu>
       

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogIn } from "lucide-react";
+import { LogIn, Calculator } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface MobileNavProps {
@@ -34,6 +34,16 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
         <div className="font-medium mb-2">Payments</div>
         <Link to="/payment/annual-fee" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Annual Fee ($200)</Link>
         <Link to="/payment/reinstatement-fee" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">Reinstatement Fee ($250)</Link>
+      </div>
+
+      <div className="border-b pb-2 mb-2">
+        <div className="font-medium mb-2">Tools</div>
+        <Link to="/tools/retirement-calculator" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">
+          <span className="flex items-center gap-2">
+            <Calculator className="h-4 w-4" />
+            Retirement Calculator
+          </span>
+        </Link>
       </div>
 
       <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
