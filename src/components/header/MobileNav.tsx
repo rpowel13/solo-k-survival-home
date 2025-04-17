@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogIn, Settings } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface MobileNavProps {
@@ -37,11 +37,6 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
       </div>
 
       <Link to="/contact" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors">Contact</Link>
-      
-      <Link to="/admin/zapier-settings" className="block text-gray-600 hover:text-survival-700 font-medium py-2 transition-colors flex items-center">
-        <Settings className="mr-2 h-4 w-4" />
-        Admin Settings
-      </Link>
       
       <a 
         href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 

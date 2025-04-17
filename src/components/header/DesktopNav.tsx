@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuList } from "@/components/ui/navigation-menu";
-import { LogIn, Settings } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ServiceDropdown } from "./ServiceDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
@@ -31,14 +31,6 @@ export const DesktopNav = () => {
       </NavigationMenu>
       
       <Link to="/contact" className="text-gray-600 hover:text-survival-700 font-medium transition-colors">Contact</Link>
-      
-      <Link 
-        to="/admin/zapier-settings" 
-        className="text-gray-600 hover:text-survival-700 font-medium transition-colors flex items-center"
-      >
-        <Settings className="mr-2 h-4 w-4" />
-        Admin Settings
-      </Link>
       
       <a 
         href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
