@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -95,12 +96,12 @@ const PrequalificationSection = () => {
   };
 
   return (
-    <section id="prequalification" className="my-12">
-      <div className="flex flex-col items-center justify-center">
+    <section id="prequalification" className="my-12 flex justify-center items-center">
+      <div className="w-full max-w-4xl px-4">
         <Collapsible
           open={isOpen}
           onOpenChange={setIsOpen}
-          className="w-full max-w-4xl mx-auto"
+          className="w-full mx-auto"
         >
           <CollapsibleTrigger asChild>
             <Button 
