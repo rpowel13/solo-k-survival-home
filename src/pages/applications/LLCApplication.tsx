@@ -20,10 +20,15 @@ const formSchema = z.object({
   lastName: z.string().min(2, { message: 'Last name is required' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
   phone: z.string().min(10, { message: 'Please enter a valid phone number' }),
+  
+  street: z.string().min(2, { message: 'Street address is required' }),
+  city: z.string().min(2, { message: 'City is required' }),
+  state: z.string().min(1, { message: 'Please select a state' }),
+  zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, { message: 'Please enter a valid ZIP code' }),
+  
   desiredLLCName: z.string().min(2, { message: 'LLC name is required' }),
   alternativeName1: z.string().optional(),
   alternativeName2: z.string().optional(),
-  state: z.string().min(1, { message: 'Please select a state' }),
   memberCount: z.string().min(1, { message: 'Please select number of members' }),
   businessPurpose: z.string().min(10, { message: 'Business purpose must be at least 10 characters' }),
   additionalInfo: z.string().optional(),
@@ -44,10 +49,13 @@ const LLCApplication = () => {
       lastName: '',
       email: '',
       phone: '',
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
       desiredLLCName: '',
       alternativeName1: '',
       alternativeName2: '',
-      state: '',
       memberCount: '',
       businessPurpose: '',
       additionalInfo: '',
@@ -57,13 +65,18 @@ const LLCApplication = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    console.log(values);
     
     try {
       // Store application data in sessionStorage for payment process
       sessionStorage.setItem('llc_application', JSON.stringify({
         name: `${values.firstName} ${values.lastName}`,
         email: values.email,
+        address: {
+          street: values.street,
+          city: values.city,
+          state: values.state,
+          zipCode: values.zipCode
+        },
         applicationDate: new Date().toISOString()
       }));
       
@@ -181,6 +194,72 @@ const LLCApplication = () => {
                 />
               </div>
 
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="street"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Street Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="123 Main St" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>City</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Anytown" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>State</FormLabel>
+                      <FormControl>
+                        <select
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                          {...field}
+                        >
+                          <option value="">Select state</option>
+                          {states.map((state) => (
+                            <option key={state} value={state}>{state}</option>
+                          ))}
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="zipCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>ZIP Code</FormLabel>
+                      <FormControl>
+                        <Input placeholder="12345" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="desiredLLCName"
@@ -227,27 +306,6 @@ const LLCApplication = () => {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="state"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>State of Formation</FormLabel>
-                      <FormControl>
-                        <select
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                          {...field}
-                        >
-                          <option value="">Select state</option>
-                          {states.map((state) => (
-                            <option key={state} value={state}>{state}</option>
-                          ))}
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="memberCount"
                   render={({ field }) => (
                     <FormItem>
@@ -269,25 +327,24 @@ const LLCApplication = () => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="businessPurpose"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Purpose</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Briefly describe the primary purpose and activities of your LLC"
+                          className="min-h-[120px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-
-              <FormField
-                control={form.control}
-                name="businessPurpose"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Business Purpose</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Briefly describe the primary purpose and activities of your LLC"
-                        className="min-h-[120px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
               <FormField
                 control={form.control}
