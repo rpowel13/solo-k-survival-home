@@ -4,7 +4,6 @@ import Header from './Header';
 import Footer from './Footer';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
-import { AspectRatio } from './ui/aspect-ratio';
 
 interface ServiceLayoutProps {
   children: React.ReactNode;
@@ -32,11 +31,9 @@ const ServiceLayout = ({
         <div className="relative bg-gradient-to-r from-survival-800 to-survival-900">
           {/* Background Image with Overlay */}
           <div 
-            className="absolute inset-0 z-0 opacity-30 bg-cover bg-center"
+            className="absolute inset-0 z-0 opacity-15 bg-cover bg-center"
             style={{ 
-              backgroundImage: `url('/lovable-uploads/0192c769-67ac-4656-90ad-daf796d94668.png')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              backgroundImage: "url('https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?ixlib=rb-4.0.3&auto=format&fit=crop&q=80')"
             }}
           ></div>
 
