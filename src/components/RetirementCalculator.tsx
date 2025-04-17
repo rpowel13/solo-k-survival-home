@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { formatCurrency } from '@/utils/metalPriceUtils';
 import { Button } from "@/components/ui/button";
@@ -195,7 +196,7 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-12">
+            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-8">
               <h3 className="text-lg font-semibold mb-4">Growth Projection Chart</h3>
               <div className="h-80">
                 <ChartContainer config={{
@@ -233,15 +234,15 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            {/* Move the Solo 401k plan information outside and below the chart */}
-            <div className="p-6 bg-gradient-to-r from-soft-orange/30 to-soft-yellow/30 rounded-lg">
-              <h3 className="font-semibold text-xl mb-3">With a Solo 401(k) Plan:</h3>
-              <p className="mb-3 text-lg">
+            {/* Solo 401k plan information in new highlighted box */}
+            <div className="p-6 bg-gradient-to-r from-survival-50 to-survival-100 rounded-lg border border-survival-200 shadow-sm">
+              <h3 className="font-semibold text-xl mb-3 text-survival-800">With a Solo 401(k) Plan:</h3>
+              <p className="mb-3 text-survival-700">
                 If you increased your annual contribution to {formatCurrency(solo401kContribution)} using a 
                 Solo 401(k), your projected balance after 20 years could be approximately 
                 {' '}{formatCurrency(projectedBalance * (solo401kContribution / annualContribution))}!
               </p>
-              <p className="text-lg font-medium">
+              <p className="text-lg font-medium text-survival-800">
                 That's potentially {formatCurrency(projectedBalance * (solo401kContribution / annualContribution) - projectedBalance)} more
                 for your retirement!
               </p>
