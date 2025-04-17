@@ -25,6 +25,11 @@ interface LLCFormProps {
   form: ReturnType<typeof useForm<z.infer<typeof llcFormSchema>>>;
 }
 
+// Create interface for the Solo 401k form values to match the component expectations
+interface Solo401kFormProps {
+  form: ReturnType<typeof useForm<z.infer<typeof solo401kFormSchema>>>;
+}
+
 const FirstResponderWorkflow = () => {
   const [currentStep, setCurrentStep] = useState<Step>('llc');
   const [llcData, setLlcData] = useState<any>(null);
@@ -172,6 +177,9 @@ const FirstResponderWorkflow = () => {
 
   // Use type casting to ensure compatibility with component props
   const typedLLCForm = llcForm as unknown as LLCFormProps['form'];
+  
+  // Use type casting to ensure compatibility with Solo 401k component props
+  const typedSolo401kForm = solo401kForm as unknown as Solo401kFormProps['form'];
 
   return (
     <div className="space-y-8">
@@ -219,12 +227,12 @@ const FirstResponderWorkflow = () => {
           <form onSubmit={solo401kForm.handleSubmit(on401kSubmit)} className="space-y-8">
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-survival-800">Solo 401k Details</h2>
-              <Solo401kBusinessInfo form={solo401kForm} />
+              <Solo401kBusinessInfo form={typedSolo401kForm} />
             </div>
             
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
-              <PlanInfoFields form={solo401kForm} />
+              <PlanInfoFields form={typedSolo401kForm} />
             </div>
 
             <div className="flex gap-4">
