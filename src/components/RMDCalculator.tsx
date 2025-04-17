@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,7 @@ interface FutureRMD {
   balance: number;
   distributionFactor: number;
   rmdAmount: number;
+  remainingBalance: number;
 }
 
 const RMDCalculator = () => {
@@ -64,7 +64,6 @@ const RMDCalculator = () => {
     const currentRMD = accountBalance / factor;
     setRmdAmount(currentRMD);
 
-    // Calculate future RMDs
     const futureProjections: FutureRMD[] = [];
     let projectedBalance = accountBalance;
     const currentYear = new Date().getFullYear();
@@ -72,17 +71,18 @@ const RMDCalculator = () => {
     for (let age = currentAge; age <= Math.min(currentAge + 10, 120); age++) {
       const yearFactor = getDistributionFactor(age);
       const rmdAmount = projectedBalance / yearFactor;
+      const remainingBalance = projectedBalance - rmdAmount;
       
       futureProjections.push({
         age,
         year: currentYear + (age - currentAge),
         balance: projectedBalance,
         distributionFactor: yearFactor,
-        rmdAmount
+        rmdAmount,
+        remainingBalance
       });
 
-      // Calculate next year's balance with growth and RMD withdrawal
-      projectedBalance = (projectedBalance - rmdAmount) * (1 + growthRate / 100);
+      projectedBalance = remainingBalance * (1 + growthRate / 100);
     }
 
     setFutureRMDs(futureProjections);
@@ -163,9 +163,10 @@ const RMDCalculator = () => {
                     <TableRow>
                       <TableHead>Year</TableHead>
                       <TableHead>Age</TableHead>
-                      <TableHead>Projected Balance</TableHead>
+                      <TableHead>Starting Balance</TableHead>
                       <TableHead>Distribution Factor</TableHead>
-                      <TableHead>Projected RMD</TableHead>
+                      <TableHead>Required Distribution</TableHead>
+                      <TableHead>Remaining Balance</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -176,6 +177,7 @@ const RMDCalculator = () => {
                         <TableCell>${rmd.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
                         <TableCell>{rmd.distributionFactor.toFixed(1)}</TableCell>
                         <TableCell>${rmd.rmdAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                        <TableCell>${rmd.remainingBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
