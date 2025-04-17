@@ -196,6 +196,9 @@ export const submitLLCApplication = async (data: any) => {
     last_name: data.lastName,
     email: data.email,
     phone: data.phone,
+    street: data.street, // New field
+    city: data.city, // New field
+    zipcode: data.zipCode, // New field
     desired_llc_name: data.desiredLLCName,
     alternative_name1: data.alternativeName1 || null,
     alternative_name2: data.alternativeName2 || null,

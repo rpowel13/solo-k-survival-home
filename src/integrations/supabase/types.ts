@@ -155,6 +155,7 @@ export type Database = {
           alternative_name2: string | null
           application_date: string | null
           business_purpose: string
+          city: string | null
           created_at: string | null
           desired_llc_name: string
           email: string
@@ -166,6 +167,8 @@ export type Database = {
           phone: string
           state: string
           status: string | null
+          street: string | null
+          zipcode: string | null
         }
         Insert: {
           additional_info?: string | null
@@ -174,6 +177,7 @@ export type Database = {
           alternative_name2?: string | null
           application_date?: string | null
           business_purpose: string
+          city?: string | null
           created_at?: string | null
           desired_llc_name: string
           email: string
@@ -185,6 +189,8 @@ export type Database = {
           phone: string
           state: string
           status?: string | null
+          street?: string | null
+          zipcode?: string | null
         }
         Update: {
           additional_info?: string | null
@@ -193,6 +199,7 @@ export type Database = {
           alternative_name2?: string | null
           application_date?: string | null
           business_purpose?: string
+          city?: string | null
           created_at?: string | null
           desired_llc_name?: string
           email?: string
@@ -204,6 +211,8 @@ export type Database = {
           phone?: string
           state?: string
           status?: string | null
+          street?: string | null
+          zipcode?: string | null
         }
         Relationships: []
       }
