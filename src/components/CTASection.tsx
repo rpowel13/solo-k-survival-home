@@ -29,8 +29,7 @@ const CTASection = () => {
               </Link>
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white/20"
+                className="bg-white text-survival-800 hover:bg-gray-100"
                 onClick={() => setIsSchedulerOpen(true)}
               >
                 Schedule a Consultation
