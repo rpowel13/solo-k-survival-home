@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { initZapierConfig } from "@/services/zapierConfigService";
+import { initZapierConfig, WebhookType } from "@/services/zapierConfigService";
 
 interface ZapierConfigProps {
   hidden?: boolean;
@@ -13,8 +13,8 @@ interface ZapierConfigProps {
  */
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ hidden = false }) => {
   useEffect(() => {
-    // Initialize Zapier configuration
-    initZapierConfig();
+    // Initialize Zapier configuration with 'crm' as the default type
+    initZapierConfig('crm');
   }, []);
 
   return null;

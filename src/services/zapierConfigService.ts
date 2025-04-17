@@ -1,7 +1,10 @@
+
 /**
  * Zapier Configuration Service
  * Handles Zapier webhook URL configuration and retrieval for multiple integration types
  */
+
+import { supabase } from '@/integrations/supabase/client';
 
 // The prefix used to store webhook URLs in localStorage
 export const ZAPIER_WEBHOOK_STORAGE_PREFIX = "zapier_";
