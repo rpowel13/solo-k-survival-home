@@ -20,6 +20,11 @@ import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 
 type Step = 'llc' | '401k';
 
+// Create interface for the LLC form values to match the component expectations
+interface LLCFormProps {
+  form: ReturnType<typeof useForm<z.infer<typeof llcFormSchema>>>;
+}
+
 const FirstResponderWorkflow = () => {
   const [currentStep, setCurrentStep] = useState<Step>('llc');
   const [llcData, setLlcData] = useState<any>(null);
@@ -165,6 +170,9 @@ const FirstResponderWorkflow = () => {
     }
   };
 
+  // Use type casting to ensure compatibility with component props
+  const typedLLCForm = llcForm as unknown as LLCFormProps['form'];
+
   return (
     <div className="space-y-8">
       {currentStep === 'llc' ? (
@@ -172,22 +180,22 @@ const FirstResponderWorkflow = () => {
           <form onSubmit={llcForm.handleSubmit(onLLCSubmit)} className="space-y-8">
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
-              <PersonalInfoFields form={llcForm} />
+              <PersonalInfoFields form={typedLLCForm} />
             </div>
             
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
-              <AddressFields form={llcForm} />
+              <AddressFields form={typedLLCForm} />
             </div>
             
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
-              <BusinessInfoFields form={llcForm} />
+              <BusinessInfoFields form={typedLLCForm} />
             </div>
             
             <div className="space-y-6">
               <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
-              <AdditionalInfoFields form={llcForm} />
+              <AdditionalInfoFields form={typedLLCForm} />
             </div>
 
             <Button 
