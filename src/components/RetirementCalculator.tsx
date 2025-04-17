@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { formatCurrency } from '@/utils/metalPriceUtils';
 import { Button } from "@/components/ui/button";
@@ -196,7 +195,7 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-8">
+            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-16">
               <h3 className="text-lg font-semibold mb-4">Growth Projection Chart</h3>
               <div className="h-80">
                 <ChartContainer config={{
@@ -234,7 +233,6 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            {/* Solo 401k plan information in new highlighted box */}
             <div className="p-6 bg-gradient-to-r from-survival-50 to-survival-100 rounded-lg border border-survival-200 shadow-sm">
               <h3 className="font-semibold text-xl mb-3 text-survival-800">With a Solo 401(k) Plan:</h3>
               <p className="mb-3 text-survival-700">
@@ -254,7 +252,6 @@ export const RetirementCalculator = () => {
   );
 };
 
-// Custom tooltip component for the chart
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
