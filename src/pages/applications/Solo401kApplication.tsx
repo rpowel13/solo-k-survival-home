@@ -7,7 +7,7 @@ import { useToast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Form } from "@/components/ui/form";
-import { formSchema, SoloFormValues } from '@/components/solo401k/FormSchema';
+import { formSchema, SoloFormValues, BusinessTypes, IncomeRanges } from '@/components/solo401k/FormSchema';
 import FormHeader from '@/components/solo401k/FormHeader';
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
@@ -40,8 +40,8 @@ const Solo401kApplication = () => {
       zipCode: "",
       businessName: "",
       sponsorEin: "",
-      businessType: "",
-      annualIncome: "",
+      businessType: BusinessTypes.SOLE_PROPRIETORSHIP, // Use valid enum value instead of empty string
+      annualIncome: IncomeRanges.UNDER_50K, // Use valid enum value instead of empty string
       trustee1Name: "",
       trustee2Name: "",
       participant1Name: "",
