@@ -4,15 +4,25 @@ import { BlogPost } from '@/types/blog';
 
 // For development purposes, provide fallback values
 // In production, these would be proper environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
+const supabaseUrl = 'https://daorpdnaganfugudqkmk.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhb3JwZG5hZ2FuZnVndWRxa21rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4MzcxODgsImV4cCI6MjA2MDQxMzE4OH0.op3xLPd8TLjqozzI21xZxNFrDqXO9uVyKZzY6-8cpSc';
 
 // Add mock data handling for development
 const isMockMode = true; // Set to false when connecting to a real Supabase instance
 
 export const supabase = isMockMode 
   ? createMockSupabaseClient() 
-  : createClient(supabaseUrl, supabaseAnonKey);
+  : createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+      },
+      global: {
+        headers: {
+          'apikey': supabaseAnonKey,
+        },
+      }
+    });
 
 // Helper function to handle Supabase errors consistently
 export const handleSupabaseError = (error: any) => {

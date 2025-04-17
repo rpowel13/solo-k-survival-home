@@ -11,8 +11,8 @@ console.log(`[${new Date().toISOString()}] Initializing Supabase client with URL
 // Anonymous client - USE THIS FOR PUBLIC ACCESS
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    persistSession: false, // We don't need persistent sessions for anonymous users
-    autoRefreshToken: false, // Disable token auto-refresh for anonymous users
+    persistSession: true, // Changed to true for better session handling
+    autoRefreshToken: true, // Changed to true to auto-refresh tokens
   },
   global: {
     // Adding fetch options to debug
@@ -23,13 +23,14 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
         method: options?.method,
       });
       
-      // Set appropriate headers for cross-origin requests
+      // Set appropriate headers for cross-origin requests and API key
       const headers = options?.headers || {};
       options = {
         ...options,
         headers: {
           ...headers,
           'Content-Type': 'application/json',
+          'apikey': SUPABASE_PUBLISHABLE_KEY, // Explicitly add the API key to headers
         },
         cache: 'no-cache', // Disable caching to avoid stale data
       };
@@ -56,8 +57,7 @@ const testInsertPermissions = async () => {
   console.log(`[${new Date().toISOString()}] Testing insert permissions on contacts table...`);
   try {
     // This is just a test that won't actually insert data
-    // The error was here - we were calling an RPC function that doesn't exist
-    // Instead, let's test with a select query
+    // Using a select query instead of an insert to avoid adding test data
     const { error } = await supabase
       .from('contacts')
       .select('id')
@@ -73,5 +73,5 @@ const testInsertPermissions = async () => {
   }
 };
 
-// Uncomment this line to test permissions on initialization
-// testInsertPermissions();
+// Run the permissions test to verify connection
+testInsertPermissions();

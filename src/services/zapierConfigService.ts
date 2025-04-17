@@ -1,4 +1,3 @@
-
 /**
  * Zapier Configuration Service
  * Handles Zapier webhook URL configuration and retrieval for multiple integration types
@@ -30,28 +29,43 @@ export const getWebhookStorageKey = (type: WebhookType): string =>
  * Initialize Zapier configuration by checking environment variables
  * @param type The type of webhook to initialize
  */
-export const initZapierConfig = (type: WebhookType = 'crm'): void => {
-  // Check for environment variable specific to the webhook type
-  const envKey = `VITE_ZAPIER_${type.toUpperCase()}_WEBHOOK_URL`;
-  const envWebhookUrl = import.meta.env[envKey];
+export const initZapierConfig = (webhookType: WebhookType) => {
+  console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for type: ${webhookType}`);
   
-  console.log(`[${new Date().toISOString()}] Checking for ${envKey} environment variable`);
-  
-  // If environment variable exists, use it and store in localStorage
-  if (envWebhookUrl) {
-    localStorage.setItem(getWebhookStorageKey(type), envWebhookUrl);
-    console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL initialized from env var: ${envWebhookUrl}`);
-  } else {
-    console.log(`[${new Date().toISOString()}] No env var found for ${type} webhook`);
-    
-    // Check if we already have a stored URL
-    const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
-    if (storedUrl) {
-      console.log(`[${new Date().toISOString()}] Using stored ${type} webhook URL: ${storedUrl}`);
-    } else {
-      console.log(`[${new Date().toISOString()}] No stored URL found for ${type} webhook`);
-    }
-  }
+  // Check if Supabase is properly connected first
+  supabase.from('contacts')
+    .select('id')
+    .limit(1)
+    .then(({ error }) => {
+      if (error) {
+        console.error(`[${new Date().toISOString()}] Supabase connection error while initializing Zapier config:`, error);
+        // Consider showing a toast notification here to inform users
+      } else {
+        console.log(`[${new Date().toISOString()}] Supabase connection OK for Zapier webhook`);
+        // Continue with webhook initialization
+        // Check for environment variable specific to the webhook type
+        const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
+        const envWebhookUrl = import.meta.env[envKey];
+        
+        console.log(`[${new Date().toISOString()}] Checking for ${envKey} environment variable`);
+        
+        // If environment variable exists, use it and store in localStorage
+        if (envWebhookUrl) {
+          localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl);
+          console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL initialized from env var: ${envWebhookUrl}`);
+        } else {
+          console.log(`[${new Date().toISOString()}] No env var found for ${webhookType} webhook`);
+          
+          // Check if we already have a stored URL
+          const storedUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
+          if (storedUrl) {
+            console.log(`[${new Date().toISOString()}] Using stored ${webhookType} webhook URL: ${storedUrl}`);
+          } else {
+            console.log(`[${new Date().toISOString()}] No stored URL found for ${webhookType} webhook`);
+          }
+        }
+      }
+    });
 };
 
 /**
