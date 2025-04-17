@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -22,6 +21,7 @@ import ReinstatementFeePayment from "./pages/payments/ReinstatementFeePayment";
 import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import LegalDisclosures from "./pages/LegalDisclosures";
+import ZapierSettings from "./pages/admin/ZapierSettings";
 
 const queryClient = new QueryClient();
 
@@ -49,7 +49,7 @@ const App = () => (
           <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
           <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

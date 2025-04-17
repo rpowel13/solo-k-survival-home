@@ -15,6 +15,7 @@ import MessageField from "./MessageField";
 import OptInCheckbox from "./OptInCheckbox";
 import SubmitButton from "./SubmitButton";
 import { supabase } from "@/integrations/supabase/client";
+import ZapierConfig from "@/components/common/ZapierConfig";
 
 interface FallbackContactFormProps {
   form: UseFormReturn<ContactFormValues>;
@@ -70,7 +71,15 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
           }
         } else {
           console.log(`[${new Date().toISOString()}] Direct insertion successful:`, insertResult);
+          
+          // Also send to CRM via Zapier even if database insertion was successful
+          const zapierResult = await triggerZapierWebhook(data);
+          console.log(`[${new Date().toISOString()}] CRM submission result:`, zapierResult);
         }
+      } else {
+        // Database submission was successful, also send to CRM via Zapier
+        const zapierResult = await triggerZapierWebhook(data);
+        console.log(`[${new Date().toISOString()}] CRM submission result:`, zapierResult);
       }
       
       // If we reached here, the submission was successful through one of the channels
@@ -98,29 +107,32 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <NameField form={form} />
-          <EmailField form={form} />
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <PhoneField form={form} />
-          <SubjectField form={form} />
-        </div>
-        
-        <MessageField form={form} />
-        
-        <OptInCheckbox form={form} />
-        
-        <SubmitButton isSubmitting={isSubmitting} />
-        
-        <p className="text-xs text-gray-500 text-center mt-2">
-          Your information is secure and will never be shared with third parties.
-        </p>
-      </form>
-    </Form>
+    <>
+      <ZapierConfig />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <NameField form={form} />
+            <EmailField form={form} />
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <PhoneField form={form} />
+            <SubjectField form={form} />
+          </div>
+          
+          <MessageField form={form} />
+          
+          <OptInCheckbox form={form} />
+          
+          <SubmitButton isSubmitting={isSubmitting} />
+          
+          <p className="text-xs text-gray-500 text-center mt-2">
+            Your information is secure and will never be shared with third parties.
+          </p>
+        </form>
+      </Form>
+    </>
   );
 };
 

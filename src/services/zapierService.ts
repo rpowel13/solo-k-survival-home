@@ -3,6 +3,7 @@ import { SoloFormValues } from '@/components/solo401k/FormSchema';
 import { ContactFormValues } from '@/components/contact/ContactFormSchema';
 import { ScheduleFormValues } from '@/components/consultation/types';
 import { z } from 'zod';
+import { getZapierWebhookUrl } from './zapierConfigService';
 
 // Define types for the LLC and First Responder forms based on their structure
 export type LLCFormValues = z.infer<typeof llcFormSchema>;
@@ -46,9 +47,6 @@ export interface EmailResponse {
 
 type FormData = SoloFormValues | ContactFormValues | LLCFormValues | FirstResponderFormValues | ScheduleFormValues;
 
-// Zapier webhook URL - you should replace this with your actual Zapier webhook URL
-const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
-
 /**
  * Helper functions to check form types
  */
@@ -73,21 +71,21 @@ function isScheduleForm(data: FormData): data is ScheduleFormValues {
 }
 
 /**
- * Sends the form data to a Zapier webhook in the background
+ * Sends the form data to a Zapier webhook for CRM integration
+ * @param data The form data to send
+ * @returns A promise resolving to the email response
  */
 export const triggerZapierWebhook = async (data: FormData): Promise<EmailResponse> => {
   try {
-    console.log('Sending form data to Zapier:', data);
+    console.log(`[${new Date().toISOString()}] Sending form data to Zapier:`, data);
     
-    // Try to get the Zapier webhook URL from localStorage
-    const storedWebhookUrl = localStorage.getItem("zapier_webhook_url");
-    
-    // Use the stored URL or fall back to the constant
-    const webhookUrl = storedWebhookUrl || ZAPIER_WEBHOOK_URL;
+    // Get the configured Zapier webhook URL
+    const webhookUrl = getZapierWebhookUrl();
     
     // Determine the type of form data and format accordingly
     let formattedData: Record<string, any>;
     let emailSubject: string;
+    let leadSource: string = "Website Form";
     
     if (isSolo401kForm(data)) {
       // This is Solo401k form data
@@ -107,7 +105,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         existingRetirement: data.existingRetirement ? 'Yes' : 'No',
         additionalInfo: data.additionalInfo || 'N/A',
         submissionDate: new Date().toLocaleString(),
-        source: window.location.href
+        source: window.location.href,
+        leadSource: leadSource
       };
       emailSubject = "New Solo 401k Application";
       
@@ -122,7 +121,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         message: data.message,
         consent: data.consent ? 'Yes' : 'No',
         submissionDate: new Date().toLocaleString(),
-        source: window.location.href
+        source: window.location.href,
+        leadSource: leadSource
       };
       emailSubject = "New Contact Form Submission";
       
@@ -141,7 +141,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         businessPurpose: data.businessPurpose,
         additionalInfo: data.additionalInfo || 'N/A',
         submissionDate: new Date().toLocaleString(),
-        source: window.location.href
+        source: window.location.href,
+        leadSource: leadSource
       };
       emailSubject = "New LLC Formation Application";
       
@@ -160,7 +161,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         verify401kInterest: data.verify401kInterest ? 'Yes' : 'No',
         additionalInfo: data.additionalInfo || 'N/A',
         submissionDate: new Date().toLocaleString(),
-        source: window.location.href
+        source: window.location.href,
+        leadSource: leadSource
       };
       emailSubject = "New First Responder Package Application";
     } else if (isScheduleForm(data)) {
@@ -174,7 +176,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         requestedTime: data.time,
         message: data.message || 'N/A',
         submissionDate: new Date().toLocaleString(),
-        source: window.location.href
+        source: window.location.href,
+        leadSource: leadSource
       };
       emailSubject = "New Consultation Request";
     } else {
@@ -184,7 +187,10 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Add recipient emails to the data (multiple recipients)
     formattedData.recipientEmails = ["ross.powell@survival401k.com", "jill.powell@survival401k.com"];
     formattedData.emailSubject = emailSubject;
-    formattedData.targetService = "WooSender"; // This identifies that the data should be sent to WooSender
+    formattedData.targetService = "CRM"; // This identifies that data should be sent to external CRM
+    
+    // Log the webhook URL being used (for debugging only)
+    console.log(`[${new Date().toISOString()}] Using Zapier webhook URL: ${webhookUrl}`);
     
     // Send data to Zapier webhook
     const response = await fetch(webhookUrl, {
@@ -198,12 +204,13 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     // Since we're using no-cors, we won't get a proper response
     // Instead, we'll assume it worked if no error was thrown
+    console.log(`[${new Date().toISOString()}] Zapier webhook triggered successfully`);
     return { 
       success: true,
-      message: 'Form submitted successfully to Zapier'
+      message: 'Form submitted successfully to Zapier and CRM'
     };
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, error);
     return { 
       success: false, 
       message: error instanceof Error ? error.message : 'Unknown error occurred'
