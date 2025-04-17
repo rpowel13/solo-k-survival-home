@@ -11,7 +11,7 @@ const BenefitsSection = () => {
         Key Benefits
       </SectionHeading>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+        <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-finance-600" />
@@ -22,7 +22,7 @@ const BenefitsSection = () => {
             <p>Contribute up to $70,000 annually (2025), far exceeding traditional IRA limits, allowing you to accelerate your retirement savings.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-finance-600" />
@@ -33,7 +33,7 @@ const BenefitsSection = () => {
             <p>Invest in a wide range of assets beyond traditional stocks and bonds, including real estate, precious metals, private equity, and more.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-finance-600" />
@@ -44,7 +44,7 @@ const BenefitsSection = () => {
             <p>Access to loan provisions allowing you to borrow up to 50% of your account value (maximum $50,000) for any purpose.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-finance-600" />
@@ -55,7 +55,7 @@ const BenefitsSection = () => {
             <p>Choose between traditional tax-deferred contributions or Roth contributions for tax-free growth and distributions in retirement.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-finance-600" />
@@ -66,7 +66,7 @@ const BenefitsSection = () => {
             <p>Maintain direct control over your retirement funds without requiring custodian approval for investments.</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-finance-600" />
