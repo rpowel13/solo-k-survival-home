@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +14,7 @@ import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 import AdditionalInfoFields from '@/components/solo401k/AdditionalInfoFields';
 import AgreementSection from '@/components/solo401k/AgreementSection';
+import AddressFields from '@/components/solo401k/AddressFields';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { triggerZapierWebhook } from '@/services/zapierService';
