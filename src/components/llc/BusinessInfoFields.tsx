@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { LLCFormValues } from './FormSchema';
+import { memberCountOptions } from '@/constants/formOptions';
 
 interface BusinessInfoFieldsProps {
   form: UseFormReturn<LLCFormValues>;
@@ -69,11 +69,9 @@ const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
                   {...field}
                 >
                   <option value="">Select number of members</option>
-                  <option value="1">1 (Single Member LLC)</option>
-                  <option value="2">2</option>
-                  <option value="3-5">3-5</option>
-                  <option value="6-10">6-10</option>
-                  <option value="11+">11 or more</option>
+                  {memberCountOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
                 </select>
               </FormControl>
               <FormMessage />
@@ -103,4 +101,3 @@ const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
 };
 
 export default BusinessInfoFields;
-
