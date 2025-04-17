@@ -32,12 +32,25 @@ export const getWebhookStorageKey = (type: WebhookType): string =>
  */
 export const initZapierConfig = (type: WebhookType = 'crm'): void => {
   // Check for environment variable specific to the webhook type
-  const envWebhookUrl = import.meta.env[`VITE_ZAPIER_${type.toUpperCase()}_WEBHOOK_URL`];
+  const envKey = `VITE_ZAPIER_${type.toUpperCase()}_WEBHOOK_URL`;
+  const envWebhookUrl = import.meta.env[envKey];
+  
+  console.log(`[${new Date().toISOString()}] Checking for ${envKey} environment variable`);
   
   // If environment variable exists, use it and store in localStorage
   if (envWebhookUrl) {
     localStorage.setItem(getWebhookStorageKey(type), envWebhookUrl);
-    console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL initialized from env var`);
+    console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL initialized from env var: ${envWebhookUrl}`);
+  } else {
+    console.log(`[${new Date().toISOString()}] No env var found for ${type} webhook`);
+    
+    // Check if we already have a stored URL
+    const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
+    if (storedUrl) {
+      console.log(`[${new Date().toISOString()}] Using stored ${type} webhook URL: ${storedUrl}`);
+    } else {
+      console.log(`[${new Date().toISOString()}] No stored URL found for ${type} webhook`);
+    }
   }
 };
 
@@ -48,7 +61,10 @@ export const initZapierConfig = (type: WebhookType = 'crm'): void => {
  */
 export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
   const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
-  return storedUrl || DEFAULT_WEBHOOK_URL;
+  const url = storedUrl || DEFAULT_WEBHOOK_URL;
+  
+  console.log(`[${new Date().toISOString()}] Retrieved ${type} webhook URL: ${url}`);
+  return url;
 };
 
 /**
@@ -59,6 +75,5 @@ export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
 export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm'): void => {
   if (!url) return;
   localStorage.setItem(getWebhookStorageKey(type), url);
-  console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL updated manually`);
+  console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL updated manually: ${url}`);
 };
-

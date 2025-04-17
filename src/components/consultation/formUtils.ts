@@ -18,7 +18,7 @@ export const handleScheduleSubmit = async (
   setIsSubmitting(true);
   
   try {
-    console.log("Schedule form data:", data);
+    console.log("Schedule form data being submitted:", JSON.stringify(data, null, 2));
     
     // Format the date for display if it's a Date object
     const formattedDate = data.date instanceof Date 
@@ -26,10 +26,14 @@ export const handleScheduleSubmit = async (
       : data.date;
     
     // Primary submission via Zapier for WooSender notifications
+    console.log("Triggering Zapier webhook for consultation form");
     const zapierResult = await triggerZapierWebhook(data);
+    console.log("Zapier webhook result:", zapierResult);
     
     // Secondary submission to Supabase for data storage and email notification
+    console.log("Submitting to Supabase");
     const supabaseResult = await submitConsultationForm(data);
+    console.log("Supabase result:", supabaseResult);
     
     if (zapierResult.success || supabaseResult.success) {
       toast({

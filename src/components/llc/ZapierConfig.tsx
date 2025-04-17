@@ -1,5 +1,6 @@
 
 import React, { useEffect } from "react";
+import { initZapierConfig } from "@/services/zapierConfigService";
 
 interface ZapierConfigProps {
   hidden?: boolean;
@@ -7,13 +8,8 @@ interface ZapierConfigProps {
 
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ hidden = false }) => {
   useEffect(() => {
-    // First, try to get the webhook URL from environment variables (ideal method)
-    const envWebhookUrl = import.meta.env.VITE_ZAPIER_WEBHOOK_URL;
-    
-    // If environment variable exists, use it
-    if (envWebhookUrl) {
-      localStorage.setItem("zapier_webhook_url", envWebhookUrl);
-    }
+    // Initialize the correct webhook type for LLC
+    initZapierConfig('llc');
   }, []);
 
   return null;
