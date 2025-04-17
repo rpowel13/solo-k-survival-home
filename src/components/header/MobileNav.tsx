@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { LogIn, Calculator } from "lucide-react";
+import { LogIn, Calculator, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface MobileNavProps {
@@ -42,6 +42,12 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
           <span className="flex items-center gap-2">
             <Calculator className="h-4 w-4" />
             Retirement Calculator
+          </span>
+        </Link>
+        <Link to="/tools/loan-calculator" className="block text-gray-600 hover:text-survival-700 py-1 pl-4 transition-colors">
+          <span className="flex items-center gap-2">
+            <DollarSign className="h-4 w-4" />
+            Loan Calculator
           </span>
         </Link>
       </div>

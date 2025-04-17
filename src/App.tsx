@@ -11,6 +11,7 @@ import LLCCreation from "./pages/services/LLCCreation";
 import FirstResponderPackage from "./pages/services/FirstResponderPackage";
 import AlternativeInvestments from "./pages/services/AlternativeInvestments";
 import RetirementCalculator from "./pages/RetirementCalculator";
+import LoanCalculator from "./pages/LoanCalculator";
 import Solo401kApplication from "./pages/applications/Solo401kApplication";
 import LLCApplication from "./pages/applications/LLCApplication";
 import FirstResponderApplication from "./pages/applications/FirstResponderApplication";
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />
           <Route path="/services/alternative-investments" element={<AlternativeInvestments />} />
           <Route path="/tools/retirement-calculator" element={<RetirementCalculator />} />
+          <Route path="/tools/loan-calculator" element={<LoanCalculator />} />
           <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
           <Route path="/apply/llc" element={<LLCApplication />} />
           <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
