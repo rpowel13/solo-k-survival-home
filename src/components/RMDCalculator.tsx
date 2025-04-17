@@ -6,11 +6,32 @@ import { Label } from "@/components/ui/label";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Calculator, Printer } from "lucide-react";
 
+interface FutureRMD {
+  age: number;
+  year: number;
+  balance: number;
+  distributionFactor: number;
+  rmdAmount: number;
+}
+
 const RMDCalculator = () => {
-  const [age, setAge] = useState<number>(72);
+  const [birthdate, setBirthdate] = useState<string>("");
   const [accountBalance, setAccountBalance] = useState<number>(0);
+  const [growthRate, setGrowthRate] = useState<number>(5);
   const [rmdAmount, setRmdAmount] = useState<number | null>(null);
   const [distributionFactor, setDistributionFactor] = useState<number | null>(null);
+  const [futureRMDs, setFutureRMDs] = useState<FutureRMD[]>([]);
+
+  const calculateAge = (birthdate: string): number => {
+    const today = new Date();
+    const birth = new Date(birthdate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
   const getDistributionFactor = (age: number): number => {
     const factors: { [key: number]: number } = {
@@ -28,11 +49,43 @@ const RMDCalculator = () => {
   };
 
   const calculateRMD = () => {
-    const factor = getDistributionFactor(age);
-    setDistributionFactor(factor);
-    if (factor && accountBalance) {
-      setRmdAmount(accountBalance / factor);
+    if (!birthdate) return;
+    
+    const currentAge = calculateAge(birthdate);
+    if (currentAge < 72) {
+      setRmdAmount(0);
+      setDistributionFactor(0);
+      setFutureRMDs([]);
+      return;
     }
+
+    const factor = getDistributionFactor(currentAge);
+    setDistributionFactor(factor);
+    const currentRMD = accountBalance / factor;
+    setRmdAmount(currentRMD);
+
+    // Calculate future RMDs
+    const futureProjections: FutureRMD[] = [];
+    let projectedBalance = accountBalance;
+    const currentYear = new Date().getFullYear();
+
+    for (let age = currentAge; age <= Math.min(currentAge + 10, 120); age++) {
+      const yearFactor = getDistributionFactor(age);
+      const rmdAmount = projectedBalance / yearFactor;
+      
+      futureProjections.push({
+        age,
+        year: currentYear + (age - currentAge),
+        balance: projectedBalance,
+        distributionFactor: yearFactor,
+        rmdAmount
+      });
+
+      // Calculate next year's balance with growth and RMD withdrawal
+      projectedBalance = (projectedBalance - rmdAmount) * (1 + growthRate / 100);
+    }
+
+    setFutureRMDs(futureProjections);
   };
 
   const handlePrint = () => {
@@ -42,16 +95,14 @@ const RMDCalculator = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="grid gap-6 mb-8">
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-3">
           <div>
-            <Label htmlFor="age">Your Age</Label>
+            <Label htmlFor="birthdate">Date of Birth</Label>
             <Input
-              id="age"
-              type="number"
-              min={72}
-              max={120}
-              value={age}
-              onChange={(e) => setAge(Number(e.target.value))}
+              id="birthdate"
+              type="date"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
               className="mt-1"
             />
           </div>
@@ -66,6 +117,19 @@ const RMDCalculator = () => {
               className="mt-1"
             />
           </div>
+          <div>
+            <Label htmlFor="growth">Expected Annual Growth Rate (%)</Label>
+            <Input
+              id="growth"
+              type="number"
+              min={0}
+              max={100}
+              step={0.1}
+              value={growthRate}
+              onChange={(e) => setGrowthRate(Number(e.target.value))}
+              className="mt-1"
+            />
+          </div>
         </div>
 
         <Button onClick={calculateRMD} className="w-full md:w-auto">
@@ -76,7 +140,7 @@ const RMDCalculator = () => {
         {rmdAmount !== null && distributionFactor !== null && (
           <div className="space-y-6">
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold mb-4">Results</h2>
+              <h2 className="text-xl font-semibold mb-4">Current Year Results</h2>
               <Table>
                 <TableBody>
                   <TableRow>
@@ -90,6 +154,34 @@ const RMDCalculator = () => {
                 </TableBody>
               </Table>
             </div>
+
+            {futureRMDs.length > 0 && (
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold mb-4">Future RMD Projections</h2>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Year</TableHead>
+                      <TableHead>Age</TableHead>
+                      <TableHead>Projected Balance</TableHead>
+                      <TableHead>Distribution Factor</TableHead>
+                      <TableHead>Projected RMD</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {futureRMDs.map((rmd) => (
+                      <TableRow key={rmd.year}>
+                        <TableCell>{rmd.year}</TableCell>
+                        <TableCell>{rmd.age}</TableCell>
+                        <TableCell>${rmd.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                        <TableCell>{rmd.distributionFactor.toFixed(1)}</TableCell>
+                        <TableCell>${rmd.rmdAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
 
             <Button onClick={handlePrint} variant="outline" className="print:hidden">
               <Printer className="mr-2" />
