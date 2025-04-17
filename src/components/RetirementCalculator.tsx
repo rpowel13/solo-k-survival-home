@@ -170,10 +170,10 @@ export const RetirementCalculator = () => {
         </div>
         
         {showResults && (
-          <div className="mt-10 space-y-6 animate-fade-in">
+          <div className="mt-10 space-y-8 animate-fade-in">
             <h2 className="text-2xl font-bold text-center">Your 20-Year Retirement Projection</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="bg-gradient-to-br from-survival-50 to-survival-100 p-4 rounded-lg text-center">
                 <h3 className="text-sm text-survival-600 mb-1">Projected Balance</h3>
                 <p className="text-2xl font-bold text-survival-800">{formatCurrency(projectedBalance)}</p>
@@ -188,44 +188,52 @@ export const RetirementCalculator = () => {
               </div>
             </div>
             
-            <div className="h-80 bg-white p-4 rounded-lg shadow-inner">
-              <ChartContainer config={{
-                balance: { label: "Balance", color: "#6E59A5" },
-                contribution: { label: "Contribution", color: "#33C3F0" },
-                growth: { label: "Growth", color: "#F97316" }
-              }}>
-                <AreaChart data={projectionData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="year" 
-                    label={{ value: 'Years', position: 'insideBottom', offset: -5 }} 
-                  />
-                  <YAxis 
-                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`} 
-                    label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area 
-                    type="monotone" 
-                    dataKey="balance" 
-                    name="Balance" 
-                    stackId="1" 
-                    stroke="#6E59A5" 
-                    fill="#6E59A5" 
-                    fillOpacity={0.6} 
-                  />
-                </AreaChart>
-              </ChartContainer>
+            <div className="h-96 bg-white p-4 rounded-lg shadow-inner mb-8">
+              <h3 className="text-lg font-semibold mb-4">Growth Projection Chart</h3>
+              <div className="h-80">
+                <ChartContainer config={{
+                  balance: { label: "Balance", color: "#6E59A5" },
+                  contribution: { label: "Contribution", color: "#33C3F0" },
+                  growth: { label: "Growth", color: "#F97316" }
+                }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart 
+                      data={projectionData}
+                      margin={{ top: 10, right: 30, left: 0, bottom: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        dataKey="year" 
+                        label={{ value: 'Years', position: 'insideBottom', offset: -5 }} 
+                      />
+                      <YAxis 
+                        tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`} 
+                        label={{ value: 'Amount ($)', angle: -90, position: 'insideLeft' }}
+                      />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Area 
+                        type="monotone" 
+                        dataKey="balance" 
+                        name="Balance" 
+                        stackId="1" 
+                        stroke="#6E59A5" 
+                        fill="#6E59A5" 
+                        fillOpacity={0.6} 
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </div>
             </div>
             
-            <div className="mt-6 p-4 bg-gradient-to-r from-soft-orange/30 to-soft-yellow/30 rounded-lg">
-              <h3 className="font-semibold mb-2">With a Solo 401(k) Plan:</h3>
-              <p className="mb-2">
+            <div className="p-6 bg-gradient-to-r from-soft-orange/30 to-soft-yellow/30 rounded-lg">
+              <h3 className="font-semibold text-xl mb-3">With a Solo 401(k) Plan:</h3>
+              <p className="mb-3 text-lg">
                 If you increased your annual contribution to {formatCurrency(solo401kContribution)} using a 
                 Solo 401(k), your projected balance after 20 years could be approximately 
-                {formatCurrency(projectedBalance * (solo401kContribution / annualContribution))}!
+                {' '}{formatCurrency(projectedBalance * (solo401kContribution / annualContribution))}!
               </p>
-              <p>
+              <p className="text-lg font-medium">
                 That's potentially {formatCurrency(projectedBalance * (solo401kContribution / annualContribution) - projectedBalance)} more
                 for your retirement!
               </p>
