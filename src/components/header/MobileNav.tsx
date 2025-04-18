@@ -58,7 +58,7 @@ export const MobileNav = ({ isOpen }: MobileNavProps) => {
         </Link>
       </div>
 
-      <Link to="/contact" className="block text-gray-600 hover:text-survival-700 hover:bg-survival-50 py-2 px-2 rounded-md transition-colors">Contact</Link>
+      <Link to="/contact" className="block text-gray-600 hover:text-survival-700 hover:bg-survival-50 py-2 px-2 rounded-md transition-colors font-bold">Contact</Link>
       
       <a 
         href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
