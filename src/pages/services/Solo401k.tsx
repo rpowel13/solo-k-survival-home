@@ -16,7 +16,7 @@ const Solo401k = () => {
   const prequalSectionRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Check if we should automatically open the quiz
+    // Check if we should automatically open the quiz from state (banner button click)
     if (location.state && location.state.openEligibilityQuiz && prequalSectionRef.current) {
       // Scroll to the section
       prequalSectionRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -29,7 +29,20 @@ const Solo401k = () => {
         }
       }, 500);
     }
-  }, [location.state]);
+    // If the location hash includes prequalification, open the quiz
+    else if (location.hash === '#prequalification' && prequalSectionRef.current) {
+      // Scroll to the section
+      prequalSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+      
+      // Open the collapsible after scrolling
+      setTimeout(() => {
+        const collapsibleTrigger = prequalSectionRef.current?.querySelector('button');
+        if (collapsibleTrigger) {
+          collapsibleTrigger.click();
+        }
+      }, 500);
+    }
+  }, [location.state, location.hash]);
 
   return (
     <ServiceLayout
@@ -39,7 +52,7 @@ const Solo401k = () => {
     >
       <div className="space-y-12">
         <IntroSection />
-        <div ref={prequalSectionRef}>
+        <div ref={prequalSectionRef} id="prequalification">
           <PrequalificationSection />
         </div>
         <BenefitsSection />
