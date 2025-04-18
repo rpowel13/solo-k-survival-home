@@ -37,8 +37,8 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
       // Get the webhook URL from localStorage
       const webhookUrl = localStorage.getItem(`zapier_${webhookType}_webhook_url`);
       
-      if (!webhookUrl) {
-        console.error(`[${new Date().toISOString()}] Cannot validate ${webhookType} webhook - URL not configured`);
+      if (!webhookUrl || webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+        console.error(`[${new Date().toISOString()}] Cannot validate ${webhookType} webhook - URL not configured or using default value`);
         toast({
           title: "Webhook Not Configured",
           description: `${webhookType.toUpperCase()} Zapier webhook URL is not configured. Please set it up in the Settings panel.`,
@@ -50,17 +50,26 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
       console.log(`[${new Date().toISOString()}] Validating ${webhookType} webhook URL: ${webhookUrl}`);
       
       // Send a test ping to the webhook
+      const testPingData = {
+        testPing: true,
+        timestamp: new Date().toISOString(),
+        message: `${webhookType} webhook validation test`,
+        source: window.location.href,
+        testData: {
+          name: "Test Contact",
+          email: "test@example.com",
+          message: "This is a test ping from the validation feature."
+        }
+      };
+      
+      console.log(`[${new Date().toISOString()}] Sending test data:`, testPingData);
+      
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          testPing: true,
-          timestamp: new Date().toISOString(),
-          message: `${webhookType} webhook validation test`,
-          source: window.location.href
-        }),
+        body: JSON.stringify(testPingData),
         mode: 'no-cors'
       });
       

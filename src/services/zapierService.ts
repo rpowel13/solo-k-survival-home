@@ -38,14 +38,24 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Log the full formatted payload for debugging
     console.log(`[${new Date().toISOString()}] Sending data to Zapier:`, JSON.stringify(formattedData, null, 2));
     
-    // Send the data to Zapier
+    // Create a more detailed payload that includes metadata
+    const payload = {
+      ...formattedData,
+      meta: {
+        timestamp: new Date().toISOString(),
+        source: typeof window !== 'undefined' ? window.location.href : 'unknown',
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
+      }
+    };
+    
+    // Send the data to Zapier with improved error handling
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(formattedData),
-      mode: 'no-cors'
+      body: JSON.stringify(payload),
+      mode: 'no-cors' // This prevents CORS issues but also prevents reading response
     });
     
     console.log(`[${new Date().toISOString()}] Zapier webhook triggered successfully (${webhookType})`);

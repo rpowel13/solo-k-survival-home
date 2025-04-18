@@ -78,7 +78,7 @@ export type ScheduleFormValues = z.infer<typeof scheduleFormSchema>;
 export type LLCFormValues = z.infer<typeof llcFormSchema>;
 export type FirstResponderFormValues = z.infer<typeof firstResponderFormSchema>;
 
-// Update the FormData type to properly include the formType field
+// Add formType to the FormData type
 export type FormData = 
   | (SoloFormValues & { formType?: string }) 
   | (ContactFormValues & { formType?: string }) 

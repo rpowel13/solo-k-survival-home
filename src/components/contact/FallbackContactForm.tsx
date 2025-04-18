@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
 import { ContactFormValues } from "./ContactFormSchema";
@@ -22,7 +22,18 @@ interface FallbackContactFormProps {
 
 const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [zapierConfigured, setZapierConfigured] = useState(false);
   const { toast } = useToast();
+  
+  // Check Zapier configuration on mount
+  useEffect(() => {
+    const isConfigured = isWebhookConfigured('crm');
+    setZapierConfigured(isConfigured);
+    console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isConfigured}`);
+    
+    const webhookUrl = getZapierWebhookUrl('crm');
+    console.log(`[${new Date().toISOString()}] Current Zapier CRM webhook URL: ${webhookUrl}`);
+  }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
@@ -30,21 +41,26 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     
     try {
       // First attempt to send to Zapier if configured
-      const isZapierConfigured = isWebhookConfigured('crm');
-      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isZapierConfigured}`);
+      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${zapierConfigured}`);
       
       let zapierSuccess = false;
-      if (isZapierConfigured) {
+      if (zapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
         // Create a properly typed data object for Zapier
         const zapierData = {
           ...data,
           formType: 'Contact'
-        };
+        } as any; // Type assertion to avoid TypeScript errors
         
         const zapierResult = await triggerZapierWebhook(zapierData);
         zapierSuccess = zapierResult.success;
         console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
+        
+        if (zapierSuccess) {
+          console.log(`[${new Date().toISOString()}] Successfully sent to Zapier`);
+        } else {
+          console.warn(`[${new Date().toISOString()}] Failed to send to Zapier: ${zapierResult.message}`);
+        }
       } else {
         console.warn(`[${new Date().toISOString()}] Zapier CRM webhook not configured, skipping Zapier submission`);
       }
@@ -92,13 +108,24 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         }
       }
       
-      // Consider the submission successful if either Zapier or Supabase worked
-      if (zapierSuccess || supabaseSuccess) {
+      // Decide on the success message based on where it was successfully sent
+      if (zapierSuccess && supabaseSuccess) {
         toast({
           title: "Message sent successfully",
-          description: "Your message has been received. We'll get back to you as soon as possible.",
+          description: "Your message has been received in our CRM system and database.",
         });
-        
+        form.reset();
+      } else if (zapierSuccess) {
+        toast({
+          title: "Message sent to CRM",
+          description: "Your message has been received in our CRM system.",
+        });
+        form.reset();
+      } else if (supabaseSuccess) {
+        toast({
+          title: "Message saved",
+          description: "Your message has been saved to our database. We'll get back to you soon.",
+        });
         form.reset();
       } else {
         throw new Error("Failed to send message through any channel");

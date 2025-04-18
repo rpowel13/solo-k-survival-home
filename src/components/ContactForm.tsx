@@ -7,7 +7,7 @@ import FallbackContactForm from "./contact/FallbackContactForm";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
 import ZapierConfig from "@/components/common/ZapierConfig";
-import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig, validateZapierWebhook } from "@/services/zapierConfigService";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -16,7 +16,7 @@ const ContactForm = () => {
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] ContactForm component mounted`);
     
-    // Initialize Zapier configuration
+    // Initialize Zapier configuration with a forced update
     initZapierConfig('crm');
     
     // Check webhook configuration
@@ -33,6 +33,22 @@ const ContactForm = () => {
         description: "The CRM integration is not fully configured. Your form will still be submitted to our database.",
         duration: 8000
       });
+    } else {
+      // If configured, verify it's working with a test ping
+      const testZapierConnection = async () => {
+        try {
+          const validationResult = await validateZapierWebhook('crm');
+          if (!validationResult.success) {
+            console.warn(`[${new Date().toISOString()}] Zapier webhook validation failed: ${validationResult.message}`);
+          } else {
+            console.log(`[${new Date().toISOString()}] Zapier webhook validation successful`);
+          }
+        } catch (error) {
+          console.error(`[${new Date().toISOString()}] Error validating Zapier webhook:`, error);
+        }
+      };
+      
+      testZapierConnection();
     }
     
     const runDiagnostics = async () => {
@@ -81,8 +97,8 @@ const ContactForm = () => {
 
   return (
     <div className="relative">
-      {/* Initialize Zapier configuration using the common component */}
-      <ZapierConfig webhookType="crm" />
+      {/* Initialize Zapier configuration using the common component with validateWebhook=true */}
+      <ZapierConfig webhookType="crm" validateWebhook={true} />
       <FallbackContactForm form={form} />
     </div>
   );
