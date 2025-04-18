@@ -78,7 +78,7 @@ export type ScheduleFormValues = z.infer<typeof scheduleFormSchema>;
 export type LLCFormValues = z.infer<typeof llcFormSchema>;
 export type FirstResponderFormValues = z.infer<typeof firstResponderFormSchema>;
 
-// Update the FormData type to include the formType field that's used in Zapier service
+// Update the FormData type to properly include the formType field
 export type FormData = 
   | (SoloFormValues & { formType?: string }) 
   | (ContactFormValues & { formType?: string }) 

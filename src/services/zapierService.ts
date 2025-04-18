@@ -12,7 +12,16 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     // Format the data for the webhook
     const formattedData = formatFormData(data);
-    const webhookType = (data.formType || formattedData.formType || 'contact').toLowerCase().replace(/_/g, '');
+    
+    // Determine webhook type from formType property or from formatted data
+    // Default to 'contact' if not specified
+    const webhookType = data.formType 
+      ? data.formType.toLowerCase().replace(/_/g, '') 
+      : (formattedData.formType 
+          ? formattedData.formType.toLowerCase().replace(/_/g, '') 
+          : 'contact');
+    
+    console.log(`[${new Date().toISOString()}] Determined webhook type: ${webhookType}`);
     
     // Check if webhook is properly configured before processing
     if (!isWebhookConfigured(webhookType as any)) {
@@ -30,7 +39,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     console.log(`[${new Date().toISOString()}] Sending data to Zapier:`, JSON.stringify(formattedData, null, 2));
     
     // Send the data to Zapier
-    await fetch(webhookUrl, {
+    const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

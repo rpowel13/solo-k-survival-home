@@ -7,7 +7,7 @@ import FallbackContactForm from "./contact/FallbackContactForm";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
 import ZapierConfig from "@/components/common/ZapierConfig";
-import { getZapierWebhookUrl, isWebhookConfigured } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig } from "@/services/zapierConfigService";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -15,6 +15,9 @@ const ContactForm = () => {
   // Perform diagnostic tests on mount
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] ContactForm component mounted`);
+    
+    // Initialize Zapier configuration
+    initZapierConfig('crm');
     
     // Check webhook configuration
     const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');

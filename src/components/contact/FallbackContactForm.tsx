@@ -26,7 +26,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
 
   const onSubmit = async (data: ContactFormValues) => {
     setIsSubmitting(true);
-    console.log(`[${new Date().toISOString()}] Form submitted with data:`, data);
+    console.log(`[${new Date().toISOString()}] Contact form submitted with data:`, data);
     
     try {
       // First attempt to send to Zapier if configured
@@ -36,13 +36,13 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       let zapierSuccess = false;
       if (isZapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
-        // Instead of adding formType directly, pass the appropriate object structure
-        // that matches what zapierService expects
-        const zapierResult = await triggerZapierWebhook({
+        // Create a properly typed data object for Zapier
+        const zapierData = {
           ...data,
-          // We'll cast this properly in the service to handle the type correctly
-          formType: 'Contact' as any
-        });
+          formType: 'Contact'
+        };
+        
+        const zapierResult = await triggerZapierWebhook(zapierData);
         zapierSuccess = zapierResult.success;
         console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
       } else {
@@ -74,17 +74,21 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       if (!supabaseSuccess) {
         console.log(`[${new Date().toISOString()}] Service method failed, trying direct insertion`);
         
-        const { data: insertResult, error: insertError } = await supabase
-          .from('contacts')
-          .insert(formattedData)
-          .select();
-          
-        if (insertError) {
-          console.error(`[${new Date().toISOString()}] Direct insertion failed:`, insertError);
-          console.error('Error details:', JSON.stringify(insertError, null, 2));
-        } else {
-          console.log(`[${new Date().toISOString()}] Direct insertion successful:`, insertResult);
-          supabaseSuccess = true;
+        try {
+          const { data: insertResult, error: insertError } = await supabase
+            .from('contacts')
+            .insert(formattedData)
+            .select();
+            
+          if (insertError) {
+            console.error(`[${new Date().toISOString()}] Direct insertion failed:`, insertError);
+            console.error('Error details:', JSON.stringify(insertError, null, 2));
+          } else {
+            console.log(`[${new Date().toISOString()}] Direct insertion successful:`, insertResult);
+            supabaseSuccess = true;
+          }
+        } catch (directInsertError) {
+          console.error(`[${new Date().toISOString()}] Exception during direct insertion:`, directInsertError);
         }
       }
       
