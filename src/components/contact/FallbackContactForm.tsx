@@ -14,7 +14,7 @@ import MessageField from "./MessageField";
 import OptInCheckbox from "./OptInCheckbox";
 import SubmitButton from "./SubmitButton";
 import { supabase } from "@/integrations/supabase/client";
-import { getZapierWebhookUrl } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl, isWebhookConfigured } from "@/services/zapierConfigService";
 
 interface FallbackContactFormProps {
   form: UseFormReturn<ContactFormValues>;
@@ -41,18 +41,28 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       
       console.log(`[${new Date().toISOString()}] Attempting to submit contact form...`);
       
-      // First try using the service method (which might handle auth differently)
+      // Check if Zapier webhook is configured
+      const isZapierConfigured = isWebhookConfigured('crm');
+      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isZapierConfigured}`);
+      
+      // Always attempt to send to Zapier first if configured
+      let zapierSuccess = false;
+      if (isZapierConfigured) {
+        console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
+        const zapierResult = await triggerZapierWebhook(data);
+        zapierSuccess = zapierResult.success;
+        console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
+      }
+      
+      // Then try Supabase for database storage
+      console.log(`[${new Date().toISOString()}] Attempting to store in Supabase`);
       const supabaseResult = await submitContactForm(data);
-      console.log(`[${new Date().toISOString()}] Service submission result:`, supabaseResult);
-      
-      // Check webhook URL before attempting to send
-      const webhookUrl = getZapierWebhookUrl('crm');
-      const isWebhookConfigured = webhookUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
-      
-      console.log(`[${new Date().toISOString()}] CRM webhook configured: ${isWebhookConfigured}, URL: ${webhookUrl}`);
+      console.log(`[${new Date().toISOString()}] Supabase submission result:`, supabaseResult);
       
       // If service method failed, try direct insertion as fallback
-      if (!supabaseResult.success) {
+      let supabaseSuccess = supabaseResult.success;
+      
+      if (!supabaseSuccess) {
         console.log(`[${new Date().toISOString()}] Service method failed, trying direct insertion`);
         
         const { data: insertResult, error: insertError } = await supabase
@@ -63,51 +73,23 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         if (insertError) {
           console.error(`[${new Date().toISOString()}] Direct insertion failed:`, insertError);
           console.error('Error details:', JSON.stringify(insertError, null, 2));
-          
-          // Try Zapier as last resort backup if configured
-          if (isWebhookConfigured) {
-            console.log(`[${new Date().toISOString()}] Attempting Zapier submission as final backup`);
-            const zapierResult = await triggerZapierWebhook(data);
-            console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
-            
-            if (!zapierResult.success) {
-              throw new Error(insertError.message || "Failed to send message through any channel");
-            } else {
-              console.log(`[${new Date().toISOString()}] Zapier submission successful`);
-            }
-          } else {
-            throw new Error(insertError.message || "Failed to send message through database, and webhook is not configured");
-          }
         } else {
           console.log(`[${new Date().toISOString()}] Direct insertion successful:`, insertResult);
-          
-          // Also send to CRM via Zapier if configured
-          if (isWebhookConfigured) {
-            console.log(`[${new Date().toISOString()}] Sending to CRM via Zapier after database success`);
-            const zapierResult = await triggerZapierWebhook(data);
-            console.log(`[${new Date().toISOString()}] CRM submission result:`, zapierResult);
-          } else {
-            console.log(`[${new Date().toISOString()}] Skipping Zapier webhook - not configured`);
-          }
-        }
-      } else {
-        // Database submission was successful, also send to CRM via Zapier if configured
-        if (isWebhookConfigured) {
-          console.log(`[${new Date().toISOString()}] Sending to CRM via Zapier after service success`);
-          const zapierResult = await triggerZapierWebhook(data);
-          console.log(`[${new Date().toISOString()}] CRM submission result:`, zapierResult);
-        } else {
-          console.log(`[${new Date().toISOString()}] Skipping Zapier webhook - not configured`);
+          supabaseSuccess = true;
         }
       }
       
-      // If we reached here, the submission was successful through one of the channels
-      toast({
-        title: "Message sent successfully",
-        description: "Your message has been received. We'll get back to you as soon as possible.",
-      });
-      
-      form.reset();
+      // Consider the submission successful if either Zapier or Supabase worked
+      if (zapierSuccess || supabaseSuccess) {
+        toast({
+          title: "Message sent successfully",
+          description: "Your message has been received. We'll get back to you as soon as possible.",
+        });
+        
+        form.reset();
+      } else {
+        throw new Error("Failed to send message through any channel");
+      }
       
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Contact form submission error:`, error);

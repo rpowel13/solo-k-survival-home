@@ -1,6 +1,6 @@
 
 import { FormData, EmailResponse } from '@/types/formTypes';
-import { getZapierWebhookUrl } from './zapierConfigService';
+import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
 import { formatFormData } from '@/utils/formDataFormatter';
 
 /**
@@ -16,8 +16,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     console.log(`[${new Date().toISOString()}] Using Zapier webhook URL (${webhookType}): ${webhookUrl}`);
     
-    // Check if webhook is the default URL which means it's not configured
-    if (webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+    // Check if webhook is properly configured
+    if (!isWebhookConfigured(webhookType as any)) {
       console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not properly configured`);
       return { 
         success: false,
@@ -60,7 +60,7 @@ export const testZapierWebhook = async (webhookType: string): Promise<EmailRespo
     const webhookUrl = getZapierWebhookUrl(webhookType as any);
     console.log(`[${new Date().toISOString()}] Testing Zapier webhook (${webhookType}): ${webhookUrl}`);
     
-    if (webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+    if (!isWebhookConfigured(webhookType as any)) {
       return { 
         success: false,
         message: `Zapier webhook for ${webhookType} is not configured. Please set it up in the Settings page.`
