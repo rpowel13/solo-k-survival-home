@@ -6,6 +6,7 @@ import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/C
 import FallbackContactForm from "./contact/FallbackContactForm";
 import { testSupabaseConnection, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
+import ZapierConfig from "@/components/contact/ZapierConfig";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -13,6 +14,14 @@ const ContactForm = () => {
   // Perform diagnostic tests on mount
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] ContactForm component mounted`);
+    
+    // Check webhook configuration
+    const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
+    if (!crmWebhookUrl || crmWebhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+      console.warn(`[${new Date().toISOString()}] CRM webhook is not properly configured. Form submissions may not be processed correctly.`);
+    } else {
+      console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${crmWebhookUrl}`);
+    }
     
     const runDiagnostics = async () => {
       // Test the connection to Supabase
@@ -60,15 +69,11 @@ const ContactForm = () => {
 
   return (
     <div className="relative">
+      {/* Initialize Zapier configuration */}
+      <ZapierConfig />
       <FallbackContactForm form={form} />
     </div>
   );
 };
 
 export default ContactForm;
-
-declare global {
-  interface Window {
-    vcitaFormToSubmit: any;
-  }
-}

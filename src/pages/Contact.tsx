@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import { Mail, Phone, MessageSquare, Calendar } from "lucide-react";
+import { Mail, Phone, MessageSquare, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,15 +10,28 @@ import ContactForm from "@/components/ContactForm";
 import ScheduleConsultationForm from "@/components/ScheduleConsultationForm";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
+import ZapierConfig from "@/components/contact/ZapierConfig";
 
 const Contact = () => {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+  const [validateWebhook, setValidateWebhook] = useState(false);
+  const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
   const { toast } = useToast();
   
   useEffect(() => {
     // Run comprehensive diagnostics on page load
     console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
     logSupabaseInfo();
+    
+    // Check webhook configuration
+    const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
+    if (!crmWebhookUrl || crmWebhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+      setWebhookStatus('unconfigured');
+      console.warn(`[${new Date().toISOString()}] CRM webhook is not configured`);
+    } else {
+      setWebhookStatus('configured');
+      console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${crmWebhookUrl}`);
+    }
     
     // Test Supabase connection on page load
     const runDiagnostics = async () => {
@@ -59,6 +73,12 @@ const Contact = () => {
     runDiagnostics();
   }, [toast]);
   
+  const handleValidateWebhook = () => {
+    setValidateWebhook(true);
+    // Reset after a timeout to allow for re-validation
+    setTimeout(() => setValidateWebhook(false), 1000);
+  };
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -69,6 +89,39 @@ const Contact = () => {
             <p className="text-lg text-gray-600 text-center mb-12">
               Have questions about Solo 401(k) plans? Our retirement specialists are here to help.
             </p>
+
+            {/* Zapier Webhook Status & Validation */}
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full mb-3">
+                <span className="text-sm font-medium">CRM Webhook Status:</span>
+                {webhookStatus === 'configured' ? (
+                  <span className="flex items-center text-green-600">
+                    <CheckCircle2 className="h-4 w-4 mr-1" /> Configured
+                  </span>
+                ) : webhookStatus === 'unconfigured' ? (
+                  <span className="flex items-center text-red-600">
+                    <XCircle className="h-4 w-4 mr-1" /> Not Configured
+                  </span>
+                ) : (
+                  <span className="text-gray-500">Checking...</span>
+                )}
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleValidateWebhook}
+                disabled={webhookStatus !== 'configured'}
+                className="mb-6"
+              >
+                Test Webhook
+              </Button>
+              {webhookStatus === 'unconfigured' && (
+                <p className="text-sm text-red-500 max-w-md mx-auto mb-6">
+                  Zapier webhook is not configured. Form submissions may not be processed correctly. 
+                  Please configure it in the <a href="/admin/zapier-settings" className="underline">Settings</a> page.
+                </p>
+              )}
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
               <Card className="shadow-md">
@@ -155,6 +208,9 @@ const Contact = () => {
         </section>
       </main>
       <Footer />
+      
+      {/* Zapier Config with webhook validation if requested */}
+      <ZapierConfig validateWebhook={validateWebhook} />
     </div>
   );
 };
