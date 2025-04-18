@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +21,7 @@ const Solo401kCalculator = () => {
   // Constants for 2025 contribution limits
   const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;  // Increased from $23,000 in 2024
   const CATCH_UP_CONTRIBUTION = 7500;         // Remains the same for 2025
-  const MAX_TOTAL_CONTRIBUTION = 69000;       // Remains the same for 2025
+  const MAX_TOTAL_CONTRIBUTION = 70000;       // Updated from $69,000 to $70,000 for 2025
 
   const calculateContributions = () => {
     const annualIncome = parseFloat(income) || 0;
