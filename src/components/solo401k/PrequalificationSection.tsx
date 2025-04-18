@@ -100,12 +100,12 @@ const PrequalificationSection = () => {
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <Card className="border-2 border-survival-200">
-              <CardHeader className="bg-survival-50">
+            <Card className="border-2 border-survival-200 rounded-xl shadow-lg bg-white transform transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
+              <CardHeader className="bg-survival-50 rounded-t-xl">
                 <CardTitle className="text-2xl text-center text-survival-800">
                   Solo 401k Eligibility Quiz
                 </CardTitle>
-                <CardDescription className="text-center">
+                <CardDescription className="text-center text-gray-600">
                   Answer a few questions to see if you qualify for a Solo 401k plan.
                 </CardDescription>
               </CardHeader>
