@@ -1,3 +1,4 @@
+
 /**
  * Zapier Configuration Service
  * Handles Zapier webhook URL configuration and retrieval for multiple integration types
@@ -93,4 +94,53 @@ export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm'): voi
   if (!url) return;
   localStorage.setItem(getWebhookStorageKey(type), url);
   console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL updated manually: ${url}`);
+};
+
+/**
+ * Validate the Zapier webhook URL for a specific type by sending a test ping
+ * @param type The type of webhook to validate
+ * @returns Promise resolving to success/error status
+ */
+export const validateZapierWebhook = async (type: WebhookType = 'crm'): Promise<{success: boolean, message: string}> => {
+  try {
+    const webhookUrl = getZapierWebhookUrl(type);
+    
+    if (webhookUrl === DEFAULT_WEBHOOK_URL) {
+      return { 
+        success: false, 
+        message: `The ${type} webhook URL is not configured. Please set it in Settings.` 
+      };
+    }
+    
+    console.log(`[${new Date().toISOString()}] Validating ${type} webhook: ${webhookUrl}`);
+    
+    // Send a test ping to the webhook
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        testValidation: true,
+        webhookType: type,
+        timestamp: new Date().toISOString(),
+        source: typeof window !== 'undefined' ? window.location.href : 'server-side'
+      }),
+      mode: 'no-cors'
+    });
+    
+    console.log(`[${new Date().toISOString()}] Test ping sent to ${type} webhook`);
+    
+    return {
+      success: true,
+      message: `Test ping sent to ${type} webhook. Check your Zapier account to confirm it was received.`
+    };
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] Error validating ${type} webhook:`, error);
+    
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error occurred during validation'
+    };
+  }
 };

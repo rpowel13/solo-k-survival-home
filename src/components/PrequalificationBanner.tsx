@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -14,6 +13,7 @@ import ResultDisplay from './solo401k/prequalification/ResultDisplay';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { Question, Result } from './solo401k/prequalification/types';
+import { getZapierWebhookUrl } from '@/services/zapierConfigService';
 
 interface PrequalificationBannerProps {
   className?: string;
@@ -30,6 +30,19 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [result, setResult] = useState<Result>(null);
+
+  // Log webhook configuration when component mounts - for validation
+  useEffect(() => {
+    console.log(`[${new Date().toISOString()}] PrequalificationBanner loading - current page: ${location.pathname}`);
+    
+    // Check if Zapier webhook is configured
+    const webhookUrl = getZapierWebhookUrl('solo401k');
+    console.log(`[${new Date().toISOString()}] Solo401k Zapier webhook URL: ${webhookUrl}`);
+    
+    if (webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+      console.warn(`[${new Date().toISOString()}] Solo401k is using the default webhook URL - CRM integration may not work`);
+    }
+  }, [location.pathname]);
 
   const questions: Question[] = [
     {
@@ -84,6 +97,9 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
       return;
     }
     setResult('eligible');
+    
+    // Log eligibility result for Zapier webhook validation
+    console.log(`[${new Date().toISOString()}] Quiz eligibility result: ${result}`);
   };
 
   const resetQuiz = () => {
@@ -101,6 +117,7 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
       // If already on the Solo401k page, scroll to the prequalification section
       const quizSection = document.getElementById('prequalification');
       if (quizSection) {
+        console.log(`[${new Date().toISOString()}] Scrolling to prequalification section on Solo401k page`);
         quizSection.scrollIntoView({ behavior: 'smooth' });
         
         // Find and click the collapsible trigger button
@@ -113,6 +130,7 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
       }
     } else {
       // If on home page, open the quiz directly
+      console.log(`[${new Date().toISOString()}] Opening quiz on home page`);
       setIsQuizOpen(true);
     }
   };
