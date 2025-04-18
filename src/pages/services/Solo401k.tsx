@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import ServiceLayout from '@/components/ServiceLayout';
-import { Link } from 'react-router-dom';
 import PrequalificationSection from '@/components/solo401k/PrequalificationSection';
 import IntroSection from '@/components/solo401k/IntroSection';
 import BenefitsSection from '@/components/solo401k/BenefitsSection';
@@ -12,6 +12,25 @@ import ReinstatementSection from '@/components/solo401k/ReinstatementSection';
 import CTASection from '@/components/solo401k/CTASection';
 
 const Solo401k = () => {
+  const location = useLocation();
+  const prequalSectionRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    // Check if we should automatically open the quiz
+    if (location.state && location.state.openEligibilityQuiz && prequalSectionRef.current) {
+      // Scroll to the section
+      prequalSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+      
+      // Open the collapsible after scrolling
+      setTimeout(() => {
+        const collapsibleTrigger = prequalSectionRef.current?.querySelector('button');
+        if (collapsibleTrigger) {
+          collapsibleTrigger.click();
+        }
+      }, 500);
+    }
+  }, [location.state]);
+
   return (
     <ServiceLayout
       title="Solo 401k Plans"
@@ -20,7 +39,9 @@ const Solo401k = () => {
     >
       <div className="space-y-12">
         <IntroSection />
-        <PrequalificationSection />
+        <div ref={prequalSectionRef}>
+          <PrequalificationSection />
+        </div>
         <BenefitsSection />
         <QualificationSection />
         <WhyChooseSection />

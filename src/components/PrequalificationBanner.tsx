@@ -2,13 +2,38 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface PrequalificationBannerProps {
   className?: string;
 }
 
 const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ className = '' }) => {
+  const navigate = useNavigate();
+
+  const handleEligibilityCheck = () => {
+    // First navigate to the Solo401k page if not already there
+    if (!window.location.pathname.includes('/services/solo-401k')) {
+      navigate('/services/solo-401k', { 
+        state: { openEligibilityQuiz: true }
+      });
+    } else {
+      // If already on the page, manually scroll and open
+      const quizSection = document.getElementById('prequalification');
+      if (quizSection) {
+        quizSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Find and click the collapsible trigger button
+        setTimeout(() => {
+          const collapsibleTrigger = quizSection.querySelector('button');
+          if (collapsibleTrigger && window.getComputedStyle(collapsibleTrigger).display !== 'none') {
+            collapsibleTrigger.click();
+          }
+        }, 500); // Short delay to ensure smooth scrolling completes
+      }
+    }
+  };
+
   return (
     <section className={`bg-gradient-to-r from-survival-50 to-finance-50 py-16 border-y border-gray-100 ${className}`}>
       <div className="container mx-auto px-4">
@@ -24,17 +49,7 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
           <Button 
             size="lg" 
             className="bg-survival-600 hover:bg-survival-700 shadow-md hover:shadow-lg transition-all"
-            onClick={() => {
-              const quizSection = document.getElementById('prequalification');
-              if (quizSection) {
-                quizSection.scrollIntoView({ behavior: 'smooth' });
-                // Also trigger the opening of the collapsible
-                const collapsibleTrigger = quizSection.querySelector('button');
-                if (collapsibleTrigger) {
-                  collapsibleTrigger.click();
-                }
-              }
-            }}
+            onClick={handleEligibilityCheck}
           >
             Take the Eligibility Quiz
             <ArrowRight className="ml-2 h-5 w-5" />
