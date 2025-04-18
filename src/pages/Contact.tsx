@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Mail, Phone, MessageSquare, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import Header from "@/components/Header";
@@ -10,12 +9,14 @@ import ContactForm from "@/components/ContactForm";
 import ScheduleConsultationForm from "@/components/ScheduleConsultationForm";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
-import ZapierConfig from "@/components/contact/ZapierConfig";
+import { getZapierWebhookUrl, validateZapierWebhook } from "@/services/zapierConfigService";
+import ZapierConfig from "@/components/common/ZapierConfig";
 
 const Contact = () => {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [validateWebhook, setValidateWebhook] = useState(false);
   const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
+  const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
   const { toast } = useToast();
   
   useEffect(() => {
@@ -25,7 +26,9 @@ const Contact = () => {
     
     // Check webhook configuration
     const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
-    if (!crmWebhookUrl || crmWebhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+    const defaultUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
+    
+    if (!crmWebhookUrl || crmWebhookUrl === defaultUrl) {
       setWebhookStatus('unconfigured');
       console.warn(`[${new Date().toISOString()}] CRM webhook is not configured`);
     } else {
@@ -73,8 +76,34 @@ const Contact = () => {
     runDiagnostics();
   }, [toast]);
   
-  const handleValidateWebhook = () => {
+  const handleValidateWebhook = async () => {
     setValidateWebhook(true);
+    
+    try {
+      const result = await validateZapierWebhook('crm');
+      
+      if (result.success) {
+        toast({
+          title: "Webhook Test Successful",
+          description: "Test data was sent to your CRM webhook. Check your Zapier account to confirm it was received.",
+        });
+        setLastTestedTime(new Date().toLocaleTimeString());
+      } else {
+        toast({
+          title: "Webhook Test Failed",
+          description: result.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Error testing webhook:", error);
+      toast({
+        title: "Webhook Test Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive"
+      });
+    }
+    
     // Reset after a timeout to allow for re-validation
     setTimeout(() => setValidateWebhook(false), 1000);
   };
@@ -106,20 +135,35 @@ const Contact = () => {
                   <span className="text-gray-500">Checking...</span>
                 )}
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleValidateWebhook}
-                disabled={webhookStatus !== 'configured'}
-                className="mb-6"
-              >
-                Test Webhook
-              </Button>
+              
+              <div className="flex flex-col items-center gap-2 mb-6">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleValidateWebhook}
+                  disabled={webhookStatus !== 'configured'}
+                >
+                  Test CRM Webhook
+                </Button>
+                
+                {lastTestedTime && (
+                  <span className="text-xs text-gray-500">
+                    Last tested: {lastTestedTime}
+                  </span>
+                )}
+              </div>
+              
               {webhookStatus === 'unconfigured' && (
-                <p className="text-sm text-red-500 max-w-md mx-auto mb-6">
-                  Zapier webhook is not configured. Form submissions may not be processed correctly. 
-                  Please configure it in the <a href="/admin/zapier-settings" className="underline">Settings</a> page.
-                </p>
+                <div className="text-sm text-red-500 max-w-md mx-auto mb-6 p-3 bg-red-50 rounded-md border border-red-200">
+                  <p className="font-medium mb-1">Webhook Not Configured</p>
+                  <p>
+                    Zapier webhook is not configured. Form submissions may not be processed correctly. 
+                    Please configure it in the <a href="/admin/zapier-settings" className="underline">Settings</a> page.
+                  </p>
+                  <p className="mt-2 text-xs">
+                    Current webhook URL: {getZapierWebhookUrl('crm')}
+                  </p>
+                </div>
               )}
             </div>
 
@@ -209,8 +253,7 @@ const Contact = () => {
       </main>
       <Footer />
       
-      {/* Zapier Config with webhook validation if requested */}
-      <ZapierConfig validateWebhook={validateWebhook} />
+      <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />
     </div>
   );
 };

@@ -65,7 +65,8 @@ export const initZapierConfig = (webhookType: WebhookType) => {
           if (storedUrl) {
             console.log(`[${new Date().toISOString()}] Using stored ${webhookType} webhook URL: ${storedUrl}`);
           } else {
-            console.log(`[${new Date().toISOString()}] No stored URL found for ${webhookType} webhook`);
+            console.log(`[${new Date().toISOString()}] No stored URL found for ${webhookType} webhook, using default`);
+            localStorage.setItem(getWebhookStorageKey(webhookType), DEFAULT_WEBHOOK_URL);
           }
         }
       }
@@ -81,7 +82,13 @@ export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
   const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
   const url = storedUrl || DEFAULT_WEBHOOK_URL;
   
-  console.log(`[${new Date().toISOString()}] Retrieved ${type} webhook URL: ${url}`);
+  // Log and warn if using default URL
+  if (url === DEFAULT_WEBHOOK_URL) {
+    console.warn(`[${new Date().toISOString()}] ${type} is using the default webhook URL - CRM integration may not work`);
+  } else {
+    console.log(`[${new Date().toISOString()}] ${type} Zapier webhook URL: ${url}`);
+  }
+  
   return url;
 };
 
@@ -94,6 +101,16 @@ export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm'): voi
   if (!url) return;
   localStorage.setItem(getWebhookStorageKey(type), url);
   console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL updated manually: ${url}`);
+};
+
+/**
+ * Check if a webhook is properly configured (not using the default URL)
+ * @param type The type of webhook to check
+ * @returns Boolean indicating if the webhook is configured
+ */
+export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
+  const url = getZapierWebhookUrl(type);
+  return url !== DEFAULT_WEBHOOK_URL;
 };
 
 /**
@@ -124,7 +141,12 @@ export const validateZapierWebhook = async (type: WebhookType = 'crm'): Promise<
         testValidation: true,
         webhookType: type,
         timestamp: new Date().toISOString(),
-        source: typeof window !== 'undefined' ? window.location.href : 'server-side'
+        source: typeof window !== 'undefined' ? window.location.href : 'server-side',
+        testData: {
+          name: "Test Contact",
+          email: "test@example.com",
+          message: "This is a test ping from the webhook validation feature."
+        }
       }),
       mode: 'no-cors'
     });
