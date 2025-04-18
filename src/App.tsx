@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +27,7 @@ import LegalDisclosures from "./pages/LegalDisclosures";
 import ZapierSettings from "./pages/admin/ZapierSettings";
 import FirstResponderPayment from "./pages/payments/FirstResponderPayment";
 import RMDCalculator from "./pages/tools/RMDCalculator";
+import Solo401kCalculator from "./pages/tools/Solo401kCalculator";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,7 @@ const App = () => (
           <Route path="/services/alternative-investments" element={<AlternativeInvestments />} />
           <Route path="/tools/retirement-calculator" element={<RetirementCalculator />} />
           <Route path="/tools/loan-calculator" element={<LoanCalculator />} />
+          <Route path="/tools/solo-401k-calculator" element={<Solo401kCalculator />} />
           <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
           <Route path="/apply/llc" element={<LLCApplication />} />
           <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
