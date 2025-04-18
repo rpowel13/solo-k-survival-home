@@ -4,9 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { contactFormSchema, defaultValues, ContactFormValues } from "./contact/ContactFormSchema";
 import FallbackContactForm from "./contact/FallbackContactForm";
-import { testSupabaseConnection, insertTestContact } from "@/services/debugService";
+import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
 import ZapierConfig from "@/components/common/ZapierConfig";
+import { getZapierWebhookUrl, isWebhookConfigured } from "@/services/zapierConfigService";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -17,10 +18,18 @@ const ContactForm = () => {
     
     // Check webhook configuration
     const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
-    if (!crmWebhookUrl || crmWebhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+    const isConfigured = isWebhookConfigured('crm');
+    
+    console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}`);
+    console.log(`[${new Date().toISOString()}] CRM webhook URL: ${crmWebhookUrl}`);
+    
+    if (!isConfigured) {
       console.warn(`[${new Date().toISOString()}] CRM webhook is not configured. Form submissions may not be processed correctly.`);
-    } else {
-      console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${crmWebhookUrl}`);
+      toast({
+        title: "Zapier Integration Not Configured",
+        description: "The CRM integration is not fully configured. Your form will still be submitted to our database.",
+        duration: 8000
+      });
     }
     
     const runDiagnostics = async () => {

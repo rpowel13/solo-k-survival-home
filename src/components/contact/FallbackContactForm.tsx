@@ -29,6 +29,23 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log(`[${new Date().toISOString()}] Form submitted with data:`, data);
     
     try {
+      // First attempt to send to Zapier if configured
+      const isZapierConfigured = isWebhookConfigured('crm');
+      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isZapierConfigured}`);
+      
+      let zapierSuccess = false;
+      if (isZapierConfigured) {
+        console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
+        const zapierResult = await triggerZapierWebhook(data);
+        zapierSuccess = zapierResult.success;
+        console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
+      } else {
+        console.warn(`[${new Date().toISOString()}] Zapier CRM webhook not configured, skipping Zapier submission`);
+      }
+      
+      // Then try to store in Supabase database
+      console.log(`[${new Date().toISOString()}] Attempting to store in Supabase`);
+      
       // Format the data for insertion
       const formattedData = {
         name: data.name,
@@ -39,23 +56,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         opt_in: data.consent || false
       };
       
-      console.log(`[${new Date().toISOString()}] Attempting to submit contact form...`);
-      
-      // Check if Zapier webhook is configured
-      const isZapierConfigured = isWebhookConfigured('crm');
-      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isZapierConfigured}`);
-      
-      // Always attempt to send to Zapier first if configured
-      let zapierSuccess = false;
-      if (isZapierConfigured) {
-        console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
-        const zapierResult = await triggerZapierWebhook(data);
-        zapierSuccess = zapierResult.success;
-        console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
-      }
-      
-      // Then try Supabase for database storage
-      console.log(`[${new Date().toISOString()}] Attempting to store in Supabase`);
+      // First try the service method
       const supabaseResult = await submitContactForm(data);
       console.log(`[${new Date().toISOString()}] Supabase submission result:`, supabaseResult);
       
