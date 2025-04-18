@@ -18,16 +18,16 @@ const Solo401kCalculator = () => {
   const [income, setIncome] = useState<string>('');
   const [age, setAge] = useState<string>('');
 
-  // Constants for 2024 contribution limits
-  const EMPLOYEE_CONTRIBUTION_LIMIT = 23000;
-  const CATCH_UP_CONTRIBUTION = 7500;
-  const MAX_TOTAL_CONTRIBUTION = 69000;
+  // Constants for 2025 contribution limits
+  const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;  // Increased from $23,000 in 2024
+  const CATCH_UP_CONTRIBUTION = 7500;         // Remains the same for 2025
+  const MAX_TOTAL_CONTRIBUTION = 69000;       // Remains the same for 2025
 
   const calculateContributions = () => {
     const annualIncome = parseFloat(income) || 0;
     const participantAge = parseInt(age) || 0;
     
-    // Employee contribution (up to $23,000 in 2024)
+    // Employee contribution (up to $23,500 in 2025)
     const baseEmployeeContribution = Math.min(annualIncome, EMPLOYEE_CONTRIBUTION_LIMIT);
     
     // Catch-up contribution if age 50 or older
@@ -98,7 +98,7 @@ const Solo401kCalculator = () => {
           <div className="mt-6 space-y-4 bg-gray-50 p-4 rounded-lg">
             <h3 className="text-lg font-semibold flex items-center gap-2 text-survival-700">
               <PiggyBank className="h-5 w-5" />
-              Contribution Limits for {new Date().getFullYear()}
+              Contribution Limits for 2025
             </h3>
             
             <div className="grid gap-4 text-sm">
