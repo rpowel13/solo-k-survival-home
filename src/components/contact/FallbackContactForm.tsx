@@ -46,12 +46,13 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       let zapierSuccess = false;
       if (zapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
-        // Create a properly typed data object for Zapier
+        // Create a properly typed data object for Zapier with formType
         const zapierData = {
           ...data,
           formType: 'Contact'
-        } as any; // Type assertion to avoid TypeScript errors
+        };
         
+        console.log(`[${new Date().toISOString()}] Zapier data being sent:`, zapierData);
         const zapierResult = await triggerZapierWebhook(zapierData);
         zapierSuccess = zapierResult.success;
         console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);

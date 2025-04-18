@@ -41,10 +41,12 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Create a more detailed payload that includes metadata
     const payload = {
       ...formattedData,
+      formData: data, // Include the original form data for Zapier's reference
       meta: {
         timestamp: new Date().toISOString(),
         source: typeof window !== 'undefined' ? window.location.href : 'unknown',
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+        isTest: false // Indicate this is not a test submission
       }
     };
     

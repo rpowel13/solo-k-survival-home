@@ -141,6 +141,7 @@ export const validateZapierWebhook = async (type: WebhookType = 'crm'): Promise<
       },
       body: JSON.stringify({
         testValidation: true,
+        isTest: true,
         webhookType: type,
         timestamp: new Date().toISOString(),
         source: typeof window !== 'undefined' ? window.location.href : 'server-side',

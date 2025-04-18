@@ -55,6 +55,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
         timestamp: new Date().toISOString(),
         message: `${webhookType} webhook validation test`,
         source: window.location.href,
+        isTest: true,
         testData: {
           name: "Test Contact",
           email: "test@example.com",

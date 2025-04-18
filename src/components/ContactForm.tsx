@@ -97,8 +97,8 @@ const ContactForm = () => {
 
   return (
     <div className="relative">
-      {/* Initialize Zapier configuration using the common component with validateWebhook=true */}
-      <ZapierConfig webhookType="crm" validateWebhook={true} />
+      {/* Initialize Zapier configuration using the common component with validateWebhook=false */}
+      <ZapierConfig webhookType="crm" validateWebhook={false} />
       <FallbackContactForm form={form} />
     </div>
   );
