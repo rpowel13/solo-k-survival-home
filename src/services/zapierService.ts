@@ -38,8 +38,11 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Log the full formatted payload for debugging
     console.log(`[${new Date().toISOString()}] Sending data to Zapier:`, JSON.stringify(formattedData, null, 2));
     
-    // Send just the formatted data without the test flag or metadata wrapper
-    // This ensures Zapier receives the actual form data directly
+    // Log the raw data as well for comparison
+    console.log(`[${new Date().toISOString()}] Original form data:`, JSON.stringify(data, null, 2));
+    
+    // Send the formatted data directly to Zapier without wrapping it
+    // This ensures all field values are at the top level as Zapier expects
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
