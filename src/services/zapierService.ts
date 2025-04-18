@@ -12,7 +12,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     // Format the data for the webhook
     const formattedData = formatFormData(data);
-    const webhookType = formattedData.formType.toLowerCase().replace(/_/g, '');
+    const webhookType = (data.formType || formattedData.formType || 'contact').toLowerCase().replace(/_/g, '');
     
     // Check if webhook is properly configured before processing
     if (!isWebhookConfigured(webhookType as any)) {

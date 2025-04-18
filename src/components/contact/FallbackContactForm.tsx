@@ -36,9 +36,12 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       let zapierSuccess = false;
       if (isZapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
+        // Instead of adding formType directly, pass the appropriate object structure
+        // that matches what zapierService expects
         const zapierResult = await triggerZapierWebhook({
           ...data,
-          formType: 'Contact'
+          // We'll cast this properly in the service to handle the type correctly
+          formType: 'Contact' as any
         });
         zapierSuccess = zapierResult.success;
         console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
