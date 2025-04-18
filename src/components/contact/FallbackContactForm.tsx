@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
@@ -25,7 +24,6 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const [zapierConfigured, setZapierConfigured] = useState(false);
   const { toast } = useToast();
   
-  // Check Zapier configuration on mount
   useEffect(() => {
     const isConfigured = isWebhookConfigured('crm');
     setZapierConfigured(isConfigured);
@@ -40,18 +38,15 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log(`[${new Date().toISOString()}] Contact form submitted with data:`, data);
     
     try {
-      // First attempt to send to Zapier if configured
       console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${zapierConfigured}`);
       
       let zapierSuccess = false;
       if (zapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
         
-        // Create a properly typed data object for Zapier with explicit formType
         const zapierData = {
           ...data,
-          formType: 'Contact', // Must be explicitly set for correct formatting
-          // Add any other fields that might be useful for Zapier
+          formType: 'Contact',
           submissionDate: new Date().toISOString(),
           source: typeof window !== 'undefined' ? window.location.href : 'unknown'
         };
@@ -70,10 +65,8 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         console.warn(`[${new Date().toISOString()}] Zapier CRM webhook not configured, skipping Zapier submission`);
       }
       
-      // Then try to store in Supabase database
       console.log(`[${new Date().toISOString()}] Attempting to store in Supabase`);
       
-      // Format the data for insertion
       const formattedData = {
         name: data.name,
         email: data.email,
@@ -85,11 +78,9 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       
       console.log(`[${new Date().toISOString()}] Formatted data for Supabase:`, formattedData);
       
-      // First try the service method
       const supabaseResult = await submitContactForm(data);
       console.log(`[${new Date().toISOString()}] Supabase submission result:`, supabaseResult);
       
-      // If service method failed, try direct insertion as fallback
       let supabaseSuccess = supabaseResult.success;
       
       if (!supabaseSuccess) {
@@ -113,7 +104,6 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         }
       }
       
-      // Decide on the success message based on where it was successfully sent
       if (zapierSuccess && supabaseSuccess) {
         toast({
           title: "Message sent successfully",

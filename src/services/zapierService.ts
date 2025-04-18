@@ -10,16 +10,24 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
   try {
     console.log(`[${new Date().toISOString()}] Preparing to send form data to Zapier:`, data);
     
+    // Validate that the data is an object before continuing
+    if (!data || typeof data !== 'object') {
+      console.error(`[${new Date().toISOString()}] Invalid data format for Zapier webhook:`, data);
+      return {
+        success: false,
+        message: 'Invalid data format. Data must be an object.'
+      };
+    }
+    
     // Format the data for the webhook
     const formattedData = formatFormData(data);
     
+    // Validate that formType exists in either the original data or formatted data
+    const dataType = ('formType' in data && typeof data.formType === 'string') ? data.formType : 
+                    (formattedData.formType ? formattedData.formType : 'contact');
+    
     // Determine webhook type from formType property or from formatted data
-    // Default to 'contact' if not specified
-    const webhookType = data.formType 
-      ? data.formType.toLowerCase().replace(/_/g, '') 
-      : (formattedData.formType 
-          ? formattedData.formType.toLowerCase().replace(/_/g, '') 
-          : 'contact');
+    const webhookType = dataType.toLowerCase().replace(/_/g, '');
     
     console.log(`[${new Date().toISOString()}] Determined webhook type: ${webhookType}`);
     

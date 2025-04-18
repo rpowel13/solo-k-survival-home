@@ -127,8 +127,11 @@ export function formatFormData(data: FormData) {
       });
       
       // If formType is explicitly provided in data, use that instead of 'Unknown'
-      if ('formType' in data && data.formType) {
-        formattedData.formType = data.formType;
+      if ('formType' in data && typeof data === 'object') {
+        const typedData = data as { formType?: string };
+        if (typedData.formType) {
+          formattedData.formType = typedData.formType;
+        }
       }
     }
   }
