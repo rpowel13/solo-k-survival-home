@@ -1,4 +1,3 @@
-
 import {
   NavigationMenuItem,
   NavigationMenuTrigger,
@@ -20,6 +19,13 @@ export const ToolsDropdown = () => {
           >
             <Calculator className="h-4 w-4" />
             <span>Retirement Calculator</span>
+          </Link>
+          <Link 
+            to="/tools/solo-401k-calculator" 
+            className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-survival-50 hover:text-survival-800 text-gray-700"
+          >
+            <DollarSign className="h-4 w-4" />
+            <span>Solo 401k Calculator</span>
           </Link>
           <Link 
             to="/tools/loan-calculator" 
