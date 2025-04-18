@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface PrequalificationBannerProps {
   className?: string;
@@ -13,7 +14,6 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   const isOnSolo401kPage = location.pathname.includes('/services/solo-401k');
 
   const handleEligibilityCheck = () => {
-    // Only directly open the quiz if already on the Solo401k page
     if (isOnSolo401kPage) {
       // If already on the page, manually scroll and open
       const quizSection = document.getElementById('prequalification');
@@ -28,8 +28,12 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
           }
         }, 500); // Short delay to ensure smooth scrolling completes
       }
+    } else {
+      // If on home page, navigate programmatically with state
+      navigate('/services/solo-401k#prequalification', { 
+        state: { openEligibilityQuiz: true } 
+      });
     }
-    // Otherwise, we'll handle this in the PrequalificationSection component itself
   };
 
   return (
@@ -44,26 +48,14 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
           <p className="text-xl mb-8 text-gray-700">
             Answer a few quick questions to determine if you're eligible for the significant tax advantages and higher contribution limits of a Solo 401k plan.
           </p>
-          {isOnSolo401kPage ? (
-            <Button 
-              size="lg" 
-              className="bg-survival-600 hover:bg-survival-700 shadow-md hover:shadow-lg transition-all"
-              onClick={handleEligibilityCheck}
-            >
-              Take the Eligibility Quiz
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          ) : (
-            <Link to="/services/solo-401k#prequalification">
-              <Button 
-                size="lg" 
-                className="bg-survival-600 hover:bg-survival-700 shadow-md hover:shadow-lg transition-all"
-              >
-                Take the Eligibility Quiz
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          )}
+          <Button 
+            size="lg" 
+            className="bg-survival-600 hover:bg-survival-700 shadow-md hover:shadow-lg transition-all"
+            onClick={handleEligibilityCheck}
+          >
+            Take the Eligibility Quiz
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </div>
     </section>
