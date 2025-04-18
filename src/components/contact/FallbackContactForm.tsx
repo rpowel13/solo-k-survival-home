@@ -36,7 +36,10 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       let zapierSuccess = false;
       if (isZapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
-        const zapierResult = await triggerZapierWebhook(data);
+        const zapierResult = await triggerZapierWebhook({
+          ...data,
+          formType: 'Contact'
+        });
         zapierSuccess = zapierResult.success;
         console.log(`[${new Date().toISOString()}] Zapier submission result:`, zapierResult);
       } else {
@@ -55,6 +58,8 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
         message: data.message,
         opt_in: data.consent || false
       };
+      
+      console.log(`[${new Date().toISOString()}] Formatted data for Supabase:`, formattedData);
       
       // First try the service method
       const supabaseResult = await submitContactForm(data);

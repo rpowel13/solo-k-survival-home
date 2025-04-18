@@ -70,7 +70,7 @@ const ContactForm = () => {
     runDiagnostics();
   }, [toast]);
   
-  // Always use our form - VCita iframe is completely disabled
+  // Initialize the form with validation
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
     defaultValues,

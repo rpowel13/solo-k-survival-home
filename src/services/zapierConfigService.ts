@@ -110,7 +110,9 @@ export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm'): voi
  */
 export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
   const url = getZapierWebhookUrl(type);
-  return url !== DEFAULT_WEBHOOK_URL;
+  const isConfigured = url !== DEFAULT_WEBHOOK_URL;
+  console.log(`[${new Date().toISOString()}] ${type} webhook is configured: ${isConfigured}`);
+  return isConfigured;
 };
 
 /**

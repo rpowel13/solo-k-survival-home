@@ -10,10 +10,11 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
   try {
     console.log(`[${new Date().toISOString()}] Preparing to send form data to Zapier:`, data);
     
-    // First, check if webhook is properly configured before processing
+    // Format the data for the webhook
     const formattedData = formatFormData(data);
     const webhookType = formattedData.formType.toLowerCase().replace(/_/g, '');
     
+    // Check if webhook is properly configured before processing
     if (!isWebhookConfigured(webhookType as any)) {
       console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not properly configured`);
       return { 
@@ -28,7 +29,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Log the full formatted payload for debugging
     console.log(`[${new Date().toISOString()}] Sending data to Zapier:`, JSON.stringify(formattedData, null, 2));
     
-    const response = await fetch(webhookUrl, {
+    // Send the data to Zapier
+    await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -83,7 +85,7 @@ export const testZapierWebhook = async (webhookType: string): Promise<EmailRespo
     
     console.log(`[${new Date().toISOString()}] Sending test data:`, testData);
     
-    const response = await fetch(webhookUrl, {
+    await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
