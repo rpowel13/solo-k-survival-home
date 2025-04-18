@@ -11,7 +11,6 @@ import {
 export function formatFormData(data: FormData) {
   const leadSource = "Website Form";
   let formattedData: Record<string, any>;
-  let emailSubject: string;
 
   if (isSolo401kForm(data)) {
     formattedData = {
@@ -33,21 +32,24 @@ export function formatFormData(data: FormData) {
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
-    emailSubject = "New Solo 401k Application";
   } else if (isContactForm(data)) {
+    // Ensure all contact form fields are at the top level
     formattedData = {
       formType: 'Contact',
       name: data.name,
       email: data.email,
-      phone: data.phone,
-      subject: data.subject,
-      message: data.message,
+      phone: data.phone || '',
+      subject: data.subject || '',
+      message: data.message || '',
       consent: data.consent ? 'Yes' : 'No',
       submissionDate: new Date().toLocaleString(),
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
-      leadSource
+      leadSource,
+      // Add any additional fields that might be useful
+      leadType: 'Website Contact Form',
+      priority: 'Medium',
+      nextAction: 'Follow-up Call'
     };
-    emailSubject = "New Contact Form Submission";
   } else if (isLLCForm(data)) {
     formattedData = {
       formType: 'LLC_Formation',
@@ -65,7 +67,6 @@ export function formatFormData(data: FormData) {
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
-    emailSubject = "New LLC Formation Application";
   } else if (isFirstResponderForm(data)) {
     formattedData = {
       formType: 'First_Responder_Package',
@@ -83,7 +84,6 @@ export function formatFormData(data: FormData) {
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource
     };
-    emailSubject = "New First Responder Package Application";
   } else if (isScheduleForm(data)) {
     const formattedDate = data.date instanceof Date 
       ? data.date.toLocaleDateString() 
@@ -107,15 +107,25 @@ export function formatFormData(data: FormData) {
         ? data.date.toISOString() 
         : typeof data.date === 'string' ? new Date(data.date).toISOString() : new Date().toISOString()
     };
-    emailSubject = "New Consultation Request - Priority Lead";
   } else {
-    throw new Error("Unknown form data type");
+    // Fallback case for unknown form types
+    console.warn(`[${new Date().toISOString()}] Unknown form type, using generic format:`, data);
+    formattedData = {
+      ...data,
+      formType: data.formType || 'Unknown',
+      submissionDate: new Date().toLocaleString(),
+      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
+      leadSource: 'Website Form'
+    };
   }
 
   // Add recipient emails
   formattedData.recipientEmails = ["ross.powell@survival401k.com", "jill.powell@survival401k.com"];
-  formattedData.emailSubject = emailSubject;
-  formattedData.targetService = "CRM";
+  
+  // Include any additional tracking or metadata fields
+  formattedData.submissionTimestamp = new Date().toISOString();
+  formattedData.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  formattedData.browserInfo = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
 
   return formattedData;
 }

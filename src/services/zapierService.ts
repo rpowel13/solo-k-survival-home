@@ -35,20 +35,17 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     const webhookUrl = getZapierWebhookUrl(webhookType as any);
     console.log(`[${new Date().toISOString()}] Using Zapier webhook URL (${webhookType}): ${webhookUrl}`);
     
-    // Log the full formatted payload for debugging
-    console.log(`[${new Date().toISOString()}] Sending data to Zapier:`, JSON.stringify(formattedData, null, 2));
+    // DEBUG: Log exact payload going to Zapier
+    console.log(`[${new Date().toISOString()}] EXACT PAYLOAD TO ZAPIER:`, JSON.stringify(formattedData, null, 2));
     
-    // Log the raw data as well for comparison
-    console.log(`[${new Date().toISOString()}] Original form data:`, JSON.stringify(data, null, 2));
-    
-    // Send the formatted data directly to Zapier without wrapping it
-    // This ensures all field values are at the top level as Zapier expects
+    // Try sending with fetch but explicitly set credentials to 'omit'
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(formattedData),
+      credentials: 'omit', // Explicitly avoid sending credentials
       mode: 'no-cors' // This prevents CORS issues but also prevents reading response
     });
     
@@ -83,17 +80,14 @@ export const testZapierWebhook = async (webhookType: string): Promise<EmailRespo
     }
     
     const testData = {
-      testMode: true,
-      testSource: 'Manual Test',
       formType: webhookType,
+      name: "Test Contact",
+      email: "test@example.com",
+      phone: "555-123-4567",
+      subject: "Zapier Test",
+      message: "This is a manual test ping from the application.",
       timestamp: new Date().toISOString(),
-      sourceUrl: typeof window !== 'undefined' ? window.location.href : 'Unknown',
-      sessionInfo: {
-        userAgent: navigator.userAgent,
-        screenWidth: window.innerWidth,
-        screenHeight: window.innerHeight,
-        language: navigator.language
-      }
+      sourceUrl: typeof window !== 'undefined' ? window.location.href : 'Unknown'
     };
     
     console.log(`[${new Date().toISOString()}] Sending test data:`, testData);
@@ -104,6 +98,7 @@ export const testZapierWebhook = async (webhookType: string): Promise<EmailRespo
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(testData),
+      credentials: 'omit',
       mode: 'no-cors'
     });
     
