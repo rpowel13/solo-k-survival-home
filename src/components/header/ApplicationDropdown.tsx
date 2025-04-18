@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 export const ApplicationDropdown = () => {
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="text-gray-600 hover:text-survival-700 font-medium bg-transparent">
+      <NavigationMenuTrigger className="text-gray-600 hover:text-survival-700 font-bold bg-transparent">
         Applications
       </NavigationMenuTrigger>
       <NavigationMenuContent>

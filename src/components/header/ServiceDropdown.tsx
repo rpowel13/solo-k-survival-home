@@ -15,7 +15,7 @@ export const ServiceDropdown = () => {
 
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="text-gray-600 hover:text-survival-700 font-medium bg-transparent">
+      <NavigationMenuTrigger className="text-gray-600 hover:text-survival-700 font-bold bg-transparent">
         Services
       </NavigationMenuTrigger>
       <NavigationMenuContent>

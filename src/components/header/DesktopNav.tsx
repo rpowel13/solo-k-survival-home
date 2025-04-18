@@ -11,7 +11,7 @@ import { ToolsDropdown } from "./ToolsDropdown";
 export const DesktopNav = () => {
   return (
     <nav className="hidden md:flex items-center space-x-6">
-      <Link to="/" className="text-gray-600 hover:text-survival-700 hover:bg-survival-50 rounded-md px-2 py-1 transition-colors">Home</Link>
+      <Link to="/" className="text-gray-600 hover:text-survival-700 hover:bg-survival-50 rounded-md px-2 py-1 transition-colors font-bold">Home</Link>
       
       <NavigationMenu>
         <NavigationMenuList>
@@ -45,7 +45,7 @@ export const DesktopNav = () => {
         rel="noopener noreferrer" 
         className="w-full"
       >
-        <Button className="bg-survival-600 hover:bg-survival-700 text-white">
+        <Button className="bg-survival-600 hover:bg-survival-700 text-white font-bold">
           <LogIn className="mr-2 h-4 w-4" />
           Customer Portal
         </Button>
