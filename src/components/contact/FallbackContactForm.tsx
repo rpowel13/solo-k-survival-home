@@ -47,10 +47,10 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       if (zapierConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
         
-        // IMPORTANT: Create a properly typed data object for Zapier with explicit formType
+        // Create a properly typed data object for Zapier with explicit formType
         const zapierData = {
           ...data,
-          formType: 'Contact', // Must be capitalized to match the formatFormData expectations
+          formType: 'Contact', // Must be explicitly set for correct formatting
           // Add any other fields that might be useful for Zapier
           submissionDate: new Date().toISOString(),
           source: typeof window !== 'undefined' ? window.location.href : 'unknown'

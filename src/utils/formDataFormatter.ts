@@ -108,15 +108,29 @@ export function formatFormData(data: FormData) {
         : typeof data.date === 'string' ? new Date(data.date).toISOString() : new Date().toISOString()
     };
   } else {
-    // Fallback case for unknown form types
+    // Fallback case for unknown form types - Fixed to avoid TypeScript errors
     console.warn(`[${new Date().toISOString()}] Unknown form type, using generic format:`, data);
+    
+    // Create a properly typed generic object instead of spreading data
     formattedData = {
-      ...data,
-      formType: data.formType || 'Unknown',
+      formType: 'Unknown',
       submissionDate: new Date().toLocaleString(),
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource: 'Website Form'
     };
+    
+    // Safely add properties from data as they exist
+    if (typeof data === 'object' && data !== null) {
+      // Add all properties that exist in data to our formattedData
+      Object.entries(data).forEach(([key, value]) => {
+        formattedData[key] = value;
+      });
+      
+      // If formType is explicitly provided in data, use that instead of 'Unknown'
+      if ('formType' in data && data.formType) {
+        formattedData.formType = data.formType;
+      }
+    }
   }
 
   // Add recipient emails
