@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Coins, Building2, BarChart4, WalletCards, ChartPie, DollarSign } from "lucide-react";
+import { Coins, Building2, WalletCards, ChartPie, DollarSign, HandCoins } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const InvestmentOptionsSection = ({ className }: { className?: string }) => {
@@ -30,10 +31,10 @@ const InvestmentOptionsSection = ({ className }: { className?: string }) => {
       icon: <DollarSign className="h-6 w-6 text-green-600" />
     },
     {
-      title: "Stock Market",
-      description: "Trade stocks, bonds, mutual funds, and ETFs with complete control.",
-      tooltip: "Take control of your investments with direct access to market opportunities.",
-      icon: <BarChart4 className="h-6 w-6 text-green-600" />
+      title: "Hardmoney Lending",
+      description: "Provide direct loans secured by real estate with competitive interest rates.",
+      tooltip: "Generate passive income through secured, high-yield private lending opportunities.",
+      icon: <HandCoins className="h-6 w-6 text-teal-600" />
     },
     {
       title: "Cryptocurrency",
