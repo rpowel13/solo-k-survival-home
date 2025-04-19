@@ -91,6 +91,8 @@ const FirstResponderWorkflow = () => {
   const onLLCSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
+      console.log(`[${new Date().toISOString()}] LLC Form Data:`, data);
+      
       // Check if Zapier webhook is configured
       const isZapierConfigured = isWebhookConfigured('first_responder');
       console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
@@ -112,22 +114,14 @@ const FirstResponderWorkflow = () => {
         await triggerZapierWebhook(zapierData);
       }
       
-      // Submit LLC application
-      const { data: llcApplication, error: llcError } = await supabase
-        .from('llc_applications')
-        .insert([
-          {
-            ...data,
-            is_first_responder: true,
-          }
-        ])
-        .select()
-        .single();
-
-      if (llcError) throw llcError;
-
-      // Store LLC data and move to 401k step
-      setLlcData(llcApplication);
+      // Store application data in local state for next step
+      const tempLLCData = {
+        id: crypto.randomUUID(), // Generate a temporary ID since we're not submitting to Supabase yet
+        ...data,
+        is_first_responder: true,
+      };
+      
+      setLlcData(tempLLCData);
       
       // Pre-fill 401k form with LLC data
       solo401kForm.reset({
@@ -146,7 +140,7 @@ const FirstResponderWorkflow = () => {
       setCurrentStep('401k');
       
       toast({
-        title: "LLC Application Submitted",
+        title: "LLC Information Saved",
         description: "Please complete your Solo 401k application.",
       });
     } catch (error) {
@@ -164,6 +158,16 @@ const FirstResponderWorkflow = () => {
   const on401kSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
+      console.log(`[${new Date().toISOString()}] 401k Form Data:`, data);
+      
+      // Combine LLC and 401k data for First Responder package
+      const combinedData = {
+        llc: llcData,
+        solo401k: data
+      };
+      
+      console.log(`[${new Date().toISOString()}] Combined First Responder Data:`, combinedData);
+      
       // Check if Zapier webhook is configured
       const isZapierConfigured = isWebhookConfigured('first_responder');
       console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
@@ -195,19 +199,14 @@ const FirstResponderWorkflow = () => {
         await triggerZapierWebhook(zapierData);
       }
       
-      // Submit 401k application with link to LLC application
-      const { data: solo401kApplication, error: solo401kError } = await supabase
-        .from('solo401k_applications')
-        .insert([
-          {
-            ...data,
-            linked_llc_application_id: llcData.id
-          }
-        ])
-        .select()
-        .single();
-
-      if (solo401kError) throw solo401kError;
+      // Store application data in sessionStorage for payment process
+      sessionStorage.setItem('first_responder_application', JSON.stringify({
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        applicationDate: new Date().toISOString(),
+        llcName: llcData.desiredLLCName,
+        state: data.state
+      }));
 
       toast({
         title: "Success",

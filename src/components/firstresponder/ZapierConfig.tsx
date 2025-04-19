@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { initZapierConfig } from "@/services/zapierConfigService";
+import { initZapierConfig, isWebhookConfigured } from "@/services/zapierConfigService";
 import { testZapierWebhook } from "@/services/zapierService";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -25,7 +25,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({ hidden = false, validateWeb
     if (validateWebhook) {
       validateZapierWebhook();
     }
-  }, [validateWebhook]);
+  }, [validateWebhook, toast]);
 
   const validateZapierWebhook = async () => {
     try {
