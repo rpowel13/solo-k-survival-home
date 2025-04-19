@@ -2,12 +2,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import { Loader2 } from 'lucide-react';
+import { Loader2, DollarSign } from 'lucide-react';
 import Solo401kBusinessInfo from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import AddressFields from '@/components/solo401k/AddressFields';
 import { Solo401kFormProps } from './types';
+import AgreementSection from '@/components/solo401k/AgreementSection';
 
 interface Props {
   form: Solo401kFormProps['form'];
@@ -48,6 +49,11 @@ const FirstResponder401kForm: React.FC<Props> = ({
         </div>
 
         {pricingComponent}
+
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-survival-800">Agreement</h2>
+          <AgreementSection form={form} />
+        </div>
 
         <div className="flex gap-4">
           <Button 
