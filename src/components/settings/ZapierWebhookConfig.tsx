@@ -13,6 +13,8 @@ const WEBHOOK_TYPES = [
   { id: 'solo401k', label: 'Solo 401k Applications' },
   { id: 'llc', label: 'LLC Applications' },
   { id: 'first_responder', label: 'First Responder Applications' },
+  { id: 'first_responder_401k', label: 'First Responder 401k Applications' },
+  { id: 'first_responder_llc', label: 'First Responder LLC Applications' },
   { id: 'alternative_investments', label: 'Alternative Investment Applications' }
 ] as const;
 
