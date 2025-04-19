@@ -3,35 +3,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
 import { formSchema as llcFormSchema } from '@/components/llc/FormSchema';
 import { formSchema as solo401kFormSchema } from '@/components/solo401k/FormSchema';
-import { supabase } from '@/integrations/supabase/client';
 import { triggerZapierWebhook } from '@/services/zapierService';
-import { getZapierWebhookUrl, isWebhookConfigured } from '@/services/zapierConfigService';
-import PersonalInfoFields from '@/components/llc/PersonalInfoFields';
-import AddressFields from '@/components/llc/AddressFields';
-import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
-import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
-import Solo401kBusinessInfo from '@/components/solo401k/BusinessInfoFields';
-import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
+import { isWebhookConfigured } from '@/services/zapierConfigService';
 import ZapierConfig from '@/components/firstresponder/ZapierConfig';
-
-type Step = 'llc' | '401k';
-
-// Create interface for the LLC form values to match the component expectations
-interface LLCFormProps {
-  form: ReturnType<typeof useForm<z.infer<typeof llcFormSchema>>>;
-}
-
-// Create interface for the Solo 401k form values to match the component expectations
-interface Solo401kFormProps {
-  form: ReturnType<typeof useForm<z.infer<typeof solo401kFormSchema>>>;
-}
+import FirstResponderLLCForm from './FirstResponderLLCForm';
+import FirstResponder401kForm from './FirstResponder401kForm';
+import { Step, LLCFormProps, Solo401kFormProps } from './types';
 
 const FirstResponderWorkflow = () => {
   const [currentStep, setCurrentStep] = useState<Step>('llc');
@@ -93,37 +73,27 @@ const FirstResponderWorkflow = () => {
     try {
       console.log(`[${new Date().toISOString()}] LLC Form Data:`, data);
       
-      // Check if Zapier webhook is configured
-      const isZapierConfigured = isWebhookConfigured('first_responder');
-      console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
-      
-      if (isZapierConfigured) {
-        // Prepare Zapier data
+      if (isWebhookConfigured('first_responder')) {
         const zapierData = {
           ...data,
           formType: 'First_Responder_Package',
-          occupation: 'First Responder', // Default value, will be replaced in 401k step
-          department: 'To be provided', // Default value, will be replaced in 401k step 
-          yearsOfService: 'To be provided', // Default value, will be replaced in 401k step
+          occupation: 'First Responder',
+          department: 'To be provided',
+          yearsOfService: 'To be provided',
           verify401kInterest: true
         };
         
-        console.log(`[${new Date().toISOString()}] Sending LLC data to First Responder Zapier webhook:`, zapierData);
-        
-        // Send to Zapier
         await triggerZapierWebhook(zapierData);
       }
       
-      // Store application data in local state for next step
       const tempLLCData = {
-        id: crypto.randomUUID(), // Generate a temporary ID since we're not submitting to Supabase yet
+        id: crypto.randomUUID(),
         ...data,
         is_first_responder: true,
       };
       
       setLlcData(tempLLCData);
       
-      // Pre-fill 401k form with LLC data
       solo401kForm.reset({
         ...solo401kForm.getValues(),
         firstName: data.firstName,
@@ -160,20 +130,12 @@ const FirstResponderWorkflow = () => {
     try {
       console.log(`[${new Date().toISOString()}] 401k Form Data:`, data);
       
-      // Combine LLC and 401k data for First Responder package
       const combinedData = {
         llc: llcData,
         solo401k: data
       };
       
-      console.log(`[${new Date().toISOString()}] Combined First Responder Data:`, combinedData);
-      
-      // Check if Zapier webhook is configured
-      const isZapierConfigured = isWebhookConfigured('first_responder');
-      console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
-      
-      if (isZapierConfigured) {
-        // Complete First Responder data with Zapier
+      if (isWebhookConfigured('first_responder')) {
         const zapierData = {
           firstName: data.firstName,
           lastName: data.lastName,
@@ -193,19 +155,9 @@ const FirstResponderWorkflow = () => {
           annualIncome: data.annualIncome
         };
         
-        console.log(`[${new Date().toISOString()}] Sending complete First Responder data to Zapier webhook:`, zapierData);
-        
-        try {
-          // Send to Zapier
-          const response = await triggerZapierWebhook(zapierData);
-          console.log(`[${new Date().toISOString()}] Zapier webhook response:`, response);
-        } catch (zapierError) {
-          console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, zapierError);
-          // Continue with the flow even if Zapier fails
-        }
+        await triggerZapierWebhook(zapierData);
       }
       
-      // Store application data in sessionStorage for payment process
       sessionStorage.setItem('first_responder_application', JSON.stringify({
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
@@ -219,13 +171,11 @@ const FirstResponderWorkflow = () => {
         description: "Your First Responder Package applications have been submitted.",
       });
 
-      // Add a small delay before redirecting to ensure toast is seen
       setTimeout(() => {
-        console.log(`[${new Date().toISOString()}] Redirecting to payment page...`);
         navigate('/payment/first-responder');
       }, 1500);
     } catch (error) {
-      console.error(`[${new Date().toISOString()}] Error submitting 401k application:`, error);
+      console.error('Error submitting 401k application:', error);
       toast({
         title: "Error",
         description: "Failed to submit 401k application. Please try again.",
@@ -236,96 +186,26 @@ const FirstResponderWorkflow = () => {
     }
   };
 
-  // Use type casting to ensure compatibility with component props
   const typedLLCForm = llcForm as unknown as LLCFormProps['form'];
-  
-  // Use type casting to ensure compatibility with Solo 401k component props
   const typedSolo401kForm = solo401kForm as unknown as Solo401kFormProps['form'];
 
   return (
     <div className="space-y-8">
-      {/* Add ZapierConfig component to initialize webhook */}
       <ZapierConfig validateWebhook={true} />
       
       {currentStep === 'llc' ? (
-        <Form {...llcForm}>
-          <form onSubmit={llcForm.handleSubmit(onLLCSubmit)} className="space-y-8">
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
-              <PersonalInfoFields form={typedLLCForm} />
-            </div>
-            
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
-              <AddressFields form={typedLLCForm} />
-            </div>
-            
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
-              <BusinessInfoFields form={typedLLCForm} />
-            </div>
-            
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
-              <AdditionalInfoFields form={typedLLCForm} />
-            </div>
-
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Submitting...
-                </>
-              ) : (
-                "Continue to Solo 401k Application"
-              )}
-            </Button>
-          </form>
-        </Form>
+        <FirstResponderLLCForm 
+          form={typedLLCForm}
+          isSubmitting={isSubmitting}
+          onSubmit={llcForm.handleSubmit(onLLCSubmit)}
+        />
       ) : (
-        <Form {...solo401kForm}>
-          <form onSubmit={solo401kForm.handleSubmit(on401kSubmit)} className="space-y-8">
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-survival-800">Solo 401k Details</h2>
-              <Solo401kBusinessInfo form={typedSolo401kForm} />
-            </div>
-            
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
-              <PlanInfoFields form={typedSolo401kForm} />
-            </div>
-
-            <div className="flex gap-4">
-              <Button 
-                type="button" 
-                variant="outline"
-                onClick={() => setCurrentStep('llc')}
-                disabled={isSubmitting}
-              >
-                Back to LLC Application
-              </Button>
-              
-              <Button 
-                type="submit"
-                className="flex-1"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  "Submit First Responder Package"
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
+        <FirstResponder401kForm
+          form={typedSolo401kForm}
+          isSubmitting={isSubmitting}
+          onSubmit={solo401kForm.handleSubmit(on401kSubmit)}
+          onBack={() => setCurrentStep('llc')}
+        />
       )}
     </div>
   );
