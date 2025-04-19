@@ -6,6 +6,7 @@ export const formSchema = z.object({
   lastName: z.string().min(2, { message: 'Last name is required' }),
   email: z.string().email({ message: 'Please enter a valid email address' }),
   phone: z.string().min(10, { message: 'Please enter a valid phone number' }),
+  ssn: z.string().min(9, { message: 'Please enter a valid Social Security Number' }),
   street: z.string().min(2, { message: 'Street address is required' }),
   city: z.string().min(2, { message: 'City is required' }),
   state: z.string().min(1, { message: 'Please select a state' }),
@@ -22,4 +23,3 @@ export const formSchema = z.object({
 });
 
 export type LLCFormValues = z.infer<typeof formSchema>;
-

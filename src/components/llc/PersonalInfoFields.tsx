@@ -41,7 +41,7 @@ const PersonalInfoFields = ({ form }: PersonalInfoFieldsProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <FormField
           control={form.control}
           name="email"
@@ -68,10 +68,22 @@ const PersonalInfoFields = ({ form }: PersonalInfoFieldsProps) => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="ssn"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Social Security Number</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="XXX-XX-XXXX" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     </>
   );
 };
 
 export default PersonalInfoFields;
-

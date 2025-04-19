@@ -29,6 +29,7 @@ const LLCApplication = () => {
       lastName: '',
       email: '',
       phone: '',
+      ssn: '',
       street: '',
       city: '',
       state: '',
@@ -40,7 +41,7 @@ const LLCApplication = () => {
       businessPurpose: '',
       additionalInfo: '',
       agreeToTerms: false,
-    },
+    }
   });
 
   const onSubmit = async (values: LLCFormValues) => {
