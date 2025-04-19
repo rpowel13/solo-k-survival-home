@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { CheckCircle2, XCircle, ArrowRight, RefreshCw } from 'lucide-react';
 import { Result } from './types';
 import { useToast } from '@/hooks/use-toast';
@@ -74,7 +73,6 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
   const onSubmit = async (data: z.infer<typeof contactFormSchema>) => {
     setIsSubmitting(true);
     try {
-      // Create a custom payload that extends the form data with additional info
       const zapierPayload = {
         formType: 'Solo401k_Prequalification',
         name: data.name,
@@ -120,47 +118,49 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-md mx-auto">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Your name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="your.email@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input type="tel" placeholder="(123) 456-7890" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xs">Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Your name" {...field} className="text-sm" />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xs">Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="Email" {...field} className="text-sm" />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-xs">Phone</FormLabel>
+                  <FormControl>
+                    <Input type="tel" placeholder="Phone" {...field} className="text-sm" />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
             <Button onClick={onReset} variant="outline" type="button" className="border-2">
