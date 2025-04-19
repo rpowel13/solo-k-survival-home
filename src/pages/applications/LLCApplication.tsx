@@ -13,7 +13,7 @@ import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
 import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
 import SubmitButton from '@/components/llc/SubmitButton';
-import ZapierConfig from '@/components/llc/ZapierConfig';
+import ZapierConfig from '@/components/solo401k/ZapierConfig';
 import { formSchema, type LLCFormValues } from '@/components/llc/FormSchema';
 import { triggerZapierWebhook } from '@/services/zapierService';
 
@@ -47,6 +47,12 @@ const LLCApplication = () => {
     setIsSubmitting(true);
     
     try {
+      // Add formType to the data for proper identification
+      const formData = {
+        ...values,
+        formType: 'LLC_Formation'
+      };
+      
       // Store application data in sessionStorage for payment process
       sessionStorage.setItem('llc_application', JSON.stringify({
         name: `${values.firstName} ${values.lastName}`,
@@ -61,7 +67,7 @@ const LLCApplication = () => {
       }));
       
       // Send the form data via Zapier webhook
-      const emailResult = await triggerZapierWebhook(values);
+      const emailResult = await triggerZapierWebhook(formData);
       
       if (emailResult.success) {
         toast({
@@ -91,7 +97,8 @@ const LLCApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <ZapierConfig />
+      {/* Using the correct webhook type 'llc' */}
+      <ZapierConfig webhookType="llc" />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <FormHeader />
@@ -129,4 +136,3 @@ const LLCApplication = () => {
 };
 
 export default LLCApplication;
-

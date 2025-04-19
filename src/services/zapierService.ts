@@ -1,4 +1,3 @@
-
 import { FormData, EmailResponse } from '@/types/formTypes';
 import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
 import { formatFormData } from '@/utils/formDataFormatter';
@@ -22,12 +21,34 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     // Format the data for the webhook
     const formattedData = formatFormData(data);
     
-    // Validate that formType exists in either the original data or formatted data
-    const dataType = ('formType' in data && typeof data.formType === 'string') ? data.formType : 
-                    (formattedData.formType ? formattedData.formType : 'contact');
-    
     // Determine webhook type from formType property or from formatted data
-    const webhookType = dataType.toLowerCase().replace(/_/g, '');
+    let webhookType = 'crm'; // Default webhook type
+    
+    if ('formType' in data && typeof data.formType === 'string') {
+      // Get webhook type from form data
+      if (data.formType.toLowerCase() === 'solo401k') {
+        webhookType = 'solo401k';
+      } else if (data.formType.toLowerCase().includes('llc') || data.formType.toLowerCase().includes('formation')) {
+        webhookType = 'llc';
+      } else if (data.formType.toLowerCase().includes('first_responder')) {
+        webhookType = 'first_responder';
+      } else if (data.formType.toLowerCase().includes('schedule') || data.formType.toLowerCase().includes('consultation')) {
+        webhookType = 'consultation';
+      } else if (data.formType.toLowerCase().includes('contact')) {
+        webhookType = 'crm';
+      }
+    } else if (formattedData.formType) {
+      // Get webhook type from formatted data if not in original data
+      if (formattedData.formType.toLowerCase() === 'solo401k') {
+        webhookType = 'solo401k';
+      } else if (formattedData.formType.toLowerCase().includes('llc') || formattedData.formType.toLowerCase().includes('formation')) {
+        webhookType = 'llc';
+      } else if (formattedData.formType.toLowerCase().includes('first_responder')) {
+        webhookType = 'first_responder';
+      } else if (formattedData.formType.toLowerCase().includes('schedule') || formattedData.formType.toLowerCase().includes('consultation')) {
+        webhookType = 'consultation';
+      }
+    }
     
     console.log(`[${new Date().toISOString()}] Determined webhook type: ${webhookType}`);
     

@@ -1,4 +1,3 @@
-
 import { FormData } from '@/types/formTypes';
 import { 
   isSolo401kForm, 
@@ -12,6 +11,9 @@ export function formatFormData(data: FormData) {
   const leadSource = "Website Form";
   let formattedData: Record<string, any>;
 
+  // Handle explicit formType if provided
+  const explicitFormType = 'formType' in data ? data.formType : null;
+  
   if (isSolo401kForm(data)) {
     formattedData = {
       formType: 'Solo401k',
@@ -113,7 +115,7 @@ export function formatFormData(data: FormData) {
     
     // Create a properly typed generic object
     formattedData = {
-      formType: 'Unknown',
+      formType: explicitFormType || 'Unknown',
       submissionDate: new Date().toLocaleString(),
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
       leadSource: 'Website Form'
@@ -125,14 +127,6 @@ export function formatFormData(data: FormData) {
       Object.entries(data).forEach(([key, value]) => {
         formattedData[key] = value;
       });
-      
-      // If formType is explicitly provided in data, use that instead of 'Unknown'
-      if ('formType' in data && typeof data === 'object') {
-        const typedData = data as { formType?: string };
-        if (typedData.formType) {
-          formattedData.formType = typedData.formType;
-        }
-      }
     }
   }
 
