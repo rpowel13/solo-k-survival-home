@@ -1,5 +1,7 @@
+
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import GoldPriceWidget from "./GoldPriceWidget";
 
 const Footer = () => {
   return (
@@ -12,7 +14,7 @@ const Footer = () => {
             <p className="mb-4 text-sm text-gray-400">
               Providing customized Solo 401(k) solutions for self-employed professionals and small business owners since 2014.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mb-6">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Facebook size={20} />
               </a>
@@ -25,6 +27,11 @@ const Footer = () => {
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram size={20} />
               </a>
+            </div>
+            
+            {/* Add Gold Price Widget under social icons */}
+            <div className="flex justify-center mt-4">
+              <GoldPriceWidget />
             </div>
           </div>
 
