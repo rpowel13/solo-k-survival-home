@@ -19,7 +19,7 @@ const ZapierConfig = () => {
       toast({
         title: "Zapier Webhook Not Configured",
         description: "The Solo401k webhook is not configured, applications may not be properly processed in the CRM system.",
-        variant: "warning",
+        variant: "default", // Changed from "warning" to "default"
         duration: 5000,
       });
     }
