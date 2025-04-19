@@ -5,6 +5,8 @@ import { Form } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 import Solo401kBusinessInfo from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
+import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
+import AddressFields from '@/components/solo401k/AddressFields';
 import { Solo401kFormProps } from './types';
 
 interface Props {
@@ -26,6 +28,16 @@ const FirstResponder401kForm: React.FC<Props> = ({
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-8">
         <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
+          <PersonalInfoFields form={form} />
+        </div>
+
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-survival-800">Address</h2>
+          <AddressFields form={form} />
+        </div>
+        
+        <div className="space-y-6">
           <h2 className="text-xl font-semibold text-survival-800">Solo 401k Details</h2>
           <Solo401kBusinessInfo form={form} />
         </div>
@@ -35,7 +47,6 @@ const FirstResponder401kForm: React.FC<Props> = ({
           <PlanInfoFields form={form} />
         </div>
 
-        {/* Render pricing component if provided */}
         {pricingComponent}
 
         <div className="flex gap-4">
