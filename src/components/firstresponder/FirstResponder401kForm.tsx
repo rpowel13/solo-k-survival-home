@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
@@ -8,7 +7,7 @@ import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import AddressFields from '@/components/solo401k/AddressFields';
 import { Solo401kFormProps } from './types';
-import AgreementSection from '@/components/solo401k/AgreementSection';
+import FirstResponder401kAgreementSection from './FirstResponder401kAgreementSection';
 
 interface Props {
   form: Solo401kFormProps['form'];
@@ -48,7 +47,7 @@ const FirstResponder401kForm: React.FC<Props> = ({
 
         <div className="space-y-6">
           <h2 className="text-xl font-semibold text-survival-800">Agreement</h2>
-          <AgreementSection form={form} />
+          <FirstResponder401kAgreementSection form={form} />
         </div>
 
         <div className="flex gap-4">
