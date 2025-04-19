@@ -72,7 +72,7 @@ const Solo401k = () => {
       {/* Include ZapierConfig for webhook initialization */}
       <ZapierConfig />
       
-      <div className="space-y-12">
+      <div className="space-y-8 sm:space-y-12 px-4 sm:px-0">
         <IntroSection />
         <div ref={prequalSectionRef} id="prequalification">
           <PrequalificationSection />

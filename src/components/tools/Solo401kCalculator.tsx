@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, DollarSign, PiggyBank } from 'lucide-react';
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const businessTypes = [
   { value: 'sole-proprietor', label: 'Sole Proprietorship' },
@@ -16,6 +17,7 @@ const Solo401kCalculator = () => {
   const [businessType, setBusinessType] = useState<string>(businessTypes[0].value);
   const [income, setIncome] = useState<string>('');
   const [age, setAge] = useState<string>('');
+  const isMobile = useIsMobile();
 
   // Constants for 2025 contribution limits
   const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;     // Base limit for 2025
@@ -70,10 +72,10 @@ const Solo401kCalculator = () => {
   const results = calculateContributions();
 
   return (
-    <Card className="p-6 max-w-2xl mx-auto">
-      <div className="space-y-8">
-        <div className="flex items-center gap-2 text-2xl font-semibold text-survival-800">
-          <Calculator className="h-6 w-6" />
+    <Card className="p-4 sm:p-6 max-w-full sm:max-w-2xl mx-auto">
+      <div className="space-y-6 sm:space-y-8">
+        <div className="flex items-center gap-2 text-xl sm:text-2xl font-semibold text-survival-800">
+          <Calculator className="h-5 w-5 sm:h-6 sm:w-6" />
           <h2>Solo 401(k) Contribution Calculator</h2>
         </div>
 
@@ -99,6 +101,7 @@ const Solo401kCalculator = () => {
             <Input
               id="income"
               type="number"
+              inputMode="numeric"
               placeholder="Enter your annual income"
               value={income}
               onChange={(e) => setIncome(e.target.value)}
@@ -110,6 +113,7 @@ const Solo401kCalculator = () => {
             <Input
               id="age"
               type="number"
+              inputMode="numeric"
               placeholder="Enter your age"
               value={age}
               onChange={(e) => setAge(e.target.value)}
@@ -118,17 +122,17 @@ const Solo401kCalculator = () => {
         </div>
 
         {income && age && (
-          <div className="mt-6 space-y-4 bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold flex items-center gap-2 text-survival-700">
-              <PiggyBank className="h-5 w-5" />
+          <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 bg-gray-50 p-3 sm:p-4 rounded-lg">
+            <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2 text-survival-700">
+              <PiggyBank className="h-4 w-4 sm:h-5 sm:w-5" />
               Contribution Limits for 2025
             </h3>
             
-            <div className="grid gap-4 text-sm">
+            <div className={`grid gap-3 text-sm ${isMobile ? 'text-xs' : 'text-sm'}`}>
               <div className="flex justify-between items-center">
                 <span>Employee Contribution:</span>
                 <span className="font-semibold text-survival-700 flex items-center">
-                  <DollarSign className="h-4 w-4" />
+                  <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
                   {results.employeeContribution.toLocaleString()}
                 </span>
               </div>
@@ -137,7 +141,7 @@ const Solo401kCalculator = () => {
                 <div className="flex justify-between items-center">
                   <span>Catch-up Contribution (Age 50+):</span>
                   <span className="font-semibold text-survival-700 flex items-center">
-                    <DollarSign className="h-4 w-4" />
+                    <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
                     {results.catchUpContribution.toLocaleString()}
                   </span>
                 </div>
@@ -146,7 +150,7 @@ const Solo401kCalculator = () => {
               <div className="flex justify-between items-center">
                 <span>Employer Contribution:</span>
                 <span className="font-semibold text-survival-700 flex items-center">
-                  <DollarSign className="h-4 w-4" />
+                  <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
                   {results.employerContribution.toLocaleString()}
                 </span>
               </div>
@@ -154,7 +158,7 @@ const Solo401kCalculator = () => {
               <div className="flex justify-between items-center border-t pt-2">
                 <span>Self-Employment Tax (15.3%):</span>
                 <span className="font-semibold text-survival-700 flex items-center">
-                  <DollarSign className="h-4 w-4" />
+                  <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
                   {Math.round(results.seTax).toLocaleString()}
                 </span>
               </div>
@@ -162,7 +166,7 @@ const Solo401kCalculator = () => {
               <div className="flex justify-between items-center">
                 <span>SE Tax Deduction:</span>
                 <span className="font-semibold text-survival-700 flex items-center">
-                  <DollarSign className="h-4 w-4" />
+                  <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
                   {Math.round(results.seTaxDeduction).toLocaleString()}
                 </span>
               </div>
@@ -170,15 +174,15 @@ const Solo401kCalculator = () => {
               <div className="flex justify-between items-center">
                 <span>Estimated Tax Savings:</span>
                 <span className="font-semibold text-green-600 flex items-center">
-                  <DollarSign className="h-4 w-4" />
+                  <DollarSign className="h-3 w-3 sm:h-4 sm:w-4" />
                   {Math.round(results.estimatedTaxSavings).toLocaleString()}
                 </span>
               </div>
               
               <div className="flex justify-between items-center pt-2 border-t">
                 <span className="font-medium">Total Potential Contribution:</span>
-                <span className="font-bold text-lg text-survival-700 flex items-center">
-                  <DollarSign className="h-5 w-5" />
+                <span className="font-bold text-base sm:text-lg text-survival-700 flex items-center">
+                  <DollarSign className="h-4 w-4 sm:h-5 sm:w-5" />
                   {results.totalContribution.toLocaleString()}
                 </span>
               </div>
