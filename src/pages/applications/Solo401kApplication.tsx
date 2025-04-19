@@ -16,7 +16,6 @@ import FormHeader from '@/components/solo401k/FormHeader';
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
-import AdditionalInfoFields from '@/components/solo401k/AdditionalInfoFields';
 import AgreementSection from '@/components/solo401k/AgreementSection';
 import AddressFields from '@/components/solo401k/AddressFields';
 import { Button } from '@/components/ui/button';
@@ -51,8 +50,6 @@ const Solo401kApplication = () => {
       trustee2Name: "",
       participant1Name: "",
       participant2Name: "",
-      existingRetirement: false,
-      additionalInfo: "",
       agreeToTerms: false
     }
   });
@@ -62,47 +59,38 @@ const Solo401kApplication = () => {
     console.log("Form submitted with data:", data);
     
     try {
-      // Add formType to the data for proper identification
       const formData = {
         ...data,
         formType: 'Solo401k'
       };
       
-      // Store application data in sessionStorage for payment process
       sessionStorage.setItem('solo401k_application', JSON.stringify({
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         applicationDate: new Date().toISOString()
       }));
       
-      // Try both submission methods for redundancy
       const zapierPromise = triggerZapierWebhook(formData);
       const supabasePromise = submitSolo401kApplication(data);
       
-      // Wait for both promises to resolve
       const [zapierResult, supabaseResult] = await Promise.allSettled([zapierPromise, supabasePromise]);
       
-      // Determine if at least one method was successful
       const zapierSuccess = zapierResult.status === 'fulfilled' && zapierResult.value.success;
       const supabaseSuccess = supabaseResult.status === 'fulfilled' && supabaseResult.value.success;
       
-      // Log results for debugging
       console.log("Zapier submission result:", zapierResult);
       console.log("Supabase submission result:", supabaseResult);
       
-      // Proceed if either method was successful
       if (zapierSuccess || supabaseSuccess) {
         toast({
           title: "Application Submitted",
           description: "Your Solo 401k application has been submitted successfully. Redirecting to payment...",
         });
         
-        // Redirect to payment page after a short delay
         setTimeout(() => {
           navigate('/payment/solo-401k');
         }, 1500);
       } else {
-        // Extract error messages
         let errorMessage = "Failed to submit application through any available method.";
         
         if (zapierResult.status === 'fulfilled' && !zapierResult.value.success) {
@@ -154,11 +142,6 @@ const Solo401kApplication = () => {
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
                   <PlanInfoFields form={form} />
-                </div>
-                
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
-                  <AdditionalInfoFields form={form} />
                 </div>
                 
                 <div className="space-y-6">

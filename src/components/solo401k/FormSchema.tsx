@@ -51,9 +51,6 @@ export const formSchema = z.object({
   participant1Name: z.string().min(2, { message: 'Participant name must be at least 2 characters' }),
   participant2Name: z.string().optional(),
   
-  // Additional information
-  existingRetirement: z.boolean().default(false),
-  additionalInfo: z.string().optional(),
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms and conditions',
   }),

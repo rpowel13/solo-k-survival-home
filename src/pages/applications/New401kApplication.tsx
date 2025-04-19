@@ -7,7 +7,6 @@ import { Form } from "@/components/ui/form";
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
-import AdditionalInfoFields from '@/components/solo401k/AdditionalInfoFields';
 import AddressFields from '@/components/solo401k/AddressFields';
 import AgreementSection from '@/components/solo401k/AgreementSection';
 import { Button } from '@/components/ui/button';
@@ -41,8 +40,6 @@ const New401kApplication = () => {
       trustee2Name: "",
       participant1Name: "",
       participant2Name: "",
-      existingRetirement: false,
-      additionalInfo: "",
       agreeToTerms: false
     }
   });
@@ -104,11 +101,6 @@ const New401kApplication = () => {
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
                   <PlanInfoFields form={form} />
-                </div>
-                
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
-                  <AdditionalInfoFields form={form} />
                 </div>
                 
                 <div className="space-y-6">
