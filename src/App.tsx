@@ -69,6 +69,8 @@ const App = () => (
           <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
           <Route path="/apply/new-solo-401k" element={<New401kApplication />} />
           <Route path="/apply/new-401k-form" element={<New401kFormPage />} />
+          <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
+          <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
