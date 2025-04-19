@@ -171,7 +171,7 @@ const LLCCreation = () => {
           <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
             <div className="flex items-center justify-center mb-4">
               <DollarSign className="h-8 w-8 text-finance-600 mr-2" />
-              <h3 className="text-3xl font-bold text-survival-800">$750</h3>
+              <h3 className="text-3xl font-bold text-survival-800">$795</h3>
             </div>
             <p className="text-lg mb-4 text-gray-600">
               Complete LLC Formation and Documentation

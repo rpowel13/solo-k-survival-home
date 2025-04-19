@@ -20,7 +20,7 @@ const LLCPayment = () => {
     id?: string;
   } | null>(null);
   
-  // Updated vCita payment link for LLC creation
+  // Updated vCita payment link for LLC creation with new price
   const paymentLink = "https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=LLC%20Creation&amount=795&v_currency=USD";
 
   useEffect(() => {
