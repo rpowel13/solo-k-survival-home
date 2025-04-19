@@ -12,9 +12,16 @@ interface Props {
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onBack: () => void;
+  pricingComponent?: React.ReactNode;  // Add this optional prop
 }
 
-const FirstResponder401kForm: React.FC<Props> = ({ form, isSubmitting, onSubmit, onBack }) => {
+const FirstResponder401kForm: React.FC<Props> = ({ 
+  form, 
+  isSubmitting, 
+  onSubmit, 
+  onBack, 
+  pricingComponent  // Destructure the new prop
+}) => {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-8">
@@ -27,6 +34,9 @@ const FirstResponder401kForm: React.FC<Props> = ({ form, isSubmitting, onSubmit,
           <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
           <PlanInfoFields form={form} />
         </div>
+
+        {/* Render pricing component if provided */}
+        {pricingComponent}
 
         <div className="flex gap-4">
           <Button 
@@ -59,3 +69,4 @@ const FirstResponder401kForm: React.FC<Props> = ({ form, isSubmitting, onSubmit,
 };
 
 export default FirstResponder401kForm;
+
