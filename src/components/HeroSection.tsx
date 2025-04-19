@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check } from "lucide-react";
@@ -8,7 +7,6 @@ import QuestionDisplay from './solo401k/prequalification/QuestionDisplay';
 import QuestionProgress from './solo401k/prequalification/QuestionProgress';
 import ResultDisplay from './solo401k/prequalification/ResultDisplay';
 import { Question, Result } from './solo401k/prequalification/types';
-import { useState } from 'react';
 
 const HeroSection = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -110,7 +108,7 @@ const HeroSection = () => {
                     Check if you qualify →
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80">
+                <PopoverContent className="w-96">
                   <div className="p-4">
                     {result === null ? (
                       <div className="space-y-4">
