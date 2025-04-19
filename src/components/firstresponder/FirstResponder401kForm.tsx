@@ -12,7 +12,7 @@ interface Props {
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onBack: () => void;
-  pricingComponent?: React.ReactNode;  // Add this optional prop
+  pricingComponent?: React.ReactNode;
 }
 
 const FirstResponder401kForm: React.FC<Props> = ({ 
@@ -20,7 +20,7 @@ const FirstResponder401kForm: React.FC<Props> = ({
   isSubmitting, 
   onSubmit, 
   onBack, 
-  pricingComponent  // Destructure the new prop
+  pricingComponent
 }) => {
   return (
     <Form {...form}>
@@ -45,7 +45,7 @@ const FirstResponder401kForm: React.FC<Props> = ({
             onClick={onBack}
             disabled={isSubmitting}
           >
-            Back to LLC Application
+            Back
           </Button>
           
           <Button 
@@ -69,4 +69,3 @@ const FirstResponder401kForm: React.FC<Props> = ({
 };
 
 export default FirstResponder401kForm;
-

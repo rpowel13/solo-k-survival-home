@@ -107,6 +107,13 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
     }
   };
 
+  const handleBack = () => {
+    toast({
+      title: "Navigation",
+      description: "This is a standalone form. Please use browser navigation to go back.",
+    });
+  };
+
   const typedSolo401kForm = solo401kForm as unknown as Solo401kFormProps['form'];
 
   const PricingSection = () => {
@@ -136,6 +143,7 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
         form={typedSolo401kForm}
         isSubmitting={isSubmitting}
         onSubmit={solo401kForm.handleSubmit(on401kSubmit)}
+        onBack={handleBack}
         pricingComponent={<PricingSection />}
       />
     </div>
