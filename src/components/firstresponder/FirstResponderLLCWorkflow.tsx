@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,7 +5,7 @@ import * as z from 'zod';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, DollarSign } from 'lucide-react';
 import { formSchema as llcFormSchema } from '@/components/llc/FormSchema';
 import { supabase } from '@/integrations/supabase/client';
 import { triggerZapierWebhook } from '@/services/zapierService';
@@ -16,6 +15,7 @@ import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
 import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
 import ZapierConfig from '@/components/firstresponder/ZapierConfig';
+import FirstResponderLLCForm from './FirstResponderLLCForm';
 
 interface FirstResponderLLCWorkflowProps {
   onComplete: () => void;
@@ -110,49 +110,36 @@ const FirstResponderLLCWorkflow: React.FC<FirstResponderLLCWorkflowProps> = ({ o
   // Use type casting to ensure compatibility with component props
   const typedLLCForm = llcForm as unknown as LLCFormProps['form'];
 
+  const PricingSection = () => {
+    return (
+      <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
+        <div className="flex items-center justify-center mb-2">
+          <DollarSign className="h-6 w-6 text-finance-600 mr-2" />
+          <h3 className="text-2xl font-bold text-survival-800">Package Price</h3>
+        </div>
+        <div className="space-y-2">
+          <p className="text-lg font-semibold">
+            <span className="text-survival-700">First Responder LLC:</span> $699.00
+          </p>
+          <p className="text-sm text-gray-600">
+            This service includes complete LLC formation with special benefits for first responders.
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-8">
       {/* Add ZapierConfig component to initialize webhook */}
       <ZapierConfig validateWebhook={true} />
       
-      <Form {...llcForm}>
-        <form onSubmit={llcForm.handleSubmit(onLLCSubmit)} className="space-y-8">
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
-            <PersonalInfoFields form={typedLLCForm} />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
-            <AddressFields form={typedLLCForm} />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
-            <BusinessInfoFields form={typedLLCForm} />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
-            <AdditionalInfoFields form={typedLLCForm} />
-          </div>
-
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              "Submit First Responder LLC Application"
-            )}
-          </Button>
-        </form>
-      </Form>
+      <FirstResponderLLCForm 
+        form={typedLLCForm}
+        isSubmitting={isSubmitting}
+        onSubmit={llcForm.handleSubmit(onLLCSubmit)}
+        pricingComponent={<PricingSection />}
+      />
     </div>
   );
 };

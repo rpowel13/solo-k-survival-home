@@ -13,9 +13,15 @@ interface Props {
   form: LLCFormProps['form'];
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  pricingComponent?: React.ReactNode; // Add this optional prop
 }
 
-const FirstResponderLLCForm: React.FC<Props> = ({ form, isSubmitting, onSubmit }) => {
+const FirstResponderLLCForm: React.FC<Props> = ({ 
+  form, 
+  isSubmitting, 
+  onSubmit,
+  pricingComponent // Destructure the new prop
+}) => {
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-8">
@@ -38,6 +44,9 @@ const FirstResponderLLCForm: React.FC<Props> = ({ form, isSubmitting, onSubmit }
           <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
           <AdditionalInfoFields form={form} />
         </div>
+
+        {/* Render pricing component if provided */}
+        {pricingComponent}
 
         <Button 
           type="submit" 
