@@ -37,7 +37,7 @@ const WebhookStatus: React.FC<WebhookStatusProps> = ({
         <div className="text-center mt-1">
           <Button 
             variant="ghost" 
-            size="xs" 
+            size="sm"  // Changed from "xs" to "sm"
             onClick={onValidateWebhook}
             className="text-[10px] text-gray-400 hover:text-gray-600"
           >
@@ -50,3 +50,4 @@ const WebhookStatus: React.FC<WebhookStatusProps> = ({
 };
 
 export default WebhookStatus;
+
