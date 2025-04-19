@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -10,14 +11,15 @@ import Footer from "@/components/Footer";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
 import { Separator } from "@/components/ui/separator";
 import { Phone } from "lucide-react";
-import GoldPriceWidget from "@/components/GoldPriceWidget";
+import InvestmentOptionsSection from "@/components/InvestmentOptionsSection";
 
 const sectionBackgrounds = {
   services: "bg-gradient-to-br from-soft-blue/20 to-soft-blue/10",
-  benefits: "bg-gradient-to-br from-[#D3E4FD]/30 to-[#e1ebff]/30", // Light blue gradient
-  features: "bg-gradient-to-br from-[#C9D9FF]/30 to-[#A4BEFE]/30", // Another light blue variant
+  benefits: "bg-gradient-to-br from-[#D3E4FD]/30 to-[#e1ebff]/30",
+  features: "bg-gradient-to-br from-[#C9D9FF]/30 to-[#A4BEFE]/30",
+  investments: "bg-gradient-to-br from-[#F3F4F6]/50 to-[#E5E7EB]/50",
   prequalificationBanner: "bg-gradient-to-r from-soft-orange/30 to-soft-yellow/30",
-  comparison: "bg-gradient-to-b from-[#e7f0fd]/20 to-[#accbee]/20", // Soft blue gradient
+  comparison: "bg-gradient-to-b from-[#e7f0fd]/20 to-[#accbee]/20",
   faq: "bg-gradient-to-br from-soft-gray/20 to-soft-purple/20",
 };
 
@@ -35,17 +37,13 @@ const Index = () => {
       <main className="flex-grow">
         <HeroSection />
         
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center">
-            <GoldPriceWidget />
-          </div>
-        </div>
-        
         <ServicesSection className={sectionBackgrounds.services} />
         
         <div className={`py-12 ${sectionBackgrounds.benefits}`}>
           <BenefitsSection />
         </div>
+        
+        <InvestmentOptionsSection className={sectionBackgrounds.investments} />
         
         <div className={`py-12 ${sectionBackgrounds.features}`}>
           <FeaturesSection />
