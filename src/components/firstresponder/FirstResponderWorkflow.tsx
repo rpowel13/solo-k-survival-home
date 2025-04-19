@@ -11,7 +11,6 @@ import ZapierConfig from '@/components/firstresponder/ZapierConfig';
 import FirstResponderLLCForm from './FirstResponderLLCForm';
 import FirstResponder401kForm from './FirstResponder401kForm';
 import { Step, LLCFormProps, Solo401kFormProps } from './types';
-import { DollarSign } from 'lucide-react';
 
 const FirstResponderWorkflow = () => {
   const [currentStep, setCurrentStep] = useState<Step>('llc');
@@ -205,28 +204,8 @@ const FirstResponderWorkflow = () => {
           isSubmitting={isSubmitting}
           onSubmit={solo401kForm.handleSubmit(on401kSubmit)}
           onBack={() => setCurrentStep('llc')}
-          pricingComponent={<PricingSection />}
         />
       )}
-    </div>
-  );
-};
-
-const PricingSection = () => {
-  return (
-    <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
-      <div className="flex items-center justify-center mb-2">
-        <DollarSign className="h-6 w-6 text-finance-600 mr-2" />
-        <h3 className="text-2xl font-bold text-survival-800">Package Price</h3>
-      </div>
-      <div className="space-y-2">
-        <p className="text-lg font-semibold">
-          <span className="text-survival-700">First Responder Package:</span> $699.00
-        </p>
-        <p className="text-sm text-gray-600">
-          This comprehensive package includes LLC formation and Solo 401k setup.
-        </p>
-      </div>
     </div>
   );
 };
