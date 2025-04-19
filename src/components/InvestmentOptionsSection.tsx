@@ -2,7 +2,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Coins, Building2, BarChart4, WalletCards, ChartPie, DollarSign } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import GoldPriceWidget from './GoldPriceWidget';
 
 const InvestmentOptionsSection = ({ className }: { className?: string }) => {
   const investments = [
@@ -77,18 +76,6 @@ const InvestmentOptionsSection = ({ className }: { className?: string }) => {
               </TooltipContent>
             </Tooltip>
           ))}
-        </div>
-
-        <div className="flex flex-col items-center">
-          <div className="mb-6 text-center">
-            <h3 className="text-xl font-semibold text-survival-800 mb-2">
-              Live Precious Metals Pricing
-            </h3>
-            <p className="text-gray-600">
-              Stay updated with current precious metal prices for your investment decisions
-            </p>
-          </div>
-          <GoldPriceWidget />
         </div>
       </div>
     </section>
