@@ -98,37 +98,38 @@ const LLCApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      {/* Using the correct webhook type 'llc' */}
       <ZapierConfig webhookType="llc" />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <FormHeader />
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
-                <PersonalInfoFields form={form} />
-              </div>
-              
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
-                <AddressFields form={form} />
-              </div>
-              
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
-                <BusinessInfoFields form={form} />
-              </div>
-              
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
-                <AdditionalInfoFields form={form} />
-              </div>
-              
-              <SubmitButton isSubmitting={isSubmitting} />
-            </form>
-          </Form>
+          <div className="bg-white p-8 rounded-lg shadow-lg"> {/* New white background container */}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
+                  <PersonalInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
+                  <AddressFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
+                  <BusinessInfoFields form={form} />
+                </div>
+                
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold text-survival-800">Additional Information</h2>
+                  <AdditionalInfoFields form={form} />
+                </div>
+                
+                <SubmitButton isSubmitting={isSubmitting} />
+              </form>
+            </Form>
+          </div>
         </div>
       </main>
       <Footer />

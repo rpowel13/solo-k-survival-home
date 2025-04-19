@@ -25,7 +25,9 @@ const FirstResponderLLCApplication = () => {
             </p>
           </div>
 
-          <FirstResponderLLCWorkflow onComplete={() => navigate('/payment/first-responder-llc')} />
+          <div className="bg-white p-8 rounded-lg shadow-lg"> {/* New white background container */}
+            <FirstResponderLLCWorkflow onComplete={() => navigate('/payment/first-responder-llc')} />
+          </div>
         </div>
       </main>
       <Footer />

@@ -25,7 +25,9 @@ const FirstResponder401kApplication = () => {
             </p>
           </div>
 
-          <FirstResponder401kWorkflow onComplete={() => navigate('/payment/first-responder-401k')} />
+          <div className="bg-white p-8 rounded-lg shadow-lg"> {/* New white background container */}
+            <FirstResponder401kWorkflow onComplete={() => navigate('/payment/first-responder-401k')} />
+          </div>
         </div>
       </main>
       <Footer />
