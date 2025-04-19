@@ -168,7 +168,8 @@ const LLCCreation = () => {
 
         <section>
           <h2 className="text-2xl font-bold mb-6 text-survival-800">Pricing</h2>
-          <div className="bg-gray-50 rounded-lg p-8 shadow-sm text-center">
+          <div className="bg-soft-purple rounded-lg p-8 shadow-lg text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-[#D6BCFA]/20 to-[#8B5CF6]/20 opacity-50 -z-10"></div>
             <div className="flex items-center justify-center mb-4">
               <DollarSign className="h-8 w-8 text-finance-600 mr-2" />
               <h3 className="text-3xl font-bold text-survival-800">$795</h3>
