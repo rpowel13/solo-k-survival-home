@@ -6,12 +6,12 @@ const FirstResponder401kPayment = () => {
   const paymentDetails = {
     title: "First Responder Solo 401k",
     description: "Solo 401k Setup for First Responders",
-    amount: 1095,
+    amount: 1095, // Updated to $1,095
     paymentType: "First Responder Solo 401k Package",
     features: [
       "Pension Complement Strategy",
       "High Contribution Limits",
-      "Tax-Advantaged Savings",
+      "Tax-Advantaged Savings", 
       "Priority Processing",
       "First Responder Benefits Package",
       "Dedicated Support"
