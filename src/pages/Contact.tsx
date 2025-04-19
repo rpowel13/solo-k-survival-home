@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -88,7 +89,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
       <Header />
       <main className="flex-grow">
         <section className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -98,13 +99,6 @@ const Contact = () => {
               Have questions about Solo 401(k) plans? Our retirement specialists are here to help.
             </p>
 
-            <WebhookStatus 
-              webhookStatus={webhookStatus}
-              lastTestedTime={lastTestedTime}
-              onValidateWebhook={handleValidateWebhook}
-              webhookUrl={getZapierWebhookUrl('crm')}
-            />
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
               <ContactMethods />
               <MessageCard />
@@ -113,6 +107,13 @@ const Contact = () => {
         </section>
       </main>
       <Footer />
+      
+      <WebhookStatus 
+        webhookStatus={webhookStatus}
+        lastTestedTime={lastTestedTime}
+        onValidateWebhook={handleValidateWebhook}
+        webhookUrl={getZapierWebhookUrl('crm')}
+      />
       
       <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />
     </div>
