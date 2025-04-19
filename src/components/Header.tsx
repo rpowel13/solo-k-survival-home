@@ -10,6 +10,14 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,7 +31,7 @@ const Header = () => {
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
               className="text-gray-500 hover:text-survival-700 focus:outline-none"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -32,7 +40,7 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <MobileNav isOpen={isMenuOpen} />
+        <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />
       </div>
     </header>
   );
