@@ -3,8 +3,8 @@ import React from 'react';
 
 const New401kForm = () => {
   return (
-    <div className="w-full min-h-screen bg-gray-50">
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+    <div className="w-full overflow-x-hidden">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
         <iframe 
           src="https://survival401k.coffeecup.com/Survival401k%20Application/" 
           name="myiFrame" 
