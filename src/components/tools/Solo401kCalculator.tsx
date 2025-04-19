@@ -19,28 +19,47 @@ const Solo401kCalculator = () => {
   const [age, setAge] = useState<string>('');
 
   // Constants for 2025 contribution limits
-  const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;  // Increased from $23,000 in 2024
-  const CATCH_UP_CONTRIBUTION = 7500;         // Remains the same for 2025
-  const MAX_TOTAL_CONTRIBUTION = 70000;       // Updated from $69,000 to $70,000 for 2025
+  const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;  // Base limit for 2025
+  const CATCH_UP_CONTRIBUTION = 7500;         // Age 50+ catch-up for 2025
+  const MAX_TOTAL_CONTRIBUTION = 70000;       // Updated for 2025
+  const SE_TAX_RATE = 0.153;                 // 15.3% Self-employment tax rate
+  const SE_TAX_DEDUCTION = 0.5;              // 50% of SE tax is deductible
 
   const calculateContributions = () => {
     const annualIncome = parseFloat(income) || 0;
     const participantAge = parseInt(age) || 0;
     
+    // Calculate self-employment tax and deduction
+    const seTax = annualIncome * SE_TAX_RATE;
+    const seTaxDeduction = seTax * SE_TAX_DEDUCTION;
+    
+    // Adjusted net earnings (income minus half of SE tax)
+    const adjustedIncome = annualIncome - seTaxDeduction;
+    
     // Employee contribution (up to $23,500 in 2025)
-    const baseEmployeeContribution = Math.min(annualIncome, EMPLOYEE_CONTRIBUTION_LIMIT);
+    const baseEmployeeContribution = Math.min(adjustedIncome, EMPLOYEE_CONTRIBUTION_LIMIT);
     
     // Catch-up contribution if age 50 or older
     const catchUpAmount = participantAge >= 50 ? CATCH_UP_CONTRIBUTION : 0;
     
-    // Employer contribution (up to 25% of compensation)
-    const employerContribution = Math.min(annualIncome * 0.25, MAX_TOTAL_CONTRIBUTION - baseEmployeeContribution - catchUpAmount);
+    // Employer contribution (up to 25% of compensation after SE tax deduction)
+    const maxEmployerContribution = adjustedIncome * 0.25;
+    const employerContribution = Math.min(
+      maxEmployerContribution,
+      MAX_TOTAL_CONTRIBUTION - baseEmployeeContribution - catchUpAmount
+    );
+    
+    // Calculate tax savings (assuming 24% marginal tax rate)
+    const estimatedTaxSavings = (baseEmployeeContribution + catchUpAmount + employerContribution) * 0.24;
     
     return {
       employeeContribution: baseEmployeeContribution,
       catchUpContribution: catchUpAmount,
       employerContribution: employerContribution,
-      totalContribution: baseEmployeeContribution + catchUpAmount + employerContribution
+      totalContribution: baseEmployeeContribution + catchUpAmount + employerContribution,
+      seTax: seTax,
+      seTaxDeduction: seTaxDeduction,
+      estimatedTaxSavings: estimatedTaxSavings
     };
   };
 
@@ -125,6 +144,30 @@ const Solo401kCalculator = () => {
                 <span className="font-semibold text-survival-700 flex items-center">
                   <DollarSign className="h-4 w-4" />
                   {results.employerContribution.toLocaleString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center border-t pt-2">
+                <span>Self-Employment Tax (15.3%):</span>
+                <span className="font-semibold text-survival-700 flex items-center">
+                  <DollarSign className="h-4 w-4" />
+                  {Math.round(results.seTax).toLocaleString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span>SE Tax Deduction:</span>
+                <span className="font-semibold text-survival-700 flex items-center">
+                  <DollarSign className="h-4 w-4" />
+                  {Math.round(results.seTaxDeduction).toLocaleString()}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span>Estimated Tax Savings:</span>
+                <span className="font-semibold text-green-600 flex items-center">
+                  <DollarSign className="h-4 w-4" />
+                  {Math.round(results.estimatedTaxSavings).toLocaleString()}
                 </span>
               </div>
               
