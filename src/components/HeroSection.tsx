@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -24,11 +25,16 @@ const HeroSection = () => {
               Self-directed retirement solutions designed for entrepreneurs, First Responders, small business owners, independent professionals, and gig economy workers.
             </p>
             
-            <div className="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+            <div className="mt-8 flex flex-col gap-3 items-center md:items-start">
               <Link to="/services/solo-401k">
                 <Button className="bg-white text-survival-800 hover:bg-gray-100 shadow-md">
                   Explore Solo 401k
                   <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/services/solo-401k#prequalification">
+                <Button variant="link" className="text-gray-200 hover:text-white text-sm">
+                  Check if you qualify →
                 </Button>
               </Link>
             </div>
