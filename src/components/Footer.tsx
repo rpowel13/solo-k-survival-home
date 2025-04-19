@@ -1,13 +1,7 @@
-
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "@/components/ui/dialog";
-import { useState } from "react";
-import ScheduleConsultationForm from "./ScheduleConsultationForm";
 
 const Footer = () => {
-  const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
-
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -71,21 +65,17 @@ const Footer = () => {
                 <span>info@survival401k.com</span>
               </li>
               <li className="mt-4 pt-4 border-t border-gray-700">
-                <button 
-                  onClick={() => setIsSchedulerOpen(true)}
-                  className="text-survival-400 hover:text-survival-300 font-medium cursor-pointer"
+                <iframe 
+                  src="https://www.vcita.com/widgets/scheduler/izk040b42jnjcf3c?frontage_iframe=true" 
+                  width="100%" 
+                  height="508" 
+                  frameBorder="0"
                 >
-                  Schedule a Free Consultation
-                </button>
-                <Dialog open={isSchedulerOpen} onOpenChange={setIsSchedulerOpen}>
-                  <DialogContent className="sm:max-w-[700px] md:max-w-[800px] p-6">
-                    <DialogHeader>
-                      <DialogTitle>Schedule a Free Consultation</DialogTitle>
-                      <DialogDescription>Select a date and time that works for you. Our specialist will call you at the scheduled time.</DialogDescription>
-                    </DialogHeader>
-                    <ScheduleConsultationForm />
-                  </DialogContent>
-                </Dialog>
+                  <p>Use my online scheduling page by vcita to schedule an appointment with me:</p>
+                  <a href='https://www.vcita.com/v/izk040b42jnjcf3c/online_scheduling?frontage_iframe=true&invite=vr_sched_pb-izk040b42jnjcf3c'>
+                    Online Scheduling with Survival 401k, LLC
+                  </a>
+                </iframe>
               </li>
             </div>
           </div>
