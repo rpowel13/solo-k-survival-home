@@ -57,7 +57,7 @@ export const ServiceDropdown = () => {
                 onClick={scrollToTop}
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
               >
-                <div className="text-sm font-medium leading-none">First Responder Package</div>
+                <div className="text-sm font-medium leading-none">First Responder</div>
                 <p className="line-clamp-2 text-sm leading-snug text-survival-700">
                   Specialized LLC and Solo 401k package for first responders.
                 </p>
@@ -83,3 +83,4 @@ export const ServiceDropdown = () => {
     </NavigationMenuItem>
   );
 };
+
