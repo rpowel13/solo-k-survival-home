@@ -1,4 +1,3 @@
-
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import GoldPriceWidget from "./GoldPriceWidget";
@@ -81,6 +80,16 @@ const Footer = () => {
                   data-staff="sdpi7niilv7t6k07"
                 >
                   Schedule a Free Consultation
+                </a>
+                <a 
+                  href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=ry5n8z8s16pz3wqj&staff=onp5y3ueog3kdoly" 
+                  target="blank" 
+                  data-id="livesite-widget" 
+                  className="block mt-2 text-survival-400 hover:text-survival-300 font-medium cursor-pointer"
+                  data-service="ry5n8z8s16pz3wqj" 
+                  data-staff="onp5y3ueog3kdoly"
+                >
+                  Update my Account
                 </a>
               </li>
             </div>
