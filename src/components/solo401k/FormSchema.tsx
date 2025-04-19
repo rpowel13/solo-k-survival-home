@@ -1,4 +1,3 @@
-
 import * as z from 'zod';
 
 // Define enums for select fields to improve type safety
