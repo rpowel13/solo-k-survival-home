@@ -9,7 +9,12 @@ import type {
 } from '@/types/formTypes';
 
 export function isSolo401kForm(data: FormData): data is SoloFormValues {
-  return 'firstName' in data && 'ssn' in data && 'businessName' in data;
+  // More robust check for Solo401k forms
+  return 'firstName' in data && 
+         'lastName' in data && 
+         ('ssn' in data || 'businessName' in data) && 
+         !('desiredLLCName' in data) && 
+         !('occupation' in data);
 }
 
 export function isContactForm(data: FormData): data is ContactFormValues {

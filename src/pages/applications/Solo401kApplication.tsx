@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Form } from "@/components/ui/form";
@@ -24,6 +23,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { triggerZapierWebhook } from '@/services/zapierService';
 import { submitSolo401kApplication } from '@/services/supabaseFormService';
+import ZapierConfig from '@/components/solo401k/ZapierConfig';
 
 const Solo401kApplication = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,14 +75,23 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      // Primary submission to Zapier webhook
-      const zapierResult = await triggerZapierWebhook(formData);
+      // Try both submission methods for redundancy
+      const zapierPromise = triggerZapierWebhook(formData);
+      const supabasePromise = submitSolo401kApplication(data);
       
-      // Secondary submission to Supabase
-      const supabaseResult = await submitSolo401kApplication(data);
+      // Wait for both promises to resolve
+      const [zapierResult, supabaseResult] = await Promise.allSettled([zapierPromise, supabasePromise]);
       
-      // Check if at least one submission was successful
-      if (zapierResult.success || supabaseResult.success) {
+      // Determine if at least one method was successful
+      const zapierSuccess = zapierResult.status === 'fulfilled' && zapierResult.value.success;
+      const supabaseSuccess = supabaseResult.status === 'fulfilled' && supabaseResult.value.success;
+      
+      // Log results for debugging
+      console.log("Zapier submission result:", zapierResult);
+      console.log("Supabase submission result:", supabaseResult);
+      
+      // Proceed if either method was successful
+      if (zapierSuccess || supabaseSuccess) {
         toast({
           title: "Application Submitted",
           description: "Your Solo 401k application has been submitted successfully. Redirecting to payment...",
@@ -93,13 +102,22 @@ const Solo401kApplication = () => {
           navigate('/payment/solo-401k');
         }, 1500);
       } else {
-        throw new Error(zapierResult.message || supabaseResult.error?.message || "Failed to submit application");
+        // Extract error messages
+        let errorMessage = "Failed to submit application through any available method.";
+        
+        if (zapierResult.status === 'fulfilled' && !zapierResult.value.success) {
+          errorMessage = zapierResult.value.message;
+        } else if (supabaseResult.status === 'fulfilled' && supabaseResult.value.error) {
+          errorMessage = supabaseResult.value.error.message;
+        }
+        
+        throw new Error(errorMessage);
       }
     } catch (error) {
       console.error("Application submission error:", error);
       toast({
         title: "Submission Error",
-        description: "There was a problem processing your application. Please try again later.",
+        description: error instanceof Error ? error.message : "There was a problem processing your application. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -110,6 +128,7 @@ const Solo401kApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      <ZapierConfig webhookType="solo401k" />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <FormHeader />

@@ -16,13 +16,13 @@ const ZapierConfig = ({ webhookType = 'solo401k' }: ZapierConfigProps) => {
     console.log(`[${new Date().toISOString()}] ${webhookType} Zapier webhook configured: ${webhookConfigured}`);
     
     const webhookUrl = getZapierWebhookUrl(webhookType);
-    console.log(`[${new Date().toISOString()}] Current ${webhookType} Zapier webhook URL: ${webhookUrl}`);
+    console.log(`[${new Date().toISOString()}] Current ${webhookType} Zapier webhook URL: ${webhookUrl || 'Not configured'}`);
     
     // Only show warning toast if we're not on the settings page
     if (!webhookConfigured && !window.location.pathname.includes('/admin/')) {
       toast({
         title: "Zapier Webhook Not Configured",
-        description: `The ${webhookType} webhook is not configured, applications may not be properly processed in the CRM system.`,
+        description: `The ${webhookType} webhook is not configured, applications may not be properly processed. We'll still try to submit via Supabase.`,
         variant: "default",
         duration: 5000,
       });
