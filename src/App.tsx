@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -16,6 +17,8 @@ import LoanCalculator from "./pages/LoanCalculator";
 import Solo401kApplication from "./pages/applications/Solo401kApplication";
 import LLCApplication from "./pages/applications/LLCApplication";
 import FirstResponderApplication from "./pages/applications/FirstResponderApplication";
+import FirstResponderLLCApplication from "./pages/applications/FirstResponderLLCApplication";
+import FirstResponder401kApplication from "./pages/applications/FirstResponder401kApplication";
 import AlternativeInvestmentsApplication from "./pages/applications/AlternativeInvestmentsApplication";
 import Solo401kPayment from "./pages/payments/Solo401kPayment";
 import LLCPayment from "./pages/payments/LLCPayment";
