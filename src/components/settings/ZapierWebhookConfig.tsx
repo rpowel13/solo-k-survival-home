@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// Updated to include alternative investments
 const WEBHOOK_TYPES = [
   { id: 'crm', label: 'CRM Integration' },
   { id: 'consultation', label: 'Consultation Scheduling' },
@@ -15,7 +14,8 @@ const WEBHOOK_TYPES = [
   { id: 'first_responder', label: 'First Responder Applications' },
   { id: 'first_responder_401k', label: 'First Responder 401k Applications' },
   { id: 'first_responder_llc', label: 'First Responder LLC Applications' },
-  { id: 'alternative_investments', label: 'Alternative Investment Applications' }
+  { id: 'alternative_investments', label: 'Alternative Investment Applications' },
+  { id: 'prequalification', label: 'Prequalification Quiz' }
 ] as const;
 
 type WebhookType = typeof WEBHOOK_TYPES[number]['id'];
@@ -36,7 +36,6 @@ const ZapierWebhookConfig: React.FC = () => {
     }
 
     try {
-      // Save the webhook URL with its specific type
       localStorage.setItem(`zapier_${webhookType}_webhook_url`, webhookUrl);
       
       toast({
@@ -54,7 +53,6 @@ const ZapierWebhookConfig: React.FC = () => {
   };
 
   useEffect(() => {
-    // Load current webhook URL for the selected type on component mount or type change
     const storedUrl = localStorage.getItem(`zapier_${webhookType}_webhook_url`) || "";
     setWebhookUrl(storedUrl);
   }, [webhookType]);

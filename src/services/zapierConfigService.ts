@@ -17,7 +17,8 @@ export type WebhookType =
   | 'first_responder'
   | 'first_responder_401k'
   | 'first_responder_llc'
-  | 'alternative_investments';
+  | 'alternative_investments'
+  | 'prequalification';
 
 // Default webhook URL if not configured in env or localStorage
 const DEFAULT_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
