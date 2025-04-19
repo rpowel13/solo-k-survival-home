@@ -1,7 +1,8 @@
+
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Award, Briefcase, Shield, CheckCircle2, DollarSign } from 'lucide-react';
+import { Users, Award, Briefcase, Shield, CheckCircle2, DollarSign, FireExtinguisher, Ambulance, HardHat } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -21,6 +22,41 @@ const FirstResponderPackage = () => {
             <p className="text-lg">
               At Survival 401k, we recognize the unique financial challenges and opportunities that first responders face. We offer specialized LLC and Solo 401k services designed to help those who serve our communities every day.
             </p>
+          </div>
+        </section>
+
+        {/* First Responders Image Section */}
+        <section className="py-8">
+          <div className="relative rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-gradient-to-r from-survival-800/70 to-finance-800/70 absolute inset-0 z-10"></div>
+            <img 
+              src="/lovable-uploads/first-responders.jpg" 
+              alt="First Responders in uniform including firefighters, police officers, and EMTs" 
+              className="w-full h-auto object-cover"
+            />
+            <div className="absolute inset-0 z-20 flex items-center justify-center p-6 md:p-12">
+              <div className="text-center text-white">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 text-shadow">Serving Those Who Serve Us</h2>
+                <div className="flex flex-wrap justify-center gap-8 mt-6">
+                  <div className="flex flex-col items-center">
+                    <FireExtinguisher className="h-12 w-12 mb-2 text-red-400" />
+                    <span className="font-medium">Firefighters</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <Shield className="h-12 w-12 mb-2 text-blue-400" />
+                    <span className="font-medium">Police Officers</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <Ambulance className="h-12 w-12 mb-2 text-green-400" />
+                    <span className="font-medium">EMTs</span>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <HardHat className="h-12 w-12 mb-2 text-yellow-400" />
+                    <span className="font-medium">Emergency Response</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
