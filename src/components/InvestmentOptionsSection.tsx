@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Coins, Building2, BarChart4, WalletCards, ChartPie } from "lucide-react";
+import { Coins, Building2, BarChart4, WalletCards, ChartPie, DollarSign } from "lucide-react";
 import GoldPriceWidget from './GoldPriceWidget';
 
 const InvestmentOptionsSection = ({ className }: { className?: string }) => {
@@ -20,6 +20,11 @@ const InvestmentOptionsSection = ({ className }: { className?: string }) => {
       title: "Private Equity",
       description: "Invest in private businesses, startups, and venture capital opportunities.",
       icon: <ChartPie className="h-6 w-6 text-purple-600" />
+    },
+    {
+      title: "Wall Street Assets",
+      description: "Access traditional stocks, bonds, ETFs, mutual funds, and other publicly traded securities.",
+      icon: <DollarSign className="h-6 w-6 text-green-600" />
     },
     {
       title: "Stock Market",
