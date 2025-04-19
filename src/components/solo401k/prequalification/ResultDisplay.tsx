@@ -74,11 +74,16 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
   const onSubmit = async (data: z.infer<typeof contactFormSchema>) => {
     setIsSubmitting(true);
     try {
-      await triggerZapierWebhook({
+      // Create a custom payload that extends the form data with additional info
+      const zapierPayload = {
         formType: 'Solo401k_Prequalification',
-        qualification_result: result,
-        ...data
-      });
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        qualification_status: result
+      };
+      
+      await triggerZapierWebhook(zapierPayload);
       
       toast({
         title: "Contact information submitted",

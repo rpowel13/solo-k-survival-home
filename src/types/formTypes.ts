@@ -71,12 +71,22 @@ export const firstResponderFormSchema = z.object({
   agreeToTerms: z.boolean(),
 });
 
+// Schema for prequalification contact form
+export const prequalificationFormSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  phone: z.string(),
+  qualification_status: z.string().optional(),
+  formType: z.string().optional(),
+});
+
 // Export all form value types
 export type SoloFormValues = z.infer<typeof soloFormSchema>;
 export type ContactFormValues = z.infer<typeof contactFormSchema>;
 export type ScheduleFormValues = z.infer<typeof scheduleFormSchema>;
 export type LLCFormValues = z.infer<typeof llcFormSchema>;
 export type FirstResponderFormValues = z.infer<typeof firstResponderFormSchema>;
+export type PrequalificationFormValues = z.infer<typeof prequalificationFormSchema>;
 
 // Add formType to the FormData type
 export type FormData = 
@@ -84,7 +94,9 @@ export type FormData =
   | (ContactFormValues & { formType?: string }) 
   | (LLCFormValues & { formType?: string }) 
   | (FirstResponderFormValues & { formType?: string }) 
-  | (ScheduleFormValues & { formType?: string });
+  | (ScheduleFormValues & { formType?: string })
+  | PrequalificationFormValues
+  | Record<string, any>; // Allow additional properties for custom submissions
 
 export interface EmailResponse {
   success: boolean;
