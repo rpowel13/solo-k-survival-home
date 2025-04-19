@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -29,7 +28,7 @@ import ZapierSettings from "./pages/admin/ZapierSettings";
 import FirstResponderPayment from "./pages/payments/FirstResponderPayment";
 import RMDCalculator from "./pages/tools/RMDCalculator";
 import Solo401kCalculator from "./pages/tools/Solo401kCalculator";
-// Removed: import New401kForm from "./pages/services/New401kForm";
+import New401kApplication from "./pages/applications/New401kApplication";
 
 const queryClient = new QueryClient();
 
@@ -63,7 +62,7 @@ const App = () => (
           <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
           <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
           <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
-          {/* Removed: <Route path="/services/new-401k-form" element={<New401kForm />} /> */}
+          <Route path="/apply/new-solo-401k" element={<New401kApplication />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
