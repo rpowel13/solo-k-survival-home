@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -11,6 +10,7 @@ import Footer from "@/components/Footer";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
 import { Separator } from "@/components/ui/separator";
 import { Phone } from "lucide-react";
+import GoldPriceWidget from "@/components/GoldPriceWidget";
 
 const sectionBackgrounds = {
   services: "bg-gradient-to-br from-soft-blue/20 to-soft-blue/10",
@@ -34,6 +34,12 @@ const Index = () => {
       
       <main className="flex-grow">
         <HeroSection />
+        
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-center">
+            <GoldPriceWidget />
+          </div>
+        </div>
         
         <ServicesSection className={sectionBackgrounds.services} />
         
