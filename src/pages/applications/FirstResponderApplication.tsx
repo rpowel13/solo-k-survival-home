@@ -1,10 +1,35 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FirstResponderWorkflow from '@/components/firstresponder/FirstResponderWorkflow';
+import { initZapierConfig, isWebhookConfigured } from '@/services/zapierConfigService';
+import { useToast } from '@/components/ui/use-toast';
 
 const FirstResponderApplication = () => {
+  const { toast } = useToast();
+  
+  useEffect(() => {
+    // Initialize Zapier webhook configuration for first responder forms
+    initZapierConfig('first_responder');
+    
+    // Check if the webhook is configured
+    const isConfigured = isWebhookConfigured('first_responder');
+    const webhookUrl = localStorage.getItem('zapier_first_responder_webhook_url') || 'Not configured';
+    
+    console.log(`[${new Date().toISOString()}] First Responder webhook configured: ${isConfigured}`);
+    console.log(`[${new Date().toISOString()}] First Responder webhook URL: ${webhookUrl}`);
+    
+    if (!isConfigured) {
+      toast({
+        title: "Integration Not Configured",
+        description: "The First Responder form integration with your CRM is not configured. Contact admin to set up the Zapier webhook.",
+        variant: "destructive",
+        duration: 6000
+      });
+    }
+  }, [toast]);
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

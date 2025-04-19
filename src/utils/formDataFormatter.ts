@@ -108,10 +108,10 @@ export function formatFormData(data: FormData) {
         : typeof data.date === 'string' ? new Date(data.date).toISOString() : new Date().toISOString()
     };
   } else {
-    // Fallback case for unknown form types - Fixed to avoid TypeScript errors
+    // Fallback case for unknown form types with proper typing
     console.warn(`[${new Date().toISOString()}] Unknown form type, using generic format:`, data);
     
-    // Create a properly typed generic object instead of spreading data
+    // Create a properly typed generic object
     formattedData = {
       formType: 'Unknown',
       submissionDate: new Date().toLocaleString(),
@@ -119,7 +119,7 @@ export function formatFormData(data: FormData) {
       leadSource: 'Website Form'
     };
     
-    // Safely add properties from data as they exist
+    // Safely add properties from data
     if (typeof data === 'object' && data !== null) {
       // Add all properties that exist in data to our formattedData
       Object.entries(data).forEach(([key, value]) => {

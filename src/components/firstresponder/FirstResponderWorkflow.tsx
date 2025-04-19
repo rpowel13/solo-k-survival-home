@@ -11,12 +11,15 @@ import { Loader2 } from 'lucide-react';
 import { formSchema as llcFormSchema } from '@/components/llc/FormSchema';
 import { formSchema as solo401kFormSchema } from '@/components/solo401k/FormSchema';
 import { supabase } from '@/integrations/supabase/client';
+import { triggerZapierWebhook } from '@/services/zapierService';
+import { getZapierWebhookUrl, isWebhookConfigured } from '@/services/zapierConfigService';
 import PersonalInfoFields from '@/components/llc/PersonalInfoFields';
 import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
 import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
 import Solo401kBusinessInfo from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
+import ZapierConfig from '@/components/firstresponder/ZapierConfig';
 
 type Step = 'llc' | '401k';
 
@@ -88,6 +91,27 @@ const FirstResponderWorkflow = () => {
   const onLLCSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
+      // Check if Zapier webhook is configured
+      const isZapierConfigured = isWebhookConfigured('first_responder');
+      console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
+      
+      if (isZapierConfigured) {
+        // Prepare Zapier data
+        const zapierData = {
+          ...data,
+          formType: 'First_Responder_Package',
+          occupation: 'First Responder', // Default value, will be replaced in 401k step
+          department: 'To be provided', // Default value, will be replaced in 401k step 
+          yearsOfService: 'To be provided', // Default value, will be replaced in 401k step
+          verify401kInterest: true
+        };
+        
+        console.log(`[${new Date().toISOString()}] Sending LLC data to First Responder Zapier webhook:`, zapierData);
+        
+        // Send to Zapier
+        await triggerZapierWebhook(zapierData);
+      }
+      
       // Submit LLC application
       const { data: llcApplication, error: llcError } = await supabase
         .from('llc_applications')
@@ -140,6 +164,37 @@ const FirstResponderWorkflow = () => {
   const on401kSubmit = async (data: any) => {
     setIsSubmitting(true);
     try {
+      // Check if Zapier webhook is configured
+      const isZapierConfigured = isWebhookConfigured('first_responder');
+      console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
+      
+      if (isZapierConfigured) {
+        // Complete First Responder data with Zapier
+        const zapierData = {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          occupation: 'First Responder',
+          department: data.businessType || 'Not specified',
+          yearsOfService: '1+',
+          desiredLLCName: data.businessName,
+          state: data.state,
+          additionalInfo: data.additionalInfo || '',
+          verify401kInterest: true,
+          formType: 'First_Responder_Package',
+          businessName: data.businessName,
+          ssn: data.ssn,
+          businessType: data.businessType,
+          annualIncome: data.annualIncome
+        };
+        
+        console.log(`[${new Date().toISOString()}] Sending complete First Responder data to Zapier webhook:`, zapierData);
+        
+        // Send to Zapier
+        await triggerZapierWebhook(zapierData);
+      }
+      
       // Submit 401k application with link to LLC application
       const { data: solo401kApplication, error: solo401kError } = await supabase
         .from('solo401k_applications')
@@ -183,6 +238,9 @@ const FirstResponderWorkflow = () => {
 
   return (
     <div className="space-y-8">
+      {/* Add ZapierConfig component to initialize webhook */}
+      <ZapierConfig />
+      
       {currentStep === 'llc' ? (
         <Form {...llcForm}>
           <form onSubmit={llcForm.handleSubmit(onLLCSubmit)} className="space-y-8">

@@ -21,7 +21,7 @@ export function isLLCForm(data: FormData): data is LLCFormValues {
 }
 
 export function isFirstResponderForm(data: FormData): data is FirstResponderFormValues {
-  return 'firstName' in data && 'occupation' in data && 'department' in data;
+  return 'firstName' in data && 'occupation' in data && 'department' in data && 'yearsOfService' in data;
 }
 
 export function isScheduleForm(data: FormData): data is ScheduleFormValues {
