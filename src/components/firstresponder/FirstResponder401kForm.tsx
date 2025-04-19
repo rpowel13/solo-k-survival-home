@@ -15,15 +15,13 @@ interface Props {
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onBack: () => void;
-  pricingComponent?: React.ReactNode;
 }
 
 const FirstResponder401kForm: React.FC<Props> = ({ 
   form, 
   isSubmitting, 
   onSubmit, 
-  onBack, 
-  pricingComponent
+  onBack
 }) => {
   return (
     <Form {...form}>
@@ -47,8 +45,6 @@ const FirstResponder401kForm: React.FC<Props> = ({
           <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
           <PlanInfoFields form={form} />
         </div>
-
-        {pricingComponent}
 
         <div className="space-y-6">
           <h2 className="text-xl font-semibold text-survival-800">Agreement</h2>
