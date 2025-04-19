@@ -44,6 +44,19 @@ export const ApplicationDropdown = () => {
           <li>
             <NavigationMenuLink asChild>
               <Link
+                to="/apply/first-responder"
+                className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
+              >
+                <div className="text-sm font-medium leading-none">First Responder Package</div>
+                <p className="line-clamp-2 text-sm leading-snug text-survival-700">
+                  Apply for First Responder combined services
+                </p>
+              </Link>
+            </NavigationMenuLink>
+          </li>
+          <li>
+            <NavigationMenuLink asChild>
+              <Link
                 to="/apply/first-responder-llc"
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
               >
@@ -85,4 +98,3 @@ export const ApplicationDropdown = () => {
     </NavigationMenuItem>
   );
 };
-
