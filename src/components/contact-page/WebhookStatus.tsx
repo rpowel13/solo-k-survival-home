@@ -1,7 +1,6 @@
 
 import React from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface WebhookStatusProps {
   webhookStatus: 'unconfigured' | 'configured' | 'unknown';
@@ -13,7 +12,6 @@ interface WebhookStatusProps {
 const WebhookStatus: React.FC<WebhookStatusProps> = ({
   webhookStatus,
   lastTestedTime,
-  onValidateWebhook,
   webhookUrl
 }) => {
   return (
@@ -32,22 +30,8 @@ const WebhookStatus: React.FC<WebhookStatusProps> = ({
           <span className="text-gray-500">Checking...</span>
         )}
       </div>
-      
-      {webhookStatus === 'configured' && (
-        <div className="text-center mt-1">
-          <Button 
-            variant="ghost" 
-            size="sm"  // Changed from "xs" to "sm"
-            onClick={onValidateWebhook}
-            className="text-[10px] text-gray-400 hover:text-gray-600"
-          >
-            Test Webhook
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
 
 export default WebhookStatus;
-
