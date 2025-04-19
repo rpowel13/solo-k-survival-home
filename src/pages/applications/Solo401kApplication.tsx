@@ -16,7 +16,7 @@ import FormHeader from '@/components/solo401k/FormHeader';
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
-import AgreementSection from '@/components/solo401k/AgreementSection';
+import Solo401kAgreementSection from '@/components/solo401k/Solo401kAgreementSection';
 import AddressFields from '@/components/solo401k/AddressFields';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
@@ -146,7 +146,7 @@ const Solo401kApplication = () => {
                 
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold text-survival-800">Agreement</h2>
-                  <AgreementSection form={form} />
+                  <Solo401kAgreementSection form={form} />
                 </div>
                 
                 <div className="pt-4 text-center">

@@ -8,7 +8,7 @@ import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 import AddressFields from '@/components/solo401k/AddressFields';
-import AgreementSection from '@/components/solo401k/AgreementSection';
+import Solo401kAgreementSection from '@/components/solo401k/Solo401kAgreementSection';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -105,7 +105,7 @@ const New401kApplication = () => {
                 
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold text-survival-800">Agreement</h2>
-                  <AgreementSection form={form} />
+                  <Solo401kAgreementSection form={form} />
                 </div>
                 
                 <div className="pt-4 text-center">

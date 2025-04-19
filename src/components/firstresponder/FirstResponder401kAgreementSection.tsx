@@ -7,11 +7,11 @@ import { InfoIcon, DollarSign } from "lucide-react";
 import { UseFormReturn } from 'react-hook-form';
 import { SoloFormValues } from '@/components/solo401k/FormSchema';
 
-interface FirstResponder401kAgreementSectionProps {
+interface AgreementSectionProps {
   form: UseFormReturn<SoloFormValues>;
 }
 
-const FirstResponder401kAgreementSection = ({ form }: FirstResponder401kAgreementSectionProps) => {
+const FirstResponder401kAgreementSection = ({ form }: AgreementSectionProps) => {
   return (
     <>
       <Alert className="mb-8 bg-amber-50 border-amber-200">
@@ -72,7 +72,9 @@ const FirstResponder401kAgreementSection = ({ form }: FirstResponder401kAgreemen
   );
 };
 
-// Create a separate component for First Responder pricing
+export default FirstResponder401kAgreementSection;
+
+// Create a separate component for the pricing overview
 const FirstResponderPricingOverview = () => {
   return (
     <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
@@ -91,5 +93,3 @@ const FirstResponderPricingOverview = () => {
     </div>
   );
 };
-
-export default FirstResponder401kAgreementSection;

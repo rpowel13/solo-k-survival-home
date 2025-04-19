@@ -11,7 +11,7 @@ interface AgreementSectionProps {
   form: UseFormReturn<SoloFormValues>;
 }
 
-const AgreementSection = ({ form }: AgreementSectionProps) => {
+const Solo401kAgreementSection = ({ form }: AgreementSectionProps) => {
   return (
     <>
       <Alert className="mb-8 bg-amber-50 border-amber-200">
@@ -40,7 +40,7 @@ const AgreementSection = ({ form }: AgreementSectionProps) => {
           
           <p>E. Survival 401k, LLC does not provide legal, tax, or investment advice. Nothing of the foregoing, or of any other written, electronic or oral statement or communication by Survival 401k, LLC or its representatives, is intended to be, or may be relied as, legal, tax or investment advice, statements, opinions or predictions. Prior to making any investment decisions, please consult with the appropriate legal, tax, and investment professionals for advice.</p>
           
-          <PricingOverview />
+          <Solo401kPricingOverview />
 
           <p className="font-semibold mt-4 text-center">
             By checking the box below, I acknowledge the pricing and agree to the terms of service.
@@ -72,10 +72,10 @@ const AgreementSection = ({ form }: AgreementSectionProps) => {
   );
 };
 
-export default AgreementSection;
+export default Solo401kAgreementSection;
 
 // Create a separate component for the pricing overview
-const PricingOverview = () => {
+const Solo401kPricingOverview = () => {
   return (
     <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
       <div className="flex items-center justify-center mb-2">
