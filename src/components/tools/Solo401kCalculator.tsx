@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import { Calculator, DollarSign, PiggyBank } from 'lucide-react';
 
 const businessTypes = [
@@ -19,15 +18,17 @@ const Solo401kCalculator = () => {
   const [age, setAge] = useState<string>('');
 
   // Constants for 2025 contribution limits
-  const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;  // Base limit for 2025
-  const CATCH_UP_CONTRIBUTION = 7500;         // Age 50+ catch-up for 2025
-  const MAX_TOTAL_CONTRIBUTION = 70000;       // Updated for 2025
-  const SE_TAX_RATE = 0.153;                 // 15.3% Self-employment tax rate
-  const SE_TAX_DEDUCTION = 0.5;              // 50% of SE tax is deductible
+  const EMPLOYEE_CONTRIBUTION_LIMIT = 23500;     // Base limit for 2025
+  const CATCH_UP_CONTRIBUTION = 7500;            // Age 50+ catch-up for 2025
+  const MAX_TOTAL_CONTRIBUTION = 77500;          // Updated max for age 50+ in 2025
+  const MAX_TOTAL_UNDER_50 = 70000;             // Max for under 50 in 2025
+  const SE_TAX_RATE = 0.153;                    // 15.3% Self-employment tax rate
+  const SE_TAX_DEDUCTION = 0.5;                 // 50% of SE tax is deductible
 
   const calculateContributions = () => {
     const annualIncome = parseFloat(income) || 0;
     const participantAge = parseInt(age) || 0;
+    const isOver50 = participantAge >= 50;
     
     // Calculate self-employment tax and deduction
     const seTax = annualIncome * SE_TAX_RATE;
@@ -40,13 +41,16 @@ const Solo401kCalculator = () => {
     const baseEmployeeContribution = Math.min(adjustedIncome, EMPLOYEE_CONTRIBUTION_LIMIT);
     
     // Catch-up contribution if age 50 or older
-    const catchUpAmount = participantAge >= 50 ? CATCH_UP_CONTRIBUTION : 0;
+    const catchUpAmount = isOver50 ? CATCH_UP_CONTRIBUTION : 0;
+    
+    // Determine maximum total contribution based on age
+    const applicableMaxTotal = isOver50 ? MAX_TOTAL_CONTRIBUTION : MAX_TOTAL_UNDER_50;
     
     // Employer contribution (up to 25% of compensation after SE tax deduction)
     const maxEmployerContribution = adjustedIncome * 0.25;
     const employerContribution = Math.min(
       maxEmployerContribution,
-      MAX_TOTAL_CONTRIBUTION - baseEmployeeContribution - catchUpAmount
+      applicableMaxTotal - baseEmployeeContribution - catchUpAmount
     );
     
     // Calculate tax savings (assuming 24% marginal tax rate)
