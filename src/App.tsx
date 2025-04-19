@@ -29,6 +29,7 @@ import FirstResponderPayment from "./pages/payments/FirstResponderPayment";
 import RMDCalculator from "./pages/tools/RMDCalculator";
 import Solo401kCalculator from "./pages/tools/Solo401kCalculator";
 import New401kApplication from "./pages/applications/New401kApplication";
+import New401kFormPage from "./pages/applications/New401kFormPage";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
           <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
           <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
           <Route path="/apply/new-solo-401k" element={<New401kApplication />} />
+          <Route path="/apply/new-401k-form" element={<New401kFormPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
