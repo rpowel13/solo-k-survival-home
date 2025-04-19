@@ -1,14 +1,9 @@
 
 import React from "react";
 import { Phone, Mail, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface ContactMethodsProps {
-  onSchedulerOpen: () => void;
-}
-
-const ContactMethods: React.FC<ContactMethodsProps> = ({ onSchedulerOpen }) => {
+const ContactMethods = () => {
   return (
     <Card className="shadow-md">
       <CardHeader>
@@ -40,13 +35,14 @@ const ContactMethods: React.FC<ContactMethodsProps> = ({ onSchedulerOpen }) => {
             <div>
               <h3 className="font-medium">Schedule a Call</h3>
               <p className="text-gray-600">Book a free consultation</p>
-              <Button 
-                variant="link" 
-                className="p-0 h-auto text-survival-600 mt-1" 
-                onClick={onSchedulerOpen}
+              <a 
+                href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke&staff=sdpi7niilv7t6k07" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-survival-600 hover:text-survival-700 transition-colors mt-1"
               >
                 Choose a time →
-              </Button>
+              </a>
             </div>
           </div>
         </div>

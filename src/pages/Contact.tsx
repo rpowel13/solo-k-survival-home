@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -9,21 +8,17 @@ import ZapierConfig from "@/components/common/ZapierConfig";
 import WebhookStatus from "@/components/contact-page/WebhookStatus";
 import ContactMethods from "@/components/contact-page/ContactMethods";
 import MessageCard from "@/components/contact-page/MessageCard";
-import ConsultationSection from "@/components/contact-page/ConsultationSection";
 
 const Contact = () => {
-  const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [validateWebhook, setValidateWebhook] = useState(false);
   const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
   const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
   const { toast } = useToast();
   
   useEffect(() => {
-    // Run comprehensive diagnostics on page load
     console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
     logSupabaseInfo();
     
-    // Check webhook configuration
     const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
     const defaultUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
     
@@ -35,7 +30,6 @@ const Contact = () => {
       console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${crmWebhookUrl}`);
     }
     
-    // Test Supabase connection
     const runDiagnostics = async () => {
       const connectionResult = await testSupabaseConnection();
       
@@ -51,7 +45,6 @@ const Contact = () => {
         console.log(`[${new Date().toISOString()}] Supabase connection test successful on Contact page load`);
       }
       
-      // Direct insert test
       const insertResult = await insertTestContact();
       if (insertResult.success) {
         console.log(`[${new Date().toISOString()}] Direct test insert successful on page load`);
@@ -113,14 +106,9 @@ const Contact = () => {
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
-              <ContactMethods onSchedulerOpen={() => setIsSchedulerOpen(true)} />
+              <ContactMethods />
               <MessageCard />
             </div>
-            
-            <ConsultationSection 
-              isOpen={isSchedulerOpen}
-              onOpenChange={setIsSchedulerOpen}
-            />
           </div>
         </section>
       </main>
