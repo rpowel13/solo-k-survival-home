@@ -45,8 +45,8 @@ const Solo401kApplication = () => {
       zipCode: "",
       businessName: "",
       sponsorEin: "",
-      businessType: BusinessTypes.SOLE_PROPRIETORSHIP, // Specific enum value
-      annualIncome: IncomeRanges.UNDER_50K, // Specific enum value
+      businessType: BusinessTypes.SOLE_PROPRIETORSHIP,
+      annualIncome: IncomeRanges.UNDER_50K,
       trustee1Name: "",
       trustee2Name: "",
       participant1Name: "",
@@ -62,6 +62,12 @@ const Solo401kApplication = () => {
     console.log("Form submitted with data:", data);
     
     try {
+      // Add formType to the data for proper identification
+      const formData = {
+        ...data,
+        formType: 'Solo401k'
+      };
+      
       // Store application data in sessionStorage for payment process
       sessionStorage.setItem('solo401k_application', JSON.stringify({
         name: `${data.firstName} ${data.lastName}`,
@@ -70,7 +76,7 @@ const Solo401kApplication = () => {
       }));
       
       // Primary submission to Zapier webhook
-      const zapierResult = await triggerZapierWebhook(data);
+      const zapierResult = await triggerZapierWebhook(formData);
       
       // Secondary submission to Supabase
       const supabaseResult = await submitSolo401kApplication(data);
