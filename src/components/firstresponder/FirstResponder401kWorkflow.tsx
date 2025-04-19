@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -6,7 +5,7 @@ import * as z from 'zod';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, DollarSign } from 'lucide-react';
 import { formSchema as solo401kFormSchema } from '@/components/solo401k/FormSchema';
 import { supabase } from '@/integrations/supabase/client';
 import { triggerZapierWebhook } from '@/services/zapierService';
@@ -16,12 +15,12 @@ import AddressFields from '@/components/solo401k/AddressFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 import ZapierConfig from '@/components/firstresponder/ZapierConfig';
+import FirstResponder401kForm from './FirstResponder401kForm';
 
 interface FirstResponder401kWorkflowProps {
   onComplete: () => void;
 }
 
-// Create interface for the Solo 401k form values to match the component expectations
 interface Solo401kFormProps {
   form: ReturnType<typeof useForm<z.infer<typeof solo401kFormSchema>>>;
 }
@@ -62,12 +61,10 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
     try {
       console.log(`[${new Date().toISOString()}] First Responder 401k Form Data:`, data);
       
-      // Check if Zapier webhook is configured
       const isZapierConfigured = isWebhookConfigured('first_responder');
       console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
       
       if (isZapierConfigured) {
-        // Prepare Zapier data
         const zapierData = {
           ...data,
           formType: 'First_Responder_401k',
@@ -78,11 +75,9 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
         
         console.log(`[${new Date().toISOString()}] Sending 401k data to First Responder Zapier webhook:`, zapierData);
         
-        // Send to Zapier
         await triggerZapierWebhook(zapierData);
       }
       
-      // Store application data in sessionStorage for payment process
       sessionStorage.setItem('first_responder_401k_application', JSON.stringify({
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
@@ -96,7 +91,6 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
         description: "Your First Responder Solo 401k application has been submitted.",
       });
 
-      // Add a small delay before redirecting to ensure toast is seen
       setTimeout(() => {
         console.log(`[${new Date().toISOString()}] Redirecting to payment page...`);
         onComplete();
@@ -113,52 +107,37 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
     }
   };
 
-  // Use type casting to ensure compatibility with component props
   const typedSolo401kForm = solo401kForm as unknown as Solo401kFormProps['form'];
+
+  const PricingSection = () => {
+    return (
+      <div className="mt-6 bg-gray-100 rounded-lg p-4 text-center">
+        <div className="flex items-center justify-center mb-2">
+          <DollarSign className="h-6 w-6 text-finance-600 mr-2" />
+          <h3 className="text-2xl font-bold text-survival-800">Package Price</h3>
+        </div>
+        <div className="space-y-2">
+          <p className="text-lg font-semibold">
+            <span className="text-survival-700">First Responder Solo 401k:</span> $1,095.00
+          </p>
+          <p className="text-sm text-gray-600">
+            This service includes a comprehensive Solo 401k setup with special benefits for first responders.
+          </p>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-8">
-      {/* Add ZapierConfig component to initialize webhook */}
       <ZapierConfig validateWebhook={true} />
       
-      <Form {...solo401kForm}>
-        <form onSubmit={solo401kForm.handleSubmit(on401kSubmit)} className="space-y-8">
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
-            <PersonalInfoFields form={typedSolo401kForm} />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Address Information</h2>
-            <AddressFields form={typedSolo401kForm} />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Business Information</h2>
-            <BusinessInfoFields form={typedSolo401kForm} />
-          </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-survival-800">Plan Details</h2>
-            <PlanInfoFields form={typedSolo401kForm} />
-          </div>
-
-          <Button 
-            type="submit" 
-            className="w-full"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              "Submit First Responder Solo 401k Application"
-            )}
-          </Button>
-        </form>
-      </Form>
+      <FirstResponder401kForm
+        form={typedSolo401kForm}
+        isSubmitting={isSubmitting}
+        onSubmit={solo401kForm.handleSubmit(on401kSubmit)}
+        pricingComponent={<PricingSection />}
+      />
     </div>
   );
 };
