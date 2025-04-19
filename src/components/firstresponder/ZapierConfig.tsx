@@ -23,13 +23,22 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({ hidden = false, validateWeb
     
     // Validate the webhook by sending a test ping if requested
     if (validateWebhook) {
-      validateZapierWebhook();
+      setTimeout(() => {
+        validateZapierWebhook();
+      }, 500); // Add a small delay to ensure config is initialized
     }
   }, [validateWebhook, toast]);
 
   const validateZapierWebhook = async () => {
     try {
       console.log(`[${new Date().toISOString()}] Testing First Responder webhook`);
+      
+      // Check if webhook is configured before testing
+      if (!isWebhookConfigured('first_responder')) {
+        console.log(`[${new Date().toISOString()}] First Responder webhook not configured, skipping test`);
+        return;
+      }
+      
       const result = await testZapierWebhook('first_responder');
       
       if (result.success) {

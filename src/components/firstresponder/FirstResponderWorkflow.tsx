@@ -195,8 +195,14 @@ const FirstResponderWorkflow = () => {
         
         console.log(`[${new Date().toISOString()}] Sending complete First Responder data to Zapier webhook:`, zapierData);
         
-        // Send to Zapier
-        await triggerZapierWebhook(zapierData);
+        try {
+          // Send to Zapier
+          const response = await triggerZapierWebhook(zapierData);
+          console.log(`[${new Date().toISOString()}] Zapier webhook response:`, response);
+        } catch (zapierError) {
+          console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, zapierError);
+          // Continue with the flow even if Zapier fails
+        }
       }
       
       // Store application data in sessionStorage for payment process
@@ -213,12 +219,13 @@ const FirstResponderWorkflow = () => {
         description: "Your First Responder Package applications have been submitted.",
       });
 
-      // Redirect to payment page
+      // Add a small delay before redirecting to ensure toast is seen
       setTimeout(() => {
+        console.log(`[${new Date().toISOString()}] Redirecting to payment page...`);
         navigate('/payment/first-responder');
       }, 1500);
     } catch (error) {
-      console.error('Error submitting 401k application:', error);
+      console.error(`[${new Date().toISOString()}] Error submitting 401k application:`, error);
       toast({
         title: "Error",
         description: "Failed to submit 401k application. Please try again.",
@@ -238,7 +245,7 @@ const FirstResponderWorkflow = () => {
   return (
     <div className="space-y-8">
       {/* Add ZapierConfig component to initialize webhook */}
-      <ZapierConfig />
+      <ZapierConfig validateWebhook={true} />
       
       {currentStep === 'llc' ? (
         <Form {...llcForm}>
