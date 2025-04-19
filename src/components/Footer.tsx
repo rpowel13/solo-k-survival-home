@@ -91,13 +91,6 @@ const Footer = () => {
                 >
                   Update my Account
                 </a>
-                <a 
-                  href="tel:+18332245517" 
-                  className="block mt-2 text-survival-400 hover:text-survival-300 font-medium cursor-pointer flex items-center"
-                >
-                  <Phone className="h-4 w-4 mr-2 text-gray-400" />
-                  Call for Immediate Support
-                </a>
               </li>
             </div>
           </div>
