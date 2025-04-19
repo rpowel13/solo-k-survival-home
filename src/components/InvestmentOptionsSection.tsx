@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Coins, Building2, BarChart4, WalletCards, ChartPie, DollarSign } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import GoldPriceWidget from './GoldPriceWidget';
 
 const InvestmentOptionsSection = ({ className }: { className?: string }) => {
@@ -9,31 +9,37 @@ const InvestmentOptionsSection = ({ className }: { className?: string }) => {
     {
       title: "Precious Metals",
       description: "Invest in IRS-approved gold, silver, platinum, and palladium bullion coins.",
+      tooltip: "Protect your wealth with time-tested precious metals - a safe haven in uncertain times.",
       icon: <Coins className="h-6 w-6 text-yellow-600" />
     },
     {
       title: "Real Estate",
       description: "Purchase residential, commercial properties, or invest in real estate notes.",
+      tooltip: "Build lasting wealth through tangible property investments with strong growth potential.",
       icon: <Building2 className="h-6 w-6 text-blue-600" />
     },
     {
       title: "Private Equity",
       description: "Invest in private businesses, startups, and venture capital opportunities.",
+      tooltip: "Access high-growth potential investments before they hit the public markets.",
       icon: <ChartPie className="h-6 w-6 text-purple-600" />
     },
     {
       title: "Wall Street Assets",
       description: "Access traditional stocks, bonds, ETFs, mutual funds, and other publicly traded securities.",
+      tooltip: "Diversify your portfolio with established market securities for steady growth.",
       icon: <DollarSign className="h-6 w-6 text-green-600" />
     },
     {
       title: "Stock Market",
       description: "Trade stocks, bonds, mutual funds, and ETFs with complete control.",
+      tooltip: "Take control of your investments with direct access to market opportunities.",
       icon: <BarChart4 className="h-6 w-6 text-green-600" />
     },
     {
       title: "Cryptocurrency",
       description: "Diversify with Bitcoin and other approved digital currencies.",
+      tooltip: "Embrace the future of finance with strategic cryptocurrency investments.",
       icon: <WalletCards className="h-6 w-6 text-orange-600" />
     }
   ];
@@ -52,17 +58,24 @@ const InvestmentOptionsSection = ({ className }: { className?: string }) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {investments.map((investment, index) => (
-            <Card key={index} className="bg-white transition-shadow duration-300 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  {investment.icon}
-                  {investment.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">{investment.description}</p>
-              </CardContent>
-            </Card>
+            <Tooltip key={index}>
+              <TooltipTrigger asChild>
+                <Card className="bg-white transition-shadow duration-300 hover:shadow-lg cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      {investment.icon}
+                      {investment.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-gray-600">{investment.description}</p>
+                  </CardContent>
+                </Card>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{investment.tooltip}</p>
+              </TooltipContent>
+            </Tooltip>
           ))}
         </div>
 
