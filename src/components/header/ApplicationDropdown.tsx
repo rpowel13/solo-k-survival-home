@@ -1,3 +1,4 @@
+
 import {
   NavigationMenuContent,
   NavigationMenuItem,
@@ -17,12 +18,12 @@ export const ApplicationDropdown = () => {
           <li>
             <NavigationMenuLink asChild>
               <Link
-                to="/apply/new-401k-form"
+                to="/apply/solo-401k"
                 className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
               >
-                <div className="text-sm font-medium leading-none">New 401k Application Form</div>
+                <div className="text-sm font-medium leading-none">Solo 401k Application</div>
                 <p className="line-clamp-2 text-sm leading-snug text-survival-700">
-                  Apply for your 401k using our streamlined form
+                  Apply for your Solo 401k retirement plan
                 </p>
               </Link>
             </NavigationMenuLink>
