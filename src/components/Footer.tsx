@@ -1,5 +1,6 @@
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
+import GoldPriceWidget from "./GoldPriceWidget";
 
 const Footer = () => {
   return (
@@ -27,7 +28,10 @@ const Footer = () => {
               </a>
             </div>
             
-            {/* Removed Gold Price Widget */}
+            {/* Add Gold Price Widget under social icons */}
+            <div className="flex justify-center mt-4">
+              <GoldPriceWidget />
+            </div>
           </div>
 
           {/* Quick Links */}
