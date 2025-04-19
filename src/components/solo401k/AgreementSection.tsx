@@ -84,7 +84,7 @@ const PricingOverview = () => {
       </div>
       <div className="space-y-2">
         <p className="text-lg font-semibold">
-          <span className="text-survival-700">Setup Fee:</span> $1,095.00 (payable upon application submission)
+          <span className="text-survival-700">Setup Fee:</span> $1,200.00 (payable upon application submission)
         </p>
         <p className="text-lg font-semibold">
           <span className="text-survival-700">Annual Maintenance Fee:</span> $200.00 (charged on the first day of the anniversary month)
