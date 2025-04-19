@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, Edit } from "lucide-react";
 import { Link } from "react-router-dom";
 import GoldPriceWidget from "./GoldPriceWidget";
 
@@ -85,10 +85,11 @@ const Footer = () => {
                   href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=ry5n8z8s16pz3wqj&staff=onp5y3ueog3kdoly" 
                   target="blank" 
                   data-id="livesite-widget" 
-                  className="block mt-2 text-survival-400 hover:text-survival-300 font-medium cursor-pointer"
+                  className="block mt-2 text-survival-400 hover:text-survival-300 font-medium cursor-pointer flex items-center"
                   data-service="ry5n8z8s16pz3wqj" 
                   data-staff="onp5y3ueog3kdoly"
                 >
+                  <Edit className="h-4 w-4 mr-2" />
                   Update my Account
                 </a>
               </li>
