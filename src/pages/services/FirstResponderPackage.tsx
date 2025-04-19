@@ -48,7 +48,7 @@ const FirstResponderPackage = () => {
               </ul>
               <div className="pt-4">
                 <div className="text-2xl font-bold text-center mb-4">$699</div>
-                <Link to="/apply/llc">
+                <Link to="/payment/first-responder-llc">
                   <Button className="w-full bg-survival-600 hover:bg-survival-700">
                     Get Started with LLC
                   </Button>
@@ -80,7 +80,7 @@ const FirstResponderPackage = () => {
               </ul>
               <div className="pt-4">
                 <div className="text-2xl font-bold text-center mb-4">$1,095</div>
-                <Link to="/apply/solo-401k">
+                <Link to="/payment/first-responder-401k">
                   <Button className="w-full bg-finance-600 hover:bg-finance-700">
                     Get Started with Solo 401k
                   </Button>

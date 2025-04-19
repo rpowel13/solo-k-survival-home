@@ -30,6 +30,8 @@ import RMDCalculator from "./pages/tools/RMDCalculator";
 import Solo401kCalculator from "./pages/tools/Solo401kCalculator";
 import New401kApplication from "./pages/applications/New401kApplication";
 import New401kFormPage from "./pages/applications/New401kFormPage";
+import FirstResponderLLCPayment from "./pages/payments/FirstResponderLLCPayment";
+import FirstResponder401kPayment from "./pages/payments/FirstResponder401kPayment";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +64,8 @@ const App = () => (
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
           <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
           <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
+          <Route path="/payment/first-responder-llc" element={<FirstResponderLLCPayment />} />
+          <Route path="/payment/first-responder-401k" element={<FirstResponder401kPayment />} />
           <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
           <Route path="/apply/new-solo-401k" element={<New401kApplication />} />
           <Route path="/apply/new-401k-form" element={<New401kFormPage />} />
