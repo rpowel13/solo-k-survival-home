@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -62,7 +63,7 @@ const App = () => (
           <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
           <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
           <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
-          <Route path="/services/new-401k-form" element={<New401kForm />} />
+          {/* Removed: <Route path="/services/new-401k-form" element={<New401kForm />} /> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
