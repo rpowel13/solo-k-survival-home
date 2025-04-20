@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -35,6 +34,7 @@ import New401kApplication from "./pages/applications/New401kApplication";
 import New401kFormPage from "./pages/applications/New401kFormPage";
 import FirstResponderLLCPayment from "./pages/payments/FirstResponderLLCPayment";
 import FirstResponder401kPayment from "./pages/payments/FirstResponder401kPayment";
+import TestForm from "./pages/TestForm";
 
 const queryClient = new QueryClient();
 
@@ -74,6 +74,7 @@ const App = () => (
           <Route path="/apply/new-401k-form" element={<New401kFormPage />} />
           <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
           <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
+          <Route path="/test-form" element={<TestForm />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -1,48 +1,37 @@
+import * as React from "react"
 import {
-  NavigationMenuItem,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
-  NavigationMenuLink
-} from "@/components/ui/navigation-menu";
-import { Calculator, DollarSign } from "lucide-react";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { CaretSortIcon } from "@radix-ui/react-icons"
 
-export const ToolsDropdown = () => {
+export function ToolsDropdown() {
+  const items = [
+    { href: "/tools/retirement-calculator", label: "Retirement Calculator" },
+    { href: "/tools/rmd-calculator", label: "RMD Calculator" },
+    { href: "/tools/solo-401k-calculator", label: "Solo 401k Calculator" },
+    { href: "/test-form", label: "Test Form" },
+  ];
+
   return (
-    <NavigationMenuItem>
-      <NavigationMenuTrigger className="h-9 text-gray-600 hover:text-survival-700 font-bold bg-transparent">Retirement Tools</NavigationMenuTrigger>
-      <NavigationMenuContent className="bg-white min-w-[200px]">
-        <div className="p-1.5 space-y-1">
-          <Link 
-            to="/tools/retirement-calculator" 
-            className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-survival-50 hover:text-survival-800 text-gray-700"
-          >
-            <Calculator className="h-4 w-4" />
-            <span>Retirement Calculator</span>
-          </Link>
-          <Link 
-            to="/tools/solo-401k-calculator" 
-            className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-survival-50 hover:text-survival-800 text-gray-700"
-          >
-            <DollarSign className="h-4 w-4" />
-            <span>Solo 401k Calculator</span>
-          </Link>
-          <Link 
-            to="/tools/loan-calculator" 
-            className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-survival-50 hover:text-survival-800 text-gray-700"
-          >
-            <DollarSign className="h-4 w-4" />
-            <span>Loan Calculator</span>
-          </Link>
-          <Link 
-            to="/tools/rmd-calculator" 
-            className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-survival-50 hover:text-survival-800 text-gray-700"
-          >
-            <Calculator className="h-4 w-4" />
-            <span>RMD Calculator</span>
-          </Link>
-        </div>
-      </NavigationMenuContent>
-    </NavigationMenuItem>
-  );
-};
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="gap-2">
+          Tools
+          <CaretSortIcon className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56">
+        {items.map((item) => (
+          <DropdownMenuItem key={item.href} asChild>
+            <Link to={item.href}>{item.label}</Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
