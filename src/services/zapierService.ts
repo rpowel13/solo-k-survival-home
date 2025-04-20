@@ -1,5 +1,5 @@
 import { FormData, EmailResponse } from '@/types/formTypes';
-import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
+import { getWebhookUrl, isWebhookConfigured } from './zapier';
 import { formatFormData } from '@/utils/formDataFormatter';
 
 /**
@@ -62,7 +62,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       };
     }
     
-    const webhookUrl = getZapierWebhookUrl(webhookType as any);
+    const webhookUrl = getWebhookUrl(webhookType as any);
     console.log(`[${new Date().toISOString()}] Using Zapier webhook URL (${webhookType}): ${webhookUrl}`);
     
     // DEBUG: Log exact payload going to Zapier
@@ -100,7 +100,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
  */
 export const testZapierWebhook = async (webhookType: string): Promise<EmailResponse> => {
   try {
-    const webhookUrl = getZapierWebhookUrl(webhookType as any);
+    const webhookUrl = getWebhookUrl(webhookType as any);
     console.log(`[${new Date().toISOString()}] Testing Zapier webhook (${webhookType}): ${webhookUrl}`);
     
     if (!isWebhookConfigured(webhookType as any)) {

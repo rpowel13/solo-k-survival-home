@@ -1,6 +1,5 @@
-
 import React, { useEffect } from "react";
-import { initZapierConfig, validateZapierWebhook, isWebhookConfigured, WebhookType } from "@/services/zapierConfigService";
+import { initWebhook, validateWebhook, isWebhookConfigured, WebhookType } from "@/services/zapier";
 import { useToast } from "@/components/ui/use-toast";
 
 interface ZapierConfigProps {
@@ -26,7 +25,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     console.log(`[${new Date().toISOString()}] Initializing ${webhookType} Zapier webhook config`);
     
     // First initialize the webhook config to ensure shared configurations
-    initZapierConfig(webhookType);
+    initWebhook(webhookType);
     
     // Validate the webhook if requested
     if (validateWebhook) {
@@ -49,7 +48,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
       
       console.log(`[${new Date().toISOString()}] Validating ${webhookType} webhook`);
       
-      const result = await validateZapierWebhook(webhookType);
+      const result = await validateWebhook(webhookType);
       
       if (result.success) {
         console.log(`[${new Date().toISOString()}] ${webhookType} webhook validation triggered`);

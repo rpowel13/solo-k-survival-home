@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { setZapierWebhookUrl, getZapierWebhookUrl, WebhookType, validateZapierWebhook } from "@/services/zapierConfigService";
+import { setWebhookUrl, getWebhookUrl, WebhookType, validateWebhook } from "@/services/zapier";
 import { AlertCircle, Check } from "lucide-react";
 
 const WEBHOOK_TYPES = [
@@ -42,8 +41,7 @@ const ZapierWebhookConfig: React.FC = () => {
     }
 
     try {
-      // Save the webhook URL and optionally update all other webhooks
-      setZapierWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
+      setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
       toast({
         title: "Success",
@@ -73,11 +71,9 @@ const ZapierWebhookConfig: React.FC = () => {
 
     setIsValidating(true);
     try {
-      // First save the webhook URL
-      setZapierWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
+      setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
-      // Then validate it
-      const result = await validateZapierWebhook(webhookType as WebhookType);
+      const result = await validateWebhook(webhookType as WebhookType);
       
       if (result.success) {
         toast({
@@ -104,7 +100,7 @@ const ZapierWebhookConfig: React.FC = () => {
   };
 
   useEffect(() => {
-    const storedUrl = getZapierWebhookUrl(webhookType as WebhookType);
+    const storedUrl = getWebhookUrl(webhookType as WebhookType);
     setWebhookUrl(storedUrl === "https://hooks.zapier.com/hooks/catch/your-webhook-id/" ? "" : storedUrl);
   }, [webhookType]);
 
