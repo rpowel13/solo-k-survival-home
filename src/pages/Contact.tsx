@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
-import { getZapierWebhookUrl, validateZapierWebhook, initZapierConfig } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl, validateZapierWebhook, initZapierConfig, isWebhookConfigured } from "@/services/zapierConfigService";
 import ZapierConfig from "@/components/common/ZapierConfig";
 import WebhookStatus from "@/components/contact-page/WebhookStatus";
 import ContactMethods from "@/components/contact-page/ContactMethods";
@@ -14,32 +14,59 @@ const Contact = () => {
   const [validateWebhook, setValidateWebhook] = useState(false);
   const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
   const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
+  const [webhookUrl, setWebhookUrl] = useState<string>("");
   const { toast } = useToast();
   
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
     logSupabaseInfo();
     
-    // Force initialization of Zapier configuration
+    // Force initialization of ALL Zapier webhook types
     initZapierConfig('crm');
+    initZapierConfig('consultation');
+    initZapierConfig('solo401k');
+    initZapierConfig('llc');
+    initZapierConfig('first_responder');
     
-    // Try to use consultation webhook if CRM webhook is not configured
-    const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
-    const defaultUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
+    // Get current CRM webhook URL and update state to force UI refresh
+    const currentUrl = getZapierWebhookUrl('crm');
+    setWebhookUrl(currentUrl);
     
-    if (!crmWebhookUrl || crmWebhookUrl === defaultUrl) {
-      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
-      if (consultationUrl && consultationUrl !== defaultUrl) {
-        localStorage.setItem('zapier_crm_webhook_url', consultationUrl);
-        console.log(`[${new Date().toISOString()}] Copied consultation webhook URL to CRM: ${consultationUrl}`);
-        setWebhookStatus('configured');
-      } else {
-        setWebhookStatus('unconfigured');
-        console.warn(`[${new Date().toISOString()}] CRM webhook is not configured`);
+    // Check configuration status
+    const isConfigured = isWebhookConfigured('crm');
+    setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
+    
+    console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}, URL: ${currentUrl}`);
+    
+    if (!isConfigured) {
+      // Try all available webhooks as fallbacks
+      const webhookTypes = ['consultation', 'solo401k', 'llc', 'first_responder'];
+      let fallbackFound = false;
+      
+      for (const type of webhookTypes) {
+        const fallbackUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
+        if (fallbackUrl && fallbackUrl !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/") {
+          console.log(`[${new Date().toISOString()}] Found fallback webhook URL from ${type}: ${fallbackUrl}`);
+          localStorage.setItem('zapier_crm_webhook_url', fallbackUrl);
+          setWebhookUrl(fallbackUrl);
+          setWebhookStatus('configured');
+          fallbackFound = true;
+          break;
+        }
       }
-    } else {
-      setWebhookStatus('configured');
-      console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${crmWebhookUrl}`);
+      
+      if (!fallbackFound) {
+        console.warn(`[${new Date().toISOString()}] CRM webhook is not configured and no fallbacks found`);
+        toast({
+          title: "Zapier Integration Not Configured",
+          description: "The CRM integration is not fully configured. Your form will still be submitted to our database.",
+          duration: 8000
+        });
+      } else {
+        // Refresh status after applying fallback
+        const newStatus = isWebhookConfigured('crm');
+        setWebhookStatus(newStatus ? 'configured' : 'unconfigured');
+      }
     }
     
     const runDiagnostics = async () => {
@@ -67,6 +94,24 @@ const Contact = () => {
     
     runDiagnostics();
   }, [toast]);
+  
+  // Force status refresh on component update
+  useEffect(() => {
+    const refreshStatus = () => {
+      const currentUrl = getZapierWebhookUrl('crm');
+      const isConfigured = isWebhookConfigured('crm');
+      setWebhookUrl(currentUrl);
+      setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
+    };
+    
+    // Initial check
+    refreshStatus();
+    
+    // Set up interval for periodic checking (every 3 seconds)
+    const interval = setInterval(refreshStatus, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
   
   const handleValidateWebhook = async () => {
     setValidateWebhook(true);
@@ -123,7 +168,7 @@ const Contact = () => {
         webhookStatus={webhookStatus}
         lastTestedTime={lastTestedTime}
         onValidateWebhook={handleValidateWebhook}
-        webhookUrl={getZapierWebhookUrl('crm')}
+        webhookUrl={webhookUrl}
       />
       
       <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />

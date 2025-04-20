@@ -16,23 +16,55 @@ const ContactForm = () => {
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] ContactForm component mounted`);
     
-    // Initialize Zapier configuration with a forced update
-    initZapierConfig('crm');
+    // Initialize all webhook types to ensure cross-sharing
+    const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
+    webhookTypes.forEach(type => initZapierConfig(type as any));
     
     // Check webhook configuration
-    const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
     const isConfigured = isWebhookConfigured('crm');
+    const webhookUrl = getZapierWebhookUrl('crm');
     
     console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}`);
-    console.log(`[${new Date().toISOString()}] CRM webhook URL: ${crmWebhookUrl}`);
+    console.log(`[${new Date().toISOString()}] CRM webhook URL: ${webhookUrl}`);
     
     if (!isConfigured) {
       console.warn(`[${new Date().toISOString()}] CRM webhook is not configured. Form submissions may not be processed correctly.`);
-      toast({
-        title: "Zapier Integration Not Configured",
-        description: "The CRM integration is not fully configured. Your form will still be submitted to our database.",
-        duration: 8000
-      });
+      
+      // Search for any configured webhook and use it as a fallback
+      let fallbackFound = false;
+      for (const type of webhookTypes.filter(t => t !== 'crm')) {
+        const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
+        if (otherUrl && otherUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+          console.log(`[${new Date().toISOString()}] Found configured webhook for ${type}, using it as fallback for CRM`);
+          localStorage.setItem('zapier_crm_webhook_url', otherUrl);
+          fallbackFound = true;
+          break;
+        }
+      }
+      
+      if (!fallbackFound) {
+        toast({
+          title: "Zapier Integration Not Configured",
+          description: "The CRM integration is not fully configured. Your form will still be submitted to our database.",
+          duration: 8000
+        });
+      } else {
+        // If we found a fallback, validate it
+        const testZapierConnection = async () => {
+          try {
+            const validationResult = await validateZapierWebhook('crm');
+            if (!validationResult.success) {
+              console.warn(`[${new Date().toISOString()}] Zapier webhook validation failed: ${validationResult.message}`);
+            } else {
+              console.log(`[${new Date().toISOString()}] Zapier webhook validation successful`);
+            }
+          } catch (error) {
+            console.error(`[${new Date().toISOString()}] Error validating Zapier webhook:`, error);
+          }
+        };
+        
+        testZapierConnection();
+      }
     } else {
       // If configured, verify it's working with a test ping
       const testZapierConnection = async () => {

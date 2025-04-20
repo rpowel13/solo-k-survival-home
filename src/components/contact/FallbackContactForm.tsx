@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
@@ -26,27 +25,45 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const { toast } = useToast();
   
   useEffect(() => {
-    // Force initialization of Zapier configuration to ensure consistency across devices
-    initZapierConfig('crm');
-    
-    // Check if the webhook is configured
-    const isConfigured = isWebhookConfigured('crm');
-    setZapierConfigured(isConfigured);
-    console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isConfigured}`);
-    
-    // Log the webhook URL for debugging
-    const webhookUrl = getZapierWebhookUrl('crm');
-    console.log(`[${new Date().toISOString()}] Current Zapier CRM webhook URL: ${webhookUrl}`);
-    
-    // If not configured, try to copy configuration from consultation webhook
-    if (!isConfigured) {
-      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
-      if (consultationUrl && consultationUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
-        console.log(`[${new Date().toISOString()}] Using consultation webhook URL for CRM: ${consultationUrl}`);
-        localStorage.setItem('zapier_crm_webhook_url', consultationUrl);
-        setZapierConfigured(true);
+    // Force initialization of all Zapier webhook types to ensure consistency across devices
+    const initializeWebhooks = () => {
+      console.log(`[${new Date().toISOString()}] ContactForm: Initializing all webhook types`);
+      
+      // Initialize all webhook types to ensure cross-sharing
+      const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
+      webhookTypes.forEach(type => initZapierConfig(type as any));
+      
+      // Check if the CRM webhook is configured
+      const isConfigured = isWebhookConfigured('crm');
+      setZapierConfigured(isConfigured);
+      
+      console.log(`[${new Date().toISOString()}] ContactForm: CRM webhook configured: ${isConfigured}`);
+      
+      // Get and log the webhook URL 
+      const webhookUrl = getZapierWebhookUrl('crm');
+      console.log(`[${new Date().toISOString()}] ContactForm: Current CRM webhook URL: ${webhookUrl}`);
+      
+      // If not configured, try every possible webhook as a fallback
+      if (!isConfigured) {
+        for (const type of webhookTypes.filter(t => t !== 'crm')) {
+          const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
+          if (otherUrl && otherUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+            console.log(`[${new Date().toISOString()}] ContactForm: Using ${type} webhook URL for CRM: ${otherUrl}`);
+            localStorage.setItem('zapier_crm_webhook_url', otherUrl);
+            setZapierConfigured(true);
+            break;
+          }
+        }
       }
-    }
+    };
+    
+    // Run initialization immediately
+    initializeWebhooks();
+    
+    // Also set up a periodic check to ensure webhook configuration stays updated
+    const interval = setInterval(initializeWebhooks, 5000);
+    
+    return () => clearInterval(interval);
   }, []);
 
   const onSubmit = async (data: ContactFormValues) => {
@@ -54,10 +71,13 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log(`[${new Date().toISOString()}] Contact form submitted with data:`, data);
     
     try {
-      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${zapierConfigured}`);
+      // Force a recheck of webhook configuration before submission
+      const isConfigured = isWebhookConfigured('crm');
+      setZapierConfigured(isConfigured);
+      console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isConfigured}`);
       
       let zapierSuccess = false;
-      if (zapierConfigured) {
+      if (isConfigured) {
         console.log(`[${new Date().toISOString()}] Sending form data to Zapier CRM webhook`);
         
         const zapierData = {
