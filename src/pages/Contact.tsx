@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -35,7 +36,8 @@ const Contact = () => {
     const isConfigured = isWebhookConfigured('crm');
     setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
     
-    console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}, URL: ${currentUrl}`);
+    console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}`);
+    console.log(`[${new Date().toISOString()}] CRM webhook URL: ${currentUrl}`);
     
     if (!isConfigured) {
       // Try all available webhooks as fallbacks

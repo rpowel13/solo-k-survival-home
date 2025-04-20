@@ -1,7 +1,7 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import { WebhookType, DEFAULT_WEBHOOK_URL, WEBHOOK_FALLBACKS } from './types';
-import { getWebhookStorageKey, setStoredWebhookUrl, findConfiguredWebhook } from './storage';
+import { getWebhookStorageKey, setStoredWebhookUrl, findConfiguredWebhook, getStoredWebhookUrl } from './storage';
 
 /**
  * Initialize Zapier configuration
@@ -9,26 +9,36 @@ import { getWebhookStorageKey, setStoredWebhookUrl, findConfiguredWebhook } from
 export const initWebhook = (webhookType: WebhookType) => {
   console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for type: ${webhookType}`);
   
+  // Check environment variables first
   const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
   const envWebhookUrl = import.meta.env[envKey] || 'https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/';
   
-  if (envWebhookUrl) {
+  if (envWebhookUrl && envWebhookUrl !== DEFAULT_WEBHOOK_URL) {
     console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL from env: ${envWebhookUrl}`);
     setStoredWebhookUrl(envWebhookUrl, webhookType, true);
     return;
   }
   
-  const currentUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
+  // Check existing configuration
+  const currentUrl = getStoredWebhookUrl(webhookType);
   if (!currentUrl || currentUrl === DEFAULT_WEBHOOK_URL) {
     console.log(`[${new Date().toISOString()}] ${webhookType} webhook not configured, checking fallbacks`);
     
     const fallbacks = WEBHOOK_FALLBACKS[webhookType] || [];
     for (const fallbackType of fallbacks) {
-      const fallbackUrl = localStorage.getItem(getWebhookStorageKey(fallbackType as WebhookType));
+      const fallbackUrl = getStoredWebhookUrl(fallbackType as WebhookType);
       if (fallbackUrl && fallbackUrl !== DEFAULT_WEBHOOK_URL) {
-        setStoredWebhookUrl(fallbackUrl, webhookType, true);
+        console.log(`[${new Date().toISOString()}] Using ${fallbackType} webhook URL as fallback for ${webhookType}`);
+        setStoredWebhookUrl(fallbackUrl, webhookType, false);
         break;
       }
+    }
+    
+    // If still not found, try the hardcoded fallback
+    const hardcodedFallback = "https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/";
+    if (hardcodedFallback && hardcodedFallback !== DEFAULT_WEBHOOK_URL) {
+      console.log(`[${new Date().toISOString()}] Using hardcoded fallback URL for ${webhookType}`);
+      setStoredWebhookUrl(hardcodedFallback, webhookType, true);
     }
   }
   
@@ -49,8 +59,7 @@ export const initWebhook = (webhookType: WebhookType) => {
  * Get the configured Zapier webhook URL
  */
 export const getWebhookUrl = (type: WebhookType = 'crm'): string => {
-  const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
-  const url = storedUrl || DEFAULT_WEBHOOK_URL;
+  const url = getStoredWebhookUrl(type);
   
   if (url === DEFAULT_WEBHOOK_URL) {
     console.warn(`[${new Date().toISOString()}] ${type} using default webhook URL`);
@@ -81,31 +90,4 @@ export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
   const isConfigured = url !== DEFAULT_WEBHOOK_URL;
   console.log(`[${new Date().toISOString()}] ${type} webhook is configured: ${isConfigured}`);
   return isConfigured;
-};
-
-// Add these compatibility functions to maintain compatibility with the old service
-
-/**
- * Initialize Zapier configuration - alias for initWebhook
- * @deprecated Use initWebhook instead
- */
-export const initZapierConfig = (webhookType: WebhookType) => {
-  return initWebhook(webhookType);
-};
-
-/**
- * Get the configured Zapier webhook URL - alias for getWebhookUrl
- * @deprecated Use getWebhookUrl instead
- */
-export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
-  return getWebhookUrl(type);
-};
-
-/**
- * Check if webhook is configured - alias for isWebhookConfigured
- * @deprecated Use isWebhookConfigured instead
- */
-export const validateZapierWebhook = async (type: WebhookType = 'crm') => {
-  const { validateWebhook } = await import('./validation');
-  return validateWebhook(type);
 };

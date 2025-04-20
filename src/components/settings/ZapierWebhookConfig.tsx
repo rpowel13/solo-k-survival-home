@@ -42,6 +42,8 @@ const ZapierWebhookConfig: React.FC = () => {
     }
 
     try {
+      // Call setWebhookUrl from the imported service
+      // The service will handle updating localStorage
       setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
       toast({
@@ -72,8 +74,10 @@ const ZapierWebhookConfig: React.FC = () => {
 
     setIsValidating(true);
     try {
+      // First save the webhook URL
       setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
+      // Then validate it
       const result = await validateWebhook(webhookType as WebhookType);
       
       if (result.success) {

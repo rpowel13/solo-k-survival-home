@@ -1,10 +1,10 @@
 
-import { getWebhookUrl, isWebhookConfigured } from '@/services/zapier';
+import { getWebhookUrl, isWebhookConfigured, WebhookType } from '@/services/zapier';
 
 /**
  * Trigger Zapier webhook with the given data
  */
-export const triggerZapierWebhook = async (data: any, webhookType = 'crm'): Promise<{success: boolean, message: string}> => {
+export const triggerZapierWebhook = async (data: any, webhookType: WebhookType = 'crm'): Promise<{success: boolean, message: string}> => {
   try {
     const isConfigured = isWebhookConfigured(webhookType);
     
@@ -62,7 +62,7 @@ export const triggerZapierWebhook = async (data: any, webhookType = 'crm'): Prom
 /**
  * Test if a Zapier webhook is working
  */
-export const testZapierWebhook = async (webhookType = 'crm'): Promise<{success: boolean, message: string}> => {
+export const testZapierWebhook = async (webhookType: WebhookType = 'crm'): Promise<{success: boolean, message: string}> => {
   try {
     return triggerZapierWebhook({
       isTest: true,

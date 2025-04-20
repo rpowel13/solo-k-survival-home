@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -28,7 +29,7 @@ const sectionBackgrounds = {
 };
 
 const Index = () => {
-  const [validateWebhook, setValidateWebhook] = useState(false);
+  const [validateWebhookState, setValidateWebhook] = useState(false);
   const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
   const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
   const [webhookUrl, setWebhookUrl] = useState<string>("");
@@ -155,7 +156,7 @@ const Index = () => {
         webhookUrl={webhookUrl}
       />
       
-      <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />
+      <ZapierConfig webhookType="crm" validateWebhook={validateWebhookState} />
     </div>
   );
 };
