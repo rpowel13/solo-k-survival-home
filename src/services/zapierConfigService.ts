@@ -54,17 +54,19 @@ export const initZapierConfig = (webhookType: WebhookType) => {
   
   // Check environment variables first - this ensures admin panel configs are prioritized
   const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
-  const envWebhookUrl = import.meta.env[envKey];
+  const envWebhookUrl = import.meta.env[envKey] || 'https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/';
   
   if (envWebhookUrl) {
     console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL from env: ${envWebhookUrl}`);
     localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl);
     
     // Share this URL with other unconfigured webhook types
-    for (const otherType of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
+    const webhookTypes: WebhookType[] = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
+    
+    for (const otherType of webhookTypes) {
       const otherUrl = localStorage.getItem(getWebhookStorageKey(otherType));
       if (!otherUrl || otherUrl === DEFAULT_WEBHOOK_URL) {
-        console.log(`[${new Date().toISOString()}] Updating ${otherType} webhook URL with env var value`);
+        console.log(`[${new Date().toISOString()}] Updating ${otherType} webhook URL with shared value`);
         localStorage.setItem(getWebhookStorageKey(otherType), envWebhookUrl);
       }
     }
