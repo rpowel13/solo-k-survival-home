@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -7,7 +6,7 @@ import FallbackContactForm from "./contact/FallbackContactForm";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
 import { useToast } from "@/components/ui/use-toast";
 import ZapierConfig from "@/components/common/ZapierConfig";
-import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig, validateZapierWebhook } from "@/services/zapierConfigService";
+import { getWebhookUrl, isWebhookConfigured, initWebhook, validateWebhook } from "@/services/zapier";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -18,11 +17,11 @@ const ContactForm = () => {
     
     // Initialize all webhook types to ensure cross-sharing
     const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
-    webhookTypes.forEach(type => initZapierConfig(type as any));
+    webhookTypes.forEach(type => initWebhook(type as any));
     
     // Check webhook configuration
     const isConfigured = isWebhookConfigured('crm');
-    const webhookUrl = getZapierWebhookUrl('crm');
+    const webhookUrl = getWebhookUrl('crm');
     
     console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}`);
     console.log(`[${new Date().toISOString()}] CRM webhook URL: ${webhookUrl}`);
@@ -52,7 +51,7 @@ const ContactForm = () => {
         // If we found a fallback, validate it
         const testZapierConnection = async () => {
           try {
-            const validationResult = await validateZapierWebhook('crm');
+            const validationResult = await validateWebhook('crm');
             if (!validationResult.success) {
               console.warn(`[${new Date().toISOString()}] Zapier webhook validation failed: ${validationResult.message}`);
             } else {
@@ -69,7 +68,7 @@ const ContactForm = () => {
       // If configured, verify it's working with a test ping
       const testZapierConnection = async () => {
         try {
-          const validationResult = await validateZapierWebhook('crm');
+          const validationResult = await validateWebhook('crm');
           if (!validationResult.success) {
             console.warn(`[${new Date().toISOString()}] Zapier webhook validation failed: ${validationResult.message}`);
           } else {

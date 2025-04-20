@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FirstResponderWorkflow from '@/components/firstresponder/FirstResponderWorkflow';
-import { initZapierConfig, isWebhookConfigured } from '@/services/zapierConfigService';
+import { initWebhook, isWebhookConfigured } from '@/services/zapier';
 import { useToast } from '@/components/ui/use-toast';
 
 const FirstResponderApplication = () => {
@@ -11,7 +11,7 @@ const FirstResponderApplication = () => {
   
   useEffect(() => {
     // Initialize Zapier webhook configuration for first responder forms
-    initZapierConfig('first_responder');
+    initWebhook('first_responder');
     
     // Check if the webhook is configured
     const isConfigured = isWebhookConfigured('first_responder');

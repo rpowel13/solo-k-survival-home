@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
-import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig } from "@/services/zapierConfigService";
+import { getWebhookUrl, isWebhookConfigured, initWebhook } from "@/services/zapier";
 
 interface WebhookStatusProps {
   webhookStatus: 'unconfigured' | 'configured' | 'unknown';
@@ -21,27 +20,21 @@ const WebhookStatus: React.FC<WebhookStatusProps> = ({
     initialStatus || 'unknown'
   );
 
-  // Actively check webhook configuration status
   useEffect(() => {
-    // Initialize all webhook types to ensure cross-sharing
     const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
-    webhookTypes.forEach(type => initZapierConfig(type as any));
+    webhookTypes.forEach(type => initWebhook(type as any));
     
     const checkWebhookStatus = () => {
-      // Get latest webhook URL directly
-      const currentUrl = getZapierWebhookUrl('crm');
+      const currentUrl = getWebhookUrl('crm');
       setWebhookUrl(currentUrl);
       
-      // Determine if the URL is configured (not using default)
       const isConfigured = currentUrl !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
       setStatus(isConfigured ? 'configured' : 'unconfigured');
 
-      // If not configured, check all other webhook types as fallbacks
       if (!isConfigured) {
         for (const type of webhookTypes) {
           const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
           if (otherUrl && otherUrl !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/") {
-            // Found a configured webhook, use it and update status
             localStorage.setItem('zapier_crm_webhook_url', otherUrl);
             setWebhookUrl(otherUrl);
             setStatus('configured');
@@ -51,15 +44,12 @@ const WebhookStatus: React.FC<WebhookStatusProps> = ({
       }
     };
     
-    // Check immediately on mount
     checkWebhookStatus();
     
-    // Set up interval for periodic rechecking
     const interval = setInterval(checkWebhookStatus, 2000);
     return () => clearInterval(interval);
   }, []);
 
-  // Determine visual display based on current status
   const effectiveStatus = status === 'configured' ? 'configured' : 'unconfigured';
 
   return (

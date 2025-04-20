@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,7 @@ type WebhookTypeOption = typeof WEBHOOK_TYPES[number]['id'];
 
 const ZapierWebhookConfig: React.FC = () => {
   const [webhookType, setWebhookType] = useState<WebhookTypeOption>('crm');
-  const [webhookUrl, setWebhookUrl] = useState("");
+  const [webhookUrl, setWebhookUrlState] = useState("");
   const [updateAllWebhooks, setUpdateAllWebhooks] = useState(true);
   const [isValidating, setIsValidating] = useState(false);
   const { toast } = useToast();
@@ -101,7 +102,7 @@ const ZapierWebhookConfig: React.FC = () => {
 
   useEffect(() => {
     const storedUrl = getWebhookUrl(webhookType as WebhookType);
-    setWebhookUrl(storedUrl === "https://hooks.zapier.com/hooks/catch/your-webhook-id/" ? "" : storedUrl);
+    setWebhookUrlState(storedUrl === "https://hooks.zapier.com/hooks/catch/your-webhook-id/" ? "" : storedUrl);
   }, [webhookType]);
 
   return (
@@ -138,7 +139,7 @@ const ZapierWebhookConfig: React.FC = () => {
             id="webhook-url"
             placeholder="https://hooks.zapier.com/hooks/catch/your-webhook-id/"
             value={webhookUrl}
-            onChange={(e) => setWebhookUrl(e.target.value)}
+            onChange={(e) => setWebhookUrlState(e.target.value)}
           />
           <p className="text-sm text-gray-500">
             Enter the webhook URL from your Zapier zap for the selected integration type.

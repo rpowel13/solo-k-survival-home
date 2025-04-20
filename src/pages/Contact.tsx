@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
-import { getZapierWebhookUrl, validateZapierWebhook, initZapierConfig, isWebhookConfigured } from "@/services/zapierConfigService";
+import { getWebhookUrl, validateWebhook, initWebhook, isWebhookConfigured } from "@/services/zapier";
 import ZapierConfig from "@/components/common/ZapierConfig";
 import WebhookStatus from "@/components/contact-page/WebhookStatus";
 import ContactMethods from "@/components/contact-page/ContactMethods";
@@ -22,14 +21,14 @@ const Contact = () => {
     logSupabaseInfo();
     
     // Force initialization of ALL Zapier webhook types
-    initZapierConfig('crm');
-    initZapierConfig('consultation');
-    initZapierConfig('solo401k');
-    initZapierConfig('llc');
-    initZapierConfig('first_responder');
+    initWebhook('crm');
+    initWebhook('consultation');
+    initWebhook('solo401k');
+    initWebhook('llc');
+    initWebhook('first_responder');
     
     // Get current CRM webhook URL and update state to force UI refresh
-    const currentUrl = getZapierWebhookUrl('crm');
+    const currentUrl = getWebhookUrl('crm');
     setWebhookUrl(currentUrl);
     
     // Check configuration status
@@ -98,7 +97,7 @@ const Contact = () => {
   // Force status refresh on component update
   useEffect(() => {
     const refreshStatus = () => {
-      const currentUrl = getZapierWebhookUrl('crm');
+      const currentUrl = getWebhookUrl('crm');
       const isConfigured = isWebhookConfigured('crm');
       setWebhookUrl(currentUrl);
       setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
@@ -117,7 +116,7 @@ const Contact = () => {
     setValidateWebhook(true);
     
     try {
-      const result = await validateZapierWebhook('crm');
+      const result = await validateWebhook('crm');
       
       if (result.success) {
         toast({

@@ -13,7 +13,7 @@ import ResultDisplay from './solo401k/prequalification/ResultDisplay';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { Question, Result } from './solo401k/prequalification/types';
-import { getZapierWebhookUrl } from '@/services/zapierConfigService';
+import { getWebhookUrl } from '@/services/zapier';
 
 interface PrequalificationBannerProps {
   className?: string;
@@ -36,7 +36,7 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
     console.log(`[${new Date().toISOString()}] PrequalificationBanner loading - current page: ${location.pathname}`);
     
     // Check if Zapier webhook is configured
-    const webhookUrl = getZapierWebhookUrl('solo401k');
+    const webhookUrl = getWebhookUrl('solo401k');
     console.log(`[${new Date().toISOString()}] Solo401k Zapier webhook URL: ${webhookUrl}`);
     
     if (webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {

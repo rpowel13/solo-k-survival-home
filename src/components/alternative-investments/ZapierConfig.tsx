@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { initZapierConfig } from "@/services/zapierConfigService";
+import { initWebhook } from "@/services/zapier";
 
 interface ZapierConfigProps {
   hidden?: boolean;
@@ -9,7 +9,7 @@ interface ZapierConfigProps {
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ hidden = false }) => {
   useEffect(() => {
     // Initialize the correct webhook type for alternative investments
-    initZapierConfig('alternative_investments');
+    initWebhook('alternative_investments');
   }, []);
 
   return null;

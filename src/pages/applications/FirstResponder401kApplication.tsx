@@ -4,13 +4,13 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useNavigate } from 'react-router-dom';
 import FirstResponder401kWorkflow from '@/components/firstresponder/FirstResponder401kWorkflow';
-import { initZapierConfig } from '@/services/zapierConfigService';
+import { initWebhook } from '@/services/zapier';
 
 const FirstResponder401kApplication = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    initZapierConfig('first_responder');
+    initWebhook('first_responder');
   }, []);
 
   return (
@@ -25,7 +25,7 @@ const FirstResponder401kApplication = () => {
             </p>
           </div>
 
-          <div className="bg-white p-8 rounded-lg shadow-lg"> {/* New white background container */}
+          <div className="bg-white p-8 rounded-lg shadow-lg">
             <FirstResponder401kWorkflow onComplete={() => navigate('/payment/first-responder-401k')} />
           </div>
         </div>

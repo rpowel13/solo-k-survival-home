@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -15,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Phone } from "lucide-react";
 import InvestmentOptionsSection from "@/components/InvestmentOptionsSection";
 import { useState, useEffect } from "react";
-import { getZapierWebhookUrl, isWebhookConfigured, validateZapierWebhook, initZapierConfig } from "@/services/zapierConfigService";
+import { getWebhookUrl, isWebhookConfigured, validateWebhook, initWebhook } from "@/services/zapier";
 import { useToast } from "@/components/ui/use-toast";
 
 const sectionBackgrounds = {
@@ -35,22 +34,19 @@ const Index = () => {
   const [webhookUrl, setWebhookUrl] = useState<string>("");
   const { toast } = useToast();
   
-  // Initialize all webhook types on page load
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] Home page: Initializing all webhook types`);
     
     const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
-    webhookTypes.forEach(type => initZapierConfig(type as any));
+    webhookTypes.forEach(type => initWebhook(type as any));
     
-    const currentUrl = getZapierWebhookUrl('crm');
+    const currentUrl = getWebhookUrl('crm');
     setWebhookUrl(currentUrl);
     
     const isConfigured = isWebhookConfigured('crm');
     setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
     
-    // Try to sync webhook configs if needed
     const consolidateWebhookConfigs = () => {
-      // If current webhook is not configured, try to find another configured webhook
       if (!isConfigured) {
         for (const type of webhookTypes) {
           const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
@@ -63,7 +59,6 @@ const Index = () => {
           }
         }
       } 
-      // If current webhook is configured, share it with other webhook types
       else {
         for (const type of webhookTypes) {
           const typeUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
@@ -82,7 +77,7 @@ const Index = () => {
     setValidateWebhook(true);
     
     try {
-      const result = await validateZapierWebhook('crm');
+      const result = await validateWebhook('crm');
       
       if (result.success) {
         toast({
@@ -153,7 +148,6 @@ const Index = () => {
       </main>
       <Footer />
       
-      {/* Add webhook status indicator and configuration to home page */}
       <WebhookStatus 
         webhookStatus={webhookStatus}
         lastTestedTime={lastTestedTime}

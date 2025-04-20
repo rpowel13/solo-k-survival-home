@@ -82,3 +82,30 @@ export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
   console.log(`[${new Date().toISOString()}] ${type} webhook is configured: ${isConfigured}`);
   return isConfigured;
 };
+
+// Add these compatibility functions to maintain compatibility with the old service
+
+/**
+ * Initialize Zapier configuration - alias for initWebhook
+ * @deprecated Use initWebhook instead
+ */
+export const initZapierConfig = (webhookType: WebhookType) => {
+  return initWebhook(webhookType);
+};
+
+/**
+ * Get the configured Zapier webhook URL - alias for getWebhookUrl
+ * @deprecated Use getWebhookUrl instead
+ */
+export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
+  return getWebhookUrl(type);
+};
+
+/**
+ * Check if webhook is configured - alias for isWebhookConfigured
+ * @deprecated Use isWebhookConfigured instead
+ */
+export const validateZapierWebhook = async (type: WebhookType = 'crm') => {
+  const { validateWebhook } = await import('./validation');
+  return validateWebhook(type);
+};

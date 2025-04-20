@@ -10,7 +10,7 @@ import { Loader2, DollarSign } from 'lucide-react';
 import { formSchema as solo401kFormSchema } from '@/components/solo401k/FormSchema';
 import { supabase } from '@/integrations/supabase/client';
 import { triggerZapierWebhook } from '@/services/zapierService';
-import { getZapierWebhookUrl, isWebhookConfigured } from '@/services/zapierConfigService';
+import { getWebhookUrl, isWebhookConfigured } from '@/services/zapier';
 import PersonalInfoFields from '@/components/solo401k/PersonalInfoFields';
 import AddressFields from '@/components/solo401k/AddressFields';
 import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
