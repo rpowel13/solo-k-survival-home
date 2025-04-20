@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -43,7 +42,6 @@ const ZapierWebhookConfig: React.FC = () => {
 
     try {
       // Call setWebhookUrl from the imported service
-      // The service will handle updating localStorage
       setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
       toast({

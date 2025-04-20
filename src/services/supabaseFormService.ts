@@ -68,14 +68,17 @@ export const submitConsultationForm = async (data: ScheduleFormValues): Promise<
   try {
     console.log(`[${new Date().toISOString()}] Submitting consultation form to Supabase:`, data);
     
+    // Convert date to proper format for the database
+    const formattedDate = data.date instanceof Date ? data.date.toISOString().split('T')[0] : data.date;
+    
     const { data: insertedData, error } = await supabase
       .from('scheduled_consultations')
       .insert({
         name: data.name,
         email: data.email,
         phone: data.phone,
-        preferred_date: data.date instanceof Date ? data.date.toISOString() : data.date,
-        preferred_time: data.time || '',
+        consultation_date: formattedDate,
+        consultation_time: data.time || '',
         message: data.message || '',
         status: 'new',
         created_at: new Date().toISOString()
@@ -119,7 +122,7 @@ export const submitContactForm = async (data: ContactFormValues): Promise<{succe
         phone: data.phone || '',
         subject: data.subject || '',
         message: data.message,
-        opt_in: data.optIn || false,
+        opt_in: data.consent || false,
         created_at: new Date().toISOString()
       })
       .select();
