@@ -1,3 +1,4 @@
+
 import { CheckCircle } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import SectionHeading from "@/components/common/SectionHeading";
@@ -9,7 +10,7 @@ const FeaturesSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7")',
+          backgroundImage: 'url("https://images.unsplash.com/photo-1460574283810-2aab119d8511")',
         }}
       />
       
