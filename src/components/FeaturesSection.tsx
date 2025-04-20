@@ -4,8 +4,16 @@ import SectionHeading from "@/components/common/SectionHeading";
 
 const FeaturesSection = () => {
   return (
-    <section id="features" className="section-padding">
-      <div className="container mx-auto">
+    <section id="features" className="section-padding relative">
+      {/* Background image with overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7")',
+        }}
+      />
+      
+      <div className="container mx-auto relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <SectionHeading className="section-title">
             Features of Our Solo 401(k) Plans
