@@ -24,6 +24,19 @@ export type WebhookType =
 // Default webhook URL if not configured in env or localStorage
 const DEFAULT_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
 
+// Define primary webhook types and their fallbacks
+const WEBHOOK_FALLBACKS: Record<WebhookType, WebhookType[]> = {
+  'crm': ['consultation', 'solo401k', 'llc', 'first_responder'],
+  'consultation': ['crm', 'solo401k', 'llc', 'first_responder'],
+  'solo401k': ['crm', 'consultation', 'first_responder_401k'],
+  'llc': ['crm', 'consultation', 'first_responder_llc'],
+  'first_responder': ['crm', 'consultation', 'first_responder_401k', 'first_responder_llc'],
+  'first_responder_401k': ['first_responder', 'solo401k', 'crm'],
+  'first_responder_llc': ['first_responder', 'llc', 'crm'],
+  'alternative_investments': ['crm', 'consultation'],
+  'prequalification': ['crm', 'consultation']
+};
+
 /**
  * Get the storage key for a specific webhook type
  * @param type The type of webhook
@@ -33,63 +46,102 @@ export const getWebhookStorageKey = (type: WebhookType): string =>
   `${ZAPIER_WEBHOOK_STORAGE_PREFIX}${type}_webhook_url`;
 
 /**
- * Initialize Zapier configuration by checking environment variables
+ * Initialize Zapier configuration by checking environment variables and 
+ * attempting to share webhook URLs across webhook types
  * @param type The type of webhook to initialize
  */
 export const initZapierConfig = (webhookType: WebhookType) => {
   console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for type: ${webhookType}`);
   
-  // Attempt to share webhook URLs across types if not already configured
-  // This helps ensure consistency across different form types
-  if (webhookType === 'crm') {
-    const currentUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
-    const defaultUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
+  // Check if this webhook type is already configured properly
+  const currentUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
+  const defaultUrl = DEFAULT_WEBHOOK_URL;
+  
+  if (!currentUrl || currentUrl === defaultUrl) {
+    console.log(`[${new Date().toISOString()}] ${webhookType} webhook not configured, checking fallbacks`);
     
-    if (!currentUrl || currentUrl === defaultUrl) {
-      // Try to use consultation webhook if available (often configured first)
-      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
-      if (consultationUrl && consultationUrl !== defaultUrl) {
-        console.log(`[${new Date().toISOString()}] Using consultation webhook URL for CRM: ${consultationUrl}`);
-        localStorage.setItem(getWebhookStorageKey(webhookType), consultationUrl);
+    // Try to find a configured webhook URL from the fallback list
+    const fallbacks = WEBHOOK_FALLBACKS[webhookType] || [];
+    
+    for (const fallbackType of fallbacks) {
+      const fallbackUrl = localStorage.getItem(getWebhookStorageKey(fallbackType as WebhookType));
+      
+      if (fallbackUrl && fallbackUrl !== defaultUrl) {
+        console.log(`[${new Date().toISOString()}] Using ${fallbackType} webhook URL for ${webhookType}: ${fallbackUrl}`);
+        localStorage.setItem(getWebhookStorageKey(webhookType), fallbackUrl);
+        
+        // Also update all other unconfigured webhook types
+        for (const otherType of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
+          const otherUrl = localStorage.getItem(getWebhookStorageKey(otherType));
+          if (!otherUrl || otherUrl === defaultUrl) {
+            console.log(`[${new Date().toISOString()}] Also updating ${otherType} webhook URL with the same value`);
+            localStorage.setItem(getWebhookStorageKey(otherType), fallbackUrl);
+          }
+        }
+        
+        break;
       }
     }
   }
   
-  // Check if Supabase is properly connected first
+  // Check for environment variable specific to the webhook type
+  const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
+  const envWebhookUrl = import.meta.env[envKey];
+  
+  if (envWebhookUrl) {
+    localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl);
+    console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL initialized from env var: ${envWebhookUrl}`);
+    
+    // Share this URL with other unconfigured webhook types
+    for (const otherType of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
+      const otherUrl = localStorage.getItem(getWebhookStorageKey(otherType));
+      if (!otherUrl || otherUrl === defaultUrl) {
+        console.log(`[${new Date().toISOString()}] Also updating ${otherType} webhook URL with the env var value`);
+        localStorage.setItem(getWebhookStorageKey(otherType), envWebhookUrl);
+      }
+    }
+  } else {
+    // Check if we already have a stored URL
+    const storedUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
+    if (storedUrl && storedUrl !== defaultUrl) {
+      console.log(`[${new Date().toISOString()}] Using stored ${webhookType} webhook URL: ${storedUrl}`);
+    } else {
+      const foundConfiguredWebhook = findConfiguredWebhook();
+      if (foundConfiguredWebhook) {
+        console.log(`[${new Date().toISOString()}] Using ${foundConfiguredWebhook.type} webhook URL for ${webhookType}: ${foundConfiguredWebhook.url}`);
+        localStorage.setItem(getWebhookStorageKey(webhookType), foundConfiguredWebhook.url);
+      } else {
+        console.log(`[${new Date().toISOString()}] No configured webhook found for ${webhookType}, using default`);
+        localStorage.setItem(getWebhookStorageKey(webhookType), DEFAULT_WEBHOOK_URL);
+      }
+    }
+  }
+  
+  // Check Supabase connection as a final verification step
   supabase.from('contacts')
     .select('id')
     .limit(1)
     .then(({ error }) => {
       if (error) {
         console.error(`[${new Date().toISOString()}] Supabase connection error while initializing Zapier config:`, error);
-        // Consider showing a toast notification here to inform users
       } else {
         console.log(`[${new Date().toISOString()}] Supabase connection OK for Zapier webhook`);
-        // Continue with webhook initialization
-        // Check for environment variable specific to the webhook type
-        const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
-        const envWebhookUrl = import.meta.env[envKey];
-        
-        console.log(`[${new Date().toISOString()}] Checking for ${envKey} environment variable`);
-        
-        // If environment variable exists, use it and store in localStorage
-        if (envWebhookUrl) {
-          localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl);
-          console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL initialized from env var: ${envWebhookUrl}`);
-        } else {
-          console.log(`[${new Date().toISOString()}] No env var found for ${webhookType} webhook`);
-          
-          // Check if we already have a stored URL
-          const storedUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
-          if (storedUrl) {
-            console.log(`[${new Date().toISOString()}] Using stored ${webhookType} webhook URL: ${storedUrl}`);
-          } else {
-            console.log(`[${new Date().toISOString()}] No stored URL found for ${webhookType} webhook, using default`);
-            localStorage.setItem(getWebhookStorageKey(webhookType), DEFAULT_WEBHOOK_URL);
-          }
-        }
       }
     });
+};
+
+/**
+ * Find any configured webhook URL across all types
+ * @returns Object with webhook type and URL if found, null otherwise
+ */
+const findConfiguredWebhook = (): { type: WebhookType, url: string } | null => {
+  for (const type of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
+    const url = localStorage.getItem(getWebhookStorageKey(type));
+    if (url && url !== DEFAULT_WEBHOOK_URL) {
+      return { type, url };
+    }
+  }
+  return null;
 };
 
 /**
@@ -104,6 +156,14 @@ export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
   // Log and warn if using default URL
   if (url === DEFAULT_WEBHOOK_URL) {
     console.warn(`[${new Date().toISOString()}] ${type} is using the default webhook URL - CRM integration may not work`);
+    
+    // Try to find and use a configured webhook as a last resort
+    const configuredWebhook = findConfiguredWebhook();
+    if (configuredWebhook) {
+      console.log(`[${new Date().toISOString()}] Found alternative webhook ${configuredWebhook.type}, using its URL for ${type}`);
+      localStorage.setItem(getWebhookStorageKey(type), configuredWebhook.url);
+      return configuredWebhook.url;
+    }
   } else {
     console.log(`[${new Date().toISOString()}] ${type} Zapier webhook URL: ${url}`);
   }
@@ -115,11 +175,23 @@ export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
  * Set a custom Zapier webhook URL for a specific type
  * @param url The webhook URL to store
  * @param type The type of webhook
+ * @param updateAll Whether to update all webhook types with this URL
  */
-export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm'): void => {
+export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm', updateAll: boolean = false): void => {
   if (!url) return;
+  
   localStorage.setItem(getWebhookStorageKey(type), url);
   console.log(`[${new Date().toISOString()}] Zapier ${type} webhook URL updated manually: ${url}`);
+  
+  // Optionally update all other webhook types with the same URL
+  if (updateAll) {
+    for (const otherType of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
+      if (otherType !== type) {
+        localStorage.setItem(getWebhookStorageKey(otherType), url);
+        console.log(`[${new Date().toISOString()}] Also updated ${otherType} webhook URL with the same value`);
+      }
+    }
+  }
 };
 
 /**

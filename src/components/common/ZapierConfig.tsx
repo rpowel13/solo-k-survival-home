@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { initZapierConfig, validateZapierWebhook, WebhookType } from "@/services/zapierConfigService";
+import { initZapierConfig, validateZapierWebhook, isWebhookConfigured, WebhookType } from "@/services/zapierConfigService";
 import { useToast } from "@/components/ui/use-toast";
 
 interface ZapierConfigProps {
@@ -25,19 +25,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     // Initialize Zapier configuration with the specified webhook type
     console.log(`[${new Date().toISOString()}] Initializing ${webhookType} Zapier webhook config`);
     
-    // Force localStorage to be properly initialized regardless of device
-    const existingUrl = localStorage.getItem(`zapier_${webhookType}_webhook_url`);
-    
-    // Check if we need to copy configuration from another webhook type (for shared webhooks)
-    if (webhookType === 'crm' && (!existingUrl || existingUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/')) {
-      // Try to use the consultation webhook if available (often configured first)
-      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
-      if (consultationUrl && consultationUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
-        console.log(`[${new Date().toISOString()}] Using consultation webhook URL for CRM: ${consultationUrl}`);
-        localStorage.setItem(`zapier_${webhookType}_webhook_url`, consultationUrl);
-      }
-    }
-    
+    // First initialize the webhook config to ensure shared configurations
     initZapierConfig(webhookType);
     
     // Validate the webhook if requested
@@ -48,10 +36,8 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
 
   const validateWebhookUrl = async () => {
     try {
-      // Get the webhook URL from localStorage
-      const webhookUrl = localStorage.getItem(`zapier_${webhookType}_webhook_url`);
-      
-      if (!webhookUrl || webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+      // Check if webhook is properly configured
+      if (!isWebhookConfigured(webhookType)) {
         console.error(`[${new Date().toISOString()}] Cannot validate ${webhookType} webhook - URL not configured or using default value`);
         toast({
           title: "Webhook Not Configured",
@@ -61,38 +47,24 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
         return;
       }
       
-      console.log(`[${new Date().toISOString()}] Validating ${webhookType} webhook URL: ${webhookUrl}`);
+      console.log(`[${new Date().toISOString()}] Validating ${webhookType} webhook`);
       
-      // Send a test ping to the webhook
-      const testPingData = {
-        testPing: true,
-        timestamp: new Date().toISOString(),
-        message: `${webhookType} webhook validation test`,
-        source: window.location.href,
-        isTest: true,
-        testData: {
-          name: "Test Contact",
-          email: "test@example.com",
-          message: "This is a test ping from the validation feature."
-        }
-      };
+      const result = await validateZapierWebhook(webhookType);
       
-      console.log(`[${new Date().toISOString()}] Sending test data:`, testPingData);
-      
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(testPingData),
-        mode: 'no-cors'
-      });
-      
-      console.log(`[${new Date().toISOString()}] ${webhookType} webhook validation triggered`);
-      toast({
-        title: "Webhook Test Triggered",
-        description: `A test ping was sent to your ${webhookType} Zapier webhook. Check your Zapier account for the incoming test data.`,
-      });
+      if (result.success) {
+        console.log(`[${new Date().toISOString()}] ${webhookType} webhook validation triggered`);
+        toast({
+          title: "Webhook Test Successful",
+          description: `A test ping was sent to your ${webhookType} Zapier webhook. Check your Zapier account for the incoming test data.`,
+        });
+      } else {
+        console.error(`[${new Date().toISOString()}] ${webhookType} webhook validation failed: ${result.message}`);
+        toast({
+          title: "Webhook Test Failed",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error(`[${new Date().toISOString()}] Error validating webhook:`, error);
       toast({

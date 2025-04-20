@@ -1,18 +1,23 @@
 
-import React, { useEffect } from "react";
-import { initZapierConfig } from "@/services/zapierConfigService";
+import React from "react";
+import CommonZapierConfig from "@/components/common/ZapierConfig";
 
 interface ZapierConfigProps {
   hidden?: boolean;
+  validateWebhook?: boolean;
 }
 
-const ZapierConfig: React.FC<ZapierConfigProps> = ({ hidden = false }) => {
-  useEffect(() => {
-    // Initialize the correct webhook type for LLC
-    initZapierConfig('llc');
-  }, []);
-
-  return null;
+const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
+  hidden = false,
+  validateWebhook = false
+}) => {
+  return (
+    <CommonZapierConfig
+      webhookType="llc"
+      validateWebhook={validateWebhook}
+      hidden={hidden}
+    />
+  );
 };
 
 export default ZapierConfig;
