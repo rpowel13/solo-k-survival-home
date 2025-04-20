@@ -9,9 +9,14 @@ import FAQSection from "@/components/FAQSection";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import PrequalificationBanner from "@/components/PrequalificationBanner";
+import WebhookStatus from "@/components/contact-page/WebhookStatus";
+import ZapierConfig from "@/components/common/ZapierConfig";
 import { Separator } from "@/components/ui/separator";
 import { Phone } from "lucide-react";
 import InvestmentOptionsSection from "@/components/InvestmentOptionsSection";
+import { useState, useEffect } from "react";
+import { getZapierWebhookUrl, isWebhookConfigured, validateZapierWebhook, initZapierConfig } from "@/services/zapierConfigService";
+import { useToast } from "@/components/ui/use-toast";
 
 const sectionBackgrounds = {
   services: "bg-gradient-to-br from-soft-blue/20 to-soft-blue/10",
@@ -24,6 +29,86 @@ const sectionBackgrounds = {
 };
 
 const Index = () => {
+  const [validateWebhook, setValidateWebhook] = useState(false);
+  const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
+  const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
+  const [webhookUrl, setWebhookUrl] = useState<string>("");
+  const { toast } = useToast();
+  
+  // Initialize all webhook types on page load
+  useEffect(() => {
+    console.log(`[${new Date().toISOString()}] Home page: Initializing all webhook types`);
+    
+    const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
+    webhookTypes.forEach(type => initZapierConfig(type as any));
+    
+    const currentUrl = getZapierWebhookUrl('crm');
+    setWebhookUrl(currentUrl);
+    
+    const isConfigured = isWebhookConfigured('crm');
+    setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
+    
+    // Try to sync webhook configs if needed
+    const consolidateWebhookConfigs = () => {
+      // If current webhook is not configured, try to find another configured webhook
+      if (!isConfigured) {
+        for (const type of webhookTypes) {
+          const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
+          if (otherUrl && otherUrl !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/") {
+            console.log(`[${new Date().toISOString()}] Found configured webhook for ${type}, using it for CRM`);
+            localStorage.setItem('zapier_crm_webhook_url', otherUrl);
+            setWebhookUrl(otherUrl);
+            setWebhookStatus('configured');
+            break;
+          }
+        }
+      } 
+      // If current webhook is configured, share it with other webhook types
+      else {
+        for (const type of webhookTypes) {
+          const typeUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
+          if (!typeUrl || typeUrl === "https://hooks.zapier.com/hooks/catch/your-webhook-id/") {
+            console.log(`[${new Date().toISOString()}] Sharing CRM webhook URL with ${type}`);
+            localStorage.setItem(`zapier_${type}_webhook_url`, currentUrl);
+          }
+        }
+      }
+    };
+    
+    consolidateWebhookConfigs();
+  }, []);
+  
+  const handleValidateWebhook = async () => {
+    setValidateWebhook(true);
+    
+    try {
+      const result = await validateZapierWebhook('crm');
+      
+      if (result.success) {
+        toast({
+          title: "Webhook Test Successful",
+          description: "Test data was sent to your CRM webhook. Check your Zapier account to confirm it was received.",
+        });
+        setLastTestedTime(new Date().toLocaleTimeString());
+      } else {
+        toast({
+          title: "Webhook Test Failed",
+          description: result.message,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Error testing webhook:", error);
+      toast({
+        title: "Webhook Test Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive"
+      });
+    }
+    
+    setTimeout(() => setValidateWebhook(false), 1000);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -67,6 +152,16 @@ const Index = () => {
         </div>
       </main>
       <Footer />
+      
+      {/* Add webhook status indicator and configuration to home page */}
+      <WebhookStatus 
+        webhookStatus={webhookStatus}
+        lastTestedTime={lastTestedTime}
+        onValidateWebhook={handleValidateWebhook}
+        webhookUrl={webhookUrl}
+      />
+      
+      <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />
     </div>
   );
 };
