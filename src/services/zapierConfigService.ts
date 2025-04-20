@@ -1,4 +1,3 @@
-
 /**
  * Zapier Configuration Service
  * Handles Zapier webhook URL configuration and retrieval for multiple integration types
@@ -53,6 +52,26 @@ export const getWebhookStorageKey = (type: WebhookType): string =>
 export const initZapierConfig = (webhookType: WebhookType) => {
   console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for type: ${webhookType}`);
   
+  // Check environment variables first - this ensures admin panel configs are prioritized
+  const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
+  const envWebhookUrl = import.meta.env[envKey];
+  
+  if (envWebhookUrl) {
+    console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL from env: ${envWebhookUrl}`);
+    localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl);
+    
+    // Share this URL with other unconfigured webhook types
+    for (const otherType of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
+      const otherUrl = localStorage.getItem(getWebhookStorageKey(otherType));
+      if (!otherUrl || otherUrl === DEFAULT_WEBHOOK_URL) {
+        console.log(`[${new Date().toISOString()}] Updating ${otherType} webhook URL with env var value`);
+        localStorage.setItem(getWebhookStorageKey(otherType), envWebhookUrl);
+      }
+    }
+    
+    return;
+  }
+  
   // Check if this webhook type is already configured properly
   const currentUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
   const defaultUrl = DEFAULT_WEBHOOK_URL;
@@ -85,19 +104,19 @@ export const initZapierConfig = (webhookType: WebhookType) => {
   }
   
   // Check for environment variable specific to the webhook type
-  const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
-  const envWebhookUrl = import.meta.env[envKey];
+  const envKey2 = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
+  const envWebhookUrl2 = import.meta.env[envKey2];
   
-  if (envWebhookUrl) {
-    localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl);
-    console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL initialized from env var: ${envWebhookUrl}`);
+  if (envWebhookUrl2) {
+    localStorage.setItem(getWebhookStorageKey(webhookType), envWebhookUrl2);
+    console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL initialized from env var: ${envWebhookUrl2}`);
     
     // Share this URL with other unconfigured webhook types
     for (const otherType of Object.keys(WEBHOOK_FALLBACKS) as WebhookType[]) {
       const otherUrl = localStorage.getItem(getWebhookStorageKey(otherType));
       if (!otherUrl || otherUrl === defaultUrl) {
         console.log(`[${new Date().toISOString()}] Also updating ${otherType} webhook URL with the env var value`);
-        localStorage.setItem(getWebhookStorageKey(otherType), envWebhookUrl);
+        localStorage.setItem(getWebhookStorageKey(otherType), envWebhookUrl2);
       }
     }
   } else {
