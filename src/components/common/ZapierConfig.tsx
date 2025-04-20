@@ -24,6 +24,20 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
   useEffect(() => {
     // Initialize Zapier configuration with the specified webhook type
     console.log(`[${new Date().toISOString()}] Initializing ${webhookType} Zapier webhook config`);
+    
+    // Force localStorage to be properly initialized regardless of device
+    const existingUrl = localStorage.getItem(`zapier_${webhookType}_webhook_url`);
+    
+    // Check if we need to copy configuration from another webhook type (for shared webhooks)
+    if (webhookType === 'crm' && (!existingUrl || existingUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/')) {
+      // Try to use the consultation webhook if available (often configured first)
+      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
+      if (consultationUrl && consultationUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+        console.log(`[${new Date().toISOString()}] Using consultation webhook URL for CRM: ${consultationUrl}`);
+        localStorage.setItem(`zapier_${webhookType}_webhook_url`, consultationUrl);
+      }
+    }
+    
     initZapierConfig(webhookType);
     
     // Validate the webhook if requested

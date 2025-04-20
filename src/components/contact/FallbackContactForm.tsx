@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/components/ui/use-toast";
@@ -13,7 +14,7 @@ import MessageField from "./MessageField";
 import OptInCheckbox from "./OptInCheckbox";
 import SubmitButton from "./SubmitButton";
 import { supabase } from "@/integrations/supabase/client";
-import { getZapierWebhookUrl, isWebhookConfigured } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig } from "@/services/zapierConfigService";
 
 interface FallbackContactFormProps {
   form: UseFormReturn<ContactFormValues>;
@@ -25,12 +26,27 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const { toast } = useToast();
   
   useEffect(() => {
+    // Force initialization of Zapier configuration to ensure consistency across devices
+    initZapierConfig('crm');
+    
+    // Check if the webhook is configured
     const isConfigured = isWebhookConfigured('crm');
     setZapierConfigured(isConfigured);
     console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isConfigured}`);
     
+    // Log the webhook URL for debugging
     const webhookUrl = getZapierWebhookUrl('crm');
     console.log(`[${new Date().toISOString()}] Current Zapier CRM webhook URL: ${webhookUrl}`);
+    
+    // If not configured, try to copy configuration from consultation webhook
+    if (!isConfigured) {
+      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
+      if (consultationUrl && consultationUrl !== 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
+        console.log(`[${new Date().toISOString()}] Using consultation webhook URL for CRM: ${consultationUrl}`);
+        localStorage.setItem('zapier_crm_webhook_url', consultationUrl);
+        setZapierConfigured(true);
+      }
+    }
   }, []);
 
   const onSubmit = async (data: ContactFormValues) => {

@@ -1,3 +1,4 @@
+
 /**
  * Zapier Configuration Service
  * Handles Zapier webhook URL configuration and retrieval for multiple integration types
@@ -37,6 +38,22 @@ export const getWebhookStorageKey = (type: WebhookType): string =>
  */
 export const initZapierConfig = (webhookType: WebhookType) => {
   console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for type: ${webhookType}`);
+  
+  // Attempt to share webhook URLs across types if not already configured
+  // This helps ensure consistency across different form types
+  if (webhookType === 'crm') {
+    const currentUrl = localStorage.getItem(getWebhookStorageKey(webhookType));
+    const defaultUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
+    
+    if (!currentUrl || currentUrl === defaultUrl) {
+      // Try to use consultation webhook if available (often configured first)
+      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
+      if (consultationUrl && consultationUrl !== defaultUrl) {
+        console.log(`[${new Date().toISOString()}] Using consultation webhook URL for CRM: ${consultationUrl}`);
+        localStorage.setItem(getWebhookStorageKey(webhookType), consultationUrl);
+      }
+    }
+  }
   
   // Check if Supabase is properly connected first
   supabase.from('contacts')

@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
-import { getZapierWebhookUrl, validateZapierWebhook } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl, validateZapierWebhook, initZapierConfig } from "@/services/zapierConfigService";
 import ZapierConfig from "@/components/common/ZapierConfig";
 import WebhookStatus from "@/components/contact-page/WebhookStatus";
 import ContactMethods from "@/components/contact-page/ContactMethods";
@@ -20,12 +20,23 @@ const Contact = () => {
     console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
     logSupabaseInfo();
     
+    // Force initialization of Zapier configuration
+    initZapierConfig('crm');
+    
+    // Try to use consultation webhook if CRM webhook is not configured
     const crmWebhookUrl = localStorage.getItem('zapier_crm_webhook_url');
     const defaultUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id/';
     
     if (!crmWebhookUrl || crmWebhookUrl === defaultUrl) {
-      setWebhookStatus('unconfigured');
-      console.warn(`[${new Date().toISOString()}] CRM webhook is not configured`);
+      const consultationUrl = localStorage.getItem('zapier_consultation_webhook_url');
+      if (consultationUrl && consultationUrl !== defaultUrl) {
+        localStorage.setItem('zapier_crm_webhook_url', consultationUrl);
+        console.log(`[${new Date().toISOString()}] Copied consultation webhook URL to CRM: ${consultationUrl}`);
+        setWebhookStatus('configured');
+      } else {
+        setWebhookStatus('unconfigured');
+        console.warn(`[${new Date().toISOString()}] CRM webhook is not configured`);
+      }
     } else {
       setWebhookStatus('configured');
       console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${crmWebhookUrl}`);
