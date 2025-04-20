@@ -6,11 +6,11 @@ import SectionHeading from "@/components/common/SectionHeading";
 const FeaturesSection = () => {
   return (
     <section id="features" className="section-padding relative">
-      {/* Background image with overlay */}
+      {/* Background image with overlay of gold bars/coins */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1460574283810-2aab119d8511")',
+          backgroundImage: 'url("/lovable-uploads/1a9cd712-eda5-4c0c-8082-4f6a8d41ef09.png")',
         }}
       />
       
@@ -83,3 +83,4 @@ const FeaturesSection = () => {
 };
 
 export default FeaturesSection;
+
