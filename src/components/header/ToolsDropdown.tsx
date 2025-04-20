@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import {
   DropdownMenu,
@@ -7,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CaretSortIcon } from "@radix-ui/react-icons"
+import { ChevronDown } from "lucide-react"
 
 export function ToolsDropdown() {
   const items = [
@@ -22,7 +23,7 @@ export function ToolsDropdown() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="gap-2">
           Tools
-          <CaretSortIcon className="h-4 w-4" />
+          <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
