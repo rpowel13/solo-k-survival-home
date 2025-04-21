@@ -1,7 +1,6 @@
-
 export const ZAPIER_WEBHOOK_STORAGE_PREFIX = "zapier_";
 
-export const DEFAULT_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
+export const DEFAULT_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2x9p97g/";
 
 export type WebhookType = 
   | 'crm' 
