@@ -13,7 +13,7 @@ import MessageField from "./MessageField";
 import OptInCheckbox from "./OptInCheckbox";
 import SubmitButton from "./SubmitButton";
 import { supabase } from "@/integrations/supabase/client";
-import { getWebhookUrl, isWebhookConfigured, initWebhook } from "@/services/zapier";
+import { getZapierWebhookUrl, isWebhookConfigured, initZapierConfig } from "@/services/zapierConfigService";
 
 interface FallbackContactFormProps {
   form: UseFormReturn<ContactFormValues>;
@@ -25,20 +25,25 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
   const { toast } = useToast();
   
   useEffect(() => {
+    // Force initialization of all Zapier webhook types to ensure consistency across devices
     const initializeWebhooks = () => {
       console.log(`[${new Date().toISOString()}] ContactForm: Initializing all webhook types`);
       
+      // Initialize all webhook types to ensure cross-sharing
       const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
-      webhookTypes.forEach(type => initWebhook(type as any));
+      webhookTypes.forEach(type => initZapierConfig(type as any));
       
+      // Check if the CRM webhook is configured
       const isConfigured = isWebhookConfigured('crm');
       setZapierConfigured(isConfigured);
       
       console.log(`[${new Date().toISOString()}] ContactForm: CRM webhook configured: ${isConfigured}`);
       
-      const webhookUrl = getWebhookUrl('crm');
+      // Get and log the webhook URL 
+      const webhookUrl = getZapierWebhookUrl('crm');
       console.log(`[${new Date().toISOString()}] ContactForm: Current CRM webhook URL: ${webhookUrl}`);
       
+      // If not configured, try every possible webhook as a fallback
       if (!isConfigured) {
         for (const type of webhookTypes.filter(t => t !== 'crm')) {
           const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
@@ -52,8 +57,10 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
       }
     };
     
+    // Run initialization immediately
     initializeWebhooks();
     
+    // Also set up a periodic check to ensure webhook configuration stays updated
     const interval = setInterval(initializeWebhooks, 5000);
     
     return () => clearInterval(interval);
@@ -64,6 +71,7 @@ const FallbackContactForm: React.FC<FallbackContactFormProps> = ({ form }) => {
     console.log(`[${new Date().toISOString()}] Contact form submitted with data:`, data);
     
     try {
+      // Force a recheck of webhook configuration before submission
       const isConfigured = isWebhookConfigured('crm');
       setZapierConfigured(isConfigured);
       console.log(`[${new Date().toISOString()}] Zapier CRM webhook configured: ${isConfigured}`);

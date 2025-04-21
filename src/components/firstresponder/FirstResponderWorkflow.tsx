@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -7,7 +6,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { formSchema as llcFormSchema } from '@/components/llc/FormSchema';
 import { formSchema as solo401kFormSchema } from '@/components/solo401k/FormSchema';
 import { triggerZapierWebhook } from '@/services/zapierService';
-import { isWebhookConfigured } from '@/services/zapier';
+import { isWebhookConfigured } from '@/services/zapierConfigService';
 import ZapierConfig from '@/components/firstresponder/ZapierConfig';
 import FirstResponderLLCForm from './FirstResponderLLCForm';
 import FirstResponder401kForm from './FirstResponder401kForm';

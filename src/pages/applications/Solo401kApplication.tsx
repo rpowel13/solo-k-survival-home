@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -71,7 +70,7 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      const zapierPromise = triggerZapierWebhook(formData, 'solo401k');
+      const zapierPromise = triggerZapierWebhook(formData);
       const supabasePromise = submitSolo401kApplication(data);
       
       const [zapierResult, supabaseResult] = await Promise.allSettled([zapierPromise, supabasePromise]);

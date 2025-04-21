@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { initWebhook, validateWebhook, isWebhookConfigured, WebhookType } from "@/services/zapier";
+import { initZapierConfig, validateZapierWebhook, isWebhookConfigured, WebhookType } from "@/services/zapierConfigService";
 import { useToast } from "@/components/ui/use-toast";
 
 interface ZapierConfigProps {
@@ -17,7 +17,7 @@ interface ZapierConfigProps {
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
   hidden = false, 
   webhookType = 'crm',
-  validateWebhook: shouldValidateWebhook = false 
+  validateWebhook = false 
 }) => {
   const { toast } = useToast();
 
@@ -26,13 +26,13 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     console.log(`[${new Date().toISOString()}] Initializing ${webhookType} Zapier webhook config`);
     
     // First initialize the webhook config to ensure shared configurations
-    initWebhook(webhookType);
+    initZapierConfig(webhookType);
     
     // Validate the webhook if requested
-    if (shouldValidateWebhook) {
+    if (validateWebhook) {
       validateWebhookUrl();
     }
-  }, [webhookType, shouldValidateWebhook]);
+  }, [webhookType, validateWebhook]);
 
   const validateWebhookUrl = async () => {
     try {
@@ -49,7 +49,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
       
       console.log(`[${new Date().toISOString()}] Validating ${webhookType} webhook`);
       
-      const result = await validateWebhook(webhookType);
+      const result = await validateZapierWebhook(webhookType);
       
       if (result.success) {
         console.log(`[${new Date().toISOString()}] ${webhookType} webhook validation triggered`);

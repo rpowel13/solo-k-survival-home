@@ -1,13 +1,13 @@
 
 import { useEffect } from 'react';
 import { 
-  getWebhookUrl, 
+  getZapierWebhookUrl, 
   isWebhookConfigured, 
   WebhookType,
-  initWebhook 
-} from '@/services/zapier';
+  initZapierConfig 
+} from '@/services/zapierConfigService';
 import { useToast } from '@/hooks/use-toast';
-import { validateWebhook } from '@/services/zapier';
+import { testZapierWebhook } from '@/services/zapierService';
 
 interface ZapierConfigProps {
   webhookType?: WebhookType;
@@ -19,11 +19,11 @@ const ZapierConfig = ({ webhookType = 'solo401k' }: ZapierConfigProps) => {
   useEffect(() => {
     // Initialize Zapier configuration
     console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for ${webhookType}`);
-    initWebhook(webhookType);
+    initZapierConfig(webhookType);
     
     // Check webhook configuration
     const webhookConfigured = isWebhookConfigured(webhookType);
-    const webhookUrl = getWebhookUrl(webhookType);
+    const webhookUrl = getZapierWebhookUrl(webhookType);
     
     console.log(`[${new Date().toISOString()}] ${webhookType} Zapier webhook configured: ${webhookConfigured}`);
     console.log(`[${new Date().toISOString()}] Current ${webhookType} Zapier webhook URL: ${webhookUrl || 'Not configured'}`);
@@ -40,7 +40,7 @@ const ZapierConfig = ({ webhookType = 'solo401k' }: ZapierConfigProps) => {
 
     // Optional: Test webhook if configured
     if (webhookConfigured) {
-      testWebhook(webhookType)
+      testZapierWebhook(webhookType)
         .then(result => {
           if (result.success) {
             console.log(`[${new Date().toISOString()}] Successful test ping for ${webhookType} webhook`);
@@ -51,11 +51,8 @@ const ZapierConfig = ({ webhookType = 'solo401k' }: ZapierConfigProps) => {
     }
   }, [toast, webhookType]);
   
-  const testWebhook = async (type: WebhookType) => {
-    return validateWebhook(type);
-  };
-  
   return null;
 };
 
 export default ZapierConfig;
+

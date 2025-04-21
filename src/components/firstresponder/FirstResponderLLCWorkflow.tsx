@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +9,7 @@ import { Loader2, DollarSign } from 'lucide-react';
 import { formSchema as llcFormSchema } from '@/components/llc/FormSchema';
 import { supabase } from '@/integrations/supabase/client';
 import { triggerZapierWebhook } from '@/services/zapierService';
-import { getWebhookUrl, isWebhookConfigured } from '@/services/zapier';
+import { getZapierWebhookUrl, isWebhookConfigured } from '@/services/zapierConfigService';
 import PersonalInfoFields from '@/components/llc/PersonalInfoFields';
 import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';

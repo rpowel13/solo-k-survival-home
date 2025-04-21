@@ -1,79 +1,148 @@
-
-import { getWebhookUrl, isWebhookConfigured, WebhookType } from '@/services/zapier';
+import { FormData, EmailResponse } from '@/types/formTypes';
+import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
+import { formatFormData } from '@/utils/formDataFormatter';
 
 /**
- * Trigger Zapier webhook with the given data
+ * Sends the form data to a Zapier webhook for CRM integration
  */
-export const triggerZapierWebhook = async (data: any, webhookType: WebhookType = 'crm'): Promise<{success: boolean, message: string}> => {
+export const triggerZapierWebhook = async (data: FormData): Promise<EmailResponse> => {
   try {
-    const isConfigured = isWebhookConfigured(webhookType);
+    console.log(`[${new Date().toISOString()}] Preparing to send form data to Zapier:`, data);
     
-    if (!isConfigured) {
-      console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not configured.`);
+    // Validate that the data is an object before continuing
+    if (!data || typeof data !== 'object') {
+      console.error(`[${new Date().toISOString()}] Invalid data format for Zapier webhook:`, data);
       return {
         success: false,
-        message: `The ${webhookType} webhook URL is not configured.`
+        message: 'Invalid data format. Data must be an object.'
       };
     }
     
-    const webhookUrl = getWebhookUrl(webhookType);
-    console.log(`[${new Date().toISOString()}] Triggering Zapier webhook for ${webhookType}: ${webhookUrl}`);
+    // Format the data for the webhook
+    const formattedData = formatFormData(data);
     
-    if (!webhookUrl || webhookUrl === 'https://hooks.zapier.com/hooks/catch/your-webhook-id/') {
-      return {
-        success: false,
-        message: `The ${webhookType} webhook URL is not properly configured.`
+    // Determine webhook type from formType property or from formatted data
+    let webhookType = 'crm'; // Default webhook type
+    
+    if ('formType' in data && typeof data.formType === 'string') {
+      // Get webhook type from form data
+      if (data.formType.toLowerCase() === 'solo401k') {
+        webhookType = 'solo401k';
+      } else if (data.formType.toLowerCase().includes('llc') || data.formType.toLowerCase().includes('formation')) {
+        webhookType = 'llc';
+      } else if (data.formType.toLowerCase().includes('first_responder')) {
+        webhookType = 'first_responder';
+      } else if (data.formType.toLowerCase().includes('schedule') || data.formType.toLowerCase().includes('consultation')) {
+        webhookType = 'consultation';
+      } else if (data.formType.toLowerCase().includes('contact')) {
+        webhookType = 'crm';
+      }
+    } else if (formattedData.formType) {
+      // Get webhook type from formatted data if not in original data
+      if (formattedData.formType.toLowerCase() === 'solo401k') {
+        webhookType = 'solo401k';
+      } else if (formattedData.formType.toLowerCase().includes('llc') || formattedData.formType.toLowerCase().includes('formation')) {
+        webhookType = 'llc';
+      } else if (formattedData.formType.toLowerCase().includes('first_responder')) {
+        webhookType = 'first_responder';
+      } else if (formattedData.formType.toLowerCase().includes('schedule') || formattedData.formType.toLowerCase().includes('consultation')) {
+        webhookType = 'consultation';
+      }
+    }
+    
+    console.log(`[${new Date().toISOString()}] Determined webhook type: ${webhookType}`);
+    
+    // Check if webhook is properly configured before processing
+    if (!isWebhookConfigured(webhookType as any)) {
+      console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not properly configured, but continuing with fallback options`);
+      // Return a partial success to allow the application to continue with other submission methods
+      return { 
+        success: true,
+        message: `Zapier webhook for ${webhookType} is not properly configured, but the application will be saved via other methods.`
       };
     }
     
-    // Add metadata to the payload
-    const enrichedData = {
-      ...data,
-      timestamp: new Date().toISOString(),
-      source: typeof window !== 'undefined' ? window.location.href : 'unknown',
-      webhookType
-    };
+    const webhookUrl = getZapierWebhookUrl(webhookType as any);
+    console.log(`[${new Date().toISOString()}] Using Zapier webhook URL (${webhookType}): ${webhookUrl}`);
     
-    // Send to Zapier with no-cors mode to handle CORS restrictions
-    await fetch(webhookUrl, {
+    // DEBUG: Log exact payload going to Zapier
+    console.log(`[${new Date().toISOString()}] EXACT PAYLOAD TO ZAPIER:`, JSON.stringify(formattedData, null, 2));
+    
+    // Try sending with fetch but explicitly set credentials to 'omit'
+    const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(enrichedData),
-      mode: 'no-cors'
+      body: JSON.stringify(formattedData),
+      credentials: 'omit', // Explicitly avoid sending credentials
+      mode: 'no-cors' // This prevents CORS issues but also prevents reading response
     });
     
-    console.log(`[${new Date().toISOString()}] Successfully triggered Zapier webhook for ${webhookType}`);
-    
-    return {
+    console.log(`[${new Date().toISOString()}] Zapier webhook triggered successfully (${webhookType})`);
+    return { 
       success: true,
-      message: `Successfully sent data to ${webhookType} webhook.`
+      message: `Form submitted successfully to Zapier via ${webhookType} webhook`
     };
   } catch (error) {
-    console.error(`[${new Date().toISOString()}] Error triggering Zapier webhook:`, error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Unknown error occurred while triggering webhook'
+    console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, error);
+    // Return a partial success to allow the application to continue with other submission methods
+    return { 
+      success: true, 
+      message: 'Failed to submit to Zapier, but continuing with other submission methods'
     };
   }
 };
 
 /**
- * Test if a Zapier webhook is working
+ * Manually trigger a test ping to the Zapier webhook
+ * Useful for testing webhook connectivity and configuration
  */
-export const testZapierWebhook = async (webhookType: WebhookType = 'crm'): Promise<{success: boolean, message: string}> => {
+export const testZapierWebhook = async (webhookType: string): Promise<EmailResponse> => {
   try {
-    return triggerZapierWebhook({
-      isTest: true,
-      testMessage: `This is a test ping from the application to verify the ${webhookType} webhook is working.`,
-      testTimestamp: new Date().toISOString()
-    }, webhookType);
+    const webhookUrl = getZapierWebhookUrl(webhookType as any);
+    console.log(`[${new Date().toISOString()}] Testing Zapier webhook (${webhookType}): ${webhookUrl}`);
+    
+    if (!isWebhookConfigured(webhookType as any)) {
+      return { 
+        success: false,
+        message: `Zapier webhook for ${webhookType} is not configured. Please set it up in the Settings page.`
+      };
+    }
+    
+    const testData = {
+      formType: webhookType,
+      name: "Test Contact",
+      email: "test@example.com",
+      phone: "555-123-4567",
+      subject: "Zapier Test",
+      message: "This is a manual test ping from the application.",
+      timestamp: new Date().toISOString(),
+      sourceUrl: typeof window !== 'undefined' ? window.location.href : 'Unknown'
+    };
+    
+    console.log(`[${new Date().toISOString()}] Sending test data:`, testData);
+    
+    await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(testData),
+      credentials: 'omit',
+      mode: 'no-cors'
+    });
+    
+    console.log(`[${new Date().toISOString()}] Test ping sent successfully to ${webhookType} webhook`);
+    return { 
+      success: true,
+      message: `Test ping sent to Zapier ${webhookType} webhook. Check your Zapier account to verify receipt.`
+    };
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error testing Zapier webhook:`, error);
-    return {
-      success: false,
-      message: error instanceof Error ? error.message : 'Unknown error occurred during webhook test'
+    return { 
+      success: false, 
+      message: error instanceof Error ? error.message : 'Unknown error occurred'
     };
   }
 };

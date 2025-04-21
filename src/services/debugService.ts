@@ -1,100 +1,141 @@
 
+/**
+ * Utility for debugging Supabase connections and operations
+ */
+
 import { supabase } from '@/integrations/supabase/client';
 
-/**
- * Test the connection to Supabase
- */
-export const testSupabaseConnection = async (): Promise<{success: boolean, message: string, error?: any}> => {
+export const testSupabaseConnection = async () => {
+  console.log(`[${new Date().toISOString()}] Testing Supabase connection...`);
+  
   try {
-    const { count, error } = await supabase
+    // First, test a simple connection
+    console.log(`[${new Date().toISOString()}] Attempting to query contacts table...`);
+    
+    // Attempt a simple query to test the connection
+    const { data, error } = await supabase
       .from('contacts')
-      .select('*', { count: 'exact', head: true })
+      .select('id')
       .limit(1);
     
     if (error) {
       console.error(`[${new Date().toISOString()}] Supabase connection test failed:`, error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
+      
+      // Check if it's an RLS error
+      if (error.message?.includes('new row violates row-level security policy')) {
+        console.error(`[${new Date().toISOString()}] RLS POLICY ERROR DETECTED! This suggests Row Level Security is blocking the insert.`);
+      }
+      
       return {
         success: false,
-        message: `Connection test failed: ${error.message}`,
-        error
+        error,
+        message: `Connection error: ${error.message}`
       };
     }
     
+    console.log(`[${new Date().toISOString()}] Supabase connection test successful:`, data);
+    
+    // Now try inserting a test record
+    console.log(`[${new Date().toISOString()}] Attempting test insert to contacts table...`);
+    
+    const testRecord = {
+      name: 'Test Connection',
+      email: 'test@connection.com',
+      message: 'This is a test message to verify insert capabilities',
+      subject: 'Connection Test',
+      opt_in: false
+    };
+    
+    const { data: insertData, error: insertError } = await supabase
+      .from('contacts')
+      .insert(testRecord)
+      .select();
+      
+    if (insertError) {
+      console.error(`[${new Date().toISOString()}] Supabase test insert failed:`, insertError);
+      console.error('Insert error details:', JSON.stringify(insertError, null, 2));
+      
+      // Check if it's an RLS error
+      if (insertError.message?.includes('new row violates row-level security policy')) {
+        console.error(`[${new Date().toISOString()}] RLS POLICY ERROR DETECTED! This suggests Row Level Security is blocking the insert.`);
+        
+        return {
+          success: false,
+          error: insertError,
+          message: `RLS Policy Error: The current user doesn't have permission to insert records. This is likely a Row Level Security configuration issue.`
+        };
+      }
+      
+      return {
+        success: false,
+        error: insertError,
+        message: `Insert error: ${insertError.message}`
+      };
+    }
+    
+    console.log(`[${new Date().toISOString()}] Supabase test insert successful:`, insertData);
+    
     return {
       success: true,
-      message: `Connection successful. Found ${count} records.`
+      message: 'Supabase connection and insert test successful',
+      testInsertId: insertData?.[0]?.id || null
     };
   } catch (error) {
-    console.error(`[${new Date().toISOString()}] Unexpected error testing Supabase connection:`, error);
+    console.error(`[${new Date().toISOString()}] Supabase connection test exception:`, error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'An unexpected error occurred',
-      error
+      error,
+      message: `Exception: ${error instanceof Error ? error.message : 'Unknown error'}`
     };
   }
 };
 
-/**
- * Log Supabase connection info
- */
-export const logSupabaseInfo = (): void => {
-  try {
-    // Log general connection info without accessing protected properties
-    console.log(`[${new Date().toISOString()}] Supabase client initialized`);
-    
-    // Test the connection and log results
-    testSupabaseConnection().then(result => {
-      if (result.success) {
-        console.log(`[${new Date().toISOString()}] Supabase connection is working`);
-      } else {
-        console.error(`[${new Date().toISOString()}] Supabase connection test failed:`, result.error);
-      }
-    });
-  } catch (error) {
-    console.error(`[${new Date().toISOString()}] Error logging Supabase info:`, error);
-  }
+export const logSupabaseInfo = () => {
+  console.log(`[${new Date().toISOString()}] Supabase client information:`);
+  console.log(`- Client initialized: ${supabase ? 'Yes' : 'No'}`);
+  
+  // Test if auth is available
+  console.log(`- Auth available: ${supabase.auth ? 'Yes' : 'No'}`);
+  
+  // Log functions availability
+  console.log(`- Functions available: ${supabase.functions ? 'Yes' : 'No'}`);
+  
+  // Log rpc availability
+  console.log(`- RPC available: ${supabase.rpc ? 'Yes' : 'No'}`);
+  
+  // Log storage availability
+  console.log(`- Storage available: ${supabase.storage ? 'Yes' : 'No'}`);
 };
 
-/**
- * Test inserting a contact
- */
-export const insertTestContact = async (): Promise<{success: boolean, data?: any, error?: any}> => {
+// Function to directly insert a test record, bypassing other application logic
+export const insertTestContact = async () => {
+  console.log(`[${new Date().toISOString()}] Directly inserting test contact record...`);
+  
+  const testRecord = {
+    name: 'Direct Test',
+    email: 'direct-test@example.com',
+    message: 'This is a direct test insertion to verify database access',
+    subject: 'Direct Test',
+    opt_in: false
+  };
+  
   try {
-    // Create test data
-    const testContact = {
-      name: `Test Contact ${new Date().toISOString()}`,
-      email: `test-${Date.now()}@example.com`,
-      message: 'This is a test contact created to verify the database connection',
-      phone: '555-555-5555',
-      is_test: true
-    };
-    
-    console.log(`[${new Date().toISOString()}] Attempting to insert test contact:`, testContact);
-    
-    // Insert the contact
     const { data, error } = await supabase
       .from('contacts')
-      .insert(testContact)
+      .insert(testRecord)
       .select();
-    
+      
     if (error) {
-      console.error(`[${new Date().toISOString()}] Test contact insertion failed:`, error);
-      return {
-        success: false,
-        error
-      };
+      console.error(`[${new Date().toISOString()}] Direct test insert failed:`, error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
+      return { success: false, error };
     }
     
-    console.log(`[${new Date().toISOString()}] Test contact inserted successfully:`, data);
-    return {
-      success: true,
-      data
-    };
-  } catch (error) {
-    console.error(`[${new Date().toISOString()}] Unexpected error inserting test contact:`, error);
-    return {
-      success: false,
-      error
-    };
+    console.log(`[${new Date().toISOString()}] Direct test insert successful:`, data);
+    return { success: true, data };
+  } catch (err) {
+    console.error(`[${new Date().toISOString()}] Exception during direct test insert:`, err);
+    return { success: false, error: err };
   }
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { setWebhookUrl, getWebhookUrl, WebhookType, validateWebhook } from "@/services/zapier";
+import { setZapierWebhookUrl, getZapierWebhookUrl, WebhookType, validateZapierWebhook } from "@/services/zapierConfigService";
 import { AlertCircle, Check } from "lucide-react";
 
 const WEBHOOK_TYPES = [
@@ -25,7 +26,7 @@ type WebhookTypeOption = typeof WEBHOOK_TYPES[number]['id'];
 
 const ZapierWebhookConfig: React.FC = () => {
   const [webhookType, setWebhookType] = useState<WebhookTypeOption>('crm');
-  const [webhookUrl, setWebhookUrlState] = useState("");
+  const [webhookUrl, setWebhookUrl] = useState("");
   const [updateAllWebhooks, setUpdateAllWebhooks] = useState(true);
   const [isValidating, setIsValidating] = useState(false);
   const { toast } = useToast();
@@ -41,8 +42,8 @@ const ZapierWebhookConfig: React.FC = () => {
     }
 
     try {
-      // Call setWebhookUrl from the imported service
-      setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
+      // Save the webhook URL and optionally update all other webhooks
+      setZapierWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
       toast({
         title: "Success",
@@ -73,10 +74,10 @@ const ZapierWebhookConfig: React.FC = () => {
     setIsValidating(true);
     try {
       // First save the webhook URL
-      setWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
+      setZapierWebhookUrl(webhookUrl, webhookType as WebhookType, updateAllWebhooks);
       
       // Then validate it
-      const result = await validateWebhook(webhookType as WebhookType);
+      const result = await validateZapierWebhook(webhookType as WebhookType);
       
       if (result.success) {
         toast({
@@ -103,8 +104,8 @@ const ZapierWebhookConfig: React.FC = () => {
   };
 
   useEffect(() => {
-    const storedUrl = getWebhookUrl(webhookType as WebhookType);
-    setWebhookUrlState(storedUrl === "https://hooks.zapier.com/hooks/catch/your-webhook-id/" ? "" : storedUrl);
+    const storedUrl = getZapierWebhookUrl(webhookType as WebhookType);
+    setWebhookUrl(storedUrl === "https://hooks.zapier.com/hooks/catch/your-webhook-id/" ? "" : storedUrl);
   }, [webhookType]);
 
   return (
@@ -141,7 +142,7 @@ const ZapierWebhookConfig: React.FC = () => {
             id="webhook-url"
             placeholder="https://hooks.zapier.com/hooks/catch/your-webhook-id/"
             value={webhookUrl}
-            onChange={(e) => setWebhookUrlState(e.target.value)}
+            onChange={(e) => setWebhookUrl(e.target.value)}
           />
           <p className="text-sm text-gray-500">
             Enter the webhook URL from your Zapier zap for the selected integration type.
