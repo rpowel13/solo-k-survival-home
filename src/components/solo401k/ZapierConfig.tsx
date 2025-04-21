@@ -70,6 +70,8 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
                   mode: 'no-cors'
                 }).then(() => {
                   console.log(`[${new Date().toISOString()}] Additional test payload sent to ${webhookType} webhook`);
+                }).catch(err => {
+                  console.error(`[${new Date().toISOString()}] Error sending test payload:`, err);
                 });
               } catch (error) {
                 console.error(`[${new Date().toISOString()}] Error sending additional test payload:`, error);

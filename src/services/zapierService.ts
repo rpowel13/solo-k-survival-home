@@ -22,8 +22,10 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     let webhookType = 'crm' as WebhookType;
     
     if (explicitFormType?.toLowerCase().includes('solo401k')) {
+      console.log(`[${new Date().toISOString()}] Handling as Solo401k submission`);
       return await handleSolo401kSubmission(data);
     } else if (explicitFormType?.toLowerCase().includes('llc')) {
+      console.log(`[${new Date().toISOString()}] Handling as LLC submission`);
       return await handleLLCSubmission(data);
     }
     
@@ -38,6 +40,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       }
     }
     
+    console.log(`[${new Date().toISOString()}] Using webhook type: ${webhookType}`);
     return await handleGenericSubmission(data, webhookType);
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, error);
@@ -48,9 +51,11 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
   }
 };
 
-// Re-export test function with simplified implementation
+// Re-export test function with simplified implementation and more logging
 export const testZapierWebhook = async (webhookType: string): Promise<EmailResponse> => {
   try {
+    console.log(`[${new Date().toISOString()}] Testing Zapier webhook for type: ${webhookType}`);
+    
     const testData = {
       formType: webhookType,
       name: "Test Contact",
@@ -62,6 +67,7 @@ export const testZapierWebhook = async (webhookType: string): Promise<EmailRespo
       sourceUrl: typeof window !== 'undefined' ? window.location.href : 'Unknown'
     };
     
+    console.log(`[${new Date().toISOString()}] Sending test data to ${webhookType} webhook:`, testData);
     return await handleGenericSubmission(testData, webhookType as WebhookType);
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error testing Zapier webhook:`, error);
