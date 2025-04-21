@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Calculator, Printer } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface FutureRMD {
   age: number;
@@ -18,6 +20,7 @@ const RMDCalculator = () => {
   const [birthdate, setBirthdate] = useState<string>("");
   const [accountBalance, setAccountBalance] = useState<number>(0);
   const [growthRate, setGrowthRate] = useState<number>(5);
+  const [isSpouseBeneficiary, setIsSpouseBeneficiary] = useState<boolean>(false);
   const [rmdAmount, setRmdAmount] = useState<number | null>(null);
   const [distributionFactor, setDistributionFactor] = useState<number | null>(null);
   const [futureRMDs, setFutureRMDs] = useState<FutureRMD[]>([]);
@@ -61,23 +64,28 @@ const RMDCalculator = () => {
 
     const factor = getDistributionFactor(currentAge);
     setDistributionFactor(factor);
+    
+    // Calculate RMD amount based on balance and distribution factor
     const currentRMD = accountBalance / factor;
     setRmdAmount(currentRMD);
 
+    // Calculate future projections
     const futureProjections: FutureRMD[] = [];
     let projectedBalance = accountBalance;
     const currentYear = new Date().getFullYear();
 
     for (let age = currentAge; age <= Math.min(90, 120); age++) {
       const yearFactor = getDistributionFactor(age);
-      const rmdAmount = projectedBalance / yearFactor;
+      // Adjust the factor if spouse is beneficiary (this is a simplified adjustment)
+      const adjustedFactor = isSpouseBeneficiary ? yearFactor * 1.1 : yearFactor;
+      const rmdAmount = projectedBalance / adjustedFactor;
       const remainingBalance = projectedBalance - rmdAmount;
       
       futureProjections.push({
         age,
         year: currentYear + (age - currentAge),
         balance: projectedBalance,
-        distributionFactor: yearFactor,
+        distributionFactor: adjustedFactor,
         rmdAmount,
         remainingBalance
       });
@@ -130,6 +138,15 @@ const RMDCalculator = () => {
               className="mt-1"
             />
           </div>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="beneficiary"
+            checked={isSpouseBeneficiary}
+            onCheckedChange={(checked) => setIsSpouseBeneficiary(checked as boolean)}
+          />
+          <Label htmlFor="beneficiary">Spouse is more than 10 years younger and sole beneficiary</Label>
         </div>
 
         <Button onClick={calculateRMD} className="w-full md:w-auto">
