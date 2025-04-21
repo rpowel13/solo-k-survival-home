@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
-import { getZapierWebhookUrl, WebhookType } from '@/services/zapier/webhookTypes';
+import { WebhookType } from '@/services/zapier/webhookTypes';
+import { getZapierWebhookUrl } from '@/services/zapier/webhookUrlManager';
 import { validateZapierWebhook } from '@/services/zapier/webhookValidator';
 import { useToast } from '@/hooks/use-toast';
 

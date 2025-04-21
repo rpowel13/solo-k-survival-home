@@ -4,10 +4,11 @@ export * from './zapier';
 
 // Explicitly re-export the webhook types and constants for easier access
 export { 
-  SOLO_401K_WEBHOOK_URL,
-  WebhookType, 
-  WEBHOOK_FALLBACKS 
+  SOLO_401K_WEBHOOK_URL
 } from './zapier/webhookTypes';
+
+export type { WebhookType } from './zapier/webhookTypes';
+export { WEBHOOK_FALLBACKS } from './zapier/webhookTypes';
 
 // Re-export webhook management functions
 export {
