@@ -1,5 +1,6 @@
+
 import { FormData, EmailResponse } from '@/types/formTypes';
-import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
+import { getZapierWebhookUrl, isWebhookConfigured, WebhookType } from './zapier';
 import { formatFormData } from '@/utils/formDataFormatter';
 
 /**

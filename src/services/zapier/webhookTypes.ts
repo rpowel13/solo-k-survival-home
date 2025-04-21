@@ -1,0 +1,28 @@
+
+export const ZAPIER_WEBHOOK_STORAGE_PREFIX = "zapier_";
+
+export const DEFAULT_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
+
+export type WebhookType = 
+  | 'crm' 
+  | 'consultation' 
+  | 'solo401k' 
+  | 'llc' 
+  | 'first_responder'
+  | 'first_responder_401k'
+  | 'first_responder_llc'
+  | 'alternative_investments'
+  | 'prequalification';
+
+// Define primary webhook types and their fallbacks
+export const WEBHOOK_FALLBACKS: Record<WebhookType, WebhookType[]> = {
+  'crm': ['consultation', 'solo401k', 'llc', 'first_responder'],
+  'consultation': ['crm', 'solo401k', 'llc', 'first_responder'],
+  'solo401k': ['crm', 'consultation', 'first_responder_401k'],
+  'llc': ['crm', 'consultation', 'first_responder_llc'],
+  'first_responder': ['crm', 'consultation', 'first_responder_401k', 'first_responder_llc'],
+  'first_responder_401k': ['first_responder', 'solo401k', 'crm'],
+  'first_responder_llc': ['first_responder', 'llc', 'crm'],
+  'alternative_investments': ['crm', 'consultation'],
+  'prequalification': ['crm', 'consultation']
+};
