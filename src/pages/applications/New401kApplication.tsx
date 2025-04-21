@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, SoloFormValues } from '@/components/solo401k/FormSchema';
@@ -13,13 +13,20 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import ZapierConfig from '@/components/solo401k/ZapierConfig';
+import ZapierConfig from '@/components/common/ZapierConfig';
 import { triggerZapierWebhook } from '@/services/zapierService';
 
 const New401kApplication = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [webhookInitialized, setWebhookInitialized] = React.useState(false);
+  
+  // Initialize Zapier webhook on component mount
+  useEffect(() => {
+    console.log(`[${new Date().toISOString()}] Initializing Solo 401k Zapier webhook`);
+    setWebhookInitialized(true);
+  }, []);
   
   const form = useForm<SoloFormValues>({
     resolver: zodResolver(formSchema),
@@ -48,22 +55,40 @@ const New401kApplication = () => {
   const onSubmit = async (data: SoloFormValues) => {
     setIsSubmitting(true);
     try {
-      // Prepare form data for Zapier webhook
+      // Add detailed logging for debugging
+      console.log(`[${new Date().toISOString()}] Starting Solo 401k form submission process`);
+      console.log(`[${new Date().toISOString()}] Form data:`, JSON.stringify(data, null, 2));
+      
+      // Enhanced form data structure with explicit type marker
       const formData = {
         ...data,
-        formType: 'Solo401k'
+        formType: 'Solo401k',
+        submissionTimestamp: new Date().toISOString(),
+        source: window.location.href,
+        webhookInitialized: webhookInitialized
       };
       
-      // Try sending data to Zapier webhook first
-      console.log(`[${new Date().toISOString()}] Submitting Solo 401k application to Zapier:`, formData);
-      await triggerZapierWebhook(formData);
+      // Add more detailed logging for debugging
+      console.log(`[${new Date().toISOString()}] Submitting Solo 401k application to Zapier with enhanced data`);
+      
+      // Using explicit await to ensure promise resolution
+      const zapierResult = await triggerZapierWebhook(formData);
+      console.log(`[${new Date().toISOString()}] Zapier webhook result:`, zapierResult);
+      
+      if (!zapierResult.success) {
+        console.warn(`[${new Date().toISOString()}] Warning: Zapier webhook might not have processed successfully:`, zapierResult.message);
+      }
       
       // Store application data for payment process
-      sessionStorage.setItem('solo401k_application', JSON.stringify({
+      const applicationData = {
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
-        applicationDate: new Date().toISOString()
-      }));
+        applicationDate: new Date().toISOString(),
+        submissionId: Math.random().toString(36).substring(2, 15)
+      };
+      
+      console.log(`[${new Date().toISOString()}] Storing application data for payment:`, applicationData);
+      sessionStorage.setItem('solo401k_application', JSON.stringify(applicationData));
       
       toast({
         title: "Application Submitted",
@@ -71,12 +96,13 @@ const New401kApplication = () => {
       });
       
       // Redirect to payment page after a short delay
+      console.log(`[${new Date().toISOString()}] Redirecting to payment page`);
       setTimeout(() => {
         navigate('/payment/solo-401k');
       }, 1500);
       
     } catch (error) {
-      console.error("Application submission error:", error);
+      console.error(`[${new Date().toISOString()}] Application submission error:`, error);
       toast({
         title: "Submission Error",
         description: "There was a problem processing your application. Please try again later.",
@@ -89,8 +115,11 @@ const New401kApplication = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
-      {/* Add ZapierConfig component to initialize webhook */}
-      <ZapierConfig webhookType="solo401k" />
+      {/* Use the common ZapierConfig component with explicit webhook type */}
+      <ZapierConfig 
+        webhookType="solo401k" 
+        validateWebhook={true}
+      />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">

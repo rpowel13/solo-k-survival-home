@@ -1,3 +1,4 @@
+
 import { FormData, EmailResponse } from '@/types/formTypes';
 import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
 import { formatFormData } from '@/utils/formDataFormatter';
@@ -54,7 +55,40 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     // Check if webhook is properly configured before processing
     if (!isWebhookConfigured(webhookType as any)) {
-      console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not properly configured, but continuing with fallback options`);
+      console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not properly configured, retrying with default URL`);
+      
+      // Try resetting the webhook URL from environment variables or config
+      const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
+      const backupWebhookUrl = import.meta.env[envKey] || "https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/";
+      
+      if (backupWebhookUrl && backupWebhookUrl !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/") {
+        console.log(`[${new Date().toISOString()}] Found backup webhook URL from environment: ${backupWebhookUrl}`);
+        
+        // Try sending with the backup webhook URL
+        try {
+          console.log(`[${new Date().toISOString()}] Attempting with backup webhook URL: ${backupWebhookUrl}`);
+          
+          await fetch(backupWebhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formattedData),
+            credentials: 'omit',
+            mode: 'no-cors'
+          });
+          
+          console.log(`[${new Date().toISOString()}] Successfully sent to backup webhook URL`);
+          
+          return { 
+            success: true,
+            message: `Form submitted to Zapier via backup webhook URL (${webhookType})`
+          };
+        } catch (backupError) {
+          console.error(`[${new Date().toISOString()}] Error sending to backup webhook:`, backupError);
+        }
+      }
+      
       // Return a partial success to allow the application to continue with other submission methods
       return { 
         success: true,

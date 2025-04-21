@@ -1,3 +1,4 @@
+
 import { FormData } from '@/types/formTypes';
 import { 
   isSolo401kForm, 
@@ -13,14 +14,23 @@ export function formatFormData(data: FormData) {
 
   // Handle explicit formType if provided
   const explicitFormType = 'formType' in data ? data.formType : null;
+  console.log(`[${new Date().toISOString()}] Formatting form data, detected type: ${explicitFormType || 'Unknown'}`);
   
   if (isSolo401kForm(data)) {
+    console.log(`[${new Date().toISOString()}] Formatting as Solo401k form data`);
     formattedData = {
       formType: 'Solo401k',
       fullName: `${data.firstName} ${data.lastName}`,
       email: data.email,
       phone: data.phone,
       ssn: data.ssn,
+      // Include address data if available
+      address: 'street' in data ? {
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode
+      } : undefined,
       businessName: data.businessName,
       businessType: data.businessType,
       annualIncome: data.annualIncome,
@@ -28,7 +38,7 @@ export function formatFormData(data: FormData) {
       trustee2Name: data.trustee2Name || '',
       participant1Name: data.participant1Name,
       participant2Name: data.participant2Name || '',
-      existingRetirement: data.existingRetirement ? 'Yes' : 'No',
+      existingRetirement: 'existingRetirement' in data ? (data.existingRetirement ? 'Yes' : 'No') : 'No',
       additionalInfo: data.additionalInfo || 'N/A',
       submissionDate: new Date().toLocaleString(),
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
@@ -137,6 +147,9 @@ export function formatFormData(data: FormData) {
   formattedData.submissionTimestamp = new Date().toISOString();
   formattedData.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   formattedData.browserInfo = typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown';
+  
+  // Add debug info
+  console.log(`[${new Date().toISOString()}] Formatted form data:`, formattedData);
 
   return formattedData;
 }
