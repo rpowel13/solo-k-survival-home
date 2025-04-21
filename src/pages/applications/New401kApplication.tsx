@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
+import ZapierConfig from '@/components/solo401k/ZapierConfig';
+import { triggerZapierWebhook } from '@/services/zapierService';
 
 const New401kApplication = () => {
   const { toast } = useToast();
@@ -45,6 +48,16 @@ const New401kApplication = () => {
   const onSubmit = async (data: SoloFormValues) => {
     setIsSubmitting(true);
     try {
+      // Prepare form data for Zapier webhook
+      const formData = {
+        ...data,
+        formType: 'Solo401k'
+      };
+      
+      // Try sending data to Zapier webhook first
+      console.log(`[${new Date().toISOString()}] Submitting Solo 401k application to Zapier:`, formData);
+      await triggerZapierWebhook(formData);
+      
       // Store application data for payment process
       sessionStorage.setItem('solo401k_application', JSON.stringify({
         name: `${data.firstName} ${data.lastName}`,
@@ -76,6 +89,9 @@ const New401kApplication = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
+      {/* Add ZapierConfig component to initialize webhook */}
+      <ZapierConfig webhookType="solo401k" />
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white p-8 rounded-lg shadow-lg">
