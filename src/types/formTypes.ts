@@ -45,11 +45,11 @@ export const llcFormSchema = z.object({
   lastName: z.string(),
   email: z.string(),
   phone: z.string(),
-  ssn: z.string(), // Added SSN field
-  street: z.string(), // Added street field
-  city: z.string(), // Added city field
+  ssn: z.string(),
+  street: z.string(),
+  city: z.string(),
   state: z.string(),
-  zipCode: z.string(), // Added zipCode field
+  zipCode: z.string(),
   desiredLLCName: z.string(),
   alternativeName1: z.string().optional(),
   alternativeName2: z.string().optional(),
@@ -57,6 +57,18 @@ export const llcFormSchema = z.object({
   businessPurpose: z.string(),
   additionalInfo: z.string().optional(),
   agreeToTerms: z.boolean(),
+  // Add management fields
+  managementType: z.enum(['member', 'manager']),
+  member1Name: z.string(),
+  member1Title: z.string(),
+  member2Name: z.string().optional(),
+  member2Title: z.string().optional(),
+  // Add registered agent fields
+  registeredAgentName: z.string(),
+  registeredAgentStreet: z.string(),
+  registeredAgentCity: z.string(),
+  registeredAgentState: z.string(),
+  registeredAgentZip: z.string(),
 });
 
 // Schema for First Responder forms

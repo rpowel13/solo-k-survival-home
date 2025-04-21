@@ -94,20 +94,20 @@ export function formatFormData(data: FormData) {
       memberCount: data.memberCount,
       businessPurpose: data.businessPurpose,
       
-      // Management Information
-      managementType: data.managementType,
-      member1Name: data.member1Name,
-      member1Title: data.member1Title,
-      member2Name: data.member2Name || 'None provided',
-      member2Title: data.member2Title || 'None provided',
+      // Management Information - using type assertion to access the properties
+      managementType: 'managementType' in data ? data.managementType as string : 'Not specified',
+      member1Name: 'member1Name' in data ? data.member1Name as string : 'Not specified',
+      member1Title: 'member1Title' in data ? data.member1Title as string : 'Not specified',
+      member2Name: 'member2Name' in data ? (data.member2Name as string || 'None provided') : 'None provided',
+      member2Title: 'member2Title' in data ? (data.member2Title as string || 'None provided') : 'None provided',
       
       // Registered Agent Information
-      registeredAgentName: data.registeredAgentName,
+      registeredAgentName: 'registeredAgentName' in data ? data.registeredAgentName as string : 'Not specified',
       registeredAgentAddress: {
-        street: data.registeredAgentStreet,
-        city: data.registeredAgentCity,
-        state: data.registeredAgentState,
-        zipCode: data.registeredAgentZip
+        street: 'registeredAgentStreet' in data ? data.registeredAgentStreet as string : 'Not specified',
+        city: 'registeredAgentCity' in data ? data.registeredAgentCity as string : 'Not specified',
+        state: 'registeredAgentState' in data ? data.registeredAgentState as string : 'Not specified',
+        zipCode: 'registeredAgentZip' in data ? data.registeredAgentZip as string : 'Not specified'
       },
       
       // Additional information
