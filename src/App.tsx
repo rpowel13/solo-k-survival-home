@@ -57,7 +57,7 @@ const App = () => (
           <Route path="/tools/retirement-calculator" element={<RetirementCalculator />} />
           <Route path="/tools/loan-calculator" element={<LoanCalculator />} />
           <Route path="/tools/solo-401k-calculator" element={<Solo401kCalculator />} />
-          <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
+          <Route path="/apply/solo-401k" element={<New401kApplication />} />
           <Route path="/apply/llc" element={<LLCApplication />} />
           <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
           <Route path="/apply/alternative-investments" element={<AlternativeInvestmentsApplication />} />
