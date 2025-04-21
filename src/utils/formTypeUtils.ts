@@ -22,7 +22,15 @@ export function isContactForm(data: FormData): data is ContactFormValues {
 }
 
 export function isLLCForm(data: FormData): data is LLCFormValues {
-  return 'firstName' in data && 'desiredLLCName' in data && 'businessPurpose' in data && !('occupation' in data);
+  // Updated check to include new required fields for LLC forms
+  return 'firstName' in data && 
+         'desiredLLCName' in data && 
+         'businessPurpose' in data && 
+         'ssn' in data &&
+         'street' in data &&
+         'city' in data &&
+         'zipCode' in data &&
+         !('occupation' in data);
 }
 
 export function isFirstResponderForm(data: FormData): data is FirstResponderFormValues {

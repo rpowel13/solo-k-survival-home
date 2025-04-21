@@ -39,16 +39,20 @@ export const scheduleFormSchema = z.object({
   message: z.string().optional(),
 });
 
-// Simplified schema definitions for LLC forms
+// Updated LLC form schema to include all fields used in the formatter
 export const llcFormSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
   phone: z.string(),
+  ssn: z.string(), // Added SSN field
+  street: z.string(), // Added street field
+  city: z.string(), // Added city field
+  state: z.string(),
+  zipCode: z.string(), // Added zipCode field
   desiredLLCName: z.string(),
   alternativeName1: z.string().optional(),
   alternativeName2: z.string().optional(),
-  state: z.string(),
   memberCount: z.string(),
   businessPurpose: z.string(),
   additionalInfo: z.string().optional(),
