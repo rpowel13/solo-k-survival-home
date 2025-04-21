@@ -1,8 +1,7 @@
-
 import { WebhookType, ZAPIER_WEBHOOK_STORAGE_PREFIX, SOLO_401K_WEBHOOK_URL, FIRST_RESPONDER_401K_WEBHOOK_URL } from './webhookTypes';
 
 // Add a hardcoded URL for LLC webhook
-export const LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xdpcb6/";
+export const LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2x9p97g/";
 export const FIRST_RESPONDER_LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2x9p97g/";
 
 export const getWebhookStorageKey = (type: WebhookType): string => 
