@@ -1,13 +1,18 @@
 
 import React, { useEffect } from 'react';
-import { getZapierWebhookUrl } from '@/services/zapierConfigService';
+import { getZapierWebhookUrl, initZapierConfig, WebhookType } from '@/services/zapierConfigService';
 
 export interface ZapierConfigProps {
   validateWebhook?: boolean;
-  webhookType?: string;
+  webhookType?: WebhookType;
+  hidden?: boolean;
 }
 
-const ZapierConfig: React.FC<ZapierConfigProps> = ({ validateWebhook = false, webhookType = "default" }) => {
+const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
+  validateWebhook = false, 
+  webhookType = "default" as WebhookType,
+  hidden = false
+}) => {
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] Initializing ${webhookType} Zapier webhook config`);
     console.log(`[${new Date().toISOString()}] Initializing Zapier webhook for type: ${webhookType}`);

@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import CommonZapierConfig from "@/components/common/ZapierConfig";
+import { WebhookType } from "@/services/zapierConfigService";
 
 interface ZapierConfigProps {
   validateWebhook?: boolean;
@@ -33,7 +34,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
 
   return (
     <CommonZapierConfig 
-      webhookType="solo401k"
+      webhookType="solo401k" as WebhookType
       validateWebhook={validateWebhook}
       hidden={hidden}
     />

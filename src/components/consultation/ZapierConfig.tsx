@@ -1,6 +1,7 @@
 
 import React from "react";
 import CommonZapierConfig from "@/components/common/ZapierConfig";
+import { WebhookType } from "@/services/zapierConfigService";
 
 interface ZapierConfigProps {
   hidden?: boolean;
@@ -13,7 +14,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
 }) => {
   return (
     <CommonZapierConfig
-      webhookType="consultation"
+      webhookType="consultation" as WebhookType
       validateWebhook={validateWebhook}
       hidden={hidden}
     />
