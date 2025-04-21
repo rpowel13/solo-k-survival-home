@@ -1,3 +1,4 @@
+
 import { WebhookType } from './types';
 
 // Define a default webhook URL
@@ -25,7 +26,11 @@ export const setStoredWebhookUrl = (url: string, type: WebhookType, updateAll: b
   
   if (updateAll) {
     // Iterate over all WebhookType values and update their URLs
-    const webhookTypes: WebhookType[] = ['crm', 'solo401k', 'llc', 'contact', 'schedule', 'first_responder'];
+    const webhookTypes: WebhookType[] = [
+      'crm', 'consultation', 'solo401k', 'llc', 'first_responder',
+      'first_responder_401k', 'first_responder_llc', 'alternative_investments',
+      'prequalification'
+    ];
     webhookTypes.forEach(webhookType => {
       const webhookKey = getWebhookStorageKey(webhookType);
       localStorage.setItem(webhookKey, url);
@@ -45,7 +50,11 @@ export const getStoredWebhookUrl = (type: WebhookType): string => {
  * Find a configured webhook URL in local storage
  */
 export const findConfiguredWebhook = (): { type: WebhookType; url: string } | undefined => {
-  const webhookTypes: WebhookType[] = ['crm', 'solo401k', 'llc', 'contact', 'schedule', 'first_responder'];
+  const webhookTypes: WebhookType[] = [
+    'crm', 'consultation', 'solo401k', 'llc', 'first_responder',
+    'first_responder_401k', 'first_responder_llc', 'alternative_investments',
+    'prequalification'
+  ];
   
   for (const type of webhookTypes) {
     const url = getStoredWebhookUrl(type);
