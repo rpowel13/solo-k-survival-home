@@ -25,10 +25,8 @@ export const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
   phone: z.string().regex(/^\d{10}$/, { message: 'Phone number must be 10 digits' }),
   ssn: z.string().regex(/^\d{9}$/, { message: 'SSN must be 9 digits without dashes' }),
-  dateOfBirth: z.string().refine((value) => {
-    const date = new Date(value);
-    return !isNaN(date.getTime()) && date < new Date();
-  }, { message: 'Please enter a valid date of birth' }),
+  
+  // Removed dateOfBirth field as it's no longer used
 
   // Address information
   street: z.string().min(5, { message: 'Street address must be at least 5 characters' }),

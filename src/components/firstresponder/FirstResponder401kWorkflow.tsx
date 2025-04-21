@@ -38,7 +38,7 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
       email: '',
       phone: '',
       ssn: '',
-      dateOfBirth: '',
+      // dateOfBirth field removed
       street: '',
       city: '',
       state: '',

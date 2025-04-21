@@ -38,7 +38,7 @@ const Solo401kApplication = () => {
       email: "",
       phone: "",
       ssn: "",
-      // Removed dateOfBirth here
+      // dateOfBirth field removed
       street: "",
       city: "",
       state: "",
@@ -127,7 +127,6 @@ const Solo401kApplication = () => {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold text-survival-800">Personal Information</h2>
-                  {/* Removed Date of Birth fields entirely */}
                   <PersonalInfoFields form={form} />
                 </div>
                 
@@ -177,4 +176,3 @@ const Solo401kApplication = () => {
 };
 
 export default Solo401kApplication;
-
