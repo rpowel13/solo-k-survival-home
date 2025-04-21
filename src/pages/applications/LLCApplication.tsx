@@ -50,28 +50,15 @@ const LLCApplication = () => {
     try {
       console.log(`[${new Date().toISOString()}] Submitting LLC application:`, values);
       
+      // Create a complete data object with explicit type
       const formData = {
         ...values,
         formType: 'LLC_Formation',
-        // Explicitly include all fields to ensure they're sent to Zapier
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        phone: values.phone,
-        ssn: values.ssn,
-        street: values.street,
-        city: values.city,
-        state: values.state,
-        zipCode: values.zipCode,
-        desiredLLCName: values.desiredLLCName,
-        alternativeName1: values.alternativeName1 || '',
-        alternativeName2: values.alternativeName2 || '',
-        memberCount: values.memberCount,
-        businessPurpose: values.businessPurpose,
-        additionalInfo: values.additionalInfo || '',
-        agreeToTerms: values.agreeToTerms
       };
       
+      console.log(`[${new Date().toISOString()}] Sending form data to Zapier:`, formData);
+      
+      // Store application data in sessionStorage for payment process
       sessionStorage.setItem('llc_application', JSON.stringify({
         name: `${values.firstName} ${values.lastName}`,
         email: values.email,
@@ -84,6 +71,7 @@ const LLCApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
+      // Send data to Zapier webhook
       const emailResult = await triggerZapierWebhook(formData);
       
       if (emailResult.success) {

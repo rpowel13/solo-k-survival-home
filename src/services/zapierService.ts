@@ -1,4 +1,3 @@
-
 import { FormData, EmailResponse } from '@/types/formTypes';
 import { getZapierWebhookUrl, isWebhookConfigured } from './zapierConfigService';
 import { formatFormData } from '@/utils/formDataFormatter';
@@ -67,6 +66,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         // Try sending with the backup webhook URL
         try {
           console.log(`[${new Date().toISOString()}] Attempting with backup webhook URL: ${backupWebhookUrl}`);
+          console.log(`[${new Date().toISOString()}] Sending data:`, formattedData);
           
           await fetch(backupWebhookUrl, {
             method: 'POST',
@@ -100,7 +100,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     console.log(`[${new Date().toISOString()}] Using Zapier webhook URL (${webhookType}): ${webhookUrl}`);
     
     // DEBUG: Log exact payload going to Zapier
-    console.log(`[${new Date().toISOString()}] EXACT PAYLOAD TO ZAPIER:`, JSON.stringify(formattedData, null, 2));
+    console.log(`[${new Date().toISOString()}] PAYLOAD TO ZAPIER:`, JSON.stringify(formattedData, null, 2));
     
     // Try sending with fetch but explicitly set credentials to 'omit'
     const response = await fetch(webhookUrl, {
