@@ -34,7 +34,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
 
   return (
     <CommonZapierConfig 
-      webhookType="solo401k" as WebhookType
+      webhookType={"solo401k" as WebhookType}
       validateWebhook={validateWebhook}
       hidden={hidden}
     />
