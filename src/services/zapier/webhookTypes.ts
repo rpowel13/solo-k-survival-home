@@ -1,6 +1,8 @@
+
 export const ZAPIER_WEBHOOK_STORAGE_PREFIX = "zapier_";
 
 export const SOLO_401K_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xmfiad/";
+export const FIRST_RESPONDER_401K_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xmfiad/";
 
 export type WebhookType = 
   | 'crm' 
@@ -21,7 +23,5 @@ export const WEBHOOK_FALLBACKS: Record<WebhookType, WebhookType[]> = {
   'llc': ['crm', 'consultation', 'first_responder_llc'],
   'first_responder': ['crm', 'consultation', 'first_responder_401k', 'first_responder_llc'],
   'first_responder_401k': ['first_responder', 'solo401k', 'crm'],
-  'first_responder_llc': ['first_responder', 'llc', 'crm'],
-  'alternative_investments': ['crm', 'consultation'],
-  'prequalification': ['crm', 'consultation']
 };
+
