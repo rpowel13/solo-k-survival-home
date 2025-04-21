@@ -1,178 +1,199 @@
-
-import React, { useState, useEffect } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import React from 'react';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { contactFormSchema, ContactFormValues } from '@/components/contact/ContactFormSchema';
+import { Form } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { testSupabaseConnection, logSupabaseInfo, insertTestContact } from "@/services/debugService";
-import { getWebhookUrl, validateWebhook, initWebhook, isWebhookConfigured } from "@/services/zapier";
-import ZapierConfig from "@/components/common/ZapierConfig";
-import WebhookStatus from "@/components/contact-page/WebhookStatus";
-import ContactMethods from "@/components/contact-page/ContactMethods";
-import MessageCard from "@/components/contact-page/MessageCard";
+import { submitContactForm } from '@/services/supabaseFormService';
+import { Loader2 } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const Contact = () => {
-  const [validateWebhook, setValidateWebhook] = useState(false);
-  const [webhookStatus, setWebhookStatus] = useState<'unconfigured' | 'configured' | 'unknown'>('unknown');
-  const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
-  const [webhookUrl, setWebhookUrl] = useState<string>("");
   const { toast } = useToast();
-  
-  useEffect(() => {
-    console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
-    logSupabaseInfo();
-    
-    // Force initialization of ALL Zapier webhook types
-    initWebhook('crm');
-    initWebhook('consultation');
-    initWebhook('solo401k');
-    initWebhook('llc');
-    initWebhook('first_responder');
-    
-    // Get current CRM webhook URL and update state to force UI refresh
-    const currentUrl = getWebhookUrl('crm');
-    setWebhookUrl(currentUrl);
-    
-    // Check configuration status
-    const isConfigured = isWebhookConfigured('crm');
-    setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
-    
-    console.log(`[${new Date().toISOString()}] CRM webhook is configured: ${isConfigured}`);
-    console.log(`[${new Date().toISOString()}] CRM webhook URL: ${currentUrl}`);
-    
-    if (!isConfigured) {
-      // Try all available webhooks as fallbacks
-      const webhookTypes = ['consultation', 'solo401k', 'llc', 'first_responder'];
-      let fallbackFound = false;
-      
-      for (const type of webhookTypes) {
-        const fallbackUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
-        if (fallbackUrl && fallbackUrl !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/") {
-          console.log(`[${new Date().toISOString()}] Found fallback webhook URL from ${type}: ${fallbackUrl}`);
-          localStorage.setItem('zapier_crm_webhook_url', fallbackUrl);
-          setWebhookUrl(fallbackUrl);
-          setWebhookStatus('configured');
-          fallbackFound = true;
-          break;
-        }
-      }
-      
-      if (!fallbackFound) {
-        console.warn(`[${new Date().toISOString()}] CRM webhook is not configured and no fallbacks found`);
-        toast({
-          title: "Zapier Integration Not Configured",
-          description: "The CRM integration is not fully configured. Your form will still be submitted to our database.",
-          duration: 8000
-        });
-      } else {
-        // Refresh status after applying fallback
-        const newStatus = isWebhookConfigured('crm');
-        setWebhookStatus(newStatus ? 'configured' : 'unconfigured');
-      }
-    }
-    
-    const runDiagnostics = async () => {
-      const connectionResult = await testSupabaseConnection();
-      
-      if (!connectionResult.success) {
-        console.error(`[${new Date().toISOString()}] Supabase connection test failed on Contact page load:`, connectionResult.error);
-        toast({
-          title: "Database Connection Issue",
-          description: "There may be an issue connecting to our database. Your message will still be received through backup systems.",
-          variant: "destructive",
-          duration: 5000
-        });
-      } else {
-        console.log(`[${new Date().toISOString()}] Supabase connection test successful on Contact page load`);
-      }
-      
-      const insertResult = await insertTestContact();
-      if (insertResult.success) {
-        console.log(`[${new Date().toISOString()}] Direct test insert successful on page load`);
-      } else {
-        console.error(`[${new Date().toISOString()}] Direct test insert failed on page load:`, insertResult.error);
-      }
-    };
-    
-    runDiagnostics();
-  }, [toast]);
-  
-  // Force status refresh on component update
-  useEffect(() => {
-    const refreshStatus = () => {
-      const currentUrl = getWebhookUrl('crm');
-      const isConfigured = isWebhookConfigured('crm');
-      setWebhookUrl(currentUrl);
-      setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
-    };
-    
-    // Initial check
-    refreshStatus();
-    
-    // Set up interval for periodic checking (every 3 seconds)
-    const interval = setInterval(refreshStatus, 3000);
-    
-    return () => clearInterval(interval);
-  }, []);
-  
-  const handleValidateWebhook = async () => {
-    setValidateWebhook(true);
-    
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+      consent: false,
+    },
+  });
+
+  const onSubmit = async (data: ContactFormValues) => {
+    setIsSubmitting(true);
     try {
-      const result = await validateWebhook('crm');
-      
+      const result = await submitContactForm(data);
       if (result.success) {
         toast({
-          title: "Webhook Test Successful",
-          description: "Test data was sent to your CRM webhook. Check your Zapier account to confirm it was received.",
+          title: "Message sent!",
+          description: "We'll get back to you as soon as possible.",
         });
-        setLastTestedTime(new Date().toLocaleTimeString());
+        form.reset();
       } else {
         toast({
-          title: "Webhook Test Failed",
-          description: result.message,
-          variant: "destructive"
+          title: "Something went wrong.",
+          description: "There was an error sending your message. Please try again.",
+          variant: "destructive",
         });
       }
     } catch (error) {
-      console.error("Error testing webhook:", error);
       toast({
-        title: "Webhook Test Error",
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
-        variant: "destructive"
+        title: "Something went wrong.",
+        description: "There was an error sending your message. Please try again.",
+        variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setTimeout(() => setValidateWebhook(false), 1000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative">
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-grow">
-        <section className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">Contact Us</h1>
-            <p className="text-lg text-gray-600 text-center mb-12">
-              Have questions about Solo 401(k) plans? Our retirement specialists are here to help.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
-              <ContactMethods />
-              <MessageCard />
-            </div>
+      <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-semibold text-center text-gray-800 mb-8">Contact Us</h1>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div>
+                  <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                    Name
+                  </Label>
+                  <Form.Item>
+                    <Form.Control>
+                      <Input
+                        id="name"
+                        placeholder="Your Name"
+                        type="text"
+                        {...form.register("name")}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                </div>
+                <div>
+                  <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email
+                  </Label>
+                  <Form.Item>
+                    <Form.Control>
+                      <Input
+                        id="email"
+                        placeholder="you@example.com"
+                        type="email"
+                        {...form.register("email")}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                </div>
+                <div>
+                  <Label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                    Phone Number (Optional)
+                  </Label>
+                  <Form.Item>
+                    <Form.Control>
+                      <Input
+                        id="phone"
+                        placeholder="123-456-7890"
+                        type="tel"
+                        {...form.register("phone")}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                </div>
+                <div>
+                  <Label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+                    Subject (Optional)
+                  </Label>
+                  <Form.Item>
+                    <Form.Control>
+                      <Input
+                        id="subject"
+                        placeholder="Subject of your message"
+                        type="text"
+                        {...form.register("subject")}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                </div>
+                <div>
+                  <Label htmlFor="message" className="block text-sm font-medium text-gray-700">
+                    Message
+                  </Label>
+                  <Form.Item>
+                    <Form.Control>
+                      <Textarea
+                        id="message"
+                        placeholder="Your message here..."
+                        rows={4}
+                        {...form.register("message")}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                      />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                </div>
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <Form.Item>
+                      <Form.Control>
+                        <Checkbox
+                          id="consent"
+                          {...form.register("consent")}
+                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
+                      </Form.Control>
+                      <Form.Message />
+                    </Form.Item>
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <Label htmlFor="consent" className="font-medium text-gray-700">
+                      I consent to receive marketing communications from Survival Business.
+                    </Label>
+                    <p className="text-gray-500">
+                      You can unsubscribe at any time.
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  {/* Fix: replace 'Boolean()' call to use lowercase 'Boolean' function correctly or logic fix. */}
+                  {/* const checked = Boolean(value); // use Boolean as a function, ensure value is properly used here. */}
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Please wait
+                      </>
+                    ) : (
+                      "Send Message"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </div>
-        </section>
+        </div>
       </main>
       <Footer />
-      
-      <WebhookStatus 
-        webhookStatus={webhookStatus}
-        lastTestedTime={lastTestedTime}
-        onValidateWebhook={handleValidateWebhook}
-        webhookUrl={webhookUrl}
-      />
-      
-      <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />
     </div>
   );
 };

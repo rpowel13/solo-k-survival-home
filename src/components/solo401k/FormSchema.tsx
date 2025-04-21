@@ -1,7 +1,8 @@
 
 import * as z from 'zod';
 
-export const soloFormSchema = z.object({
+// Main form schema (renamed to formSchema for consistency)
+export const formSchema = z.object({
   firstName: z.string()
     .min(2, { message: 'First name must be at least 2 characters' })
     .max(50, { message: 'First name must be at most 50 characters' }),
@@ -58,7 +59,7 @@ export const soloFormSchema = z.object({
   }),
 });
 
-export type SoloFormValues = z.infer<typeof soloFormSchema>;
+export type SoloFormValues = z.infer<typeof formSchema>;
 
 export const defaultValues: Partial<SoloFormValues> = {
   firstName: '',
@@ -73,8 +74,8 @@ export const defaultValues: Partial<SoloFormValues> = {
   zipCode: '',
   businessName: '',
   sponsorEin: '',
-  businessType: '',
-  annualIncome: '',
+  businessType: '', // default can be set in forms
+  annualIncome: '', // default can be set in forms
   trustee1Name: '',
   trustee2Name: '',
   participant1Name: '',
@@ -83,3 +84,37 @@ export const defaultValues: Partial<SoloFormValues> = {
   additionalInfo: '',
   agreeToTerms: false,
 };
+
+// Enums for business types and income ranges
+export const BusinessTypes = {
+  SOLE_PROPRIETORSHIP: 'sole_proprietorship',
+  PARTNERSHIP: 'partnership',
+  LLC: 'llc',
+  C_CORP: 'c_corp',
+  S_CORP: 's_corp',
+} as const;
+
+export const IncomeRanges = {
+  UNDER_50K: 'under_50k',
+  FROM_50K_TO_100K: '50k_to_100k',
+  FROM_100K_TO_250K: '100k_to_250k',
+  FROM_250K_TO_500K: '250k_to_500k',
+  OVER_500K: 'over_500k',
+} as const;
+
+// Options for selects rendered in UI
+export const businessTypeOptions = [
+  { value: BusinessTypes.SOLE_PROPRIETORSHIP, label: 'Sole Proprietorship' },
+  { value: BusinessTypes.PARTNERSHIP, label: 'Partnership' },
+  { value: BusinessTypes.LLC, label: 'LLC' },
+  { value: BusinessTypes.C_CORP, label: 'C Corporation' },
+  { value: BusinessTypes.S_CORP, label: 'S Corporation' },
+];
+
+export const incomeRangeOptions = [
+  { value: IncomeRanges.UNDER_50K, label: 'Under $50K' },
+  { value: IncomeRanges.FROM_50K_TO_100K, label: '$50K to $100K' },
+  { value: IncomeRanges.FROM_100K_TO_250K, label: '$100K to $250K' },
+  { value: IncomeRanges.FROM_250K_TO_500K, label: '$250K to $500K' },
+  { value: IncomeRanges.OVER_500K, label: 'Over $500K' },
+];

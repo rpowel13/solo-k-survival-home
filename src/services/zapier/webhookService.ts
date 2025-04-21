@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { WebhookType, DEFAULT_WEBHOOK_URL, WEBHOOK_FALLBACKS } from './types';
 import { getWebhookStorageKey, setStoredWebhookUrl, findConfiguredWebhook, getStoredWebhookUrl } from './storage';
@@ -11,10 +10,10 @@ export const initWebhook = (webhookType: WebhookType) => {
   
   // Check environment variables first
   const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
-  const envWebhookUrl = import.meta.env[envKey] || 'https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/';
-  
-  // Compare strings using string equality, not the === operator for string literals
-  if (envWebhookUrl && envWebhookUrl !== DEFAULT_WEBHOOK_URL) {
+  const envWebhookUrl = import.meta.env[envKey] || "https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/";
+
+  // Use the helper function or relaxed check to avoid type error
+  if (envWebhookUrl && !isDefaultWebhookUrl(envWebhookUrl)) {
     console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL from env: ${envWebhookUrl}`);
     setStoredWebhookUrl(envWebhookUrl, webhookType, true);
     return;
@@ -28,7 +27,7 @@ export const initWebhook = (webhookType: WebhookType) => {
     const fallbacks = WEBHOOK_FALLBACKS[webhookType] || [];
     for (const fallbackType of fallbacks) {
       const fallbackUrl = getStoredWebhookUrl(fallbackType as WebhookType);
-      if (fallbackUrl && fallbackUrl !== DEFAULT_WEBHOOK_URL) {
+      if (fallbackUrl && !isDefaultWebhookUrl(fallbackUrl)) {
         console.log(`[${new Date().toISOString()}] Using ${fallbackType} webhook URL as fallback for ${webhookType}`);
         setStoredWebhookUrl(fallbackUrl, webhookType, false);
         break;
@@ -39,7 +38,7 @@ export const initWebhook = (webhookType: WebhookType) => {
     const hardcodedFallback = "https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/";
     
     // Compare strings using string equality, not the === operator for string literals
-    if (hardcodedFallback && hardcodedFallback !== DEFAULT_WEBHOOK_URL) {
+    if (hardcodedFallback && !isDefaultWebhookUrl(hardcodedFallback)) {
       console.log(`[${new Date().toISOString()}] Using hardcoded fallback URL for ${webhookType}`);
       setStoredWebhookUrl(hardcodedFallback, webhookType, true);
     }
@@ -94,3 +93,8 @@ export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
   console.log(`[${new Date().toISOString()}] ${type} webhook is configured: ${isConfigured}`);
   return isConfigured;
 };
+
+// Define the isDefaultWebhookUrl function (shared or locally redefined)
+function isDefaultWebhookUrl(url: string): boolean {
+  return url === DEFAULT_WEBHOOK_URL || url.includes('hooks.zapier.com/hooks/catch/');
+}
