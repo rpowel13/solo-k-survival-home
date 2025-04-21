@@ -12,7 +12,12 @@ export function isSolo401kForm(data: FormData): data is SoloFormValues {
   // More robust check for Solo401k forms
   return 'firstName' in data && 
          'lastName' in data && 
-         ('ssn' in data || 'businessName' in data) && 
+         'ssn' in data && 
+         'street' in data && 
+         'city' in data && 
+         'state' in data && 
+         'zipCode' in data && 
+         'businessName' in data && 
          !('desiredLLCName' in data) && 
          !('occupation' in data);
 }

@@ -8,6 +8,11 @@ export const soloFormSchema = z.object({
   email: z.string().email(),
   phone: z.string(),
   ssn: z.string(),
+  // Add address fields
+  street: z.string(),
+  city: z.string(),
+  state: z.string(),
+  zipCode: z.string(),
   businessName: z.string(),
   businessType: z.string(),
   annualIncome: z.string(),
@@ -15,8 +20,9 @@ export const soloFormSchema = z.object({
   trustee2Name: z.string().optional(),
   participant1Name: z.string(),
   participant2Name: z.string().optional(),
-  existingRetirement: z.boolean(),
+  existingRetirement: z.boolean().optional(),
   additionalInfo: z.string().optional(),
+  agreeToTerms: z.boolean().optional(), // Adding this since it's in the form but not in the type
 });
 
 // Schema for Contact forms
