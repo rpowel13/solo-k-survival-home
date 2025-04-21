@@ -1,4 +1,3 @@
-
 import { FormData } from '@/types/formTypes';
 import { 
   isSolo401kForm, 
@@ -94,6 +93,22 @@ export function formatFormData(data: FormData) {
       alternativeName2: data.alternativeName2 || 'None provided',
       memberCount: data.memberCount,
       businessPurpose: data.businessPurpose,
+      
+      // Management Information
+      managementType: data.managementType,
+      member1Name: data.member1Name,
+      member1Title: data.member1Title,
+      member2Name: data.member2Name || 'None provided',
+      member2Title: data.member2Title || 'None provided',
+      
+      // Registered Agent Information
+      registeredAgentName: data.registeredAgentName,
+      registeredAgentAddress: {
+        street: data.registeredAgentStreet,
+        city: data.registeredAgentCity,
+        state: data.registeredAgentState,
+        zipCode: data.registeredAgentZip
+      },
       
       // Additional information
       additionalInfo: data.additionalInfo || 'N/A',
