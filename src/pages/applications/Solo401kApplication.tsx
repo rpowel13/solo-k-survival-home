@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { triggerZapierWebhook } from '@/services/zapierService';
 import { submitSolo401kApplication } from '@/services/supabaseFormService';
-import ZapierConfig from '@/components/common/ZapierConfig';
+import ZapierConfig from '@/components/solo401k/ZapierConfig';
 
 const Solo401kApplication = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -117,7 +117,7 @@ const Solo401kApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <ZapierConfig webhookType="solo401k" />
+      <ZapierConfig webhookType="solo401k" validateWebhook={true} />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <FormHeader />

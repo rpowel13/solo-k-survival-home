@@ -1,6 +1,7 @@
 
 import { FormData, EmailResponse } from '@/types/formTypes';
-import { getZapierWebhookUrl, isWebhookConfigured, WebhookType } from './zapier';
+import { getZapierWebhookUrl, isWebhookConfigured } from './zapier/webhookUrlManager';
+import { WebhookType, WEBHOOK_FALLBACKS } from './zapier/webhookTypes';
 import { formatFormData } from '@/utils/formDataFormatter';
 
 /**
@@ -54,7 +55,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     console.log(`[${new Date().toISOString()}] Determined webhook type: ${webhookType}`);
     
     // Check if webhook is properly configured before processing
-    if (!isWebhookConfigured(webhookType as any)) {
+    if (!isWebhookConfigured(webhookType as WebhookType)) {
       console.warn(`[${new Date().toISOString()}] Zapier webhook for ${webhookType} is not properly configured, retrying with default URL`);
       
       // Try resetting the webhook URL from environment variables or config
@@ -97,7 +98,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       };
     }
     
-    const webhookUrl = getZapierWebhookUrl(webhookType as any);
+    const webhookUrl = getZapierWebhookUrl(webhookType as WebhookType);
     console.log(`[${new Date().toISOString()}] Using Zapier webhook URL (${webhookType}): ${webhookUrl}`);
     
     // DEBUG: Log exact payload going to Zapier
@@ -135,10 +136,10 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
  */
 export const testZapierWebhook = async (webhookType: string): Promise<EmailResponse> => {
   try {
-    const webhookUrl = getZapierWebhookUrl(webhookType as any);
+    const webhookUrl = getZapierWebhookUrl(webhookType as WebhookType);
     console.log(`[${new Date().toISOString()}] Testing Zapier webhook (${webhookType}): ${webhookUrl}`);
     
-    if (!isWebhookConfigured(webhookType as any)) {
+    if (!isWebhookConfigured(webhookType as WebhookType)) {
       return { 
         success: false,
         message: `Zapier webhook for ${webhookType} is not configured. Please set it up in the Settings page.`

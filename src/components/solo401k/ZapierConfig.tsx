@@ -2,10 +2,12 @@
 import React, { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import CommonZapierConfig from "@/components/common/ZapierConfig";
-import { WebhookType } from "@/services/zapierConfigService";
+import { WebhookType } from "@/services/zapier/webhookTypes";
+import { validateZapierWebhook } from "@/services/zapier/webhookValidator";
 
 interface ZapierConfigProps {
   validateWebhook?: boolean;
+  webhookType?: WebhookType;
   hidden?: boolean;
 }
 
@@ -15,12 +17,39 @@ interface ZapierConfigProps {
  */
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
   validateWebhook = false,
+  webhookType = "solo401k" as WebhookType,
   hidden = false
 }) => {
   const { toast } = useToast();
 
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] Solo 401k Zapier Config mounted`);
+    
+    // Validate the webhook if requested
+    if (validateWebhook) {
+      // Add a small delay to ensure initialization is complete
+      setTimeout(() => {
+        validateZapierWebhook(webhookType)
+          .then(result => {
+            if (!result.success) {
+              console.warn(`[${new Date().toISOString()}] Solo 401k webhook validation failed: ${result.message}`);
+              // Only show warning in development
+              if (import.meta.env.DEV) {
+                toast({
+                  title: "Webhook Validation",
+                  description: result.message,
+                  duration: 5000,
+                });
+              }
+            } else {
+              console.log(`[${new Date().toISOString()}] Solo 401k webhook validation successful`);
+            }
+          })
+          .catch(error => {
+            console.error(`[${new Date().toISOString()}] Error validating webhook:`, error);
+          });
+      }, 1000);
+    }
     
     // Show a toast for developers in debug environment
     if (import.meta.env.DEV && !hidden) {
@@ -30,11 +59,11 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
         duration: 3000,
       });
     }
-  }, [toast, hidden]);
+  }, [toast, hidden, validateWebhook, webhookType]);
 
   return (
     <CommonZapierConfig 
-      webhookType={"solo401k" as WebhookType}
+      webhookType={webhookType}
       validateWebhook={validateWebhook}
       hidden={hidden}
     />
