@@ -1,8 +1,15 @@
+
 import React from 'react';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { contactFormSchema, ContactFormValues } from '@/components/contact/ContactFormSchema';
-import { Form } from "@/components/ui/form";
+import { 
+  Form,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -71,112 +78,145 @@ const Contact = () => {
                   <Label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Name
                   </Label>
-                  <Form.Item>
-                    <Form.Control>
-                      <Input
-                        id="name"
-                        placeholder="Your Name"
-                        type="text"
-                        {...form.register("name")}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            id="name"
+                            placeholder="Your Name"
+                            type="text"
+                            {...field}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email
                   </Label>
-                  <Form.Item>
-                    <Form.Control>
-                      <Input
-                        id="email"
-                        placeholder="you@example.com"
-                        type="email"
-                        {...form.register("email")}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            id="email"
+                            placeholder="you@example.com"
+                            type="email"
+                            {...field}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                     Phone Number (Optional)
                   </Label>
-                  <Form.Item>
-                    <Form.Control>
-                      <Input
-                        id="phone"
-                        placeholder="123-456-7890"
-                        type="tel"
-                        {...form.register("phone")}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            id="phone"
+                            placeholder="123-456-7890"
+                            type="tel"
+                            {...field}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="subject" className="block text-sm font-medium text-gray-700">
                     Subject (Optional)
                   </Label>
-                  <Form.Item>
-                    <Form.Control>
-                      <Input
-                        id="subject"
-                        placeholder="Subject of your message"
-                        type="text"
-                        {...form.register("subject")}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
+                  <FormField
+                    control={form.control}
+                    name="subject"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            id="subject"
+                            placeholder="Subject of your message"
+                            type="text"
+                            {...field}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div>
                   <Label htmlFor="message" className="block text-sm font-medium text-gray-700">
                     Message
                   </Label>
-                  <Form.Item>
-                    <Form.Control>
-                      <Textarea
-                        id="message"
-                        placeholder="Your message here..."
-                        rows={4}
-                        {...form.register("message")}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
+                  <FormField
+                    control={form.control}
+                    name="message"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            id="message"
+                            placeholder="Your message here..."
+                            rows={4}
+                            {...field}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <Form.Item>
-                      <Form.Control>
-                        <Checkbox
-                          id="consent"
-                          {...form.register("consent")}
-                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                        />
-                      </Form.Control>
-                      <Form.Message />
-                    </Form.Item>
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <Label htmlFor="consent" className="font-medium text-gray-700">
-                      I consent to receive marketing communications from Survival Business.
-                    </Label>
-                    <p className="text-gray-500">
-                      You can unsubscribe at any time.
-                    </p>
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="consent"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            id="consent"
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                          />
+                        </FormControl>
+                        <div className="ml-3 text-sm">
+                          <Label htmlFor="consent" className="font-medium text-gray-700">
+                            I consent to receive marketing communications from Survival Business.
+                          </Label>
+                          <p className="text-gray-500">
+                            You can unsubscribe at any time.
+                          </p>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div>
-                  {/* Fix: replace 'Boolean()' call to use lowercase 'Boolean' function correctly or logic fix. */}
-                  {/* const checked = Boolean(value); // use Boolean as a function, ensure value is properly used here. */}
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
