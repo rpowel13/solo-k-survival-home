@@ -1,9 +1,12 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Phone, Mail, Calendar } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import ConsultationSection from "./ConsultationSection";
 
 const ContactMethods = () => {
+  const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+
   return (
     <Card className="shadow-md">
       <CardHeader>
@@ -35,14 +38,15 @@ const ContactMethods = () => {
             <div>
               <h3 className="font-medium">Schedule a Call</h3>
               <p className="text-gray-600">Book a free consultation</p>
-              <a 
-                href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke&staff=sdpi7niilv7t6k07" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-survival-600 hover:text-survival-700 transition-colors mt-1"
+              <button
+                type="button"
+                onClick={() => setIsConsultationOpen(true)}
+                className="inline-block text-survival-600 hover:text-survival-700 font-semibold transition-colors mt-1 underline focus:outline-none"
               >
-                Choose a time →
-              </a>
+                Request a consultation →
+              </button>
+              {/* The modal webform */}
+              <ConsultationSection isOpen={isConsultationOpen} onOpenChange={setIsConsultationOpen} />
             </div>
           </div>
         </div>
@@ -52,3 +56,4 @@ const ContactMethods = () => {
 };
 
 export default ContactMethods;
+
