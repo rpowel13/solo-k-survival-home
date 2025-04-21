@@ -18,15 +18,33 @@ export const formatBasicInfo = (data: FormData) => {
   };
 };
 
-export const formatAddress = (data: FormData) => ({
-  street: data.street,
-  city: data.city,
-  state: data.state,
-  zipCode: data.zipCode,
-  address: {
-    street: data.street,
-    city: data.city,
-    state: data.state,
-    zipCode: data.zipCode
+export const formatAddress = (data: FormData) => {
+  // Check if the data contains address properties before accessing them
+  if (!('street' in data) || !('city' in data) || !('state' in data) || !('zipCode' in data)) {
+    return {
+      street: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      address: {
+        street: '',
+        city: '',
+        state: '',
+        zipCode: ''
+      }
+    };
   }
-});
+  
+  return {
+    street: data.street as string,
+    city: data.city as string,
+    state: data.state as string,
+    zipCode: data.zipCode as string,
+    address: {
+      street: data.street as string,
+      city: data.city as string,
+      state: data.state as string,
+      zipCode: data.zipCode as string
+    }
+  };
+};
