@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import CommonZapierConfig from "@/components/common/ZapierConfig";
 import { WebhookType } from "@/services/zapier/webhookTypes";
 import { validateZapierWebhook } from "@/services/zapier/webhookValidator";
+import { getZapierWebhookUrl } from "@/services/zapier/webhookUrlManager";
 
 interface ZapierConfigProps {
   validateWebhook?: boolean;
@@ -23,7 +24,8 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
   const { toast } = useToast();
 
   useEffect(() => {
-    console.log(`[${new Date().toISOString()}] Solo 401k Zapier Config mounted`);
+    console.log(`[${new Date().toISOString()}] Solo 401k Zapier Config mounted with type: ${webhookType}`);
+    console.log(`[${new Date().toISOString()}] Solo 401k webhook URL: ${getZapierWebhookUrl(webhookType)}`);
     
     // Validate the webhook if requested
     if (validateWebhook) {

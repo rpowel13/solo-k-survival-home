@@ -1,7 +1,6 @@
-
 import { FormData, EmailResponse } from '@/types/formTypes';
 import { getZapierWebhookUrl, isWebhookConfigured } from './zapier/webhookUrlManager';
-import { WebhookType, WEBHOOK_FALLBACKS } from './zapier/webhookTypes';
+import { WebhookType, WEBHOOK_FALLBACKS, SOLO_401K_WEBHOOK_URL } from './zapier/webhookTypes';
 import { formatFormData } from '@/utils/formDataFormatter';
 
 /**
@@ -28,8 +27,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     
     if ('formType' in data && typeof data.formType === 'string') {
       // Get webhook type from form data
-      if (data.formType.toLowerCase() === 'solo401k') {
+      if (data.formType.toLowerCase().includes('solo401k') || data.formType.toLowerCase() === 'solo401k') {
         webhookType = 'solo401k';
+        console.log(`[${new Date().toISOString()}] Solo401k form type detected, using specific webhook`);
       } else if (data.formType.toLowerCase().includes('llc') || data.formType.toLowerCase().includes('formation')) {
         webhookType = 'llc';
       } else if (data.formType.toLowerCase().includes('first_responder')) {
@@ -41,8 +41,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       }
     } else if (formattedData.formType) {
       // Get webhook type from formatted data if not in original data
-      if (formattedData.formType.toLowerCase() === 'solo401k') {
+      if (formattedData.formType.toLowerCase().includes('solo401k') || formattedData.formType.toLowerCase() === 'solo401k') {
         webhookType = 'solo401k';
+        console.log(`[${new Date().toISOString()}] Solo401k form type detected from formatted data`);
       } else if (formattedData.formType.toLowerCase().includes('llc') || formattedData.formType.toLowerCase().includes('formation')) {
         webhookType = 'llc';
       } else if (formattedData.formType.toLowerCase().includes('first_responder')) {
@@ -53,6 +54,34 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     }
     
     console.log(`[${new Date().toISOString()}] Determined webhook type: ${webhookType}`);
+    
+    // For Solo401k forms, always use the hardcoded webhook URL
+    if (webhookType === 'solo401k') {
+      console.log(`[${new Date().toISOString()}] Using hardcoded Solo401k webhook URL: ${SOLO_401K_WEBHOOK_URL}`);
+      
+      try {
+        // Send directly to the hardcoded URL for Solo401k
+        await fetch(SOLO_401K_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formattedData),
+          credentials: 'omit',
+          mode: 'no-cors'
+        });
+        
+        console.log(`[${new Date().toISOString()}] Successfully sent to Solo401k webhook URL`);
+        
+        return { 
+          success: true,
+          message: `Form submitted to Zapier via Solo401k webhook URL`
+        };
+      } catch (soloError) {
+        console.error(`[${new Date().toISOString()}] Error sending to Solo401k webhook:`, soloError);
+        throw soloError;
+      }
+    }
     
     // Check if webhook is properly configured before processing
     if (!isWebhookConfigured(webhookType as WebhookType)) {
@@ -124,8 +153,8 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     console.error(`[${new Date().toISOString()}] Error sending data to Zapier:`, error);
     // Return a partial success to allow the application to continue with other submission methods
     return { 
-      success: true, 
-      message: 'Failed to submit to Zapier, but continuing with other submission methods'
+      success: false, 
+      message: 'Failed to submit to Zapier: ' + (error instanceof Error ? error.message : 'Unknown error')
     };
   }
 };

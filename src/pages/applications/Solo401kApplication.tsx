@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,11 +24,18 @@ import { Loader2 } from 'lucide-react';
 import { triggerZapierWebhook } from '@/services/zapierService';
 import { submitSolo401kApplication } from '@/services/supabaseFormService';
 import ZapierConfig from '@/components/solo401k/ZapierConfig';
+import { getZapierWebhookUrl } from '@/services/zapier/webhookUrlManager';
 
 const Solo401kApplication = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Log webhook URL on component mount for debugging
+    const webhookUrl = getZapierWebhookUrl('solo401k');
+    console.log(`[${new Date().toISOString()}] Solo401k Application initialized with webhook URL: ${webhookUrl}`);
+  }, []);
   
   const form = useForm<SoloFormValues>({
     resolver: zodResolver(formSchema),
@@ -70,16 +77,33 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
+      // Log the webhook URL right before submission
+      const webhookUrl = getZapierWebhookUrl('solo401k');
+      console.log(`[${new Date().toISOString()}] Submitting to Solo401k webhook: ${webhookUrl}`);
+      
+      // Submit to Zapier directly first with explicit logging
+      const zapierResult = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData),
+        credentials: 'omit',
+        mode: 'no-cors'
+      });
+      
+      console.log(`[${new Date().toISOString()}] Direct Zapier submission completed`);
+      
       // Submit to both Zapier and Supabase in parallel for redundancy
       const zapierPromise = triggerZapierWebhook(formData);
       const supabasePromise = submitSolo401kApplication(data);
       
-      const [zapierResult, supabaseResult] = await Promise.allSettled([zapierPromise, supabasePromise]);
+      const [zapierServiceResult, supabaseResult] = await Promise.allSettled([zapierPromise, supabasePromise]);
       
-      const zapierSuccess = zapierResult.status === 'fulfilled' && zapierResult.value.success;
+      const zapierSuccess = zapierServiceResult.status === 'fulfilled' && zapierServiceResult.value.success;
       const supabaseSuccess = supabaseResult.status === 'fulfilled' && supabaseResult.value.success;
       
-      console.log("Zapier submission result:", zapierResult);
+      console.log("Zapier submission result:", zapierServiceResult);
       console.log("Supabase submission result:", supabaseResult);
       
       if (zapierSuccess || supabaseSuccess) {
@@ -94,8 +118,8 @@ const Solo401kApplication = () => {
       } else {
         let errorMessage = "Failed to submit application through any available method.";
         
-        if (zapierResult.status === 'fulfilled' && !zapierResult.value.success) {
-          errorMessage = zapierResult.value.message;
+        if (zapierServiceResult.status === 'fulfilled' && !zapierServiceResult.value.success) {
+          errorMessage = zapierServiceResult.value.message;
         } else if (supabaseResult.status === 'fulfilled' && supabaseResult.value.error) {
           errorMessage = supabaseResult.value.error.message;
         }
