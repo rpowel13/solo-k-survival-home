@@ -1,23 +1,25 @@
 
-import { WebhookType, ZAPIER_WEBHOOK_STORAGE_PREFIX, DEFAULT_WEBHOOK_URL } from './webhookTypes';
+import { WebhookType, ZAPIER_WEBHOOK_STORAGE_PREFIX } from './webhookTypes';
+
+export const FIRST_RESPONDER_LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2x9p97g/";
 
 export const getWebhookStorageKey = (type: WebhookType): string => 
   `${ZAPIER_WEBHOOK_STORAGE_PREFIX}${type}_webhook_url`;
 
 export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
-  // Always return the hardcoded URL for LLC formation
-  if (type === 'llc') {
-    return DEFAULT_WEBHOOK_URL;
+  // Always return the hardcoded URL for First Responder LLC
+  if (type === 'first_responder_llc') {
+    return FIRST_RESPONDER_LLC_WEBHOOK_URL;
   }
   
   const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
-  return storedUrl || DEFAULT_WEBHOOK_URL;
+  return storedUrl || "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
 };
 
 export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm', updateAll: boolean = false): void => {
-  // For LLC, always use the hardcoded URL
-  if (type === 'llc') {
-    console.log(`[${new Date().toISOString()}] LLC webhook URL is hardcoded and cannot be changed`);
+  // For First Responder LLC, always use the hardcoded URL
+  if (type === 'first_responder_llc') {
+    console.log(`[${new Date().toISOString()}] First Responder LLC webhook URL is hardcoded and cannot be changed`);
     return;
   }
   
@@ -38,13 +40,14 @@ export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm', upda
 };
 
 export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
-  // For LLC, always consider the hardcoded URL as configured
-  if (type === 'llc') {
+  // For First Responder LLC, always consider the hardcoded URL as configured
+  if (type === 'first_responder_llc') {
     return true;
   }
   
   const url = getZapierWebhookUrl(type);
-  const isConfigured = url !== DEFAULT_WEBHOOK_URL;
+  const isConfigured = url !== "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
   console.log(`[${new Date().toISOString()}] ${type} webhook is configured: ${isConfigured}`);
   return isConfigured;
 };
+
