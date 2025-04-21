@@ -32,7 +32,7 @@ export const submitSolo401kApplication = async (data: SoloFormValues): Promise<{
         trustee2_name: data.trustee2Name,
         participant1_name: data.participant1Name,
         participant2_name: data.participant2Name,
-        existing_retirement: data.existingRetirement || false,
+        existing_retirement: data.existingRetirement === true,
         additional_info: data.additionalInfo || '',
         agree_to_terms: data.agreeToTerms,
         application_date: new Date().toISOString()

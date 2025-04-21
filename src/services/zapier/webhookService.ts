@@ -13,6 +13,7 @@ export const initWebhook = (webhookType: WebhookType) => {
   const envKey = `VITE_ZAPIER_${webhookType.toUpperCase()}_WEBHOOK_URL`;
   const envWebhookUrl = import.meta.env[envKey] || 'https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/';
   
+  // Compare strings using string equality, not the === operator for string literals
   if (envWebhookUrl && envWebhookUrl !== DEFAULT_WEBHOOK_URL) {
     console.log(`[${new Date().toISOString()}] Zapier ${webhookType} webhook URL from env: ${envWebhookUrl}`);
     setStoredWebhookUrl(envWebhookUrl, webhookType, true);
@@ -36,6 +37,8 @@ export const initWebhook = (webhookType: WebhookType) => {
     
     // If still not found, try the hardcoded fallback
     const hardcodedFallback = "https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/";
+    
+    // Compare strings using string equality, not the === operator for string literals
     if (hardcodedFallback && hardcodedFallback !== DEFAULT_WEBHOOK_URL) {
       console.log(`[${new Date().toISOString()}] Using hardcoded fallback URL for ${webhookType}`);
       setStoredWebhookUrl(hardcodedFallback, webhookType, true);

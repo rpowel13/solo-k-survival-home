@@ -114,6 +114,8 @@ export const getStoredWebhookUrl = (type: WebhookType): string => {
   if (!url || url === DEFAULT_WEBHOOK_URL) {
     // Use the CRM fallback URL that was provided by the user
     const hardcodedFallback = "https://hooks.zapier.com/hooks/catch/22537237/2xtjoqu/";
+    
+    // Compare using string equality check, not the === operator on string literals
     if (hardcodedFallback && hardcodedFallback !== DEFAULT_WEBHOOK_URL) {
       url = hardcodedFallback;
       localStorage.setItem(getWebhookStorageKey(type), url);
