@@ -1,3 +1,4 @@
+
 import * as z from 'zod';
 
 // Define enums for select fields to improve type safety
@@ -28,29 +29,36 @@ export const formSchema = z.object({
     const date = new Date(value);
     return !isNaN(date.getTime()) && date < new Date();
   }, { message: 'Please enter a valid date of birth' }),
-  
+
   // Address information
   street: z.string().min(5, { message: 'Street address must be at least 5 characters' }),
   city: z.string().min(2, { message: 'City must be at least 2 characters' }),
   state: z.string().length(2, { message: 'Please enter a valid 2-letter state code' }),
   zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, { message: 'Please enter a valid ZIP code' }),
-  
+
   // Business information
   businessName: z.string().min(2, { message: 'Business name must be at least 2 characters' }),
-  sponsorEin: z.string().regex(/^\d{9}$/, { message: 'EIN must be 9 digits' }).optional(),
+  // Make sponsorEin optional and only validate regex if not blank
+  sponsorEin: z
+    .string()
+    .optional()
+    .refine(
+      val => !val || val === "" || /^\d{9}$/.test(val),
+      { message: 'EIN must be 9 digits (numbers only)' }
+    ),
   businessType: z.nativeEnum(BusinessTypes, { 
     errorMap: () => ({ message: 'Please select a valid business type' })
   }),
   annualIncome: z.nativeEnum(IncomeRanges, {
     errorMap: () => ({ message: 'Please select a valid income range' })
   }),
-  
+
   // Plan participants
   trustee1Name: z.string().min(2, { message: 'Trustee name must be at least 2 characters' }),
   trustee2Name: z.string().optional(),
   participant1Name: z.string().min(2, { message: 'Participant name must be at least 2 characters' }),
   participant2Name: z.string().optional(),
-  
+
   agreeToTerms: z.boolean().refine((val) => val === true, {
     message: 'You must agree to the terms and conditions',
   }),
