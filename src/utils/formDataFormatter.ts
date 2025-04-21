@@ -1,3 +1,4 @@
+
 import { FormData } from '@/types/formTypes';
 import { 
   isSolo401kForm, 
@@ -64,21 +65,47 @@ export function formatFormData(data: FormData) {
       nextAction: 'Follow-up Call'
     };
   } else if (isLLCForm(data)) {
+    // Enhanced LLC form data formatting - ensure all fields are included
     formattedData = {
       formType: 'LLC_Formation',
+      // Personal information
+      firstName: data.firstName,
+      lastName: data.lastName,
       fullName: `${data.firstName} ${data.lastName}`,
       email: data.email,
       phone: data.phone,
+      ssn: data.ssn,
+      
+      // Address information
+      street: data.street,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      address: {
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode
+      },
+      
+      // Business information
       desiredLLCName: data.desiredLLCName,
       alternativeName1: data.alternativeName1 || 'None provided',
       alternativeName2: data.alternativeName2 || 'None provided',
-      state: data.state,
       memberCount: data.memberCount,
       businessPurpose: data.businessPurpose,
+      
+      // Additional information
       additionalInfo: data.additionalInfo || 'N/A',
+      agreeToTerms: data.agreeToTerms ? 'Yes' : 'No',
+      
+      // Metadata
       submissionDate: new Date().toLocaleString(),
+      submissionTimestamp: new Date().toISOString(),
       source: typeof window !== 'undefined' ? window.location.href : 'unknown',
-      leadSource
+      leadSource,
+      leadType: 'LLC Formation Application',
+      priority: 'High'
     };
   } else if (isFirstResponderForm(data)) {
     formattedData = {

@@ -13,7 +13,7 @@ import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
 import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
 import SubmitButton from '@/components/llc/SubmitButton';
-import ZapierConfig from '@/components/common/ZapierConfig';
+import ZapierConfig from '@/components/llc/ZapierConfig';
 import { formSchema, type LLCFormValues } from '@/components/llc/FormSchema';
 import { triggerZapierWebhook } from '@/services/zapierService';
 
@@ -48,9 +48,28 @@ const LLCApplication = () => {
     setIsSubmitting(true);
     
     try {
+      console.log(`[${new Date().toISOString()}] Submitting LLC application:`, values);
+      
       const formData = {
         ...values,
-        formType: 'LLC_Formation'
+        formType: 'LLC_Formation',
+        // Explicitly include all fields to ensure they're sent to Zapier
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phone: values.phone,
+        ssn: values.ssn,
+        street: values.street,
+        city: values.city,
+        state: values.state,
+        zipCode: values.zipCode,
+        desiredLLCName: values.desiredLLCName,
+        alternativeName1: values.alternativeName1 || '',
+        alternativeName2: values.alternativeName2 || '',
+        memberCount: values.memberCount,
+        businessPurpose: values.businessPurpose,
+        additionalInfo: values.additionalInfo || '',
+        agreeToTerms: values.agreeToTerms
       };
       
       sessionStorage.setItem('llc_application', JSON.stringify({
@@ -94,7 +113,7 @@ const LLCApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <ZapierConfig webhookType="llc" />
+      <ZapierConfig validateWebhook={true} />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <FormHeader />
