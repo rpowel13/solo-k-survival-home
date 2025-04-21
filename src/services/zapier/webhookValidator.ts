@@ -18,19 +18,53 @@ export const validateZapierWebhook = async (type: WebhookType = 'crm'): Promise<
     
     console.log(`[${new Date().toISOString()}] Validating ${type} webhook: ${webhookUrl}`);
     
+    // Create type-specific test data to better test the webhook
+    let testData: Record<string, any> = {
+      testValidation: true,
+      isTest: true,
+      webhookType: type,
+      timestamp: new Date().toISOString(),
+      source: typeof window !== 'undefined' ? window.location.href : 'server-side'
+    };
+    
+    // Add form-specific test fields based on webhook type
+    if (type === 'solo401k') {
+      testData = {
+        ...testData,
+        formType: 'Solo401k',
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@example.com',
+        phone: '555-123-4567',
+        // Include address fields that were missing
+        street: '123 Test St',
+        city: 'Test City',
+        state: 'TX',
+        zipCode: '12345'
+      };
+    } else if (type === 'llc') {
+      testData = {
+        ...testData,
+        formType: 'LLC_Formation',
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@example.com',
+        desiredLLCName: 'Test LLC',
+        // Include address fields
+        street: '123 Test St',
+        city: 'Test City',
+        state: 'TX',
+        zipCode: '12345'
+      };
+    }
+    
     // Send a test ping to the webhook
     await fetch(webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        testValidation: true,
-        isTest: true,
-        webhookType: type,
-        timestamp: new Date().toISOString(),
-        source: typeof window !== 'undefined' ? window.location.href : 'server-side'
-      }),
+      body: JSON.stringify(testData),
       mode: 'no-cors'
     });
     

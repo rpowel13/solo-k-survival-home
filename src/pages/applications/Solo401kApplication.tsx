@@ -63,41 +63,45 @@ const Solo401kApplication = () => {
 
   const onSubmit = async (data: SoloFormValues) => {
     setIsSubmitting(true);
-    console.log("Form submitted with data:", data);
+    console.log(`[${new Date().toISOString()}] Solo401k form submitted with data:`, JSON.stringify(data, null, 2));
     
     try {
-      // Log the form data before formatting
-      console.log(`[${new Date().toISOString()}] Raw Solo401k form data:`, JSON.stringify(data, null, 2));
-      
+      // Add explicit formType to ensure proper routing in Zapier service
       const formData = {
         ...data,
         formType: 'Solo401k'
       };
       
+      // Save application data to session storage for payment page
       sessionStorage.setItem('solo401k_application', JSON.stringify({
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         applicationDate: new Date().toISOString()
       }));
       
-      // Log the webhook URL right before submission
+      // Get the webhook URL directly for direct submission
       const webhookUrl = getZapierWebhookUrl('solo401k');
-      console.log(`[${new Date().toISOString()}] Submitting to Solo401k webhook: ${webhookUrl}`);
+      console.log(`[${new Date().toISOString()}] Submitting directly to Solo401k webhook: ${webhookUrl}`);
       
-      // Submit to Zapier directly first with explicit logging
-      const zapierResult = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-        credentials: 'omit',
-        mode: 'no-cors'
-      });
+      // Submit to Zapier directly first with explicit logging for debugging
+      try {
+        const directResponse = await fetch(webhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData),
+          credentials: 'omit',
+          mode: 'no-cors'
+        });
+        
+        console.log(`[${new Date().toISOString()}] Direct Zapier submission completed`);
+      } catch (directError) {
+        console.error(`[${new Date().toISOString()}] Direct Zapier submission error:`, directError);
+      }
       
-      console.log(`[${new Date().toISOString()}] Direct Zapier submission completed`);
-      
-      // Submit to both Zapier and Supabase in parallel for redundancy
+      // Submit to both Zapier service and Supabase in parallel for redundancy
+      console.log(`[${new Date().toISOString()}] Submitting via Zapier service with formType: ${formData.formType}`);
       const zapierPromise = triggerZapierWebhook(formData);
       const supabasePromise = submitSolo401kApplication(data);
       
@@ -106,8 +110,8 @@ const Solo401kApplication = () => {
       const zapierSuccess = zapierServiceResult.status === 'fulfilled' && zapierServiceResult.value.success;
       const supabaseSuccess = supabaseResult.status === 'fulfilled' && supabaseResult.value.success;
       
-      console.log("Zapier submission result:", zapierServiceResult);
-      console.log("Supabase submission result:", supabaseResult);
+      console.log(`[${new Date().toISOString()}] Zapier submission result:`, JSON.stringify(zapierServiceResult));
+      console.log(`[${new Date().toISOString()}] Supabase submission result:`, JSON.stringify(supabaseResult));
       
       if (zapierSuccess || supabaseSuccess) {
         toast({
@@ -130,7 +134,7 @@ const Solo401kApplication = () => {
         throw new Error(errorMessage);
       }
     } catch (error) {
-      console.error("Application submission error:", error);
+      console.error(`[${new Date().toISOString()}] Solo401k application submission error:`, error);
       toast({
         title: "Submission Error",
         description: error instanceof Error ? error.message : "There was a problem processing your application. Please try again later.",

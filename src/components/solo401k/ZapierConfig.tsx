@@ -25,7 +25,8 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
 
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] Solo 401k Zapier Config mounted with type: ${webhookType}`);
-    console.log(`[${new Date().toISOString()}] Solo 401k webhook URL: ${getZapierWebhookUrl(webhookType)}`);
+    const webhookUrl = getZapierWebhookUrl(webhookType);
+    console.log(`[${new Date().toISOString()}] Solo 401k webhook URL: ${webhookUrl}`);
     
     // Validate the webhook if requested
     if (validateWebhook) {
@@ -45,6 +46,34 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
               }
             } else {
               console.log(`[${new Date().toISOString()}] Solo 401k webhook validation successful`);
+              
+              // Send an additional test payload specifically for the formData format
+              try {
+                const testUrl = getZapierWebhookUrl(webhookType);
+                fetch(testUrl, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    formType: 'Solo401kTest',
+                    firstName: 'Test',
+                    lastName: 'User',
+                    email: 'test@example.com',
+                    street: '123 Test St',
+                    city: 'Test City',
+                    state: 'TX',
+                    zipCode: '12345',
+                    isTest: true,
+                    timestamp: new Date().toISOString()
+                  }),
+                  mode: 'no-cors'
+                }).then(() => {
+                  console.log(`[${new Date().toISOString()}] Additional test payload sent to ${webhookType} webhook`);
+                });
+              } catch (error) {
+                console.error(`[${new Date().toISOString()}] Error sending additional test payload:`, error);
+              }
             }
           })
           .catch(error => {
@@ -61,6 +90,10 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
         duration: 3000,
       });
     }
+    
+    return () => {
+      console.log(`[${new Date().toISOString()}] Solo401k Zapier Config unmounted`);
+    };
   }, [toast, hidden, validateWebhook, webhookType]);
 
   return (

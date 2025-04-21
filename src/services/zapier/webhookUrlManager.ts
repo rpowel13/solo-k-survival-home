@@ -9,24 +9,32 @@ export const getWebhookStorageKey = (type: WebhookType): string =>
   `${ZAPIER_WEBHOOK_STORAGE_PREFIX}${type}_webhook_url`;
 
 export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
+  // Log when retrieving a webhook URL for debugging
+  console.log(`[${new Date().toISOString()}] Getting Zapier webhook URL for type: ${type}`);
+  
   // Return hardcoded URLs for specific types
   if (type === 'first_responder_llc') {
+    console.log(`[${new Date().toISOString()}] Using hardcoded first_responder_llc webhook URL: ${FIRST_RESPONDER_LLC_WEBHOOK_URL}`);
     return FIRST_RESPONDER_LLC_WEBHOOK_URL;
   }
   
   if (type === 'solo401k') {
+    console.log(`[${new Date().toISOString()}] Using hardcoded solo401k webhook URL: ${SOLO_401K_WEBHOOK_URL}`);
     return SOLO_401K_WEBHOOK_URL;
   }
   
   if (type === 'first_responder_401k') {
+    console.log(`[${new Date().toISOString()}] Using hardcoded first_responder_401k webhook URL: ${FIRST_RESPONDER_401K_WEBHOOK_URL}`);
     return FIRST_RESPONDER_401K_WEBHOOK_URL;
   }
   
   if (type === 'llc') {
+    console.log(`[${new Date().toISOString()}] Using hardcoded LLC webhook URL: ${LLC_WEBHOOK_URL}`);
     return LLC_WEBHOOK_URL;
   }
   
   const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
+  console.log(`[${new Date().toISOString()}] Retrieved ${type} webhook URL from storage: ${storedUrl || "not found"}`);
   return storedUrl || "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
 };
 
