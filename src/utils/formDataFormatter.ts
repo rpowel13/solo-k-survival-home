@@ -19,19 +19,24 @@ export function formatFormData(data: FormData) {
     console.log(`[${new Date().toISOString()}] Formatting as Solo401k form data`);
     formattedData = {
       formType: 'Solo401k',
+      firstName: data.firstName,
+      lastName: data.lastName,
       fullName: `${data.firstName} ${data.lastName}`,
       email: data.email,
       phone: data.phone,
       ssn: data.ssn,
-      // Add address data conditionally with type checking
-      ...(('street' in data && 'city' in data && 'state' in data && 'zipCode' in data) ? {
-        address: {
-          street: data.street,
-          city: data.city,
-          state: data.state,
-          zipCode: data.zipCode
-        }
-      } : {}),
+      // Ensure address fields are always included at the top level
+      street: data.street,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      // Also keep the address object for backwards compatibility
+      address: {
+        street: data.street,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode
+      },
       businessName: data.businessName,
       businessType: data.businessType,
       annualIncome: data.annualIncome,

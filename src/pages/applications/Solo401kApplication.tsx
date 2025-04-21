@@ -66,6 +66,9 @@ const Solo401kApplication = () => {
     console.log("Form submitted with data:", data);
     
     try {
+      // Log the form data before formatting
+      console.log(`[${new Date().toISOString()}] Raw Solo401k form data:`, JSON.stringify(data, null, 2));
+      
       const formData = {
         ...data,
         formType: 'Solo401k'

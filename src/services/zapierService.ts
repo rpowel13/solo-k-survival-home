@@ -59,6 +59,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     if (webhookType === 'solo401k') {
       console.log(`[${new Date().toISOString()}] Using hardcoded Solo401k webhook URL: ${SOLO_401K_WEBHOOK_URL}`);
       
+      // Log the full Solo401k payload for debugging
+      console.log(`[${new Date().toISOString()}] Solo401k complete payload:`, JSON.stringify(formattedData, null, 2));
+      
       try {
         // Send directly to the hardcoded URL for Solo401k
         await fetch(SOLO_401K_WEBHOOK_URL, {
