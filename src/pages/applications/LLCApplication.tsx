@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -12,7 +13,7 @@ import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
 import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
 import SubmitButton from '@/components/llc/SubmitButton';
-import ZapierConfig from '@/components/llc/ZapierConfig';
+import ZapierConfig from '@/components/common/ZapierConfig';
 import { formSchema, type LLCFormValues } from '@/components/llc/FormSchema';
 import { triggerZapierWebhook } from '@/services/zapierService';
 
@@ -93,7 +94,7 @@ const LLCApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <ZapierConfig />
+      <ZapierConfig webhookType="llc" />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <FormHeader />

@@ -233,23 +233,38 @@ export const submitFirstResponderApplication = async (data: any) => {
 };
 
 export const submitSolo401kApplication = async (data: any) => {
-  // Format data for solo401k_applications table
+  // Enhanced logging for debugging submission issues
+  console.log(`[${new Date().toISOString()}] Starting Solo 401k application submission to Supabase with data:`, JSON.stringify(data, null, 2));
+  
+  // Format data for solo401k_applications table with all possible fields
   const formattedData = {
     first_name: data.firstName,
     last_name: data.lastName,
     email: data.email,
     phone: data.phone,
     ssn: data.ssn,
+    // Address information
+    street: data.street || null,
+    city: data.city || null,
+    state: data.state || null,
+    zipcode: data.zipCode || null,
+    // Business information
     business_name: data.businessName,
+    sponsor_ein: data.sponsorEin || null,
     business_type: data.businessType,
     annual_income: data.annualIncome,
+    // Trustees
     trustee1_name: data.trustee1Name,
     trustee2_name: data.trustee2Name || null,
+    // Participants
     participant1_name: data.participant1Name,
     participant2_name: data.participant2Name || null,
+    // Additional fields
     existing_retirement: data.existingRetirement || false,
-    additional_info: data.additionalInfo || null
+    additional_info: data.additionalInfo || null,
+    application_date: new Date().toISOString()
   };
   
+  console.log(`[${new Date().toISOString()}] Formatted Solo 401k data for Supabase:`, JSON.stringify(formattedData, null, 2));
   return submitFormToSupabase('solo401k_applications', formattedData);
 };

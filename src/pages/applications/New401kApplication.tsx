@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import ZapierConfig from '@/components/common/ZapierConfig';
 import { triggerZapierWebhook } from '@/services/zapierService';
+import { submitSolo401kApplication } from '@/services/supabaseFormService';
 
 const New401kApplication = () => {
   const { toast } = useToast();
@@ -68,15 +69,25 @@ const New401kApplication = () => {
         webhookInitialized: webhookInitialized
       };
       
-      // Add more detailed logging for debugging
-      console.log(`[${new Date().toISOString()}] Submitting Solo 401k application to Zapier with enhanced data`);
+      // Submit to both Zapier and Supabase in parallel for redundancy
+      console.log(`[${new Date().toISOString()}] Starting parallel submission to Zapier and Supabase`);
       
-      // Using explicit await to ensure promise resolution
-      const zapierResult = await triggerZapierWebhook(formData);
-      console.log(`[${new Date().toISOString()}] Zapier webhook result:`, zapierResult);
+      const zapierPromise = triggerZapierWebhook(formData);
+      const supabasePromise = submitSolo401kApplication(data);
       
-      if (!zapierResult.success) {
-        console.warn(`[${new Date().toISOString()}] Warning: Zapier webhook might not have processed successfully:`, zapierResult.message);
+      const [zapierResult, supabaseResult] = await Promise.allSettled([zapierPromise, supabasePromise]);
+      
+      console.log(`[${new Date().toISOString()}] Zapier webhook result:`, 
+        zapierResult.status === 'fulfilled' ? zapierResult.value : 'Rejected');
+      console.log(`[${new Date().toISOString()}] Supabase submission result:`, 
+        supabaseResult.status === 'fulfilled' ? supabaseResult.value : 'Rejected');
+      
+      const zapierSuccess = zapierResult.status === 'fulfilled' && zapierResult.value.success;
+      const supabaseSuccess = supabaseResult.status === 'fulfilled' && 
+        supabaseResult.value && supabaseResult.value.success;
+      
+      if (!zapierSuccess && !supabaseSuccess) {
+        throw new Error("Both Zapier and Supabase submissions failed");
       }
       
       // Store application data for payment process
@@ -117,8 +128,8 @@ const New401kApplication = () => {
     <div className="min-h-screen bg-gray-50 py-12">
       {/* Use the common ZapierConfig component with explicit webhook type */}
       <ZapierConfig 
-        webhookType="solo401k" 
         validateWebhook={true}
+        webhookType="solo401k"
       />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
