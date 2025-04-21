@@ -23,5 +23,7 @@ export const WEBHOOK_FALLBACKS: Record<WebhookType, WebhookType[]> = {
   'llc': ['crm', 'consultation', 'first_responder_llc'],
   'first_responder': ['crm', 'consultation', 'first_responder_401k', 'first_responder_llc'],
   'first_responder_401k': ['first_responder', 'solo401k', 'crm'],
+  'first_responder_llc': ['first_responder', 'llc', 'crm'],
+  'alternative_investments': ['crm', 'consultation'],
+  'prequalification': ['crm', 'consultation']
 };
-
