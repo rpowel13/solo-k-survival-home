@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -5,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { LLCFormValues } from './FormSchema';
 import { memberCountOptions } from '@/constants/formOptions';
+import ManagementFields from './ManagementFields';
+import RegisteredAgentFields from './RegisteredAgentFields';
 
 interface BusinessInfoFieldsProps {
   form: UseFormReturn<LLCFormValues>;
@@ -13,6 +16,7 @@ interface BusinessInfoFieldsProps {
 const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
   return (
     <>
+      {/* LLC Name Fields */}
       <FormField
         control={form.control}
         name="desiredLLCName"
@@ -95,6 +99,16 @@ const BusinessInfoFields = ({ form }: BusinessInfoFieldsProps) => {
             </FormItem>
           )}
         />
+      </div>
+
+      <div className="space-y-6">
+        <h3 className="text-lg font-semibold text-survival-800">Management Information</h3>
+        <ManagementFields form={form} />
+      </div>
+
+      <div className="space-y-6">
+        <h3 className="text-lg font-semibold text-survival-800">Registered Agent Information</h3>
+        <RegisteredAgentFields form={form} />
       </div>
     </>
   );

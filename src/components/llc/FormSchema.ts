@@ -11,11 +11,32 @@ export const formSchema = z.object({
   city: z.string().min(2, { message: 'City is required' }),
   state: z.string().min(1, { message: 'Please select a state' }),
   zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, { message: 'Please enter a valid ZIP code' }),
+  
+  // LLC Details
   desiredLLCName: z.string().min(2, { message: 'LLC name is required' }),
   alternativeName1: z.string().optional(),
   alternativeName2: z.string().optional(),
   memberCount: z.string().min(1, { message: 'Please select number of members' }),
   businessPurpose: z.string().min(10, { message: 'Business purpose must be at least 10 characters' }),
+  
+  // New fields for LLC management
+  managementType: z.enum(['member', 'manager'], { 
+    required_error: 'Please select management type' 
+  }),
+  
+  // Member/Manager Information
+  member1Name: z.string().min(2, { message: 'Member/Manager #1 name is required' }),
+  member1Title: z.string().min(2, { message: 'Member/Manager #1 title is required' }),
+  member2Name: z.string().optional(),
+  member2Title: z.string().optional(),
+  
+  // Registered Agent Information
+  registeredAgentName: z.string().min(2, { message: 'Registered agent name is required' }),
+  registeredAgentStreet: z.string().min(2, { message: 'Registered agent street is required' }),
+  registeredAgentCity: z.string().min(2, { message: 'Registered agent city is required' }),
+  registeredAgentState: z.string().min(1, { message: 'Registered agent state is required' }),
+  registeredAgentZip: z.string().regex(/^\d{5}(-\d{4})?$/, { message: 'Please enter a valid ZIP code' }),
+  
   additionalInfo: z.string().optional(),
   agreeToTerms: z.boolean().refine(val => val === true, {
     message: 'You must agree to the terms and conditions',
