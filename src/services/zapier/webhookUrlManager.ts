@@ -1,6 +1,8 @@
 
 import { WebhookType, ZAPIER_WEBHOOK_STORAGE_PREFIX, SOLO_401K_WEBHOOK_URL, FIRST_RESPONDER_401K_WEBHOOK_URL } from './webhookTypes';
 
+// Add a hardcoded URL for LLC webhook
+export const LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xdpcb6/";
 export const FIRST_RESPONDER_LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2x9p97g/";
 
 export const getWebhookStorageKey = (type: WebhookType): string => 
@@ -20,13 +22,17 @@ export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
     return FIRST_RESPONDER_401K_WEBHOOK_URL;
   }
   
+  if (type === 'llc') {
+    return LLC_WEBHOOK_URL;
+  }
+  
   const storedUrl = localStorage.getItem(getWebhookStorageKey(type));
   return storedUrl || "https://hooks.zapier.com/hooks/catch/your-webhook-id/";
 };
 
 export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm', updateAll: boolean = false): void => {
   // For hardcoded webhook types, prevent changes
-  if (type === 'first_responder_llc' || type === 'solo401k' || type === 'first_responder_401k') {
+  if (type === 'first_responder_llc' || type === 'solo401k' || type === 'first_responder_401k' || type === 'llc') {
     console.log(`[${new Date().toISOString()}] ${type} webhook URL is hardcoded and cannot be changed`);
     return;
   }
@@ -49,7 +55,7 @@ export const setZapierWebhookUrl = (url: string, type: WebhookType = 'crm', upda
 
 export const isWebhookConfigured = (type: WebhookType = 'crm'): boolean => {
   // For hardcoded webhook types, always return true
-  if (type === 'first_responder_llc' || type === 'solo401k' || type === 'first_responder_401k') {
+  if (type === 'first_responder_llc' || type === 'solo401k' || type === 'first_responder_401k' || type === 'llc') {
     return true;
   }
   

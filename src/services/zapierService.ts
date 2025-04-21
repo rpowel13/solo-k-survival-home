@@ -32,6 +32,7 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
         console.log(`[${new Date().toISOString()}] Solo401k form type detected, using specific webhook`);
       } else if (data.formType.toLowerCase().includes('llc') || data.formType.toLowerCase().includes('formation')) {
         webhookType = 'llc';
+        console.log(`[${new Date().toISOString()}] LLC form type detected, using specific webhook`);
       } else if (data.formType.toLowerCase().includes('first_responder')) {
         webhookType = 'first_responder';
       } else if (data.formType.toLowerCase().includes('schedule') || data.formType.toLowerCase().includes('consultation')) {
@@ -43,9 +44,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       // Get webhook type from formatted data if not in original data
       if (formattedData.formType.toLowerCase().includes('solo401k') || formattedData.formType.toLowerCase() === 'solo401k') {
         webhookType = 'solo401k';
-        console.log(`[${new Date().toISOString()}] Solo401k form type detected from formatted data`);
       } else if (formattedData.formType.toLowerCase().includes('llc') || formattedData.formType.toLowerCase().includes('formation')) {
         webhookType = 'llc';
+        console.log(`[${new Date().toISOString()}] LLC form type detected from formatted data`);
       } else if (formattedData.formType.toLowerCase().includes('first_responder')) {
         webhookType = 'first_responder';
       } else if (formattedData.formType.toLowerCase().includes('schedule') || formattedData.formType.toLowerCase().includes('consultation')) {
@@ -83,6 +84,38 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
       } catch (soloError) {
         console.error(`[${new Date().toISOString()}] Error sending to Solo401k webhook:`, soloError);
         throw soloError;
+      }
+    }
+    
+    // For LLC forms, always use the hardcoded webhook URL
+    if (webhookType === 'llc') {
+      const llcWebhookUrl = getZapierWebhookUrl('llc');
+      console.log(`[${new Date().toISOString()}] Using hardcoded LLC webhook URL: ${llcWebhookUrl}`);
+      
+      // Log the full LLC payload for debugging
+      console.log(`[${new Date().toISOString()}] LLC complete payload:`, JSON.stringify(formattedData, null, 2));
+      
+      try {
+        // Send directly to the hardcoded URL for LLC
+        await fetch(llcWebhookUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formattedData),
+          credentials: 'omit',
+          mode: 'no-cors'
+        });
+        
+        console.log(`[${new Date().toISOString()}] Successfully sent to LLC webhook URL`);
+        
+        return { 
+          success: true,
+          message: `Form submitted to Zapier via LLC webhook URL`
+        };
+      } catch (llcError) {
+        console.error(`[${new Date().toISOString()}] Error sending to LLC webhook:`, llcError);
+        throw llcError;
       }
     }
     

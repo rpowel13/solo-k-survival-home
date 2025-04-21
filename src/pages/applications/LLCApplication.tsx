@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,11 +16,18 @@ import SubmitButton from '@/components/llc/SubmitButton';
 import ZapierConfig from '@/components/llc/ZapierConfig';
 import { formSchema, type LLCFormValues } from '@/components/llc/FormSchema';
 import { triggerZapierWebhook } from '@/services/zapierService';
+import { getZapierWebhookUrl } from '@/services/zapier/webhookUrlManager';
 
 const LLCApplication = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Log webhook URL on component mount for debugging
+    const webhookUrl = getZapierWebhookUrl('llc');
+    console.log(`[${new Date().toISOString()}] LLC Application initialized with webhook URL: ${webhookUrl}`);
+  }, []);
   
   const form = useForm<LLCFormValues>({
     resolver: zodResolver(formSchema),
@@ -41,6 +48,16 @@ const LLCApplication = () => {
       businessPurpose: '',
       additionalInfo: '',
       agreeToTerms: false,
+      // Initialize management fields
+      managementType: 'member',
+      member1Name: '',
+      member1Title: '',
+      // Initialize registered agent fields
+      registeredAgentName: '',
+      registeredAgentStreet: '',
+      registeredAgentCity: '',
+      registeredAgentState: '',
+      registeredAgentZip: '',
     }
   });
 
@@ -56,7 +73,8 @@ const LLCApplication = () => {
         formType: 'LLC_Formation',
       };
       
-      console.log(`[${new Date().toISOString()}] Sending form data to Zapier:`, formData);
+      const webhookUrl = getZapierWebhookUrl('llc');
+      console.log(`[${new Date().toISOString()}] Sending form data to Zapier LLC webhook (${webhookUrl}):`, formData);
       
       // Store application data in sessionStorage for payment process
       sessionStorage.setItem('llc_application', JSON.stringify({

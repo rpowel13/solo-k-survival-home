@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import CommonZapierConfig from "@/components/common/ZapierConfig";
 import { WebhookType, validateZapierWebhook } from "@/services/zapierConfigService";
+import { getZapierWebhookUrl } from "@/services/zapier/webhookUrlManager";
 
 interface ZapierConfigProps {
   hidden?: boolean;
@@ -21,6 +22,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
 
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] LLC Zapier Config mounted`);
+    console.log(`[${new Date().toISOString()}] LLC webhook URL: ${getZapierWebhookUrl('llc')}`);
     
     // Validate webhook if needed
     if (validateWebhook) {
