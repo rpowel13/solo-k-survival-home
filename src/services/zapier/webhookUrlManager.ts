@@ -1,3 +1,4 @@
+
 import { WebhookType, ZAPIER_WEBHOOK_STORAGE_PREFIX, SOLO_401K_WEBHOOK_URL, FIRST_RESPONDER_401K_WEBHOOK_URL } from './webhookTypes';
 
 export const FIRST_RESPONDER_LLC_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2x9p97g/";
@@ -11,7 +12,11 @@ export const getZapierWebhookUrl = (type: WebhookType = 'crm'): string => {
     return FIRST_RESPONDER_LLC_WEBHOOK_URL;
   }
   
-  if (type === 'solo401k' || type === 'first_responder_401k') {
+  if (type === 'solo401k') {
+    return SOLO_401K_WEBHOOK_URL;
+  }
+  
+  if (type === 'first_responder_401k') {
     return FIRST_RESPONDER_401K_WEBHOOK_URL;
   }
   
