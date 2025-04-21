@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -13,7 +12,7 @@ import AddressFields from '@/components/llc/AddressFields';
 import BusinessInfoFields from '@/components/llc/BusinessInfoFields';
 import AdditionalInfoFields from '@/components/llc/AdditionalInfoFields';
 import SubmitButton from '@/components/llc/SubmitButton';
-import ZapierConfig from '@/components/solo401k/ZapierConfig';
+import ZapierConfig from '@/components/llc/ZapierConfig';
 import { formSchema, type LLCFormValues } from '@/components/llc/FormSchema';
 import { triggerZapierWebhook } from '@/services/zapierService';
 
@@ -48,13 +47,11 @@ const LLCApplication = () => {
     setIsSubmitting(true);
     
     try {
-      // Add formType to the data for proper identification
       const formData = {
         ...values,
         formType: 'LLC_Formation'
       };
       
-      // Store application data in sessionStorage for payment process
       sessionStorage.setItem('llc_application', JSON.stringify({
         name: `${values.firstName} ${values.lastName}`,
         email: values.email,
@@ -67,7 +64,6 @@ const LLCApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      // Send the form data via Zapier webhook
       const emailResult = await triggerZapierWebhook(formData);
       
       if (emailResult.success) {
@@ -76,7 +72,6 @@ const LLCApplication = () => {
           description: "We've received your LLC formation application and notification sent to our team. Please proceed to payment.",
         });
         
-        // Redirect to payment page after a short delay
         setTimeout(() => {
           navigate('/payment/llc');
         }, 1500);
@@ -98,12 +93,12 @@ const LLCApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <ZapierConfig webhookType="llc" />
+      <ZapierConfig />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <FormHeader />
 
-          <div className="bg-white p-8 rounded-lg shadow-lg"> {/* New white background container */}
+          <div className="bg-white p-8 rounded-lg shadow-lg">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <div className="space-y-6">

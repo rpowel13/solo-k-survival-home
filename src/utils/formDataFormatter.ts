@@ -1,4 +1,3 @@
-
 import { FormData } from '@/types/formTypes';
 import { 
   isSolo401kForm, 
@@ -24,13 +23,15 @@ export function formatFormData(data: FormData) {
       email: data.email,
       phone: data.phone,
       ssn: data.ssn,
-      // Include address data if available
-      address: 'street' in data ? {
-        street: data.street,
-        city: data.city,
-        state: data.state,
-        zipCode: data.zipCode
-      } : undefined,
+      // Add address data conditionally with type checking
+      ...(('street' in data && 'city' in data && 'state' in data && 'zipCode' in data) ? {
+        address: {
+          street: data.street,
+          city: data.city,
+          state: data.state,
+          zipCode: data.zipCode
+        }
+      } : {}),
       businessName: data.businessName,
       businessType: data.businessType,
       annualIncome: data.annualIncome,

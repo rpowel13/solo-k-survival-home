@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +37,6 @@ const Solo401kApplication = () => {
       email: "",
       phone: "",
       ssn: "",
-      // dateOfBirth field removed
       street: "",
       city: "",
       state: "",
@@ -117,7 +115,7 @@ const Solo401kApplication = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <ZapierConfig webhookType="solo401k" />
+      <ZapierConfig />
       <main className="flex-grow container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <FormHeader />
