@@ -1,4 +1,3 @@
-
 export const ZAPIER_WEBHOOK_STORAGE_PREFIX = "zapier_";
 
 export const SOLO_401K_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xmfiad/";
