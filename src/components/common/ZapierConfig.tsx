@@ -9,12 +9,14 @@ export interface ZapierConfigProps {
   validateWebhook?: boolean;
   webhookType?: WebhookType;
   hidden?: boolean;
+  skipTestPayload?: boolean;
 }
 
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
   validateWebhook = false, 
   webhookType = "default" as WebhookType,
-  hidden = false
+  hidden = false,
+  skipTestPayload = true  // Default to skipping test payload to prevent unwanted Zapier triggers
 }) => {
   const { toast } = useToast();
 
@@ -28,7 +30,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     if (validateWebhook) {
       setTimeout(() => {
         console.log(`[${new Date().toISOString()}] Validating ${webhookType} webhook URL: ${webhookUrl}`);
-        validateZapierWebhook(webhookType)
+        validateZapierWebhook(webhookType, skipTestPayload)
           .then(result => {
             if (!result.success) {
               console.warn(`[${new Date().toISOString()}] ${webhookType} webhook validation failed: ${result.message}`);
@@ -52,7 +54,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     return () => {
       console.log(`[${new Date().toISOString()}] ${webhookType.charAt(0).toUpperCase() + webhookType.slice(1)} Zapier Config unmounted`);
     };
-  }, [webhookType, validateWebhook, hidden, toast]);
+  }, [webhookType, validateWebhook, hidden, toast, skipTestPayload]);
 
   return null; // This is a non-visual component that just handles initialization
 };

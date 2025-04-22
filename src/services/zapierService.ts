@@ -2,7 +2,7 @@
 import { FormData, EmailResponse } from '@/types/formTypes';
 import { WebhookType } from './zapier/webhookTypes';
 import { validateZapierPayload } from './zapier/submissionValidator';
-import { handleSolo401kSubmission } from './zapier/handlers/solo401kHandler';
+import { handleSolo401kSubmission, handleFirstResponder401kSubmission } from './zapier/handlers/solo401kHandler';
 import { handleLLCSubmission } from './zapier/handlers/llcHandler';
 import { handleGenericSubmission } from './zapier/handlers/genericHandler';
 
@@ -24,6 +24,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     if (explicitFormType?.toLowerCase().includes('solo401k')) {
       console.log(`[${new Date().toISOString()}] Handling as Solo401k submission`);
       return await handleSolo401kSubmission(data);
+    } else if (explicitFormType?.toLowerCase().includes('first_responder_401k')) {
+      console.log(`[${new Date().toISOString()}] Handling as First Responder 401k submission`);
+      return await handleFirstResponder401kSubmission(data);
     } else if (explicitFormType?.toLowerCase().includes('llc')) {
       console.log(`[${new Date().toISOString()}] Handling as LLC submission`);
       return await handleLLCSubmission(data);

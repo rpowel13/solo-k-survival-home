@@ -8,6 +8,7 @@ import { getZapierWebhookUrl } from "@/services/zapier/webhookUrlManager";
 interface ZapierConfigProps {
   hidden?: boolean;
   validateWebhook?: boolean;
+  skipTestPayload?: boolean;
 }
 
 /**
@@ -16,7 +17,8 @@ interface ZapierConfigProps {
  */
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
   hidden = false,
-  validateWebhook = false
+  validateWebhook = false,
+  skipTestPayload = true // Default to skipping test payload
 }) => {
   const { toast } = useToast();
 
@@ -26,7 +28,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     
     // Validate webhook if needed
     if (validateWebhook) {
-      validateZapierWebhook("llc" as WebhookType)
+      validateZapierWebhook("llc" as WebhookType, skipTestPayload)
         .then(result => {
           if (result.success) {
             console.log(`[${new Date().toISOString()}] LLC Zapier webhook validated successfully`);
@@ -55,13 +57,14 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
         duration: 3000,
       });
     }
-  }, [toast, hidden, validateWebhook]);
+  }, [toast, hidden, validateWebhook, skipTestPayload]);
 
   return (
     <CommonZapierConfig
       webhookType={"llc" as WebhookType}
       validateWebhook={validateWebhook}
       hidden={hidden}
+      skipTestPayload={skipTestPayload}
     />
   );
 };

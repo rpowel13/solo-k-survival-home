@@ -10,6 +10,7 @@ interface ZapierConfigProps {
   validateWebhook?: boolean;
   webhookType?: WebhookType;
   hidden?: boolean;
+  skipTestPayload?: boolean;
 }
 
 /**
@@ -19,7 +20,8 @@ interface ZapierConfigProps {
 const ZapierConfig: React.FC<ZapierConfigProps> = ({ 
   validateWebhook = false,
   webhookType = "solo401k" as WebhookType,
-  hidden = false
+  hidden = false,
+  skipTestPayload = true  // Default to skipping test payload
 }) => {
   const { toast } = useToast();
 
@@ -32,7 +34,7 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     if (validateWebhook) {
       // Add a small delay to ensure initialization is complete
       setTimeout(() => {
-        validateZapierWebhook(webhookType)
+        validateZapierWebhook(webhookType, skipTestPayload)
           .then(result => {
             if (!result.success) {
               console.warn(`[${new Date().toISOString()}] Solo 401k webhook validation failed: ${result.message}`);
@@ -47,34 +49,36 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
             } else {
               console.log(`[${new Date().toISOString()}] Solo 401k webhook validation successful`);
               
-              // Send an additional test payload specifically for the formData format
-              try {
-                const testUrl = getZapierWebhookUrl(webhookType);
-                fetch(testUrl, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    formType: 'Solo401kTest',
-                    firstName: 'Test',
-                    lastName: 'User',
-                    email: 'test@example.com',
-                    street: '123 Test St',
-                    city: 'Test City',
-                    state: 'TX',
-                    zipCode: '12345',
-                    isTest: true,
-                    timestamp: new Date().toISOString()
-                  }),
-                  mode: 'no-cors'
-                }).then(() => {
-                  console.log(`[${new Date().toISOString()}] Additional test payload sent to ${webhookType} webhook`);
-                }).catch(err => {
-                  console.error(`[${new Date().toISOString()}] Error sending test payload:`, err);
-                });
-              } catch (error) {
-                console.error(`[${new Date().toISOString()}] Error sending additional test payload:`, error);
+              // Send an additional test payload specifically for the formData format only if not skipping test payloads
+              if (!skipTestPayload) {
+                try {
+                  const testUrl = getZapierWebhookUrl(webhookType);
+                  fetch(testUrl, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                      formType: 'Solo401kTest',
+                      firstName: 'Test',
+                      lastName: 'User',
+                      email: 'test@example.com',
+                      street: '123 Test St',
+                      city: 'Test City',
+                      state: 'TX',
+                      zipCode: '12345',
+                      isTest: true,
+                      timestamp: new Date().toISOString()
+                    }),
+                    mode: 'no-cors'
+                  }).then(() => {
+                    console.log(`[${new Date().toISOString()}] Additional test payload sent to ${webhookType} webhook`);
+                  }).catch(err => {
+                    console.error(`[${new Date().toISOString()}] Error sending test payload:`, err);
+                  });
+                } catch (error) {
+                  console.error(`[${new Date().toISOString()}] Error sending additional test payload:`, error);
+                }
               }
             }
           })
@@ -96,13 +100,14 @@ const ZapierConfig: React.FC<ZapierConfigProps> = ({
     return () => {
       console.log(`[${new Date().toISOString()}] Solo401k Zapier Config unmounted`);
     };
-  }, [toast, hidden, validateWebhook, webhookType]);
+  }, [toast, hidden, validateWebhook, webhookType, skipTestPayload]);
 
   return (
     <CommonZapierConfig 
       webhookType={webhookType}
       validateWebhook={validateWebhook}
       hidden={hidden}
+      skipTestPayload={skipTestPayload}
     />
   );
 };
