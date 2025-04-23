@@ -3,6 +3,7 @@ export const ZAPIER_WEBHOOK_STORAGE_PREFIX = "zapier_";
 export const SOLO_401K_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xmfiad/";
 export const SOLO_401K_SECONDARY_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xx9p46/";
 export const FIRST_RESPONDER_401K_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xmfiad/";
+export const FIRST_RESPONDER_SECONDARY_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/22537237/2xiw4ay/";
 
 export type WebhookType = 
   | 'crm' 

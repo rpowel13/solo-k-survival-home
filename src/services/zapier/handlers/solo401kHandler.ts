@@ -1,6 +1,7 @@
+
 import { FormData } from '@/types/formTypes';
 import { getZapierWebhookUrl } from '../webhookUrlManager';
-import { SOLO_401K_WEBHOOK_URL, SOLO_401K_SECONDARY_WEBHOOK_URL } from '../webhookTypes';
+import { SOLO_401K_WEBHOOK_URL, SOLO_401K_SECONDARY_WEBHOOK_URL, FIRST_RESPONDER_401K_WEBHOOK_URL, FIRST_RESPONDER_SECONDARY_WEBHOOK_URL } from '../webhookTypes';
 import { formatFormData } from '@/utils/formDataFormatter';
 
 export const handleSolo401kSubmission = async (data: FormData) => {
@@ -45,14 +46,15 @@ export const handleSolo401kSubmission = async (data: FormData) => {
 };
 
 export const handleFirstResponder401kSubmission = async (data: FormData) => {
-  console.log(`[${new Date().toISOString()}] Using hardcoded First Responder 401k webhook URL: ${SOLO_401K_WEBHOOK_URL}`);
+  console.log(`[${new Date().toISOString()}] Using First Responder webhook URLs:`, 
+    { primary: FIRST_RESPONDER_401K_WEBHOOK_URL, secondary: FIRST_RESPONDER_SECONDARY_WEBHOOK_URL });
   
   const formattedData = formatFormData(data);
   console.log(`[${new Date().toISOString()}] First Responder 401k complete payload:`, JSON.stringify(formattedData, null, 2));
   
   try {
-    // Use fetch with explicit options for better cross-domain compatibility
-    const response = await fetch(SOLO_401K_WEBHOOK_URL, {
+    // Send to both webhooks in parallel
+    const primaryPromise = fetch(FIRST_RESPONDER_401K_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formattedData),
@@ -60,15 +62,23 @@ export const handleFirstResponder401kSubmission = async (data: FormData) => {
       mode: 'no-cors'
     });
     
-    console.log(`[${new Date().toISOString()}] Successfully sent to First Responder 401k webhook URL`);
+    const secondaryPromise = fetch(FIRST_RESPONDER_SECONDARY_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formattedData),
+      credentials: 'omit',
+      mode: 'no-cors'
+    });
+    
+    await Promise.all([primaryPromise, secondaryPromise]);
+    console.log(`[${new Date().toISOString()}] Successfully sent to both First Responder webhook URLs`);
     
     return { 
       success: true,
-      message: `Form submitted to Zapier via First Responder 401k webhook URL`
+      message: `Form submitted to Zapier via both First Responder webhook URLs`
     };
   } catch (error) {
-    console.error(`[${new Date().toISOString()}] Error sending to First Responder 401k webhook:`, error);
-    // Still return success since no-cors mode won't give us actual error info
+    console.error(`[${new Date().toISOString()}] Error sending to First Responder webhooks:`, error);
     return { 
       success: true,
       message: `Form submission sent to Zapier (note: actual delivery cannot be confirmed due to CORS restrictions)`
