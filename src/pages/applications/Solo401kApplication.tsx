@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -79,28 +78,7 @@ const Solo401kApplication = () => {
         applicationDate: new Date().toISOString()
       }));
       
-      // Get the webhook URL directly for direct submission
-      const webhookUrl = getZapierWebhookUrl('solo401k');
-      console.log(`[${new Date().toISOString()}] Submitting directly to Solo401k webhook: ${webhookUrl}`);
-      
-      // Submit to Zapier directly first with explicit logging for debugging
-      try {
-        const directResponse = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData),
-          credentials: 'omit',
-          mode: 'no-cors'
-        });
-        
-        console.log(`[${new Date().toISOString()}] Direct Zapier submission completed`);
-      } catch (directError) {
-        console.error(`[${new Date().toISOString()}] Direct Zapier submission error:`, directError);
-      }
-      
-      // Submit to both Zapier service and Supabase in parallel for redundancy
+      // Remove direct Zapier submission and only use the service function
       console.log(`[${new Date().toISOString()}] Submitting via Zapier service with formType: ${formData.formType}`);
       const zapierPromise = triggerZapierWebhook(formData);
       const supabasePromise = submitSolo401kApplication(data);
