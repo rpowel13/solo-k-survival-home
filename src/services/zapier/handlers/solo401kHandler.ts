@@ -49,7 +49,10 @@ export const handleFirstResponder401kSubmission = async (data: FormData) => {
   console.log(`[${new Date().toISOString()}] Using First Responder webhook URLs:`, 
     { primary: FIRST_RESPONDER_401K_WEBHOOK_URL, secondary: FIRST_RESPONDER_SECONDARY_WEBHOOK_URL });
   
-  const formattedData = formatFormData(data);
+  // Skip formatFormData to preserve all fields
+  // Instead, use the data directly if it's already formatted by formatFirstResponderData
+  const formattedData = 'formType' in data && data.formType === 'First_Responder_401k' ? data : formatFormData(data);
+  
   console.log(`[${new Date().toISOString()}] First Responder 401k complete payload:`, JSON.stringify(formattedData, null, 2));
   
   try {

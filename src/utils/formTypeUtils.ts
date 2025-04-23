@@ -19,7 +19,8 @@ export function isSolo401kForm(data: FormData): data is SoloFormValues {
          'zipCode' in data && 
          'businessName' in data && 
          !('desiredLLCName' in data) && 
-         !('occupation' in data);
+         !('occupation' in data) && 
+         !('formType' in data && data.formType === 'First_Responder_401k'); // Exclude First Responder 401k
 }
 
 export function isContactForm(data: FormData): data is ContactFormValues {
@@ -39,7 +40,14 @@ export function isLLCForm(data: FormData): data is LLCFormValues {
 }
 
 export function isFirstResponderForm(data: FormData): data is FirstResponderFormValues {
-  return 'firstName' in data && 'occupation' in data && 'department' in data && 'yearsOfService' in data;
+  // Add explicit check for First Responder 401k
+  if ('formType' in data && data.formType === 'First_Responder_401k') {
+    return true;
+  }
+  
+  return 'firstName' in data && 
+         ('occupation' in data || 'department' in data) && 
+         ('yearsOfService' in data || 'businessType' in data);
 }
 
 export function isScheduleForm(data: FormData): data is ScheduleFormValues {

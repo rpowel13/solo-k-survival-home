@@ -17,6 +17,7 @@ import BusinessInfoFields from '@/components/solo401k/BusinessInfoFields';
 import PlanInfoFields from '@/components/solo401k/PlanInfoFields';
 import ZapierConfig from '@/components/firstresponder/ZapierConfig';
 import FirstResponder401kForm from './FirstResponder401kForm';
+import { formatFirstResponderData } from '@/utils/formatters/firstResponderFormatter';
 
 interface FirstResponder401kWorkflowProps {
   onComplete: () => void;
@@ -66,17 +67,18 @@ const FirstResponder401kWorkflow: React.FC<FirstResponder401kWorkflowProps> = ({
       console.log(`[${new Date().toISOString()}] First Responder Zapier webhook configured: ${isZapierConfigured}`);
       
       if (isZapierConfigured) {
-        const zapierData = {
+        // Add formType explicitly for proper routing
+        const formattedData = formatFirstResponderData({
           ...data,
           formType: 'First_Responder_401k',
-          occupation: 'First Responder',
+          occupation: data.occupation || 'First Responder',
           department: data.businessType || 'Not specified',
-          yearsOfService: 'Not specified',
-        };
+          yearsOfService: data.yearsOfService || 'Not specified',
+        });
         
-        console.log(`[${new Date().toISOString()}] Sending 401k data to First Responder Zapier webhook:`, zapierData);
+        console.log(`[${new Date().toISOString()}] Sending formatted 401k data to First Responder Zapier webhook:`, formattedData);
         
-        await triggerZapierWebhook(zapierData);
+        await triggerZapierWebhook(formattedData);
       }
       
       sessionStorage.setItem('first_responder_401k_application', JSON.stringify({

@@ -21,6 +21,9 @@ export const triggerZapierWebhook = async (data: FormData): Promise<EmailRespons
     const explicitFormType = 'formType' in data ? data.formType : null;
     let webhookType = 'crm' as WebhookType;
     
+    // Log the form type for debugging
+    console.log(`[${new Date().toISOString()}] Form type detected: ${explicitFormType}`);
+    
     if (explicitFormType?.toLowerCase().includes('solo401k')) {
       console.log(`[${new Date().toISOString()}] Handling as Solo401k submission`);
       return await handleSolo401kSubmission(data);
