@@ -10,5 +10,5 @@ export interface BlogPost {
   authorTitle: string;
   publishedAt: string;
   tags: string[];
-  pdfUrl?: string;
+  pdfUrl?: string; // Made optional since we're not using it anymore
 }

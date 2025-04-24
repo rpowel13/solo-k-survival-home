@@ -1,11 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Clock, Edit, Trash, FileText, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Edit, Trash } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
@@ -35,7 +34,6 @@ const BlogPostPage = () => {
       try {
         setIsLoading(true);
         
-        // In production, this would fetch from Supabase
         const { data, error } = await supabase
           .from('blog_posts')
           .select()
@@ -72,7 +70,6 @@ const BlogPostPage = () => {
     try {
       if (!slug) return;
       
-      // In production, this would delete from Supabase
       const { error } = await supabase
         .from('blog_posts')
         .delete()
@@ -204,7 +201,12 @@ const BlogPostPage = () => {
                   Edit
                 </Button>
               </Link>
-              <Button variant="outline" size="sm" className="text-red-500 border-red-500 hover:bg-red-50" onClick={() => setShowDeleteDialog(true)}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-red-500 border-red-500 hover:bg-red-50" 
+                onClick={() => setShowDeleteDialog(true)}
+              >
                 <Trash className="h-4 w-4 mr-2" />
                 Delete
               </Button>
@@ -212,32 +214,10 @@ const BlogPostPage = () => {
 
             <div className="prose prose-lg max-w-none mb-8">
               <p className="text-lg text-gray-600 mb-6 font-medium">{post.excerpt}</p>
-              
-              {post.pdfUrl ? (
-                <div className="bg-gray-50 border rounded-lg p-6 my-8">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <FileText className="h-8 w-8 text-survival-600 mr-3" />
-                      <div>
-                        <h3 className="font-medium text-gray-900 mb-1">Full Article PDF</h3>
-                        <p className="text-sm text-gray-500">View or download the complete article</p>
-                      </div>
-                    </div>
-                    <a 
-                      href={post.pdfUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-survival-600 hover:bg-survival-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-survival-500"
-                    >
-                      View PDF <ExternalLink className="ml-2 h-4 w-4" />
-                    </a>
-                  </div>
-                </div>
-              ) : post.content ? (
-                <div dangerouslySetInnerHTML={{ __html: post.content }} />
-              ) : (
-                <p className="text-gray-500 italic">No content available for this post.</p>
-              )}
+              <div 
+                className="prose prose-lg max-w-none"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
             </div>
 
             <div className="mt-8 pt-6 border-t">
