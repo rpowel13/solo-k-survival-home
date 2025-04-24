@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ServiceLayout from '@/components/ServiceLayout';
@@ -12,6 +11,7 @@ import ReinstatementSection from '@/components/solo401k/ReinstatementSection';
 import CTASection from '@/components/solo401k/CTASection';
 import ZapierConfig from '@/components/solo401k/ZapierConfig';
 import { useToast } from '@/components/ui/use-toast';
+import DownloadableFlyer from '@/components/solo401k/DownloadableFlyer';
 
 const Solo401k = () => {
   const location = useLocation();
@@ -78,6 +78,7 @@ const Solo401k = () => {
           <PrequalificationSection />
         </div>
         <BenefitsSection />
+        <DownloadableFlyer />
         <QualificationSection />
         <WhyChooseSection />
         <PricingSection />
