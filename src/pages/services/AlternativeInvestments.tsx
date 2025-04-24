@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +9,7 @@ const AlternativeInvestments = () => {
       title="Alternative Investments"
       description="Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options."
     >
-      <div className="space-y-12">
+      <div id="top" className="space-y-12">
         <section>
           <h2 className="text-2xl font-bold mb-6 text-survival-800">Beyond the Stock Market</h2>
           <div className="prose max-w-none">
