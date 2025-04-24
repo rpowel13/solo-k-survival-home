@@ -78,7 +78,6 @@ const Solo401k = () => {
           <PrequalificationSection />
         </div>
         <BenefitsSection />
-        <DownloadableFlyer />
         <QualificationSection />
         <WhyChooseSection />
         <PricingSection />
