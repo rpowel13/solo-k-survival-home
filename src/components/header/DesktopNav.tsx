@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { LogIn } from "lucide-react";
@@ -35,6 +36,8 @@ export const DesktopNav = () => {
           <ToolsDropdown />
         </NavigationMenuList>
       </NavigationMenu>
+      
+      <Link to="/blog" className="text-gray-600 hover:text-survival-700 hover:bg-survival-50 rounded-md px-2 py-1 transition-colors font-bold">Blog</Link>
       
       <Link to="/contact" className="text-gray-600 hover:text-survival-700 hover:bg-survival-50 rounded-md px-2 py-1 transition-colors font-bold">Contact</Link>
       

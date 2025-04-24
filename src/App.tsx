@@ -35,6 +35,9 @@ import New401kFormPage from "./pages/applications/New401kFormPage";
 import FirstResponderLLCPayment from "./pages/payments/FirstResponderLLCPayment";
 import FirstResponder401kPayment from "./pages/payments/FirstResponder401kPayment";
 import TestForm from "./pages/TestForm";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import BlogEditor from "./pages/BlogEditor";
 
 const queryClient = new QueryClient();
 
@@ -75,6 +78,10 @@ const App = () => (
           <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
           <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
           <Route path="/test-form" element={<TestForm />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/blog/new" element={<BlogEditor />} />
+          <Route path="/blog/edit/:slug" element={<BlogEditor />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

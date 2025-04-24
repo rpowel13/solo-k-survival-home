@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { LogIn, Calculator, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -67,7 +66,21 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
             </Link>
           </div>
 
-          <Link to="/contact" className="block text-gray-600 hover:text-survival-700 hover:bg-survival-50 py-2 px-2 rounded-md transition-colors font-bold" onClick={onClose}>Contact</Link>
+          <Link 
+            to="/blog" 
+            className="block text-gray-600 hover:text-survival-700 hover:bg-survival-50 py-2 px-2 rounded-md transition-colors font-bold" 
+            onClick={onClose}
+          >
+            Blog
+          </Link>
+
+          <Link 
+            to="/contact" 
+            className="block text-gray-600 hover:text-survival-700 hover:bg-survival-50 py-2 px-2 rounded-md transition-colors font-bold" 
+            onClick={onClose}
+          >
+            Contact
+          </Link>
           
           <a 
             href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
