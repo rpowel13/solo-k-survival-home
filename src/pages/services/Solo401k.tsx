@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ServiceLayout from '@/components/ServiceLayout';
@@ -69,16 +68,15 @@ const Solo401k = () => {
       description="Maximize your retirement savings with a personalized Solo 401k plan designed specifically for self-employed professionals and small business owners."
       callToAction={{ text: "Apply Now", link: "/apply/solo-401k" }}
     >
-      {/* Include ZapierConfig for webhook initialization */}
       <ZapierConfig />
       
       <div className="space-y-8 sm:space-y-12 px-4 sm:px-0">
         <IntroSection />
+        <BenefitsSection />
+        <QualificationSection />
         <div ref={prequalSectionRef} id="prequalification">
           <PrequalificationSection />
         </div>
-        <BenefitsSection />
-        <QualificationSection />
         <WhyChooseSection />
         <PricingSection />
         <ReinstatementSection />
