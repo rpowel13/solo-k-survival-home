@@ -25,7 +25,7 @@ const ConsentField: React.FC<ConsentFieldProps> = ({ form }) => {
           </FormControl>
           <div className="space-y-1 leading-none">
             <FormLabel className="text-sm font-normal">
-              I agree to receive SMS from Survival 401k, LLC
+              <strong>I agree to receive SMS from Survival 401k, LLC</strong>
             </FormLabel>
             
             <FormLabel className="text-sm font-normal block mt-4">
