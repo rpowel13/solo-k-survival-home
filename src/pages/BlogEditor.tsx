@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -6,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Save, Upload, File, AlertCircle } from "lucide-react";
+import { ArrowLeft, Save, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
@@ -19,20 +20,18 @@ const BlogEditor = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const isEditMode = !!slug;
-  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
     excerpt: "",
+    content: "",
     coverImage: "",
     author: "",
     authorTitle: "",
     tags: ""
   });
   
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [pdfUrl, setPdfUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -74,15 +73,12 @@ const BlogEditor = () => {
             title: post.title,
             slug: post.slug,
             excerpt: post.excerpt,
+            content: post.content,
             coverImage: post.coverImage,
             author: post.author,
             authorTitle: post.authorTitle,
             tags: post.tags.join(", ")
           });
-          
-          if (post.pdfUrl) {
-            setPdfUrl(post.pdfUrl);
-          }
         }
       } catch (error) {
         console.error("Error fetching blog post:", error);
@@ -101,31 +97,6 @@ const BlogEditor = () => {
       fetchBlogPost();
     }
   }, [slug, isEditMode, navigate, toast, isAuthenticated]);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type !== 'application/pdf') {
-        toast({
-          title: "Invalid file type",
-          description: "Please upload a PDF file",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      if (file.size > 10 * 1024 * 1024) {
-        toast({
-          title: "File too large",
-          description: "PDF file must be less than 10MB",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      setPdfFile(file);
-    }
-  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,7 +138,7 @@ const BlogEditor = () => {
       return;
     }
     
-    if (!formData.title || !formData.slug || !formData.excerpt) {
+    if (!formData.title || !formData.slug || !formData.excerpt || !formData.content) {
       toast({
         title: "Missing required fields",
         description: "Please fill out all required fields",
@@ -176,37 +147,20 @@ const BlogEditor = () => {
       return;
     }
     
-    if (!isEditMode && !pdfFile && !pdfUrl) {
-      toast({
-        title: "PDF required",
-        description: "Please upload a PDF file for the blog post",
-        variant: "destructive",
-      });
-      return;
-    }
-    
     try {
       setIsSaving(true);
       
-      let finalPdfUrl = pdfUrl;
-      
-      if (pdfFile) {
-        const fileName = `blog_${formData.slug}_${Date.now()}.pdf`;
-        finalPdfUrl = `https://storage.example.com/blog-pdfs/${fileName}`;
-      }
-      
-      const newPost: BlogPost & { pdfUrl: string } = {
+      const newPost: BlogPost = {
         id: isEditMode ? slug! : crypto.randomUUID(),
         title: formData.title,
         slug: formData.slug,
         excerpt: formData.excerpt,
-        content: "",
+        content: formData.content,
         coverImage: formData.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
         author: formData.author || "Admin",
         authorTitle: formData.authorTitle || "Site Administrator",
         publishedAt: new Date().toISOString(),
-        tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean),
-        pdfUrl: finalPdfUrl
+        tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean)
       };
       
       if (isEditMode) {
@@ -268,10 +222,6 @@ const BlogEditor = () => {
         [name]: value
       }));
     }
-  };
-
-  const handleClickUpload = () => {
-    fileInputRef.current?.click();
   };
 
   if (!isAuthenticated) {
@@ -437,52 +387,16 @@ const BlogEditor = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-base">PDF Document *</Label>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept=".pdf"
-                  className="hidden"
+                <Label htmlFor="content" className="text-base">Content *</Label>
+                <Textarea 
+                  id="content"
+                  name="content"
+                  value={formData.content}
+                  onChange={handleChange}
+                  required
+                  placeholder="Write your blog post content here..."
+                  className="min-h-[400px] resize-y"
                 />
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  {pdfFile || pdfUrl ? (
-                    <div className="flex flex-col items-center">
-                      <File className="h-12 w-12 text-survival-600 mb-2" />
-                      <p className="text-lg font-medium mb-1">
-                        {pdfFile ? pdfFile.name : "PDF document uploaded"}
-                      </p>
-                      <p className="text-sm text-gray-500 mb-4">
-                        {pdfFile ? 
-                          `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` : 
-                          "Click below to replace the current PDF"}
-                      </p>
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        onClick={handleClickUpload}
-                      >
-                        Replace PDF
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center">
-                      <Upload className="h-12 w-12 text-gray-400 mb-2" />
-                      <p className="text-lg font-medium mb-1">Upload a PDF</p>
-                      <p className="text-sm text-gray-500 mb-4">
-                        Drag and drop or click to select a PDF file
-                      </p>
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        onClick={handleClickUpload}
-                      >
-                        Select PDF
-                      </Button>
-                    </div>
-                  )}
-                </div>
-                <p className="text-sm text-gray-500">Maximum file size: 10MB. Only PDF files are accepted.</p>
               </div>
 
               <div className="space-y-2">
