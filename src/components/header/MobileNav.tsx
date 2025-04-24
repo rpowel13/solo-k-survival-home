@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { LogIn, Calculator, DollarSign } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
@@ -10,7 +10,6 @@ interface MobileNavProps {
 }
 
 export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
-  // Using Sheet component for better mobile display instead of conditionally rendering
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent side="left" className="overflow-y-auto max-h-screen w-[85vw] py-6">
@@ -76,8 +75,11 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
             rel="noopener noreferrer" 
             className="w-full block"
           >
-            <Button className="w-full bg-survival-600 hover:bg-survival-700 text-white font-bold">
-              <LogIn className="mr-2 h-4 w-4" />
+            <Button 
+              size="sm" 
+              className="w-full bg-survival-600 hover:bg-survival-700 text-white font-bold"
+            >
+              <LogIn className="mr-1 h-3 w-3" />
               Customer Portal
             </Button>
           </a>

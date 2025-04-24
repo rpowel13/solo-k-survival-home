@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { LogIn } from "lucide-react";
@@ -45,9 +44,12 @@ export const DesktopNav = () => {
         rel="noopener noreferrer" 
         className="w-full"
       >
-        <Button className="bg-survival-600 hover:bg-survival-700 text-white font-bold">
-          <LogIn className="mr-2 h-4 w-4" />
-          Customer Portal
+        <Button 
+          size="sm" 
+          className="bg-survival-600 hover:bg-survival-700 text-white font-bold"
+        >
+          <LogIn className="mr-1 h-3 w-3" />
+          Portal
         </Button>
       </a>
     </nav>
