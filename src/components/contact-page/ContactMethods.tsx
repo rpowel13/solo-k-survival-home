@@ -2,7 +2,6 @@
 import React from "react";
 import { Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Logo } from "@/components/header/Logo";
 
 const ContactMethods = () => {
   return (
@@ -29,10 +28,6 @@ const ContactMethods = () => {
               <p className="text-gray-600">info@survival401k.com</p>
               <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
             </div>
-          </div>
-          
-          <div className="flex items-center justify-center pt-12 pb-8">
-            <Logo />
           </div>
         </div>
       </CardContent>
