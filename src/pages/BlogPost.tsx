@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Calendar, Clock, Edit, Trash } from "lucide-react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
-import { 
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import BlogHeader from "@/components/blog/BlogHeader";
+import BlogContent from "@/components/blog/BlogContent";
+import BlogActions from "@/components/blog/BlogActions";
+import BlogLoadingSkeleton from "@/components/blog/BlogLoadingSkeleton";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -23,7 +24,7 @@ const BlogPostPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [post, setPost] = useState<BlogPost & { pdfUrl?: string } | null>(null);
+  const [post, setPost] = useState<BlogPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -48,7 +49,7 @@ const BlogPostPage = () => {
           });
           navigate("/blog");
         } else {
-          setPost(data as BlogPost & { pdfUrl?: string });
+          setPost(data as BlogPost);
         }
       } catch (error) {
         console.error("Error fetching blog post:", error);
@@ -103,17 +104,7 @@ const BlogPostPage = () => {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow container mx-auto px-4 py-8">
-          <div className="w-full max-w-4xl mx-auto">
-            <div className="h-64 bg-gray-200 rounded-lg animate-pulse mb-6"></div>
-            <div className="h-8 bg-gray-200 rounded animate-pulse mb-4 w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse mb-2 w-1/2"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse mb-6 w-1/3"></div>
-            <div className="space-y-4">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
-              ))}
-            </div>
-          </div>
+          <BlogLoadingSkeleton />
         </main>
         <Footer />
       </div>
@@ -129,10 +120,7 @@ const BlogPostPage = () => {
             <h1 className="text-2xl font-bold mb-4">Blog Post Not Found</h1>
             <p className="mb-6">The blog post you're looking for doesn't exist or has been removed.</p>
             <Link to="/blog">
-              <Button>
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Blog
-              </Button>
+              <Button>Back to Blog</Button>
             </Link>
           </div>
         </main>
@@ -151,85 +139,24 @@ const BlogPostPage = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">
-        <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white py-16">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-              <Link to="/blog" className="inline-flex items-center text-white hover:text-gray-200 mb-6">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Blog
-              </Link>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <div className="flex items-center text-gray-200">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  <span>{publishedDate}</span>
-                </div>
-                <div className="flex items-center text-gray-200">
-                  <Clock className="h-4 w-4 mr-1" />
-                  <span>5 min read</span>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-full bg-survival-600 flex items-center justify-center">
-                    {post.author.charAt(0)}
-                  </div>
-                </div>
-                <div>
-                  <div className="font-medium">{post.author}</div>
-                  <div className="text-sm text-gray-300">{post.authorTitle}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <BlogHeader
+          title={post.title}
+          publishedDate={publishedDate}
+          author={post.author}
+          authorTitle={post.authorTitle}
+        />
 
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-            <div className="mb-8 rounded-lg overflow-hidden">
-              <img 
-                src={post.coverImage} 
-                alt={post.title} 
-                className="w-full h-auto"
-              />
-            </div>
-
-            <div className="flex justify-end mb-6 space-x-2">
-              <Link to={`/blog/edit/${post.slug}`}>
-                <Button variant="outline" size="sm">
-                  <Edit className="h-4 w-4 mr-2" />
-                  Edit
-                </Button>
-              </Link>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-red-500 border-red-500 hover:bg-red-50" 
-                onClick={() => setShowDeleteDialog(true)}
-              >
-                <Trash className="h-4 w-4 mr-2" />
-                Delete
-              </Button>
-            </div>
-
-            <div className="prose prose-lg max-w-none mb-8">
-              <p className="text-lg text-gray-600 mb-6 font-medium">{post.excerpt}</p>
-              <div 
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
-            </div>
-
-            <div className="mt-8 pt-6 border-t">
-              <h3 className="text-lg font-semibold mb-3">Topics</h3>
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+            <BlogActions 
+              slug={post.slug} 
+              onDeleteClick={() => setShowDeleteDialog(true)} 
+            />
+            <BlogContent
+              excerpt={post.excerpt}
+              content={post.content}
+              tags={post.tags}
+            />
           </div>
         </div>
       </main>
