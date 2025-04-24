@@ -13,7 +13,8 @@ export const handleLLCSubmission = async (data: FormData) => {
     // Check if bank payment data exists and add it to the payload
     if ('bankPayment' in data && data.bankPayment) {
       console.log(`[${new Date().toISOString()}] Including bank payment information in LLC submission`);
-      formattedData.bankPayment = {
+      // Use type assertion to inform TypeScript that we're adding a new property
+      (formattedData as any).bankPayment = {
         accountName: data.bankPayment.accountName,
         accountType: data.bankPayment.accountType,
         routingNumber: data.bankPayment.routingNumber,

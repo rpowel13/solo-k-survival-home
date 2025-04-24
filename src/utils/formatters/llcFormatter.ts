@@ -6,7 +6,8 @@ export const formatLLCData = (data: LLCFormValues) => {
   const basicInfo = formatBasicInfo(data);
   const addressInfo = formatAddress(data);
 
-  return {
+  // Create the formatted data object
+  const formattedData = {
     formType: 'LLC_Formation',
     firstName: data.firstName,
     lastName: data.lastName,
@@ -38,4 +39,6 @@ export const formatLLCData = (data: LLCFormValues) => {
     leadType: 'LLC Formation Application',
     priority: 'High'
   };
+
+  return formattedData;
 };
