@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { LogIn } from "lucide-react";
+import { LogIn, Calculator, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
