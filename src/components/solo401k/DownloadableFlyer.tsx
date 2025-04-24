@@ -3,47 +3,22 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Download } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const DownloadableFlyer = () => {
   const { toast } = useToast();
 
   const handleDownload = () => {
-    const flyerContent = document.getElementById('flyer-content');
-    if (!flyerContent) return;
-
-    // Create styles for PDF
-    const styles = `
-      <style>
-        body { font-family: Arial, sans-serif; }
-        .section { margin: 20px 0; }
-        .title { color: #1a365d; font-size: 24px; }
-        .benefit { margin: 10px 0; }
-      </style>
-    `;
-
-    // Create the printable content
-    const printContent = `
-      <html>
-        <head>
-          ${styles}
-        </head>
-        <body>
-          ${flyerContent.innerHTML}
-        </body>
-      </html>
-    `;
-
-    // Create a blob and download
-    const blob = new Blob([printContent], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
+    // Create a link to download a pre-made PDF file instead of generating one on the fly
+    const pdfUrl = '/survival-401k-benefits.pdf'; // Replace with your actual PDF path
+    
     const link = document.createElement('a');
-    link.href = url;
+    link.href = pdfUrl;
     link.download = 'survival-401k-benefits.pdf';
+    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
 
     toast({
       title: "Download Started",
@@ -133,6 +108,9 @@ const DownloadableFlyer = () => {
           <Download className="mr-2 h-4 w-4" />
           Download Flyer
         </Button>
+        <p className="mt-2 text-sm text-gray-500">
+          Note: For complete information on Survival 401k plans, please contact our office.
+        </p>
       </div>
     </div>
   );
