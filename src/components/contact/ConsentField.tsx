@@ -25,7 +25,10 @@ const ConsentField: React.FC<ConsentFieldProps> = ({ form }) => {
           </FormControl>
           <div className="space-y-1 leading-none">
             <FormLabel className="text-sm font-normal">
-              By clicking "submit", I consent to join the email list and receive SMS from Survival 401k, with access to latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our <Link to="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> and <Link to="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</Link>. Text "HELP" for help or contact us at (833) 224-5517. Text "STOP" to cancel.
+              I agree to receive SMS from Survival 401k, LLC
+            </FormLabel>
+            <FormLabel className="text-sm font-normal block mt-2">
+              By clicking "send message", I consent to join the email list and receive SMS from Survival 401k, LLC, with access to our latest offers and services. Message and data rates may apply. Message frequency varies. More details on this are in our <Link to="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> and <Link to="/terms-of-service" className="text-blue-600 hover:underline">Terms and Conditions</Link>. Text "HELP" for help or contact us at 833-224-5517. Text "STOP" to cancel.
             </FormLabel>
             <FormMessage />
           </div>
@@ -36,3 +39,4 @@ const ConsentField: React.FC<ConsentFieldProps> = ({ form }) => {
 };
 
 export default ConsentField;
+
