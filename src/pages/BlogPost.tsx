@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button"; // Add this import
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
