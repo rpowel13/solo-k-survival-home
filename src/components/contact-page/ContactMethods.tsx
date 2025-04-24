@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Phone, Mail } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Logo from "@/components/header/Logo"; // Import the existing Logo component
+import { Logo } from "@/components/header/Logo";
 
 const ContactMethods = () => {
   return (
@@ -41,4 +40,3 @@ const ContactMethods = () => {
 };
 
 export default ContactMethods;
-
