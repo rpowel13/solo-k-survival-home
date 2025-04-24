@@ -6,8 +6,6 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/lib/supabase';
 import { useNavigate } from 'react-router-dom';
-import { handleLLCSubmission } from '@/services/zapier/handlers/llcHandler';
-import { BankPayment } from '@/types/formTypes';
 
 interface BankAccountFormProps {
   applicationData: {
@@ -49,36 +47,6 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ applicationData }) =>
         llcName: applicationData.llcName || 'Not specified',
         state: applicationData.state || 'Not specified'
       });
-      
-      // Create bank payment data
-      const bankPayment: BankPayment = {
-        accountName,
-        accountType,
-        routingNumber,
-        accountNumber
-      };
-      
-      // Send data to Zapier with bank payment information
-      console.log(`[${new Date().toISOString()}] Sending LLC formation data with bank payment to Zapier`);
-      
-      // Retrieve the stored LLC application data for sending to Zapier
-      const storedData = sessionStorage.getItem('llc_application');
-      if (storedData) {
-        const applicationFormData = JSON.parse(storedData);
-        
-        // Send to Zapier with bank payment info
-        const zapierResult = await handleLLCSubmission({
-          ...applicationFormData,
-          bankPayment,
-          formType: 'LLC_Formation'
-        });
-        
-        if (!zapierResult.success) {
-          console.error(`[${new Date().toISOString()}] Failed to send LLC data to Zapier:`, zapierResult.message);
-        } else {
-          console.log(`[${new Date().toISOString()}] Successfully sent LLC data to Zapier with bank payment info`);
-        }
-      }
       
       // Store the payment information in Supabase
       const { error } = await supabase

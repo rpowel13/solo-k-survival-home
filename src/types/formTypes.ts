@@ -1,16 +1,6 @@
 
 import { z } from 'zod';
 
-// Define bank payment schema
-export const bankPaymentSchema = z.object({
-  accountName: z.string(),
-  accountType: z.string(),
-  routingNumber: z.string(),
-  accountNumber: z.string(),
-});
-
-export type BankPayment = z.infer<typeof bankPaymentSchema>;
-
 // Define explicit schema for Solo 401k forms
 export const soloFormSchema = z.object({
   firstName: z.string(),
@@ -122,10 +112,10 @@ export type PrequalificationFormValues = z.infer<typeof prequalificationFormSche
 
 // Add formType to the FormData type
 export type FormData = 
-  | (SoloFormValues & { formType?: string; bankPayment?: BankPayment }) 
+  | (SoloFormValues & { formType?: string }) 
   | (ContactFormValues & { formType?: string }) 
-  | (LLCFormValues & { formType?: string; bankPayment?: BankPayment }) 
-  | (FirstResponderFormValues & { formType?: string; bankPayment?: BankPayment }) 
+  | (LLCFormValues & { formType?: string }) 
+  | (FirstResponderFormValues & { formType?: string }) 
   | (ScheduleFormValues & { formType?: string })
   | PrequalificationFormValues
   | Record<string, any>; // Allow additional properties for custom submissions

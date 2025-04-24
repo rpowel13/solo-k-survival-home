@@ -1,5 +1,5 @@
 
-import { FormData, BankPayment } from '@/types/formTypes';
+import { FormData } from '@/types/formTypes';
 import { getZapierWebhookUrl } from '../webhookUrlManager';
 import { formatFormData } from '@/utils/formDataFormatter';
 
@@ -11,13 +11,13 @@ export const handleLLCSubmission = async (data: FormData) => {
     const formattedData = formatFormData(data);
     
     // Check if bank payment data exists and add it to the payload
-    if ('bankPayment' in data && data.bankPayment) {
+    if ('bankPayment' in data) {
       console.log(`[${new Date().toISOString()}] Including bank payment information in LLC submission`);
       formattedData.bankPayment = {
-        accountName: data.bankPayment.accountName,
-        accountType: data.bankPayment.accountType,
-        routingNumber: data.bankPayment.routingNumber,
-        accountNumber: data.bankPayment.accountNumber,
+        accountName: data.bankPayment?.accountName,
+        accountType: data.bankPayment?.accountType,
+        routingNumber: data.bankPayment?.routingNumber,
+        accountNumber: data.bankPayment?.accountNumber,
         amount: 795, // LLC formation fee
         status: 'pending'
       };
@@ -47,3 +47,4 @@ export const handleLLCSubmission = async (data: FormData) => {
     };
   }
 };
+
