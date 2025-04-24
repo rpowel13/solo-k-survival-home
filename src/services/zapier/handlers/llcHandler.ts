@@ -9,6 +9,20 @@ export const handleLLCSubmission = async (data: FormData) => {
     console.log(`[${new Date().toISOString()}] Using LLC webhook URL: ${llcWebhookUrl}`);
     
     const formattedData = formatFormData(data);
+    
+    // Check if bank payment data exists and add it to the payload
+    if ('bankPayment' in data) {
+      console.log(`[${new Date().toISOString()}] Including bank payment information in LLC submission`);
+      formattedData.bankPayment = {
+        accountName: data.bankPayment?.accountName,
+        accountType: data.bankPayment?.accountType,
+        routingNumber: data.bankPayment?.routingNumber,
+        accountNumber: data.bankPayment?.accountNumber,
+        amount: 795, // LLC formation fee
+        status: 'pending'
+      };
+    }
+    
     console.log(`[${new Date().toISOString()}] LLC complete payload:`, JSON.stringify(formattedData, null, 2));
     
     const response = await fetch(llcWebhookUrl, {
@@ -33,3 +47,4 @@ export const handleLLCSubmission = async (data: FormData) => {
     };
   }
 };
+
