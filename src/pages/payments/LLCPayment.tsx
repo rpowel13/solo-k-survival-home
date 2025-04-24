@@ -18,6 +18,14 @@ const LLCPayment = () => {
     email: string;
     applicationDate: string;
     id?: string;
+    address?: {
+      street?: string;
+      city?: string;
+      state?: string;
+      zipCode?: string;
+    };
+    llcName?: string;
+    state?: string;
   } | null>(null);
   
   // Updated vCita payment link for LLC creation with new price
@@ -26,13 +34,40 @@ const LLCPayment = () => {
   useEffect(() => {
     // Retrieve application data from sessionStorage
     const storedData = sessionStorage.getItem('llc_application');
+    
     if (storedData) {
-      setApplicationData(JSON.parse(storedData));
+      try {
+        const parsedData = JSON.parse(storedData);
+        console.log("[LLC Payment] Retrieved application data:", parsedData);
+        
+        // Extract LLC name if available
+        const llcName = parsedData.llcName || 
+                       (parsedData.address && parsedData.address.llcName) || 
+                       'LLC Formation';
+                       
+        // Extract state if available
+        const state = parsedData.state || 
+                     (parsedData.address && parsedData.address.state) || 
+                     '';
+        
+        setApplicationData({
+          ...parsedData,
+          llcName,
+          state
+        });
+      } catch (error) {
+        console.error("Error parsing LLC application data:", error);
+        toast({
+          title: "Error Loading Application",
+          description: "There was a problem loading your application data. Please try again.",
+          variant: "destructive"
+        });
+      }
     } else {
       // Redirect back to application if no data is found
       navigate('/apply/llc');
     }
-  }, [navigate]);
+  }, [navigate, toast]);
 
   const handlePayment = () => {
     // Open the VCita payment link in a new tab

@@ -12,6 +12,8 @@ interface BankAccountFormProps {
     name: string;
     email: string;
     id?: string;
+    llcName?: string;
+    state?: string;
   };
 }
 
@@ -38,6 +40,13 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ applicationData }) =>
       if (!/^\d{9}$/.test(routingNumber)) {
         throw new Error('Routing number must be 9 digits');
       }
+
+      console.log(`[${new Date().toISOString()}] Processing bank payment for LLC formation`, {
+        name: applicationData.name,
+        email: applicationData.email,
+        llcName: applicationData.llcName || 'Not specified',
+        state: applicationData.state || 'Not specified'
+      });
       
       // Store the payment information in Supabase
       const { error } = await supabase
@@ -50,33 +59,44 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ applicationData }) =>
           routing_number: routingNumber,
           account_number: accountNumber,
           account_type: accountType,
-          amount: 1240,
-          status: 'pending',
-          created_at: new Date().toISOString()
+          amount: 795, // Updated LLC formation price
+          status: 'pending'
         }]);
         
       if (error) {
+        console.error(`[${new Date().toISOString()}] Failed to submit payment information:`, error);
         throw new Error(`Failed to submit payment information: ${error.message}`);
       }
       
-      // Send email notification to admins
-      const emailData = {
-        to: ["ross.powell@survival401k.com", "jill.powell@survival401k.com"],
-        subject: "New ACH Payment for Solo 401k",
-        body: `
-          <h2>New ACH Payment Submission</h2>
-          <p><strong>Name:</strong> ${applicationData?.name}</p>
-          <p><strong>Email:</strong> ${applicationData?.email}</p>
-          <p><strong>Account Name:</strong> ${accountName}</p>
-          <p><strong>Account Type:</strong> ${accountType}</p>
-          <p><strong>Amount:</strong> $1,240.00</p>
-          <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
-        `
-      };
+      console.log(`[${new Date().toISOString()}] Bank payment information successfully saved`);
       
-      await supabase.functions.invoke('send-email-notification', {
-        body: emailData
-      });
+      // Send email notification to admins
+      try {
+        const emailData = {
+          to: ["info@survival401k.com"],
+          subject: "New ACH Payment for LLC Formation",
+          body: `
+            <h2>New LLC Formation ACH Payment Submission</h2>
+            <p><strong>Name:</strong> ${applicationData?.name}</p>
+            <p><strong>Email:</strong> ${applicationData?.email}</p>
+            ${applicationData.llcName ? `<p><strong>LLC Name:</strong> ${applicationData.llcName}</p>` : ''}
+            ${applicationData.state ? `<p><strong>State:</strong> ${applicationData.state}</p>` : ''}
+            <p><strong>Account Name:</strong> ${accountName}</p>
+            <p><strong>Account Type:</strong> ${accountType}</p>
+            <p><strong>Amount:</strong> $795.00</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+          `
+        };
+        
+        await supabase.functions.invoke('send-email-notification', {
+          body: emailData
+        });
+        
+        console.log(`[${new Date().toISOString()}] Payment notification email sent`);
+      } catch (emailError) {
+        console.error(`[${new Date().toISOString()}] Email notification error (non-critical):`, emailError);
+        // Not throwing error here as payment was already saved
+      }
       
       // Show success message
       toast({
@@ -91,7 +111,7 @@ const BankAccountForm: React.FC<BankAccountFormProps> = ({ applicationData }) =>
       }, 3000);
       
     } catch (error) {
-      console.error("Payment submission error:", error);
+      console.error(`[${new Date().toISOString()}] Payment submission error:`, error);
       toast({
         title: "Submission Error",
         description: error instanceof Error ? error.message : "There was a problem submitting your payment information.",

@@ -10,6 +10,8 @@ interface PaymentTabsProps {
     name: string;
     email: string;
     id?: string;
+    llcName?: string;
+    state?: string;
   };
   paymentLink: string;
   handlePayment: () => void;
