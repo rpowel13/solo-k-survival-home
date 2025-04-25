@@ -16,6 +16,8 @@ const Blog = () => {
     const fetchBlogPosts = async () => {
       try {
         setIsLoading(true);
+        console.log("Fetching blog posts...");
+        
         const { data, error } = await supabase
           .from('blog_posts')
           .select()
@@ -28,26 +30,33 @@ const Blog = () => {
             description: error.message,
             variant: "destructive",
           });
-        } else {
-          console.log("Blog posts fetched:", data);
-          // Transform data to match our BlogPost type if needed
-          const formattedPosts = data.map((post: any) => ({
-            id: post.id,
-            title: post.title,
-            slug: post.slug,
-            excerpt: post.excerpt,
-            content: post.content,
-            coverImage: post.cover_image || post.coverImage || "",
-            author: post.author,
-            authorTitle: post.author_title || post.authorTitle,
-            publishedAt: post.published_at || post.publishedAt,
-            tags: post.tags || []
-          }));
-          
-          // Log formatted posts to see if coverImage is present
-          console.log("Formatted posts:", formattedPosts);
-          setBlogPosts(formattedPosts as BlogPost[]);
+          return;
         }
+        
+        if (!data || data.length === 0) {
+          console.log("No blog posts found");
+          setBlogPosts([]);
+          return;
+        }
+        
+        console.log("Raw blog posts data:", data);
+        
+        // Process the data into our BlogPost type
+        const formattedPosts = data.map((post) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt || "",
+          content: post.content || "",
+          coverImage: post.cover_image || "", 
+          author: post.author || "Admin",
+          authorTitle: post.author_title || "",
+          publishedAt: post.published_at,
+          tags: Array.isArray(post.tags) ? post.tags : []
+        }));
+        
+        console.log("Formatted blog posts:", formattedPosts);
+        setBlogPosts(formattedPosts);
       } catch (error) {
         console.error("Error fetching blog posts:", error);
         toast({

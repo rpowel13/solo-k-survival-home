@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
@@ -26,8 +27,8 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     excerpt: "",
     content: "",
     coverImage: "",
-    author: "",
-    authorTitle: "",
+    author: "Admin",
+    authorTitle: "Site Administrator",
     tags: ""
   });
   
@@ -35,12 +36,14 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
 
+  // Fetch blog post data if in edit mode
   useEffect(() => {
+    if (!isEditMode || !slug) return;
+    
     const fetchBlogPost = async () => {
-      if (!isEditMode || !slug) return;
-      
       try {
         setIsLoading(true);
+        console.log(`Fetching blog post with slug: ${slug}`);
         
         const { data, error } = await supabase
           .from('blog_posts')
@@ -49,25 +52,28 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           .single();
         
         if (error) {
+          console.error("Error fetching post:", error);
           toast({
             title: "Post not found",
             description: "The blog post you're trying to edit doesn't exist",
             variant: "destructive",
           });
           navigate("/blog");
-        } else {
-          console.log("Fetched post data:", data);
-          setFormData({
-            title: data.title || "",
-            slug: data.slug || "",
-            excerpt: data.excerpt || "",
-            content: data.content || "",
-            coverImage: data.cover_image || data.coverImage || "",
-            author: data.author || "",
-            authorTitle: data.author_title || data.authorTitle || "",
-            tags: data.tags ? data.tags.join(", ") : ""
-          });
+          return;
         }
+        
+        console.log("Fetched post data:", data);
+        
+        setFormData({
+          title: data.title || "",
+          slug: data.slug || "",
+          excerpt: data.excerpt || "",
+          content: data.content || "",
+          coverImage: data.cover_image || "",
+          author: data.author || "Admin",
+          authorTitle: data.author_title || "Site Administrator",
+          tags: Array.isArray(data.tags) ? data.tags.join(", ") : ""
+        });
       } catch (error) {
         console.error("Error fetching blog post:", error);
         toast({
@@ -84,13 +90,15 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     fetchBlogPost();
   }, [slug, isEditMode, navigate, toast]);
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title || !formData.slug || !formData.excerpt || !formData.content) {
+    // Validate required fields
+    if (!formData.title || !formData.slug || !formData.content) {
       toast({
         title: "Missing required fields",
-        description: "Please fill out all required fields",
+        description: "Please fill out title, slug, and content",
         variant: "destructive",
       });
       return;
@@ -99,8 +107,8 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     try {
       setIsSaving(true);
       
+      // Prepare post data using column names that match the database
       const postData = {
-        id: isEditMode ? slug! : crypto.randomUUID(),
         title: formData.title,
         slug: formData.slug,
         excerpt: formData.excerpt,
@@ -109,7 +117,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
         author: formData.author || "Admin",
         author_title: formData.authorTitle || "Site Administrator",
         published_at: new Date().toISOString(),
-        tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean)
+        tags: formData.tags ? formData.tags.split(",").map(tag => tag.trim()).filter(Boolean) : []
       };
       
       console.log("Saving post data:", postData);
@@ -121,20 +129,26 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           .eq('slug', slug);
           
         if (error) throw error;
+        
+        toast({
+          title: "Blog post updated",
+          description: "Your changes have been saved successfully"
+        });
       } else {
         const { error } = await supabase
           .from('blog_posts')
-          .insert(postData);
+          .insert({
+            ...postData,
+            id: crypto.randomUUID()
+          });
           
         if (error) throw error;
+        
+        toast({
+          title: "Blog post created",
+          description: "Your new blog post has been published"
+        });
       }
-      
-      toast({
-        title: isEditMode ? "Blog post updated" : "Blog post created",
-        description: isEditMode 
-          ? "Your changes have been saved successfully" 
-          : "Your new blog post has been published",
-      });
       
       navigate(`/blog/${postData.slug}`);
     } catch (error) {
@@ -149,6 +163,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     }
   };
 
+  // Handle image upload completion
   const handleImageUploadComplete = (url: string) => {
     if (showImageUpload) {
       setFormData(prev => ({ ...prev, coverImage: url }));
@@ -158,6 +173,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
         description: "The cover image has been uploaded successfully",
       });
     } else {
+      // Insert image into content
       const imageTag = `<img src="${url}" alt="Blog content image" class="my-4 rounded-lg w-full max-w-full" />`;
       setFormData(prev => ({
         ...prev,
@@ -168,6 +184,16 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
         description: "The image has been inserted into the content",
       });
     }
+  };
+
+  // Generate slug from title
+  const generateSlugFromTitle = (title: string): string => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "") // Remove special chars
+      .replace(/\s+/g, "-")    // Replace spaces with hyphens
+      .replace(/-+/g, "-")     // Remove duplicate hyphens
+      .replace(/^-+|-+$/g, ""); // Trim hyphens from start and end
   };
 
   if (isLoading) {
@@ -223,12 +249,13 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
                   name="title"
                   value={formData.title}
                   onChange={(e) => {
-                    const value = e.target.value;
+                    const newTitle = e.target.value;
                     setFormData(prev => ({
                       ...prev,
-                      title: value,
+                      title: newTitle,
+                      // Auto-generate slug from title if slug is empty or we're creating a new post
                       slug: !isEditMode && prev.slug === "" 
-                        ? value.toLowerCase().replace(/[^\w\s]/g, "").replace(/\s+/g, "-")
+                        ? generateSlugFromTitle(newTitle)
                         : prev.slug
                     }));
                   }}
@@ -246,7 +273,10 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
                     id="slug"
                     name="slug"
                     value={formData.slug}
-                    onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                    onChange={(e) => setFormData(prev => ({ 
+                      ...prev, 
+                      slug: generateSlugFromTitle(e.target.value) 
+                    }))}
                     required
                     placeholder="url-friendly-slug"
                     className="flex-1"
@@ -255,6 +285,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
                 <p className="text-sm text-gray-500">This will be used in the URL. Use lowercase letters, numbers, and hyphens only.</p>
               </div>
 
+              {/* Cover image section */}
               <div className="space-y-2">
                 <label className="block text-base font-medium">Cover Image</label>
                 {formData.coverImage && (
@@ -263,6 +294,10 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
                       src={formData.coverImage} 
                       alt="Cover preview" 
                       className="w-full h-48 object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+                      }}
                     />
                     <Button
                       type="button"
@@ -300,14 +335,13 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="excerpt" className="block text-base font-medium">Excerpt/Summary *</label>
-                <Input
+                <label htmlFor="excerpt" className="block text-base font-medium">Excerpt/Summary</label>
+                <Textarea
                   id="excerpt"
-                  name="excerpt"
                   value={formData.excerpt}
                   onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
-                  required
                   placeholder="Brief summary of the article (1-2 sentences)"
+                  className="h-24 resize-none"
                 />
               </div>
 

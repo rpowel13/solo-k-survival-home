@@ -1,43 +1,43 @@
 
-import { Link } from "react-router-dom";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
-
 interface BlogHeaderProps {
   title: string;
   publishedDate: string;
   author: string;
   authorTitle: string;
+  coverImage?: string;
 }
 
-const BlogHeader = ({ title, publishedDate, author, authorTitle }: BlogHeaderProps) => {
+const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+
+const BlogHeader = ({ title, publishedDate, author, authorTitle, coverImage }: BlogHeaderProps) => {
   return (
-    <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white py-16">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <Link to="/blog" className="inline-flex items-center text-white hover:text-gray-200 mb-6">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
-          </Link>
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
-          <div className="flex flex-wrap items-center gap-4 mb-4">
-            <div className="flex items-center text-gray-200">
-              <Calendar className="h-4 w-4 mr-1" />
-              <span>{publishedDate}</span>
-            </div>
-            <div className="flex items-center text-gray-200">
-              <Clock className="h-4 w-4 mr-1" />
-              <span>5 min read</span>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 rounded-full bg-survival-600 flex items-center justify-center">
-                {author.charAt(0)}
-              </div>
-            </div>
-            <div>
-              <div className="font-medium">{author}</div>
-              <div className="text-sm text-gray-300">{authorTitle}</div>
+    <div className="relative">
+      {/* Cover Image */}
+      <div className="relative h-64 md:h-96 bg-survival-800 overflow-hidden">
+        <img 
+          src={coverImage || DEFAULT_COVER_IMAGE}
+          alt={title}
+          className="w-full h-full object-cover opacity-50"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = DEFAULT_COVER_IMAGE;
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30" />
+      </div>
+      
+      {/* Content */}
+      <div className="container mx-auto px-4 relative">
+        <div className="max-w-4xl mx-auto -mt-32 md:-mt-40 pb-8">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
+            <div className="flex flex-wrap items-center text-sm text-gray-500 mb-2">
+              <span className="mr-4">Published {publishedDate}</span>
+              <span className="mr-2">by</span>
+              <span className="font-medium text-survival-600">{author}</span>
+              {authorTitle && (
+                <span className="ml-2 text-gray-500">({authorTitle})</span>
+              )}
             </div>
           </div>
         </div>

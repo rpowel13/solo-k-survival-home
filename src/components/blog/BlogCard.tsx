@@ -10,25 +10,24 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+
 const BlogCard = ({ post }: BlogCardProps) => {
   const formattedDate = formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true });
   
-  // Use a default cover image if none is provided
-  const coverImage = post.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
-
   return (
     <Link to={`/blog/${post.slug}`} className="block h-full transition-transform hover:translate-y-[-4px]">
       <Card className="h-full overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
         <div className="relative h-48 overflow-hidden">
           <img 
-            src={coverImage} 
+            src={post.coverImage || DEFAULT_COVER_IMAGE} 
             alt={post.title}
             className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               console.error(`Failed to load image: ${target.src}`);
-              target.src = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
-              target.onerror = null; // Prevent infinite loop if default image also fails
+              target.src = DEFAULT_COVER_IMAGE;
+              target.onerror = null; // Prevent infinite loop
             }}
           />
         </div>
@@ -43,8 +42,8 @@ const BlogCard = ({ post }: BlogCardProps) => {
           <p className="text-gray-600 line-clamp-3">{post.excerpt}</p>
         </CardContent>
         <CardFooter className="p-4 flex flex-wrap gap-2 border-t">
-          {post.tags.slice(0, 3).map((tag) => (
-            <Badge key={tag} variant="outline" className="bg-gray-100">
+          {post.tags.slice(0, 3).map((tag, index) => (
+            <Badge key={`${tag}-${index}`} variant="outline" className="bg-gray-100">
               {tag}
             </Badge>
           ))}

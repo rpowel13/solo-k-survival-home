@@ -17,16 +17,17 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast({
         title: "Invalid file type",
-        description: "Please upload an image file",
+        description: "Please upload an image file (JPEG, PNG, GIF, etc.)",
         variant: "destructive",
       });
       return;
     }
 
-    // Maximum file size (5MB)
+    // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       toast({
@@ -38,24 +39,32 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
     }
 
     setIsUploading(true);
+    
     try {
-      // Create a unique filename
+      // Create a unique filename to prevent overwriting
       const fileExt = file.name.split('.').pop();
-      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       
-      // Upload the file to Supabase Storage
+      console.log(`Uploading image: ${fileName}`);
+      
+      // Upload the file
       const { error: uploadError, data } = await supabase.storage
         .from('blog-images')
         .upload(fileName, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        throw uploadError;
+      }
 
       // Get the public URL for the uploaded file
       const { data: { publicUrl } } = supabase.storage
         .from('blog-images')
         .getPublicUrl(fileName);
 
-      // Send the URL back to the parent component
+      console.log(`Image uploaded successfully. URL: ${publicUrl}`);
+      
+      // Return the URL to the parent component
       onUploadComplete(publicUrl);
       
       toast({
@@ -71,8 +80,8 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       });
     } finally {
       setIsUploading(false);
-      // Reset the input value so the same file can be selected again if needed
-      const input = document.getElementById('image-upload') as HTMLInputElement;
+      // Reset input value to allow uploading the same file again if needed
+      const input = event.target;
       if (input) input.value = '';
     }
   };

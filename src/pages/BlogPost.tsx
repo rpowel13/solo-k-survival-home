@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Button } from "@/components/ui/button"; // Add this import
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
@@ -36,6 +36,7 @@ const BlogPostPage = () => {
       
       try {
         setIsLoading(true);
+        console.log(`Fetching blog post with slug: ${slug}`);
         
         const { data, error } = await supabase
           .from('blog_posts')
@@ -44,15 +45,33 @@ const BlogPostPage = () => {
           .single();
         
         if (error) {
+          console.error("Error fetching post:", error);
           toast({
             title: "Post not found",
             description: "The blog post you're looking for doesn't exist",
             variant: "destructive",
           });
           navigate("/blog");
-        } else {
-          setPost(data as BlogPost);
+          return;
         }
+        
+        console.log("Post data retrieved:", data);
+        
+        // Transform the data to match our BlogPost type
+        const postData: BlogPost = {
+          id: data.id,
+          title: data.title,
+          slug: data.slug,
+          excerpt: data.excerpt || "",
+          content: data.content || "",
+          coverImage: data.cover_image || "",
+          author: data.author || "Admin",
+          authorTitle: data.author_title || "",
+          publishedAt: data.published_at,
+          tags: Array.isArray(data.tags) ? data.tags : []
+        };
+        
+        setPost(postData);
       } catch (error) {
         console.error("Error fetching blog post:", error);
         toast({
@@ -79,18 +98,20 @@ const BlogPostPage = () => {
         .eq('slug', slug);
       
       if (error) {
+        console.error("Error deleting post:", error);
         toast({
           title: "Error deleting blog post",
           description: error.message,
           variant: "destructive",
         });
-      } else {
-        toast({
-          title: "Blog post deleted",
-          description: "The blog post has been successfully deleted",
-        });
-        navigate("/blog");
+        return;
       }
+      
+      toast({
+        title: "Blog post deleted",
+        description: "The blog post has been successfully deleted",
+      });
+      navigate("/blog");
     } catch (error) {
       console.error("Error deleting blog post:", error);
       toast({
@@ -146,6 +167,7 @@ const BlogPostPage = () => {
           publishedDate={publishedDate}
           author={post.author}
           authorTitle={post.authorTitle}
+          coverImage={post.coverImage}
         />
 
         <div className="container mx-auto px-4 py-8">

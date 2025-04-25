@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
   Bold, Italic, List, Image as ImageIcon,
@@ -14,43 +14,59 @@ interface RichTextEditorProps {
 }
 
 export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEditorProps) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+  
+  // Handle formatting commands
   const handleFormat = (command: string, value?: string) => {
     document.execCommand(command, false, value);
-    const newContent = document.querySelector('[contenteditable="true"]')?.innerHTML || '';
-    onChange(newContent);
+    updateContent();
   };
-
+  
+  // Handle link insertion
   const handleLink = () => {
     const url = prompt('Enter URL:');
     if (url) {
       handleFormat('createLink', url);
     }
   };
-
-  // Initialize content when it changes externally
+  
+  // Update content after any change
+  const updateContent = () => {
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  };
+  
+  // Sync editor content when external content prop changes
   useEffect(() => {
-    const editorElement = document.querySelector('[contenteditable="true"]');
-    if (editorElement && editorElement.innerHTML !== content) {
-      editorElement.innerHTML = content;
+    if (editorRef.current && editorRef.current.innerHTML !== content) {
+      editorRef.current.innerHTML = content;
     }
   }, [content]);
-
-  // Handle paste event to allow pasting text
+  
+  // Handle paste to allow plaintext and limited HTML
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    // Get text content from clipboard
+    
+    // Get pasted content as text and HTML
     const text = e.clipboardData.getData('text/plain');
-    // Insert at cursor position using execCommand
-    document.execCommand('insertText', false, text);
-    // Update content after paste
-    const newContent = document.querySelector('[contenteditable="true"]')?.innerHTML || '';
-    onChange(newContent);
+    const html = e.clipboardData.getData('text/html');
+    
+    // Try to use HTML if it's available and looks reasonable (not too complex)
+    if (html && !html.includes('<style') && !html.includes('<script')) {
+      document.execCommand('insertHTML', false, html);
+    } else {
+      document.execCommand('insertText', false, text);
+    }
+    
+    updateContent();
   };
 
   return (
     <div className="border rounded-lg overflow-hidden">
       <div className="bg-gray-50 border-b p-2 flex flex-wrap gap-1">
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('bold')}
@@ -59,6 +75,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <Bold className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('italic')}
@@ -67,6 +84,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <Italic className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('formatBlock', '<h1>')}
@@ -75,6 +93,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <Heading1 className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('formatBlock', '<h2>')}
@@ -83,6 +102,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <Heading2 className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('insertUnorderedList')}
@@ -91,6 +111,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <List className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('justifyLeft')}
@@ -99,6 +120,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <AlignLeft className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('justifyCenter')}
@@ -107,6 +129,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <AlignCenter className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={() => handleFormat('justifyRight')}
@@ -115,6 +138,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <AlignRight className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={handleLink}
@@ -123,6 +147,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <LinkIcon className="h-4 w-4" />
         </Button>
         <Button
+          type="button"
           variant="ghost"
           size="sm"
           onClick={onImageClick}
@@ -131,12 +156,15 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
           <ImageIcon className="h-4 w-4" />
         </Button>
       </div>
+      
       <div
+        ref={editorRef}
         className="p-4 min-h-[200px] prose max-w-none"
         contentEditable
-        dangerouslySetInnerHTML={{ __html: content }}
-        onInput={(e) => onChange(e.currentTarget.innerHTML)}
+        onInput={updateContent}
         onPaste={handlePaste}
+        onBlur={updateContent}
+        dangerouslySetInnerHTML={{ __html: content }}
       />
     </div>
   );
