@@ -10,17 +10,22 @@ interface BlogHeaderProps {
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
 
 const BlogHeader = ({ title, publishedDate, author, authorTitle, coverImage }: BlogHeaderProps) => {
+  // Ensure we always have a valid image URL
+  const headerImage = coverImage || DEFAULT_COVER_IMAGE;
+  
   return (
     <div className="relative">
       {/* Cover Image */}
       <div className="relative h-64 md:h-96 bg-survival-800 overflow-hidden">
         <img 
-          src={coverImage || DEFAULT_COVER_IMAGE}
+          src={headerImage}
           alt={title}
           className="w-full h-full object-cover opacity-50"
           onError={(e) => {
+            console.error(`Failed to load header image: ${headerImage}`);
             const target = e.target as HTMLImageElement;
             target.src = DEFAULT_COVER_IMAGE;
+            target.onerror = null; // Prevent infinite loop
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/30" />

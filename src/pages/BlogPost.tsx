@@ -71,6 +71,7 @@ const BlogPostPage = () => {
           tags: Array.isArray(data.tags) ? data.tags : []
         };
         
+        console.log("Formatted post data:", postData);
         setPost(postData);
       } catch (error) {
         console.error("Error fetching blog post:", error);

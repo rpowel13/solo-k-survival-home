@@ -15,12 +15,15 @@ const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87f
 const BlogCard = ({ post }: BlogCardProps) => {
   const formattedDate = formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true });
   
+  // Use a more reliable approach to get the cover image
+  const coverImage = post.coverImage || DEFAULT_COVER_IMAGE;
+  
   return (
     <Link to={`/blog/${post.slug}`} className="block h-full transition-transform hover:translate-y-[-4px]">
       <Card className="h-full overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
         <div className="relative h-48 overflow-hidden">
           <img 
-            src={post.coverImage || DEFAULT_COVER_IMAGE} 
+            src={coverImage} 
             alt={post.title}
             className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
             onError={(e) => {
