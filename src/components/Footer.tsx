@@ -58,6 +58,10 @@ const Footer = () => {
           <Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link>
           <Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link>
         </div>
+
+        <div className="mt-4 text-center text-xs text-gray-500 px-4">
+          <p>The information provided is for general informational purposes only and should not be considered legal or tax advice. Consult with a qualified professional regarding your specific situation.</p>
+        </div>
       </div>
     </footer>
   );
