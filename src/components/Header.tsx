@@ -21,14 +21,9 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
-          {/* Logo and Tagline */}
           <Logo />
-
-          {/* Desktop Navigation - Hidden on Mobile */}
           <DesktopNav />
-
-          {/* Mobile Navigation */}
-          <MobileNav isOpen={isMenuOpen} onClose={toggleMenu} />
+          {isMobile && <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />}
         </div>
       </div>
     </header>
