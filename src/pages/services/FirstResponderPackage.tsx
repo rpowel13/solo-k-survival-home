@@ -1,7 +1,8 @@
+
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Award, Briefcase, Shield, CheckCircle2, DollarSign } from 'lucide-react';
+import { Users, Award, Briefcase, Shield, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -23,72 +24,6 @@ const FirstResponderPackage = () => {
             </p>
           </div>
         </section>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* LLC Section */}
-          <Card className="border-l-4 border-l-survival-600">
-            <CardHeader>
-              <CardTitle className="text-2xl">LLC Formation</CardTitle>
-              <CardDescription>Asset Protection for First Responders</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Professional liability protection</span>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Side business structuring</span>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Complete formation service</span>
-                </li>
-              </ul>
-              <div className="pt-4">
-                <div className="text-2xl font-bold text-center mb-4">$795</div>
-                <Link to="/apply/llc">
-                  <Button className="w-full bg-survival-600 hover:bg-survival-700">
-                    Get Started with LLC
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Solo 401k Section */}
-          <Card className="border-l-4 border-l-finance-600">
-            <CardHeader>
-              <CardTitle className="text-2xl">Solo 401k</CardTitle>
-              <CardDescription>Retirement Planning for First Responders</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <ul className="space-y-3">
-                <li className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Pension complement strategy</span>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>High contribution limits</span>
-                </li>
-                <li className="flex items-start">
-                  <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>Tax-advantaged savings</span>
-                </li>
-              </ul>
-              <div className="pt-4">
-                <div className="text-2xl font-bold text-center mb-4">$1,200</div>
-                <Link to="/apply/solo-401k">
-                  <Button className="w-full bg-finance-600 hover:bg-finance-700">
-                    Get Started with Solo 401k
-                  </Button>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
         <section>
           <h2 className="text-2xl font-bold mb-6 text-survival-800">Special Benefits for First Responders</h2>
@@ -128,9 +63,75 @@ const FirstResponderPackage = () => {
                 <Briefcase className="h-5 w-5 text-finance-600" />
                 Preferred Pricing
               </h3>
-              <p>
+              <p className="mb-8">
                 As a token of our appreciation for your service, first responders receive special bundled pricing on our combined LLC and Solo 401k services, representing significant savings over our standard rates.
               </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* LLC Section */}
+                <Card className="border-l-4 border-l-survival-600">
+                  <CardHeader>
+                    <CardTitle className="text-2xl">LLC Formation</CardTitle>
+                    <CardDescription>Asset Protection for First Responders</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Professional liability protection</span>
+                      </li>
+                      <li className="flex items-start">
+                        <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Side business structuring</span>
+                      </li>
+                      <li className="flex items-start">
+                        <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Complete formation service</span>
+                      </li>
+                    </ul>
+                    <div className="pt-4">
+                      <div className="text-2xl font-bold text-center mb-4">$795</div>
+                      <Link to="/apply/llc">
+                        <Button className="w-full bg-survival-600 hover:bg-survival-700">
+                          Get Started with LLC
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Solo 401k Section */}
+                <Card className="border-l-4 border-l-finance-600">
+                  <CardHeader>
+                    <CardTitle className="text-2xl">Solo 401k</CardTitle>
+                    <CardDescription>Retirement Planning for First Responders</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <ul className="space-y-3">
+                      <li className="flex items-start">
+                        <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Pension complement strategy</span>
+                      </li>
+                      <li className="flex items-start">
+                        <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>High contribution limits</span>
+                      </li>
+                      <li className="flex items-start">
+                        <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                        <span>Tax-advantaged savings</span>
+                      </li>
+                    </ul>
+                    <div className="pt-4">
+                      <div className="text-2xl font-bold text-center mb-4">$1,200</div>
+                      <Link to="/apply/solo-401k">
+                        <Button className="w-full bg-finance-600 hover:bg-finance-700">
+                          Get Started with Solo 401k
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </section>
