@@ -1,7 +1,7 @@
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Award, Briefcase, Shield, CheckCircle2 } from 'lucide-react';
+import { Users, Award, Briefcase, Shield, CheckCircle2, BadgePercent } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
@@ -92,6 +92,10 @@ const FirstResponderPackage = () => {
                     <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
                     <span>Complete formation service</span>
                   </li>
+                  <li className="flex items-start">
+                    <BadgePercent className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>10% Discount at Checkout</span>
+                  </li>
                 </ul>
                 <div className="pt-4">
                   <div className="text-2xl font-bold text-center mb-4">$795</div>
@@ -123,6 +127,10 @@ const FirstResponderPackage = () => {
                   <li className="flex items-start">
                     <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
                     <span>Tax-advantaged savings</span>
+                  </li>
+                  <li className="flex items-start">
+                    <BadgePercent className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                    <span>10% Discount at Checkout</span>
                   </li>
                 </ul>
                 <div className="pt-4">
