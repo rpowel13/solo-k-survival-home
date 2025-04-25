@@ -27,7 +27,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
         variant="ghost"
         size="icon"
         className="fixed top-4 right-4 z-50 lg:hidden"
-        onClick={() => isOpen ? onClose() : onClose()}
+        onClick={onClose}
         aria-label="Toggle menu"
       >
         {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
