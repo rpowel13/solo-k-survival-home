@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -55,6 +54,28 @@ const Footer = () => {
               <li><Link to="/tools/rmd-calculator" className="text-gray-300 hover:text-white">RMD Calculator</Link></li>
               <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link></li>
               <li><Link to="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</Link></li>
+              <li><Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="font-bold text-lg mb-4">Contact & Support</h3>
+            <ul className="space-y-2">
+              <li><Link to="/contact" className="text-gray-300 hover:text-white">Contact Us</Link></li>
+              <li>
+                <a href="tel:+18332245517" className="text-gray-300 hover:text-white">
+                  (833) 224-5517
+                </a>
+              </li>
+              <li>
+                <a href="mailto:info@survival401k.com" className="text-gray-300 hover:text-white">
+                  info@survival401k.com
+                </a>
+              </li>
+              <li><Link to="/schedule" className="text-gray-300 hover:text-white">Schedule a Free Consultation</Link></li>
+              <li><Link to="/account" className="text-gray-300 hover:text-white">Update my Account</Link></li>
+              <li><Link to="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</Link></li>
+              <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link></li>
               <li><Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link></li>
             </ul>
           </div>
