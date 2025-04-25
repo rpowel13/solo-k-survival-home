@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact } from "lucide-react";
@@ -19,10 +20,20 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
     <div className="lg:hidden">
+      {/* Portal Button - Always visible */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed top-4 right-4 z-50 lg:hidden"
+        onClick={() => isOpen ? onClose() : onClose()}
+        aria-label="Toggle menu"
+      >
+        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+      </Button>
+
+      {/* Mobile Navigation Menu */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/60 z-50" onClick={onClose}>
           <div 
