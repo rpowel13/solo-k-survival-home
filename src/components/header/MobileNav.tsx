@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { X, Menu, ChevronDown, ChevronRight, FileText, Home } from "lucide-react";
+import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface MobileNavProps {
@@ -261,6 +261,14 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 >
                   <FileText className="h-4 w-4 mr-1" />
                   Articles
+                </Link>
+                <Link 
+                  to="/contact" 
+                  className="block font-medium hover:text-survival-600 flex items-center"
+                  onClick={onClose}
+                >
+                  <Contact className="h-4 w-4 mr-1" />
+                  Contact
                 </Link>
               </div>
             </div>

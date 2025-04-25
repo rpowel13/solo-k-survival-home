@@ -4,7 +4,7 @@ import { ServiceDropdown } from "./ServiceDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
 import { PaymentDropdown } from "./PaymentDropdown";
-import { FileText, Home } from "lucide-react";
+import { FileText, Home, Contact } from "lucide-react";
 
 export const DesktopNav = () => {
   return (
@@ -26,6 +26,13 @@ export const DesktopNav = () => {
       >
         <FileText className="h-4 w-4 mr-1" />
         Articles
+      </Link>
+      <Link 
+        to="/contact" 
+        className="text-gray-700 hover:text-survival-600 transition flex items-center"
+      >
+        <Contact className="h-4 w-4 mr-1" />
+        Contact
       </Link>
     </nav>
   );
