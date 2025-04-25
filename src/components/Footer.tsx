@@ -26,9 +26,6 @@ const Footer = () => {
               <li><Link to="/tools/retirement-calculator" className="text-gray-300 hover:text-white">Retirement Calculator</Link></li>
               <li><Link to="/tools/loan-calculator" className="text-gray-300 hover:text-white">Loan Calculator</Link></li>
               <li><Link to="/tools/rmd-calculator" className="text-gray-300 hover:text-white">RMD Calculator</Link></li>
-              <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</Link></li>
-              <li><Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link></li>
             </ul>
           </div>
           
@@ -48,15 +45,18 @@ const Footer = () => {
               </li>
               <li><Link to="/schedule" className="text-gray-300 hover:text-white">Schedule a Free Consultation</Link></li>
               <li><Link to="/account" className="text-gray-300 hover:text-white">Update my Account</Link></li>
-              <li><Link to="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</Link></li>
-              <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link></li>
-              <li><Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link></li>
             </ul>
           </div>
         </div>
         
         <div className="border-t border-gray-800 mt-12 pt-8 text-sm text-gray-400 text-center">
           <p>&copy; {currentYear} Survival Retirement. All rights reserved.</p>
+        </div>
+
+        <div className="mt-4 text-center space-x-4">
+          <Link to="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</Link>
+          <Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link>
+          <Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link>
         </div>
       </div>
     </footer>
