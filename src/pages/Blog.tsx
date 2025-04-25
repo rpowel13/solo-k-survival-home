@@ -16,15 +16,20 @@ const Blog = () => {
     const fetchBlogPosts = async () => {
       try {
         setIsLoading(true);
-        const { data, error } = await supabase.from('blog_posts').select();
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select()
+          .order('published_at', { ascending: false });
         
         if (error) {
+          console.error("Supabase error:", error);
           toast({
             title: "Error fetching blog posts",
             description: error.message,
             variant: "destructive",
           });
         } else {
+          console.log("Blog posts fetched:", data);
           setBlogPosts(data as BlogPost[]);
         }
       } catch (error) {
