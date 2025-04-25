@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { DollarSign, BadgePercent } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PaymentTabs from '@/components/payment/PaymentTabs';
@@ -12,6 +14,9 @@ import ApplicationStatus from '@/components/payment/ApplicationStatus';
 const Solo401kPayment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [discountCode, setDiscountCode] = useState('');
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+  const [paymentAmount, setPaymentAmount] = useState(1240);
   const [applicationData, setApplicationData] = useState<{
     name: string;
     email: string;
@@ -19,8 +24,13 @@ const Solo401kPayment = () => {
     id?: string;
   } | null>(null);
   
-  // VCita payment link
-  const paymentLink = "https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Solo%20401k%20Application&amount=1240";
+  // Base vCita payment link
+  const basePaymentLink = "https://live.vcita.com/site/izk040b42jnjcf3c/make-payment?title=Solo%20401k%20Application&amount=1240";
+  
+  // Create computed payment link that updates when discount is applied
+  const paymentLink = isDiscountApplied 
+    ? basePaymentLink.replace(/amount=\d+/, `amount=${paymentAmount}`)
+    : basePaymentLink;
 
   useEffect(() => {
     // Retrieve application data from sessionStorage
@@ -32,6 +42,24 @@ const Solo401kPayment = () => {
       navigate('/apply/solo-401k');
     }
   }, [navigate]);
+
+  const handleDiscountCode = () => {
+    if (discountCode.trim() === '1stDC' && !isDiscountApplied) {
+      const discountedAmount = Math.floor(paymentAmount * 0.9);
+      setPaymentAmount(discountedAmount);
+      setIsDiscountApplied(true);
+      toast({
+        title: "Discount Applied!",
+        description: "10% discount has been applied to your payment.",
+      });
+    } else if (discountCode.trim() !== '1stDC') {
+      toast({
+        title: "Invalid Code",
+        description: "Please enter a valid discount code.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handlePayment = () => {
     // Open the VCita payment link in a new tab
@@ -80,6 +108,40 @@ const Solo401kPayment = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <PaymentDetailsCard />
+              
+              <div className="mt-6 p-4 bg-gray-50 rounded-md">
+                <div className="mb-4">
+                  <h3 className="font-medium text-lg mb-2">Payment Amount</h3>
+                  <div className="flex items-center">
+                    <span className={`text-2xl font-bold ${isDiscountApplied ? 'line-through text-gray-400' : 'text-survival-700'}`}>${1240}</span>
+                    {isDiscountApplied && (
+                      <span className="text-2xl font-bold text-survival-700 ml-3">${paymentAmount}</span>
+                    )}
+                  </div>
+                  {isDiscountApplied && (
+                    <p className="text-sm text-green-600 mt-1">10% discount applied!</p>
+                  )}
+                </div>
+                
+                <div className="flex gap-2 mb-2">
+                  <Input
+                    type="text"
+                    placeholder="Enter discount code"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                    className="flex-grow"
+                  />
+                  <Button 
+                    onClick={handleDiscountCode}
+                    variant="outline"
+                    className="whitespace-nowrap"
+                    disabled={isDiscountApplied}
+                  >
+                    <BadgePercent className="mr-2 h-4 w-4" />
+                    Apply Code
+                  </Button>
+                </div>
+              </div>
             </CardContent>
             
             <PaymentTabs 
