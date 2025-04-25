@@ -147,6 +147,24 @@ function createMockSupabaseClient() {
         return this;
       },
       
+      // Order method (chainable)
+      order: function(column: string, { ascending = true } = {}) {
+        console.log(`Mock order by ${column} ${ascending ? 'ASC' : 'DESC'}`);
+        
+        const sortedData = [...this.data].sort((a, b) => {
+          if (ascending) {
+            return a[column] < b[column] ? -1 : a[column] > b[column] ? 1 : 0;
+          } else {
+            return a[column] > b[column] ? -1 : a[column] < b[column] ? 1 : 0;
+          }
+        });
+        
+        return {
+          ...this,
+          data: sortedData
+        };
+      },
+      
       // Filter by equality (chainable)
       eq: function(column: string, value: any) {
         console.log(`Mock filter: ${column} = ${value}`);
