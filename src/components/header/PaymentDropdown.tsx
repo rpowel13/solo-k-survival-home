@@ -7,7 +7,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { CreditCard, DollarSign } from "lucide-react";
+import { CreditCard, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const PaymentDropdown = () => {
@@ -26,8 +26,8 @@ export const PaymentDropdown = () => {
                     to="/payment/annual-fee"
                     className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
                   >
-                    <div className="flex items-center space-x-2">
-                      <DollarSign className="h-4 w-4 text-survival-600" />
+                    <div className="flex items-center gap-2">
+                      <Settings className="h-4 w-4 text-survival-600" />
                       <div className="text-sm font-medium leading-none">Annual Fee ($200)</div>
                     </div>
                     <p className="line-clamp-2 text-sm leading-snug text-survival-700 pt-1">
@@ -42,7 +42,7 @@ export const PaymentDropdown = () => {
                     to="/payment/reinstatement-fee"
                     className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
                   >
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center gap-2">
                       <CreditCard className="h-4 w-4 text-survival-600" />
                       <div className="text-sm font-medium leading-none">Reinstatement Fee ($250)</div>
                     </div>

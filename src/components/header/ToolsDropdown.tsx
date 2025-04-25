@@ -8,14 +8,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Calculator, Settings } from "lucide-react"
 
 export function ToolsDropdown() {
   const items = [
-    { href: "/tools/retirement-calculator", label: "Retirement Calculator" },
-    { href: "/tools/rmd-calculator", label: "RMD Calculator" },
-    { href: "/tools/loan-calculator", label: "Loan Calculator" },
-    { href: "/tools/solo-401k-calculator", label: "Solo 401k Calculator" },
+    { href: "/tools/retirement-calculator", label: "Retirement Calculator", icon: Calculator },
+    { href: "/tools/rmd-calculator", label: "RMD Calculator", icon: Calculator },
+    { href: "/tools/loan-calculator", label: "Loan Calculator", icon: Calculator },
+    { href: "/tools/solo-401k-calculator", label: "Solo 401k Calculator", icon: Settings },
   ];
 
   return (
@@ -32,7 +32,10 @@ export function ToolsDropdown() {
       <DropdownMenuContent className="w-56">
         {items.map((item) => (
           <DropdownMenuItem key={item.href} asChild>
-            <Link to={item.href}>{item.label}</Link>
+            <Link to={item.href} className="flex items-center gap-2">
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
