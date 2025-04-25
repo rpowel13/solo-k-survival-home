@@ -7,6 +7,7 @@ interface BlogHeaderProps {
   coverImage?: string;
 }
 
+// Set default image path that's guaranteed to exist
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
 
 const BlogHeader = ({ title, publishedDate, author, authorTitle, coverImage }: BlogHeaderProps) => {

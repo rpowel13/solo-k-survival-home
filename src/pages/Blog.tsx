@@ -7,6 +7,8 @@ import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
 
+const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+
 const Blog = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +50,7 @@ const Blog = () => {
           slug: post.slug,
           excerpt: post.excerpt || "",
           content: post.content || "",
-          coverImage: post.cover_image || "", 
+          coverImage: post.cover_image || DEFAULT_COVER_IMAGE, 
           author: post.author || "Admin",
           authorTitle: post.author_title || "",
           publishedAt: post.published_at,

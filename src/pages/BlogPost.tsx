@@ -22,6 +22,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+
 const BlogPostPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -64,7 +66,7 @@ const BlogPostPage = () => {
           slug: data.slug,
           excerpt: data.excerpt || "",
           content: data.content || "",
-          coverImage: data.cover_image || "",
+          coverImage: data.cover_image || DEFAULT_COVER_IMAGE,
           author: data.author || "Admin",
           authorTitle: data.author_title || "",
           publishedAt: data.published_at,

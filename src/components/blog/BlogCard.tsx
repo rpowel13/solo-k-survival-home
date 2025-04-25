@@ -10,12 +10,13 @@ interface BlogCardProps {
   post: BlogPost;
 }
 
+// Set default image path that's guaranteed to exist
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
 
 const BlogCard = ({ post }: BlogCardProps) => {
   const formattedDate = formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true });
   
-  // Use a more reliable approach to get the cover image
+  // Normalize the image URL with a fallback
   const coverImage = post.coverImage || DEFAULT_COVER_IMAGE;
   
   return (
