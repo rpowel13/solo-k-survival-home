@@ -14,6 +14,7 @@ export function ToolsDropdown() {
   const items = [
     { href: "/tools/retirement-calculator", label: "Retirement Calculator" },
     { href: "/tools/rmd-calculator", label: "RMD Calculator" },
+    { href: "/tools/loan-calculator", label: "Loan Calculator" },
     { href: "/tools/solo-401k-calculator", label: "Solo 401k Calculator" },
   ];
 
