@@ -120,6 +120,11 @@ const mockDatabase: MockDatabase = {
   first_responder_applications: []
 };
 
+// Mock storage data for the mock client
+const mockStorageData: Record<string, Record<string, string>> = {
+  'blog-images': {}
+};
+
 // Create a proper typed mock client
 function createMockSupabaseClient() {
   console.log('Using mock Supabase client for development');
@@ -227,9 +232,62 @@ function createMockSupabaseClient() {
     return builder;
   }
   
+  // Mock storage implementation
+  const mockStorage = {
+    from: (bucketName: string) => {
+      console.log(`Mock storage operation on bucket: ${bucketName}`);
+      
+      if (!mockStorageData[bucketName]) {
+        mockStorageData[bucketName] = {};
+      }
+      
+      return {
+        upload: (filePath: string, file: any) => {
+          console.log(`Mock file upload to ${bucketName}/${filePath}`);
+          // Simulate successful upload by storing path
+          mockStorageData[bucketName][filePath] = `https://mock-storage/${bucketName}/${filePath}`;
+          return { 
+            data: { path: filePath }, 
+            error: null 
+          };
+        },
+        getPublicUrl: (filePath: string) => {
+          console.log(`Mock getting public URL for ${bucketName}/${filePath}`);
+          const publicUrl = mockStorageData[bucketName][filePath] || 
+            `https://mock-storage/${bucketName}/${filePath}`;
+          return { 
+            data: { publicUrl },
+            error: null
+          };
+        },
+        remove: (filePaths: string[]) => {
+          console.log(`Mock removing files: ${filePaths.join(', ')}`);
+          filePaths.forEach(path => {
+            delete mockStorageData[bucketName][path];
+          });
+          return {
+            data: { success: true },
+            error: null
+          };
+        },
+        list: (folderPath?: string) => {
+          console.log(`Mock listing files in ${bucketName}/${folderPath || ''}`);
+          const files = Object.keys(mockStorageData[bucketName])
+            .filter(path => !folderPath || path.startsWith(folderPath))
+            .map(path => ({ name: path }));
+          return {
+            data: files,
+            error: null
+          };
+        }
+      };
+    }
+  };
+  
   // Return the mock client with properly chained methods
   return {
     from: from,
+    storage: mockStorage,
     functions: {
       invoke: (functionName: string, { body }: { body: any }) => {
         console.log(`Mock invoke function ${functionName} with:`, body);
