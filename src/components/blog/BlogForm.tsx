@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -56,16 +55,15 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           });
           navigate("/blog");
         } else {
-          const post = data as BlogPost;
           setFormData({
-            title: post.title || "",
-            slug: post.slug || "",
-            excerpt: post.excerpt || "",
-            content: post.content || "",
-            coverImage: post.coverImage || "",
-            author: post.author || "",
-            authorTitle: post.authorTitle || "",
-            tags: post.tags ? post.tags.join(", ") : ""
+            title: data.title || "",
+            slug: data.slug || "",
+            excerpt: data.excerpt || "",
+            content: data.content || "",
+            coverImage: data.cover_image || data.coverImage || "",
+            author: data.author || "",
+            authorTitle: data.author_title || data.authorTitle || "",
+            tags: data.tags ? data.tags.join(", ") : ""
           });
         }
       } catch (error) {
@@ -99,30 +97,30 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     try {
       setIsSaving(true);
       
-      const newPost: BlogPost = {
+      const postData = {
         id: isEditMode ? slug! : crypto.randomUUID(),
         title: formData.title,
         slug: formData.slug,
         excerpt: formData.excerpt,
         content: formData.content,
-        coverImage: formData.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
+        cover_image: formData.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
         author: formData.author || "Admin",
-        authorTitle: formData.authorTitle || "Site Administrator",
-        publishedAt: new Date().toISOString(),
+        author_title: formData.authorTitle || "Site Administrator",
+        published_at: new Date().toISOString(),
         tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean)
       };
       
       if (isEditMode) {
         const { error } = await supabase
           .from('blog_posts')
-          .update(newPost)
+          .update(postData)
           .eq('slug', slug);
           
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('blog_posts')
-          .insert(newPost);
+          .insert(postData);
           
         if (error) throw error;
       }
@@ -134,7 +132,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           : "Your new blog post has been published",
       });
       
-      navigate(`/blog/${newPost.slug}`);
+      navigate(`/blog/${postData.slug}`);
     } catch (error) {
       console.error("Error saving blog post:", error);
       toast({

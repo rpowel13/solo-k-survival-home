@@ -30,7 +30,20 @@ const Blog = () => {
           });
         } else {
           console.log("Blog posts fetched:", data);
-          setBlogPosts(data as BlogPost[]);
+          // Transform data to match our BlogPost type if needed
+          const formattedPosts = data.map((post: any) => ({
+            id: post.id,
+            title: post.title,
+            slug: post.slug,
+            excerpt: post.excerpt,
+            content: post.content,
+            coverImage: post.cover_image || post.coverImage,
+            author: post.author,
+            authorTitle: post.author_title || post.authorTitle,
+            publishedAt: post.published_at || post.publishedAt,
+            tags: post.tags || []
+          }));
+          setBlogPosts(formattedPosts as BlogPost[]);
         }
       } catch (error) {
         console.error("Error fetching blog posts:", error);

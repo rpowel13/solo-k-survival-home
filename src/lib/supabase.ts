@@ -49,12 +49,11 @@ const mockBlogPosts = [
       <li>Total combined limit of $66,000 ($73,500 for those 50 and older)</li>
     </ul>
     <p>These increased limits provide an excellent opportunity to accelerate your retirement savings while enjoying valuable tax benefits.</p>`,
-    coverImage: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
+    cover_image: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070",
     author: "Jane Doe",
-    authorTitle: "Financial Advisor",
-    publishedAt: "2025-04-10T10:00:00Z",
-    tags: ["Solo 401(k)", "Retirement Planning", "Tax Strategies"],
-    pdfUrl: "https://storage.example.com/blog-pdfs/contribution-limits-2025.pdf"
+    author_title: "Financial Advisor",
+    published_at: "2025-04-10T10:00:00Z",
+    tags: ["Solo 401(k)", "Retirement Planning", "Tax Strategies"]
   },
   {
     id: "2",
@@ -70,12 +69,11 @@ const mockBlogPosts = [
       <li>Survivor benefit options</li>
       <li>Cost-of-living adjustments</li>
     </ul>`,
-    coverImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070",
+    cover_image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070",
     author: "John Smith",
-    authorTitle: "Retirement Specialist",
-    publishedAt: "2025-04-05T15:30:00Z",
-    tags: ["First Responders", "Pension Plans", "Early Retirement"],
-    pdfUrl: "https://storage.example.com/blog-pdfs/first-responders-retirement.pdf"
+    author_title: "Retirement Specialist",
+    published_at: "2025-04-05T15:30:00Z",
+    tags: ["First Responders", "Pension Plans", "Early Retirement"]
   },
   {
     id: "3",
@@ -90,18 +88,17 @@ const mockBlogPosts = [
       <li>Compounding occurs on the full investment amount without annual tax drags</li>
       <li>More of your money stays invested, working for your future</li>
     </ul>`,
-    coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2026",
+    cover_image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=2026",
     author: "Sarah Johnson",
-    authorTitle: "Tax Planning Expert",
-    publishedAt: "2025-04-01T09:15:00Z",
-    tags: ["Tax Planning", "Self-Directed IRA", "Investment Strategy"],
-    pdfUrl: "https://storage.example.com/blog-pdfs/tax-advantages.pdf"
+    author_title: "Tax Planning Expert",
+    published_at: "2025-04-01T09:15:00Z",
+    tags: ["Tax Planning", "Self-Directed IRA", "Investment Strategy"]
   }
 ];
 
 // Define type for our mock database
 interface MockDatabase {
-  blog_posts: BlogPost[];
+  blog_posts: any[];
   solo401k_applications: any[];
   contacts: any[];
   scheduled_consultations: any[];
@@ -151,7 +148,7 @@ function createMockSupabaseClient() {
       order: function(column: string, { ascending = true } = {}) {
         console.log(`Mock order by ${column} ${ascending ? 'ASC' : 'DESC'}`);
         
-        const sortedData = [...this.data].sort((a, b) => {
+        const sortedData = [...this.data].sort((a: any, b: any) => {
           if (ascending) {
             return a[column] < b[column] ? -1 : a[column] > b[column] ? 1 : 0;
           } else {
@@ -223,23 +220,38 @@ function createMockSupabaseClient() {
       // Insert records
       insert: function(data: any) {
         console.log(`Mock insert:`, data);
+        
+        // Handle both arrays and single objects
         const newData = Array.isArray(data) ? data : [data];
         
-        // Ensure each record has an ID
-        const recordsWithIds = newData.map((record) => ({
-          ...record,
-          id: record.id || crypto.randomUUID()
-        }));
+        // Map Supabase field names to our mock database field names if needed
+        const formattedData = newData.map(record => {
+          const formattedRecord = { ...record };
+          
+          // Field name mapping for blog posts
+          if (table === 'blog_posts') {
+            if (record.coverImage) formattedRecord.cover_image = record.coverImage;
+            if (record.authorTitle) formattedRecord.author_title = record.authorTitle;
+            if (record.publishedAt) formattedRecord.published_at = record.publishedAt;
+          }
+          
+          // Ensure each record has an ID
+          if (!formattedRecord.id) {
+            formattedRecord.id = crypto.randomUUID();
+          }
+          
+          return formattedRecord;
+        });
         
         // Add to mock database
-        mockDatabase[table] = [...mockDatabase[table], ...recordsWithIds];
+        mockDatabase[table] = [...mockDatabase[table], ...formattedData];
         
         return { 
-          data: recordsWithIds, 
+          data: formattedData, 
           error: null,
           select: function() {
             return { 
-              data: recordsWithIds, 
+              data: formattedData, 
               error: null 
             };
           } 
