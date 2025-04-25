@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CreditCard, DollarSign, ShieldCheck, Info, ArrowLeft } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { CreditCard, DollarSign, ShieldCheck, Info, ArrowLeft, BadgePercent } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,10 +28,19 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({
 }) => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [discountCode, setDiscountCode] = useState('');
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
 
   const handlePayment = () => {
-    // In a real implementation, you would redirect to the payment gateway
-    window.open(paymentLink, '_blank');
+    // Calculate discounted amount if discount is applied
+    const finalAmount = isDiscountApplied ? Math.floor(amount * 0.9) : amount;
+    
+    // Update payment link with new amount if discount is applied
+    const updatedPaymentLink = isDiscountApplied 
+      ? paymentLink.replace(/amount=\d+/, `amount=${finalAmount}`)
+      : paymentLink;
+    
+    window.open(updatedPaymentLink, '_blank');
     
     toast({
       title: "Payment Initiated",
@@ -39,7 +49,23 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({
   };
 
   const handleGoBack = () => {
-    navigate(-1); // Go back to the previous page in history
+    navigate(-1);
+  };
+
+  const handleDiscountCode = () => {
+    if (discountCode.trim() === '1stDC' && !isDiscountApplied) {
+      setIsDiscountApplied(true);
+      toast({
+        title: "Discount Applied!",
+        description: "10% discount has been applied to your payment.",
+      });
+    } else if (discountCode.trim() !== '1stDC') {
+      toast({
+        title: "Invalid Code",
+        description: "Please enter a valid discount code.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -74,9 +100,42 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({
             
             <CardContent className="pt-6 pb-4">
               <div className="text-center mb-6">
-                <p className="text-4xl font-bold text-survival-800">${amount}</p>
+                <div className="relative inline-block">
+                  <p className={`text-4xl font-bold ${isDiscountApplied ? 'line-through text-gray-400' : 'text-survival-800'}`}>
+                    ${amount}
+                  </p>
+                  {isDiscountApplied && (
+                    <p className="text-4xl font-bold text-survival-800 mt-2">
+                      ${Math.floor(amount * 0.9)}
+                    </p>
+                  )}
+                </div>
                 {paymentType.includes('Annual') && (
                   <p className="text-sm text-gray-500">per year</p>
+                )}
+              </div>
+
+              <div className="mb-6">
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Enter discount code"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                    className="flex-grow"
+                  />
+                  <Button 
+                    onClick={handleDiscountCode}
+                    variant="outline"
+                    className="whitespace-nowrap"
+                    disabled={isDiscountApplied}
+                  >
+                    <BadgePercent className="mr-2 h-4 w-4" />
+                    Apply Code
+                  </Button>
+                </div>
+                {isDiscountApplied && (
+                  <p className="text-sm text-green-600 mt-2">10% discount applied!</p>
                 )}
               </div>
               
