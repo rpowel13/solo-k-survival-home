@@ -4,7 +4,7 @@ import { ServiceDropdown } from "./ServiceDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
 import { PaymentDropdown } from "./PaymentDropdown";
-import { FileText, Home, Contact, Services, Applications, Payments, Tools } from "lucide-react";
+import { FileText, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench } from "lucide-react";
 
 export const DesktopNav = () => {
   return (

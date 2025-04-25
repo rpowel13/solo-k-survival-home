@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact } from "lucide-react";
+import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface MobileNavProps {
@@ -67,7 +68,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
                   <div className="flex items-center">
-                    <Services className="h-4 w-4 mr-1" />
+                    <BookOpen className="h-4 w-4 mr-1" />
                     <span>Services</span>
                   </div>
                   {openSubmenu === 'services' ? (
@@ -117,7 +118,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
                   <div className="flex items-center">
-                    <Applications className="h-4 w-4 mr-1" />
+                    <FolderInput className="h-4 w-4 mr-1" />
                     <span>Applications</span>
                   </div>
                   {openSubmenu === 'applications' ? (
@@ -167,7 +168,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
                   <div className="flex items-center">
-                    <Payments className="h-4 w-4 mr-1" />
+                    <CreditCard className="h-4 w-4 mr-1" />
                     <span>Payments</span>
                   </div>
                   {openSubmenu === 'payments' ? (
@@ -224,7 +225,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
                   <div className="flex items-center">
-                    <Tools className="h-4 w-4 mr-1" />
+                    <Wrench className="h-4 w-4 mr-1" />
                     <span>Tools</span>
                   </div>
                   {openSubmenu === 'tools' ? (
