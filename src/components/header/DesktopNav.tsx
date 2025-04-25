@@ -17,15 +17,9 @@ export const DesktopNav = () => {
         Home
       </Link>
       <ServiceDropdown />
-      <ToolsDropdown />
       <ApplicationDropdown />
       <PaymentDropdown />
-      <Link 
-        to="/contact" 
-        className="text-gray-700 hover:text-survival-600 transition"
-      >
-        Contact
-      </Link>
+      <ToolsDropdown />
       <Link 
         to="/articles" 
         className="text-gray-700 hover:text-survival-600 transition flex items-center"

@@ -101,54 +101,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 )}
               </div>
               
-              {/* Tools */}
-              <div>
-                <button 
-                  onClick={() => toggleSubmenu('tools')}
-                  className="flex items-center justify-between w-full mb-2 font-medium"
-                >
-                  <span>Tools</span>
-                  {openSubmenu === 'tools' ? (
-                    <ChevronDown className="h-5 w-5" />
-                  ) : (
-                    <ChevronRight className="h-5 w-5" />
-                  )}
-                </button>
-                
-                {openSubmenu === 'tools' && (
-                  <div className="pl-4 space-y-3 mb-4">
-                    <Link 
-                      to="/tools/retirement-calculator" 
-                      className="block text-gray-600 hover:text-survival-600"
-                      onClick={onClose}
-                    >
-                      Retirement Calculator
-                    </Link>
-                    <Link 
-                      to="/tools/rmd-calculator" 
-                      className="block text-gray-600 hover:text-survival-600"
-                      onClick={onClose}
-                    >
-                      RMD Calculator
-                    </Link>
-                    <Link 
-                      to="/tools/loan-calculator" 
-                      className="block text-gray-600 hover:text-survival-600"
-                      onClick={onClose}
-                    >
-                      Loan Calculator
-                    </Link>
-                    <Link 
-                      to="/tools/solo-401k-calculator" 
-                      className="block text-gray-600 hover:text-survival-600"
-                      onClick={onClose}
-                    >
-                      Solo 401(k) Calculator
-                    </Link>
-                  </div>
-                )}
-              </div>
-              
               {/* Applications */}
               <div>
                 <button 
@@ -252,15 +204,56 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 )}
               </div>
               
+              {/* Tools */}
+              <div>
+                <button 
+                  onClick={() => toggleSubmenu('tools')}
+                  className="flex items-center justify-between w-full mb-2 font-medium"
+                >
+                  <span>Tools</span>
+                  {openSubmenu === 'tools' ? (
+                    <ChevronDown className="h-5 w-5" />
+                  ) : (
+                    <ChevronRight className="h-5 w-5" />
+                  )}
+                </button>
+                
+                {openSubmenu === 'tools' && (
+                  <div className="pl-4 space-y-3 mb-4">
+                    <Link 
+                      to="/tools/retirement-calculator" 
+                      className="block text-gray-600 hover:text-survival-600"
+                      onClick={onClose}
+                    >
+                      Retirement Calculator
+                    </Link>
+                    <Link 
+                      to="/tools/rmd-calculator" 
+                      className="block text-gray-600 hover:text-survival-600"
+                      onClick={onClose}
+                    >
+                      RMD Calculator
+                    </Link>
+                    <Link 
+                      to="/tools/loan-calculator" 
+                      className="block text-gray-600 hover:text-survival-600"
+                      onClick={onClose}
+                    >
+                      Loan Calculator
+                    </Link>
+                    <Link 
+                      to="/tools/solo-401k-calculator" 
+                      className="block text-gray-600 hover:text-survival-600"
+                      onClick={onClose}
+                    >
+                      Solo 401(k) Calculator
+                    </Link>
+                  </div>
+                )}
+              </div>
+              
               {/* Main Nav Links */}
               <div className="space-y-3 pt-2 border-t">
-                <Link 
-                  to="/contact" 
-                  className="block font-medium hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Contact
-                </Link>
                 <Link 
                   to="/articles" 
                   className="block font-medium hover:text-survival-600 flex items-center"
