@@ -26,20 +26,36 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       return;
     }
 
+    // Maximum file size (5MB)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      toast({
+        title: "File too large",
+        description: "Please upload an image smaller than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsUploading(true);
     try {
+      // Create a unique filename
       const fileExt = file.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      
+      // Upload the file to Supabase Storage
       const { error: uploadError, data } = await supabase.storage
         .from('blog-images')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
+      // Get the public URL for the uploaded file
       const { data: { publicUrl } } = supabase.storage
         .from('blog-images')
         .getPublicUrl(fileName);
 
+      // Send the URL back to the parent component
       onUploadComplete(publicUrl);
       
       toast({
@@ -50,11 +66,14 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       console.error('Error uploading image:', error);
       toast({
         title: "Upload failed",
-        description: "There was an error uploading your image",
+        description: "There was an error uploading your image. Please try again.",
         variant: "destructive",
       });
     } finally {
       setIsUploading(false);
+      // Reset the input value so the same file can be selected again if needed
+      const input = document.getElementById('image-upload') as HTMLInputElement;
+      if (input) input.value = '';
     }
   };
 

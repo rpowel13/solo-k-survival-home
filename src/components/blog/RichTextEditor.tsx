@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
   Bold, Italic, List, Image as ImageIcon,
@@ -25,6 +25,26 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
     if (url) {
       handleFormat('createLink', url);
     }
+  };
+
+  // Initialize content when it changes externally
+  useEffect(() => {
+    const editorElement = document.querySelector('[contenteditable="true"]');
+    if (editorElement && editorElement.innerHTML !== content) {
+      editorElement.innerHTML = content;
+    }
+  }, [content]);
+
+  // Handle paste event to allow pasting text
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    // Get text content from clipboard
+    const text = e.clipboardData.getData('text/plain');
+    // Insert at cursor position using execCommand
+    document.execCommand('insertText', false, text);
+    // Update content after paste
+    const newContent = document.querySelector('[contenteditable="true"]')?.innerHTML || '';
+    onChange(newContent);
   };
 
   return (
@@ -116,6 +136,7 @@ export const RichTextEditor = ({ content, onChange, onImageClick }: RichTextEdit
         contentEditable
         dangerouslySetInnerHTML={{ __html: content }}
         onInput={(e) => onChange(e.currentTarget.innerHTML)}
+        onPaste={handlePaste}
       />
     </div>
   );

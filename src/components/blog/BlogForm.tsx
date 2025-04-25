@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -57,14 +58,14 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
         } else {
           const post = data as BlogPost;
           setFormData({
-            title: post.title,
-            slug: post.slug,
-            excerpt: post.excerpt,
-            content: post.content,
-            coverImage: post.coverImage,
-            author: post.author,
-            authorTitle: post.authorTitle,
-            tags: post.tags.join(", ")
+            title: post.title || "",
+            slug: post.slug || "",
+            excerpt: post.excerpt || "",
+            content: post.content || "",
+            coverImage: post.coverImage || "",
+            author: post.author || "",
+            authorTitle: post.authorTitle || "",
+            tags: post.tags ? post.tags.join(", ") : ""
           });
         }
       } catch (error) {
@@ -150,12 +151,20 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     if (showImageUpload) {
       setFormData(prev => ({ ...prev, coverImage: url }));
       setShowImageUpload(false);
+      toast({
+        title: "Cover image uploaded",
+        description: "The cover image has been uploaded successfully",
+      });
     } else {
-      const imageTag = `<img src="${url}" alt="Blog content image" class="my-4 rounded-lg" />`;
+      const imageTag = `<img src="${url}" alt="Blog content image" class="my-4 rounded-lg w-full max-w-full" />`;
       setFormData(prev => ({
         ...prev,
         content: prev.content + imageTag
       }));
+      toast({
+        title: "Image inserted",
+        description: "The image has been inserted into the content",
+      });
     }
   };
 
@@ -247,13 +256,45 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
               <div className="space-y-2">
                 <label className="block text-base font-medium">Cover Image</label>
                 {formData.coverImage && (
-                  <img 
-                    src={formData.coverImage} 
-                    alt="Cover preview" 
-                    className="w-full h-48 object-cover rounded-lg mb-2"
-                  />
+                  <div className="relative mb-4 border rounded-lg overflow-hidden">
+                    <img 
+                      src={formData.coverImage} 
+                      alt="Cover preview" 
+                      className="w-full h-48 object-cover"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={() => setFormData(prev => ({ ...prev, coverImage: "" }))}
+                    >
+                      Remove
+                    </Button>
+                  </div>
                 )}
-                <ImageUpload onUploadComplete={handleImageUploadComplete} />
+                <Button
+                  type="button" 
+                  variant="outline"
+                  onClick={() => setShowImageUpload(true)}
+                >
+                  {formData.coverImage ? "Change Cover Image" : "Set Cover Image"}
+                </Button>
+                {showImageUpload && (
+                  <div className="mt-2 p-4 border rounded-lg bg-gray-50">
+                    <h4 className="text-sm font-medium mb-2">Upload Cover Image</h4>
+                    <ImageUpload onUploadComplete={handleImageUploadComplete} />
+                    <Button 
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="mt-2"
+                      onClick={() => setShowImageUpload(false)}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
