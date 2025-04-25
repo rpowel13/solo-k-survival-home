@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -55,6 +56,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           });
           navigate("/blog");
         } else {
+          console.log("Fetched post data:", data);
           setFormData({
             title: data.title || "",
             slug: data.slug || "",
@@ -109,6 +111,8 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
         published_at: new Date().toISOString(),
         tags: formData.tags.split(",").map(tag => tag.trim()).filter(Boolean)
       };
+      
+      console.log("Saving post data:", postData);
       
       if (isEditMode) {
         const { error } = await supabase

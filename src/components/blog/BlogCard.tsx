@@ -12,15 +12,24 @@ interface BlogCardProps {
 
 const BlogCard = ({ post }: BlogCardProps) => {
   const formattedDate = formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true });
+  
+  // Use a default cover image if none is provided
+  const coverImage = post.coverImage || "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
 
   return (
     <Link to={`/blog/${post.slug}`} className="block h-full transition-transform hover:translate-y-[-4px]">
       <Card className="h-full overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
         <div className="relative h-48 overflow-hidden">
           <img 
-            src={post.coverImage} 
+            src={coverImage} 
             alt={post.title}
             className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              console.error(`Failed to load image: ${target.src}`);
+              target.src = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+              target.onerror = null; // Prevent infinite loop if default image also fails
+            }}
           />
         </div>
         <CardHeader className="p-4 pb-0">

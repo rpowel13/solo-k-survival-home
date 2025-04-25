@@ -37,12 +37,15 @@ const Blog = () => {
             slug: post.slug,
             excerpt: post.excerpt,
             content: post.content,
-            coverImage: post.cover_image || post.coverImage,
+            coverImage: post.cover_image || post.coverImage || "",
             author: post.author,
             authorTitle: post.author_title || post.authorTitle,
             publishedAt: post.published_at || post.publishedAt,
             tags: post.tags || []
           }));
+          
+          // Log formatted posts to see if coverImage is present
+          console.log("Formatted posts:", formattedPosts);
           setBlogPosts(formattedPosts as BlogPost[]);
         }
       } catch (error) {
