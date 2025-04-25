@@ -285,16 +285,22 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   <Contact className="h-4 w-4 mr-1" />
                   Contact
                 </Link>
-                <a 
-                  href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="block font-medium hover:text-survival-600 flex items-center"
+                <Button 
+                  variant="outline"
+                  asChild
+                  className="w-full"
                   onClick={onClose}
                 >
-                  <LogIn className="h-4 w-4 mr-1" />
-                  Client Portal
-                </a>
+                  <a 
+                    href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center justify-center"
+                  >
+                    <LogIn className="h-4 w-4 mr-1" />
+                    Portal
+                  </a>
+                </Button>
               </div>
             </div>
           </div>

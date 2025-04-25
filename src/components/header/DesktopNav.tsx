@@ -1,10 +1,10 @@
-
 import { Link } from "react-router-dom";
 import { ServiceDropdown } from "./ServiceDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
 import { ApplicationDropdown } from "./ApplicationDropdown";
 import { PaymentDropdown } from "./PaymentDropdown";
 import { FileText, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench, LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const DesktopNav = () => {
   return (
@@ -34,15 +34,20 @@ export const DesktopNav = () => {
         <Contact className="h-4 w-4 mr-1" />
         Contact
       </Link>
-      <a 
-        href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="text-gray-700 hover:text-survival-600 transition flex items-center"
+      <Button 
+        variant="outline"
+        asChild
       >
-        <LogIn className="h-4 w-4 mr-1" />
-        Client Portal
-      </a>
+        <a 
+          href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="flex items-center"
+        >
+          <LogIn className="h-4 w-4 mr-1" />
+          Portal
+        </a>
+      </Button>
     </nav>
   );
 };
