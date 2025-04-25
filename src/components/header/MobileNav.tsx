@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench } from "lucide-react";
+import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface MobileNavProps {
@@ -286,6 +285,16 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   <Contact className="h-4 w-4 mr-1" />
                   Contact
                 </Link>
+                <a 
+                  href="https://live.vcita.com/site/izk040b42jnjcf3c/activity/dashboard" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="block font-medium hover:text-survival-600 flex items-center"
+                  onClick={onClose}
+                >
+                  <LogIn className="h-4 w-4 mr-1" />
+                  Client Portal
+                </a>
               </div>
             </div>
           </div>
