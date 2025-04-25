@@ -21,12 +21,12 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
   };
 
   return (
-    <div className="lg:hidden">
+    <div>
       {/* Portal Button - Always visible */}
       <Button
         variant="ghost"
         size="icon"
-        className="fixed top-4 right-4 z-50 lg:hidden"
+        className="fixed top-4 right-4 z-50"
         onClick={onClose}
         aria-label="Toggle menu"
       >
@@ -289,3 +289,4 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
     </div>
   );
 };
+
