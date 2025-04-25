@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { X, Menu, ChevronDown, ChevronRight, FileText } from "lucide-react";
+import { X, Menu, ChevronDown, ChevronRight, FileText, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface MobileNavProps {
@@ -43,6 +42,17 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
             </div>
             
             <div className="p-4 space-y-6">
+              <div className="space-y-3 border-b pb-4">
+                <Link 
+                  to="/" 
+                  className="block font-medium hover:text-survival-600 flex items-center"
+                  onClick={onClose}
+                >
+                  <Home className="h-4 w-4 mr-1" />
+                  Home
+                </Link>
+              </div>
+              
               {/* Services */}
               <div>
                 <button 
