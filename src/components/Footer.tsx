@@ -1,128 +1,67 @@
 
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, Edit } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="container mx-auto py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
-          {/* Company Info */}
-          <div className="text-center sm:text-left">
-            <h3 className="text-white text-lg font-semibold mb-4">Survival 401k</h3>
-            <p className="mb-4 text-sm text-gray-400">
-              Providing customized Solo 401(k) solutions for self-employed professionals and small business owners since 2014.
+    <footer className="bg-gray-900 text-white">
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="md:col-span-2">
+            <h2 className="font-bold text-xl mb-4">Survival Retirement</h2>
+            <p className="text-gray-300 mb-4 max-w-md">
+              Empowering retirement with non-traditional investment strategies for first responders, entrepreneurs, and independent thinkers.
             </p>
-            <div className="flex justify-center sm:justify-start space-x-4 mb-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram size={20} />
-              </a>
+            <div className="flex space-x-4">
+              <Link to="#" className="text-white hover:text-survival-400">
+                <span className="sr-only">Facebook</span>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
+                </svg>
+              </Link>
+              <Link to="#" className="text-white hover:text-survival-400">
+                <span className="sr-only">Twitter</span>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                </svg>
+              </Link>
+              <Link to="#" className="text-white hover:text-survival-400">
+                <span className="sr-only">LinkedIn</span>
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm12.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" />
+                </svg>
+              </Link>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="text-center sm:text-left">
-            <h3 className="text-white text-lg font-semibold mb-4">Quick Links</h3>
+          <div>
+            <h3 className="font-bold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
-              <li><a href="#benefits" className="text-gray-400 hover:text-white transition-colors">Benefits</a></li>
-              <li><a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-              <li><a href="#comparison" className="text-gray-400 hover:text-white transition-colors">Plan Comparison</a></li>
-              <li><a href="#faq" className="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+              <li><Link to="/services/solo-401k" className="text-gray-300 hover:text-white">Solo 401(k)</Link></li>
+              <li><Link to="/services/llc-creation" className="text-gray-300 hover:text-white">LLC Creation</Link></li>
+              <li><Link to="/services/first-responder-package" className="text-gray-300 hover:text-white">First Responder Package</Link></li>
+              <li><Link to="/services/alternative-investments" className="text-gray-300 hover:text-white">Alternative Investments</Link></li>
+              <li><Link to="/articles" className="text-gray-300 hover:text-white">Articles</Link></li>
+              <li><Link to="/contact" className="text-gray-300 hover:text-white">Contact Us</Link></li>
             </ul>
           </div>
 
-          {/* Resources */}
-          <div className="text-center sm:text-left">
-            <h3 className="text-white text-lg font-semibold mb-4">Resources</h3>
+          <div>
+            <h3 className="font-bold text-lg mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li><Link to="/tools/retirement-calculator" className="text-gray-400 hover:text-white transition-colors">Retirement Calculator</Link></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Tax Guides</a></li>
-              <li>
-                <Link 
-                  to="/services/alternative-investments#top" 
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  Investment Options
-                </Link>
-              </li>
-              <li><Link to="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Webinars</a></li>
+              <li><Link to="/tools/retirement-calculator" className="text-gray-300 hover:text-white">Retirement Calculator</Link></li>
+              <li><Link to="/tools/loan-calculator" className="text-gray-300 hover:text-white">Loan Calculator</Link></li>
+              <li><Link to="/tools/rmd-calculator" className="text-gray-300 hover:text-white">RMD Calculator</Link></li>
+              <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white">Privacy Policy</Link></li>
+              <li><Link to="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</Link></li>
+              <li><Link to="/legal-disclosures" className="text-gray-300 hover:text-white">Legal Disclosures</Link></li>
             </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div className="text-center sm:text-left">
-            <h3 className="text-white text-lg font-semibold mb-4">Contact Us</h3>
-            <div className="space-y-3">
-              <li className="flex items-start justify-center sm:justify-start">
-                <Phone className="h-5 w-5 mr-3 text-gray-400 mt-0.5" />
-                <span>(833) 224-5517</span>
-              </li>
-              <li className="flex items-start justify-center sm:justify-start">
-                <Mail className="h-5 w-5 mr-3 text-gray-400 mt-0.5" />
-                <span>info@survival401k.com</span>
-              </li>
-              <li className="mt-4 pt-4 border-t border-gray-700">
-                <div className="flex flex-col items-center sm:items-start space-y-2">
-                  <a 
-                    href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke&staff=sdpi7niilv7t6k07" 
-                    target="blank" 
-                    data-id="livesite-widget" 
-                    className="livesite-schedule text-survival-400 hover:text-survival-300 font-medium cursor-pointer text-center sm:text-left"
-                    data-service="mscylmpg3ioi58ke" 
-                    data-staff="sdpi7niilv7t6k07"
-                  >
-                    Schedule a Free Consultation
-                  </a>
-                  <a 
-                    href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=ry5n8z8s16pz3wqj&staff=onp5y3ueog3kdoly" 
-                    target="blank" 
-                    data-id="livesite-widget" 
-                    className="flex items-center justify-center sm:justify-start text-survival-400 hover:text-survival-300 font-medium cursor-pointer"
-                    data-service="ry5n8z8s16pz3wqj" 
-                    data-staff="onp5y3ueog3kdoly"
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    Update my Account
-                  </a>
-                </div>
-              </li>
-            </div>
           </div>
         </div>
-
-        {/* Bottom Footer with Legal Links */}
-        <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-6 sm:pt-8">
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-4 sm:mb-6 px-2">
-            <Link to="/terms-of-service" className="text-gray-300 hover:text-white transition-colors font-medium text-sm sm:text-base">
-              Terms of Service
-            </Link>
-            <Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors font-medium text-sm sm:text-base">
-              Privacy Policy
-            </Link>
-            <Link to="/legal-disclosures" className="text-gray-300 hover:text-white transition-colors font-medium text-sm sm:text-base">
-              Legal Disclosures
-            </Link>
-          </div>
-          
-          <p className="text-xs sm:text-sm text-center text-gray-500 px-2">
-            &copy; {new Date().getFullYear()} Survival 401k. All rights reserved.
-          </p>
-          
-          <p className="mt-4 max-w-2xl mx-auto text-xs sm:text-sm text-center text-gray-500 px-4">
-            The information provided is for general informational purposes only and should not be considered legal or tax advice. 
-            Consult with a qualified professional regarding your specific situation.
-          </p>
+        
+        <div className="border-t border-gray-800 mt-12 pt-8 text-sm text-gray-400 text-center">
+          <p>&copy; {currentYear} Survival Retirement. All rights reserved.</p>
         </div>
       </div>
     </footer>
