@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { X, Menu, ChevronDown, ChevronRight, FileText, Home, Contact } from "lucide-react";
@@ -22,7 +21,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
 
   return (
     <div>
-      {/* Portal Button - Always visible */}
       <Button
         variant="ghost"
         size="icon"
@@ -33,7 +31,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
         {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </Button>
 
-      {/* Mobile Navigation Menu */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/60 z-50" onClick={onClose}>
           <div 
@@ -64,13 +61,15 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 </Link>
               </div>
               
-              {/* Services */}
               <div>
                 <button 
                   onClick={() => toggleSubmenu('services')}
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
-                  <span>Services</span>
+                  <div className="flex items-center">
+                    <Services className="h-4 w-4 mr-1" />
+                    <span>Services</span>
+                  </div>
                   {openSubmenu === 'services' ? (
                     <ChevronDown className="h-5 w-5" />
                   ) : (
@@ -112,13 +111,15 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 )}
               </div>
               
-              {/* Applications */}
               <div>
                 <button 
                   onClick={() => toggleSubmenu('applications')}
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
-                  <span>Applications</span>
+                  <div className="flex items-center">
+                    <Applications className="h-4 w-4 mr-1" />
+                    <span>Applications</span>
+                  </div>
                   {openSubmenu === 'applications' ? (
                     <ChevronDown className="h-5 w-5" />
                   ) : (
@@ -160,13 +161,15 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 )}
               </div>
               
-              {/* Payments */}
               <div>
                 <button 
                   onClick={() => toggleSubmenu('payments')}
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
-                  <span>Payments</span>
+                  <div className="flex items-center">
+                    <Payments className="h-4 w-4 mr-1" />
+                    <span>Payments</span>
+                  </div>
                   {openSubmenu === 'payments' ? (
                     <ChevronDown className="h-5 w-5" />
                   ) : (
@@ -215,13 +218,15 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 )}
               </div>
               
-              {/* Tools */}
               <div>
                 <button 
                   onClick={() => toggleSubmenu('tools')}
                   className="flex items-center justify-between w-full mb-2 font-medium"
                 >
-                  <span>Tools</span>
+                  <div className="flex items-center">
+                    <Tools className="h-4 w-4 mr-1" />
+                    <span>Tools</span>
+                  </div>
                   {openSubmenu === 'tools' ? (
                     <ChevronDown className="h-5 w-5" />
                   ) : (
@@ -263,7 +268,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                 )}
               </div>
               
-              {/* Main Nav Links */}
               <div className="space-y-3 pt-2 border-t">
                 <Link 
                   to="/articles" 
@@ -289,4 +293,3 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
     </div>
   );
 };
-
