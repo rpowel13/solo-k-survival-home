@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -43,8 +42,8 @@ const Footer = () => {
                   info@survival401k.com
                 </a>
               </li>
-              <li><Link to="/schedule" className="text-gray-300 hover:text-white">Schedule a Free Consultation</Link></li>
-              <li><Link to="/account" className="text-gray-300 hover:text-white">Update my Account</Link></li>
+              <li><Link to="/schedule" className="text-blue-500 hover:text-blue-400">Schedule a Free Consultation</Link></li>
+              <li><Link to="/account" className="text-blue-500 hover:text-blue-400">Update my Account</Link></li>
             </ul>
           </div>
         </div>
