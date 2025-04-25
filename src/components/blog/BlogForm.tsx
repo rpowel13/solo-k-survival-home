@@ -1,14 +1,13 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { ArrowLeft, Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BlogPost } from "@/types/blog";
 import { supabase } from "@/lib/supabase";
+import { ImageUpload } from "./ImageUpload";
+import { RichTextEditor } from "./RichTextEditor";
+import { ArrowLeft, Save } from "lucide-react";
 
 interface BlogFormProps {
   onLogout: () => void;
@@ -33,6 +32,7 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
   
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -117,17 +117,13 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           .update(newPost)
           .eq('slug', slug);
           
-        if (error) {
-          throw new Error(error.message);
-        }
+        if (error) throw error;
       } else {
         const { error } = await supabase
           .from('blog_posts')
           .insert(newPost);
           
-        if (error) {
-          throw new Error(error.message);
-        }
+        if (error) throw error;
       }
       
       toast({
@@ -150,24 +146,15 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    if (name === "title" && !isEditMode && formData.slug === "") {
-      const generatedSlug = value
-        .toLowerCase()
-        .replace(/[^\w\s]/g, "")
-        .replace(/\s+/g, "-");
-      
-      setFormData(prev => ({
-        ...prev,
-        [name]: value,
-        slug: generatedSlug
-      }));
+  const handleImageUploadComplete = (url: string) => {
+    if (showImageUpload) {
+      setFormData(prev => ({ ...prev, coverImage: url }));
+      setShowImageUpload(false);
     } else {
+      const imageTag = `<img src="${url}" alt="Blog content image" class="my-4 rounded-lg" />`;
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        content: prev.content + imageTag
       }));
     }
   };
@@ -219,12 +206,21 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
           <div className="max-w-3xl mx-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-base">Title *</Label>
+                <label htmlFor="title" className="block text-base font-medium">Title *</label>
                 <Input 
                   id="title"
                   name="title"
                   value={formData.title}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setFormData(prev => ({
+                      ...prev,
+                      title: value,
+                      slug: !isEditMode && prev.slug === "" 
+                        ? value.toLowerCase().replace(/[^\w\s]/g, "").replace(/\s+/g, "-")
+                        : prev.slug
+                    }));
+                  }}
                   required
                   placeholder="Enter blog post title"
                   className="text-lg"
@@ -232,14 +228,14 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="slug" className="text-base">URL Slug *</Label>
+                <label htmlFor="slug" className="block text-base font-medium">URL Slug *</label>
                 <div className="flex items-center space-x-2">
                   <span className="text-gray-500">/blog/</span>
                   <Input 
                     id="slug"
                     name="slug"
                     value={formData.slug}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                     required
                     placeholder="url-friendly-slug"
                     className="flex-1"
@@ -249,74 +245,72 @@ const BlogForm = ({ onLogout }: BlogFormProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="excerpt" className="text-base">Excerpt/Summary *</Label>
-                <Textarea 
+                <label className="block text-base font-medium">Cover Image</label>
+                {formData.coverImage && (
+                  <img 
+                    src={formData.coverImage} 
+                    alt="Cover preview" 
+                    className="w-full h-48 object-cover rounded-lg mb-2"
+                  />
+                )}
+                <ImageUpload onUploadComplete={handleImageUploadComplete} />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="excerpt" className="block text-base font-medium">Excerpt/Summary *</label>
+                <Input
                   id="excerpt"
                   name="excerpt"
                   value={formData.excerpt}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
                   required
                   placeholder="Brief summary of the article (1-2 sentences)"
-                  className="resize-none h-20"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="content" className="text-base">Content *</Label>
-                <Textarea 
-                  id="content"
-                  name="content"
-                  value={formData.content}
-                  onChange={handleChange}
-                  required
-                  placeholder="Write your blog post content here..."
-                  className="min-h-[400px] resize-y"
+                <label className="block text-base font-medium">Content *</label>
+                <RichTextEditor
+                  content={formData.content}
+                  onChange={(content) => setFormData(prev => ({ ...prev, content }))}
+                  onImageClick={() => {
+                    const input = document.getElementById('image-upload') as HTMLInputElement;
+                    if (input) input.click();
+                  }}
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="coverImage" className="text-base">Cover Image URL</Label>
-                <Input 
-                  id="coverImage"
-                  name="coverImage"
-                  value={formData.coverImage}
-                  onChange={handleChange}
-                  placeholder="https://example.com/image.jpg"
-                />
-                <p className="text-sm text-gray-500">Enter a URL for the blog post featured image</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="author" className="text-base">Author Name</Label>
+                  <label htmlFor="author" className="block text-base font-medium">Author Name</label>
                   <Input 
                     id="author"
                     name="author"
                     value={formData.author}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
                     placeholder="Author name"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="authorTitle" className="text-base">Author Title</Label>
+                  <label htmlFor="authorTitle" className="block text-base font-medium">Author Title</label>
                   <Input 
                     id="authorTitle"
                     name="authorTitle"
                     value={formData.authorTitle}
-                    onChange={handleChange}
+                    onChange={(e) => setFormData(prev => ({ ...prev, authorTitle: e.target.value }))}
                     placeholder="e.g., Financial Advisor"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="tags" className="text-base">Tags</Label>
+                <label htmlFor="tags" className="block text-base font-medium">Tags</label>
                 <Input 
                   id="tags"
                   name="tags"
                   value={formData.tags}
-                  onChange={handleChange}
+                  onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
                   placeholder="Tag1, Tag2, Tag3"
                 />
                 <p className="text-sm text-gray-500">Separate tags with commas</p>
