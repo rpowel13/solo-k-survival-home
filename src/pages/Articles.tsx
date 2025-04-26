@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import WhyChooseSection from "@/components/solo401k/WhyChooseSection";
 import ArticleBenefitsEditor from "@/components/articles/ArticleBenefitsEditor";
+import AdminAuth from "@/components/admin/AdminAuth";
+import { useAdminAuth } from "@/components/admin/AdminAuth";
 
 // Default benefits to display
 const defaultArticleBenefits = [
@@ -19,6 +21,7 @@ const defaultArticleBenefits = [
 const Articles = () => {
   const [benefits, setBenefits] = useState(defaultArticleBenefits);
   const { toast } = useToast();
+  const { isAuthenticated } = useAdminAuth();
 
   const handleSaveBenefits = (values: { title: string; subtitle: string; benefits: string[] }) => {
     setBenefits(values.benefits);
@@ -52,18 +55,18 @@ const Articles = () => {
               maxCards={6}
             />
             
-            <div className="max-w-4xl mx-auto">
-              <ArticleBenefitsEditor
-                initialTitle="Financial Resource Highlights"
-                initialSubtitle="Explore our key resources designed to help you navigate personal and business finances"
-                initialBenefits={benefits.map(text => ({ text }))}
-                onSave={(newBenefits) => handleSaveBenefits({
-                  title: "Financial Resource Highlights",
-                  subtitle: "Explore our key resources designed to help you navigate personal and business finances",
-                  benefits: newBenefits.map(b => b.text)
-                })}
-              />
-            </div>
+            {isAuthenticated && (
+              <AdminAuth>
+                <div className="max-w-4xl mx-auto">
+                  <ArticleBenefitsEditor
+                    initialTitle="Financial Resource Highlights"
+                    initialSubtitle="Explore our key resources designed to help you navigate personal and business finances"
+                    initialBenefits={benefits}
+                    onSave={handleSaveBenefits}
+                  />
+                </div>
+              </AdminAuth>
+            )}
           </div>
         </div>
       </main>
