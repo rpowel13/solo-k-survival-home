@@ -30,18 +30,22 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
           <Logo />
-          <DesktopNav />
+          
+          {/* Only show desktop nav on non-mobile */}
+          {!isMobile && <DesktopNav />}
+          
+          {/* Mobile menu button */}
           {isMobile && (
-            <div className="flex md:hidden">
-              <button
-                onClick={toggleMenu}
-                className="text-gray-500 p-1"
-                aria-label="Toggle menu"
-              >
-                <Menu className="h-6 w-6" />
-              </button>
-            </div>
+            <button
+              onClick={toggleMenu}
+              className="text-gray-500 hover:text-survival-700 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-survival-200"
+              aria-label="Toggle menu"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
           )}
+          
+          {/* Mobile navigation - always render it but control visibility with isOpen prop */}
           <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />
         </div>
       </div>

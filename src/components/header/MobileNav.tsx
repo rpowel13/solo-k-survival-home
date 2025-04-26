@@ -24,9 +24,13 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-50" onClick={onClose}>
+    <div 
+      className="fixed inset-0 bg-black/60 z-50 flex justify-end"
+      onClick={onClose}
+      style={{ touchAction: "pan-y" }}
+    >
       <div 
-        className="fixed right-0 top-0 h-full w-[280px] bg-white z-50 shadow-xl overflow-auto"
+        className="w-[280px] bg-white h-screen overflow-y-auto shadow-xl animate-in slide-in-from-right duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b">
@@ -41,7 +45,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
           </Button>
         </div>
         
-        <div className="p-4 space-y-6 overflow-y-auto">
+        <div className="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-64px)]">
           <div className="space-y-3 border-b pb-4">
             <Link 
               to="/" 
