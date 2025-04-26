@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -7,6 +8,8 @@ import WhyChooseSection from "@/components/solo401k/WhyChooseSection";
 import ArticleBenefitsEditor from "@/components/articles/ArticleBenefitsEditor";
 import AdminAuth from "@/components/admin/AdminAuth";
 import { useAdminAuth } from "@/components/admin/AdminAuth";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 // Default benefits to display
 const defaultArticleBenefits = [
@@ -47,6 +50,17 @@ const Articles = () => {
         </div>
 
         <div className="container mx-auto px-4 py-12">
+          {isAuthenticated && (
+            <div className="mb-6">
+              <Link to="/admin">
+                <Button variant="outline" size="sm" className="flex items-center">
+                  <ArrowLeft className="mr-1 h-4 w-4" />
+                  Back to Admin Dashboard
+                </Button>
+              </Link>
+            </div>
+          )}
+          
           <div className="space-y-12">
             <WhyChooseSection 
               title="Financial Resource Highlights"

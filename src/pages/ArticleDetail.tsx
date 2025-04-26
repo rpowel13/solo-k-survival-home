@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,7 @@ import ArticleHeader from "@/components/articles/ArticleHeader";
 import ArticleContent from "@/components/articles/ArticleContent";
 import ArticleLoadingSkeleton from "@/components/articles/ArticleLoadingSkeleton";
 import { ArrowLeft } from "lucide-react";
+import { useAdminAuth } from "@/components/admin/AdminAuth";
 
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
 
@@ -30,6 +30,7 @@ const ArticleDetail = () => {
   const { toast } = useToast();
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated } = useAdminAuth();
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -139,14 +140,23 @@ const ArticleDetail = () => {
 
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-            <Button 
-              variant="ghost" 
-              className="mb-6" 
-              onClick={() => navigate('/articles')}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Articles
-            </Button>
+            <div className="flex justify-between mb-6">
+              <Button 
+                variant="ghost" 
+                onClick={() => navigate('/articles')}
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Articles
+              </Button>
+              
+              {isAuthenticated && (
+                <Link to="/admin">
+                  <Button variant="outline" size="sm">
+                    Admin Dashboard
+                  </Button>
+                </Link>
+              )}
+            </div>
             
             <ArticleContent
               excerpt={article.excerpt}

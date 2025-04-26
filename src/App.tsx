@@ -28,6 +28,7 @@ import TermsOfService from "./pages/TermsOfService";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import LegalDisclosures from "./pages/LegalDisclosures";
 import ZapierSettings from "./pages/admin/ZapierSettings";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import FirstResponderPayment from "./pages/payments/FirstResponderPayment";
 import RMDCalculator from "./pages/tools/RMDCalculator";
 import Solo401kCalculator from "./pages/tools/Solo401kCalculator";
@@ -69,6 +70,7 @@ const App = () => (
           <Route path="/payment/llc" element={<LLCPayment />} />
           <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
           <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
           <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
           <Route path="/payment/first-responder-llc" element={<FirstResponderLLCPayment />} />
