@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -41,7 +42,18 @@ const Footer = () => {
                   info@survival401k.com
                 </a>
               </li>
-              <li><Link to="/contact" className="text-blue-500 hover:text-blue-400">Schedule a Free Consultation</Link></li>
+              <li>
+                <a 
+                  href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  data-id="livesite-widget" 
+                  data-service="mscylmpg3ioi58ke"
+                  className="text-blue-500 hover:text-blue-400"
+                >
+                  Schedule a Consultation
+                </a>
+              </li>
               <li><Link to="/contact" className="text-blue-500 hover:text-blue-400">Update my Account</Link></li>
             </ul>
           </div>
