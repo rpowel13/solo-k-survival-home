@@ -1,50 +1,71 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle2 } from 'lucide-react';
+import {
+  Wallet,
+  PiggyBank,
+  Briefcase,
+  Users,
+  CircleDollarSign,
+  Receipt,
+  Key,
+  ArrowLeftRight,
+  UserMinus,
+  TrendingUp
+} from 'lucide-react';
 import SectionHeading from '@/components/common/SectionHeading';
 
 const BenefitsSection = () => {
   const benefits = [
     {
-      title: "Higher Contribution Limits",
-      description: "Contribute up to $70,000 annually (2025), far exceeding traditional IRA limits."
+      title: "Tax Advantages Galore",
+      description: "Solo 401ks offer both pre-tax (traditional) and after-tax (Roth) options. You can reduce your taxable income today with pre-tax contributions or enjoy tax-free withdrawals in retirement by opting for Roth contributions.",
+      icon: Wallet
     },
     {
-      title: "Tax-Deferred Growth",
-      description: "Investments grow tax-deferred until withdrawal, maximizing compound growth potential."
+      title: "High Contribution Limits",
+      description: "The Solo 401k allows you to contribute as both an employee and employer, with total annual limits that far exceed those of traditional IRAs or even SEP IRAs. In 2025, freelancers can stash away up to $73,500 if they qualify.",
+      icon: PiggyBank
     },
     {
-      title: "Investment Flexibility",
-      description: "Freedom to invest in a wide range of assets including real estate, precious metals, and private companies."
+      title: "Greater Control Over Investments",
+      description: "Say goodbye to cookie-cutter options. With Solo 401ks, you're the investment decision-maker, allowing you to explore real estate, cryptocurrency, precious metals, startups, and more—perfect for the financially adventurous.",
+      icon: Briefcase
     },
     {
-      title: "Loan Provisions",
-      description: "Borrow up to 50% or $50,000 from your account for any purpose."
+      title: "Spouse Inclusion",
+      description: "If your spouse earns income from your business, they can participate in your Solo 401k plan. Together, you can turbocharge your retirement savings and double the benefits.",
+      icon: Users
     },
     {
-      title: "Roth Option",
-      description: "Choose between traditional tax-deferred or Roth after-tax contributions."
+      title: "Loan Opportunities",
+      description: "Need cash for a personal project or unexpected expenses? Solo 401k plans offer loans up to $50,000 or 50% of the account value. Plus, you repay yourself with interest, keeping the money within your retirement savings.",
+      icon: CircleDollarSign
     },
     {
-      title: "Asset Protection",
-      description: "Strong creditor protection for your retirement assets under ERISA guidelines."
+      title: "Tax Deductions",
+      description: "Freelancers can deduct their contributions to their Solo 401k directly from their taxable income, reducing the tax burden while planning for a secure future.",
+      icon: Receipt
     },
     {
-      title: "Checkbook Control",
-      description: "Direct control over investments without custodian approval requirements."
+      title: "No Custodian Required",
+      description: "Unlike traditional IRAs, Solo 401ks offer \"checkbook control,\" meaning you're not dependent on a custodian. You can invest directly and access funds without additional fees or delays.",
+      icon: Key
     },
     {
-      title: "Cost Effective",
-      description: "No percentage-based fees or assets under management charges."
+      title: "Rollover Freedom",
+      description: "If you already have funds in an IRA or other retirement accounts, you can roll them into a Solo 401k seamlessly. This gives you the flexibility to consolidate accounts and streamline your financial management.",
+      icon: ArrowLeftRight
     },
     {
-      title: "Easy Administration",
-      description: "Simplified reporting and compliance requirements for single-participant plans."
+      title: "No Employees, No Problem",
+      description: "Solo 401ks are tailored for self-employed individuals or business owners with no full-time employees. If you're running a solo enterprise, this plan fits perfectly into your setup.",
+      icon: UserMinus
     },
     {
-      title: "Spousal Contributions",
-      description: "Include your spouse in the plan, doubling potential contribution limits."
+      title: "Long-Term Growth Potential",
+      description: "Solo 401ks let freelancers take advantage of compound growth with larger contributions and flexible investment options. This makes them a powerful tool for building a robust retirement portfolio.",
+      icon: TrendingUp
     }
   ];
 
@@ -58,12 +79,12 @@ const BenefitsSection = () => {
           <Card key={index} className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <CheckCircle2 className="h-5 w-5 text-finance-600" />
+                <benefit.icon className="h-5 w-5 text-finance-600" />
                 {benefit.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p>{benefit.description}</p>
+              <p className="text-gray-600">{benefit.description}</p>
             </CardContent>
           </Card>
         ))}
