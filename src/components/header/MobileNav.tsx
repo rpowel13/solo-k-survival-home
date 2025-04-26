@@ -270,14 +270,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
               
               <div className="space-y-3 pt-2 border-t">
                 <Link 
-                  to="/articles" 
-                  className="block font-medium hover:text-survival-600 flex items-center"
-                  onClick={onClose}
-                >
-                  <FileText className="h-4 w-4 mr-1" />
-                  Articles
-                </Link>
-                <Link 
                   to="/contact" 
                   className="block font-medium hover:text-survival-600 flex items-center"
                   onClick={onClose}
