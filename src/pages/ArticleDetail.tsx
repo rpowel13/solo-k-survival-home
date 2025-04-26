@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,13 +8,14 @@ import { supabase } from "@/lib/supabase";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleHeader from "@/components/articles/ArticleHeader";
+import ArticleContent from "@/components/articles/ArticleContent";
 import ArticleLoadingSkeleton from "@/components/articles/ArticleLoadingSkeleton";
-import WhyChooseSection from "@/components/solo401k/WhyChooseSection";
 import { ArrowLeft } from "lucide-react";
 
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
 
-const articleBenefits = [
+// Default benefits to display if none are provided
+const defaultArticleBenefits = [
   "Benefit 1: Easy to understand financial concepts",
   "Benefit 2: Step-by-step guides for implementation",
   "Benefit 3: Tax-saving strategies for small businesses",
@@ -146,14 +148,15 @@ const ArticleDetail = () => {
               Back to Articles
             </Button>
             
-            <div className="mb-8">
-              <WhyChooseSection 
-                title={article.title}
-                subtitle={article.excerpt}
-                benefits={articleBenefits}
-                maxCards={6}
-              />
-            </div>
+            <ArticleContent
+              excerpt={article.excerpt}
+              content={article.content}
+              tags={article.tags}
+              showWhyChooseSection={true}
+              cardBenefits={defaultArticleBenefits}
+              cardTitle={article.title}
+              cardSubtitle={article.excerpt}
+            />
           </div>
         </div>
       </main>
