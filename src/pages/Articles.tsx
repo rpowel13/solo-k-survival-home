@@ -11,7 +11,6 @@ import { useAdminAuth } from "@/components/admin/AdminAuth";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-// Default benefits to display
 const defaultArticleBenefits = [
   "Benefit 1: Easy to understand financial concepts",
   "Benefit 2: Step-by-step guides for implementation",
@@ -62,12 +61,15 @@ const Articles = () => {
           )}
           
           <div className="space-y-12">
-            <WhyChooseSection 
-              title="Financial Resource Highlights"
-              subtitle="Explore our key resources designed to help you navigate personal and business finances"
-              benefits={benefits}
-              maxCards={6}
-            />
+            {/* Conditionally render WhyChooseSection */}
+            {false && (
+              <WhyChooseSection 
+                title="Financial Resource Highlights"
+                subtitle="Explore our key resources designed to help you navigate personal and business finances"
+                benefits={benefits}
+                maxCards={6}
+              />
+            )}
             
             {isAuthenticated && (
               <AdminAuth>
