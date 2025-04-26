@@ -140,7 +140,7 @@ const ArticleDetail = () => {
               Back to Articles
             </Button>
             
-            {/* Replace ArticleContent with WhyChooseSection */}
+            {/* Display WhyChooseSection instead of ArticleContent */}
             <div className="mb-8">
               <WhyChooseSection />
             </div>
