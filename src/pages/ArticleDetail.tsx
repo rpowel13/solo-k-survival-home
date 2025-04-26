@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,6 +12,15 @@ import WhyChooseSection from "@/components/solo401k/WhyChooseSection";
 import { ArrowLeft } from "lucide-react";
 
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+
+const articleBenefits = [
+  "Benefit 1: Easy to understand financial concepts",
+  "Benefit 2: Step-by-step guides for implementation",
+  "Benefit 3: Tax-saving strategies for small businesses",
+  "Benefit 4: Retirement planning made simple",
+  "Benefit 5: Investment options comparison",
+  "Benefit 6: How to maximize your retirement contributions"
+];
 
 const ArticleDetail = () => {
   const { slug } = useParams();
@@ -29,7 +37,6 @@ const ArticleDetail = () => {
         setIsLoading(true);
         console.log(`Fetching article with slug: ${slug}`);
         
-        // Use the existing blog_posts table
         const { data, error } = await supabase
           .from('blog_posts')
           .select()
@@ -49,7 +56,6 @@ const ArticleDetail = () => {
         
         console.log("Article data retrieved:", data);
         
-        // Transform the data to match our Article type
         const articleData: Article = {
           id: data.id,
           title: data.title,
@@ -140,9 +146,13 @@ const ArticleDetail = () => {
               Back to Articles
             </Button>
             
-            {/* Display WhyChooseSection instead of ArticleContent */}
             <div className="mb-8">
-              <WhyChooseSection />
+              <WhyChooseSection 
+                title={article.title}
+                subtitle={article.excerpt}
+                benefits={articleBenefits}
+                maxCards={6}
+              />
             </div>
           </div>
         </div>

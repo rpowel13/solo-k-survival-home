@@ -7,13 +7,29 @@ interface ArticleContentProps {
   content: string;
   tags: string[];
   showWhyChooseSection?: boolean;
+  cardBenefits?: string[];
+  cardTitle?: string;
+  cardSubtitle?: string;
 }
 
-const ArticleContent = ({ excerpt, content, tags, showWhyChooseSection = false }: ArticleContentProps) => {
+const ArticleContent = ({ 
+  excerpt, 
+  content, 
+  tags, 
+  showWhyChooseSection = false,
+  cardBenefits = [],
+  cardTitle,
+  cardSubtitle
+}: ArticleContentProps) => {
   return (
     <>
       {showWhyChooseSection ? (
-        <WhyChooseSection />
+        <WhyChooseSection 
+          title={cardTitle || "Key Benefits"}
+          subtitle={cardSubtitle || excerpt}
+          benefits={cardBenefits}
+          maxCards={6}
+        />
       ) : (
         <div className="prose prose-lg max-w-none mb-8">
           {excerpt && (
