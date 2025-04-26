@@ -8,8 +8,19 @@ import { Article } from "@/types/article";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
+import WhyChooseSection from "@/components/solo401k/WhyChooseSection";
 
 const DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1579621970795-87facc2f976d?q=80&w=2070";
+
+// Default benefits to display
+const defaultArticleBenefits = [
+  "Benefit 1: Easy to understand financial concepts",
+  "Benefit 2: Step-by-step guides for implementation",
+  "Benefit 3: Tax-saving strategies for small businesses",
+  "Benefit 4: Retirement planning made simple",
+  "Benefit 5: Investment options comparison",
+  "Benefit 6: How to maximize your retirement contributions"
+];
 
 const Articles = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -93,6 +104,17 @@ const Articles = () => {
         </div>
 
         <div className="container mx-auto px-4 py-12">
+          {/* Benefits cards section */}
+          <div className="mb-12">
+            <WhyChooseSection 
+              title="Financial Resource Highlights"
+              subtitle="Explore our key resources designed to help you navigate personal and business finances"
+              benefits={defaultArticleBenefits}
+              maxCards={6}
+            />
+          </div>
+
+          <h2 className="text-2xl font-bold mb-6">Latest Articles</h2>
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
