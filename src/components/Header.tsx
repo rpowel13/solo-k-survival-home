@@ -47,7 +47,8 @@ const Header = () => {
               </button>
             </div>
           )}
-          <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />
+          {/* Only render MobileNav on mobile devices */}
+          {isMobile && <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />}
         </div>
       </div>
     </header>
