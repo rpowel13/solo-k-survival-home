@@ -22,6 +22,9 @@ const PricingSection = () => {
             <CalendarCheck className="h-4 w-4 mr-1" />
             <span>2025 Contribution Year Ready</span>
           </div>
+          <div className="bg-soft-purple rounded-lg p-2 mb-4 text-center text-sm text-survival-800 font-medium">
+            First Year Annual Fee Included
+          </div>
           <Link to="/apply/solo-401k">
             <Button size="lg" className="bg-survival-600 hover:bg-survival-700 text-white font-medium">
               Get Started
@@ -52,3 +55,4 @@ const PricingSection = () => {
 };
 
 export default PricingSection;
+
