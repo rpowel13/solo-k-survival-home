@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import WhyChooseSection from "@/components/solo401k/WhyChooseSection";
+import ArticleBenefitsEditor from "@/components/articles/ArticleBenefitsEditor";
 
 // Default benefits to display
 const defaultArticleBenefits = [
@@ -16,6 +17,17 @@ const defaultArticleBenefits = [
 ];
 
 const Articles = () => {
+  const [benefits, setBenefits] = useState(defaultArticleBenefits);
+  const { toast } = useToast();
+
+  const handleSaveBenefits = (values: { title: string; subtitle: string; benefits: string[] }) => {
+    setBenefits(values.benefits);
+    toast({
+      title: "Benefits updated",
+      description: "The benefits cards have been updated successfully.",
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -32,12 +44,27 @@ const Articles = () => {
         </div>
 
         <div className="container mx-auto px-4 py-12">
-          <WhyChooseSection 
-            title="Financial Resource Highlights"
-            subtitle="Explore our key resources designed to help you navigate personal and business finances"
-            benefits={defaultArticleBenefits}
-            maxCards={6}
-          />
+          <div className="space-y-12">
+            <WhyChooseSection 
+              title="Financial Resource Highlights"
+              subtitle="Explore our key resources designed to help you navigate personal and business finances"
+              benefits={benefits}
+              maxCards={6}
+            />
+            
+            <div className="max-w-4xl mx-auto">
+              <ArticleBenefitsEditor
+                initialTitle="Financial Resource Highlights"
+                initialSubtitle="Explore our key resources designed to help you navigate personal and business finances"
+                initialBenefits={benefits.map(text => ({ text }))}
+                onSave={(newBenefits) => handleSaveBenefits({
+                  title: "Financial Resource Highlights",
+                  subtitle: "Explore our key resources designed to help you navigate personal and business finances",
+                  benefits: newBenefits.map(b => b.text)
+                })}
+              />
+            </div>
+          </div>
         </div>
       </main>
       <Footer />
@@ -46,4 +73,3 @@ const Articles = () => {
 };
 
 export default Articles;
-
