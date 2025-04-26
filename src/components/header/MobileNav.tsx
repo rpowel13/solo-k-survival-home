@@ -264,6 +264,17 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
             )}
           </div>
           
+          <div className="space-y-3">
+            <Link 
+              to="/resources" 
+              className="block font-medium hover:text-survival-600 flex items-center"
+              onClick={onClose}
+            >
+              <BookOpen className="h-4 w-4 mr-1" />
+              Resources
+            </Link>
+          </div>
+          
           <div className="space-y-3 pt-2 border-t">
             <Link 
               to="/contact" 
