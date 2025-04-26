@@ -2,6 +2,7 @@
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import SectionHeading from '@/components/common/SectionHeading';
+import { Card } from '@/components/ui/card';
 
 const benefits = [
   "Complete plan documentation and IRS compliance",
@@ -20,23 +21,25 @@ const benefits = [
 
 const WhyChooseSection = () => {
   return (
-    <section>
-      <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
+    <section className="py-6">
+      <SectionHeading className="text-3xl font-bold mb-8 text-center text-survival-800">
         Why Choose Survival 401k?
       </SectionHeading>
       <div className="prose max-w-none">
-        <p className="text-lg mb-6">
+        <p className="text-lg mb-8 text-center">
           At Survival 401k, we specialize in creating customized Solo 401k plans that provide maximum flexibility and investment options. Our services include:
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {benefits.map((benefit, index) => (
-            <div 
+            <Card 
               key={index} 
-              className="flex items-start p-3 bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow"
+              className="p-4 transition-all duration-300 hover:shadow-lg hover:transform hover:scale-105"
             >
-              <CheckCircle2 className="h-4 w-4 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
-              <span className="text-sm">{benefit}</span>
-            </div>
+              <div className="flex items-start">
+                <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-0.5 flex-shrink-0" />
+                <span className="text-sm font-medium">{benefit}</span>
+              </div>
+            </Card>
           ))}
         </div>
       </div>
