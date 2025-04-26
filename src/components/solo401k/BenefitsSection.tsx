@@ -11,7 +11,9 @@ import {
   Key,
   ArrowLeftRight,
   UserMinus,
-  TrendingUp
+  TrendingUp,
+  Shield,
+  Clock
 } from 'lucide-react';
 import SectionHeading from '@/components/common/SectionHeading';
 
@@ -66,6 +68,16 @@ const BenefitsSection = () => {
       title: "Long-Term Growth Potential",
       description: "Solo 401ks let freelancers take advantage of compound growth with larger contributions and flexible investment options. This makes them a powerful tool for building a robust retirement portfolio.",
       icon: TrendingUp
+    },
+    {
+      title: "Asset Protection",
+      description: "Solo 401ks offer robust legal protections, helping safeguard your retirement savings from potential creditors and legal claims in most states.",
+      icon: Shield
+    },
+    {
+      title: "Flexible Contribution Timing",
+      description: "You can make contributions up until your tax filing deadline, giving you more flexibility and strategic planning opportunities for your retirement savings.",
+      icon: Clock
     }
   ];
 
@@ -74,7 +86,7 @@ const BenefitsSection = () => {
       <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
         Key Benefits
       </SectionHeading>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {benefits.map((benefit, index) => (
           <Card key={index} className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
             <CardHeader>
@@ -94,3 +106,4 @@ const BenefitsSection = () => {
 };
 
 export default BenefitsSection;
+
