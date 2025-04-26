@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Logo } from './header/Logo';
 import { DesktopNav } from './header/DesktopNav';
 import { MobileNav } from './header/MobileNav';
@@ -16,6 +16,13 @@ const Header = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
+
+  // Close menu when screen size changes from mobile to desktop
+  useEffect(() => {
+    if (!isMobile && isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  }, [isMobile, isMenuOpen]);
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
@@ -47,8 +54,8 @@ const Header = () => {
               </button>
             </div>
           )}
-          {/* Only render MobileNav on mobile devices */}
-          {isMobile && <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />}
+          {/* Always render MobileNav but control visibility with isOpen prop */}
+          <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />
         </div>
       </div>
     </header>
