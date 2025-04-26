@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -40,6 +39,7 @@ import TestForm from "./pages/TestForm";
 import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import BlogEditor from "./pages/BlogEditor";
+import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
@@ -87,6 +87,7 @@ const App = () => (
           <Route path="/blog/:slug" element={<Navigate to="/articles/:slug" replace />} />
           <Route path="/blog/edit/:slug" element={<BlogEditor />} />
           <Route path="/blog/new" element={<BlogEditor />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
