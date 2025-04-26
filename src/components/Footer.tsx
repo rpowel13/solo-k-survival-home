@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -44,17 +43,16 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke" 
+                  href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=ry5n8z8s16pz3wqj" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   data-id="livesite-widget" 
-                  data-service="mscylmpg3ioi58ke"
+                  data-service="ry5n8z8s16pz3wqj"
                   className="text-blue-500 hover:text-blue-400"
                 >
-                  Schedule a Consultation
+                  Update my Account
                 </a>
               </li>
-              <li><Link to="/contact" className="text-blue-500 hover:text-blue-400">Update my Account</Link></li>
             </ul>
           </div>
         </div>
