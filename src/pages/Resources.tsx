@@ -18,9 +18,40 @@ const Resources = () => {
     script.async = true;
     document.body.appendChild(script);
 
+    // Fix links after the blog content has loaded
+    const fixBlogLinks = () => {
+      // Wait for the blog to load and process links
+      setTimeout(() => {
+        const blogLinks = document.querySelectorAll('#dib-posts a');
+        blogLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          if (href && (href.includes('lovableproject.com') || href.includes('19612142-4b99-4012-9fb6-80aa52498c64'))) {
+            // Extract just the path part from the URL and make it relative
+            try {
+              const url = new URL(href);
+              const path = url.pathname;
+              link.setAttribute('href', path);
+            } catch (e) {
+              console.error('Invalid URL:', href);
+            }
+          }
+        });
+      }, 1500); // Give the blog content time to load
+    };
+
+    // Run the fix when the script loads
+    script.onload = fixBlogLinks;
+
+    // Also run periodically in case of dynamic content changes
+    const interval = setInterval(fixBlogLinks, 3000);
+
     return () => {
       // Cleanup: remove the script when component unmounts
-      document.body.removeChild(script);
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+      // Clear the interval
+      clearInterval(interval);
       // Reset title to default
       document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
     };
@@ -38,4 +69,3 @@ const Resources = () => {
 };
 
 export default Resources;
-
