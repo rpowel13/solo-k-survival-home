@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -35,9 +34,12 @@ const Index = () => {
   const [webhookUrl, setWebhookUrl] = useState<string>("");
   const { toast } = useToast();
   
-  // Initialize all webhook types on page load
   useEffect(() => {
-    console.log(`[${new Date().toISOString()}] Home page: Initializing all webhook types`);
+    document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
+    document.querySelector('meta[name="description"]')?.setAttribute(
+      "content",
+      "Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings."
+    );
     
     const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
     webhookTypes.forEach(type => initZapierConfig(type as any));
@@ -48,9 +50,7 @@ const Index = () => {
     const isConfigured = isWebhookConfigured('crm');
     setWebhookStatus(isConfigured ? 'configured' : 'unconfigured');
     
-    // Try to sync webhook configs if needed
     const consolidateWebhookConfigs = () => {
-      // If current webhook is not configured, try to find another configured webhook
       if (!isConfigured) {
         for (const type of webhookTypes) {
           const otherUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
@@ -63,7 +63,6 @@ const Index = () => {
           }
         }
       } 
-      // If current webhook is configured, share it with other webhook types
       else {
         for (const type of webhookTypes) {
           const typeUrl = localStorage.getItem(`zapier_${type}_webhook_url`);
@@ -153,7 +152,6 @@ const Index = () => {
       </main>
       <Footer />
       
-      {/* Add webhook status indicator and configuration to home page */}
       <WebhookStatus 
         webhookStatus={webhookStatus}
         lastTestedTime={lastTestedTime}
