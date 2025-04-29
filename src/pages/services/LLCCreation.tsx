@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,6 +21,9 @@ const LLCCreation = () => {
             </p>
             <p className="mt-4">
               For self-employed professionals, small business owners, and real estate investors, forming an LLC creates a legal separation between your personal and business assets, protecting your personal wealth from business liabilities.
+            </p>
+            <p className="mt-4">
+              <strong>First Responders and Gig Workers:</strong> If you're a first responder with side income or working in the gig economy (rideshare, delivery, freelancing, consulting, etc.), an LLC can help protect your personal assets while providing tax benefits for your income. Any gig income qualifies and can be significantly helped by operating under an LLC structure.
             </p>
           </div>
         </section>
@@ -163,6 +167,22 @@ const LLCCreation = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-50 p-6 rounded-lg">
+          <h2 className="text-2xl font-bold mb-3 text-survival-800">First Responder & Gig Economy Benefits</h2>
+          <div className="space-y-4">
+            <p className="text-gray-700">
+              We offer specialized LLC formation services for first responders (firefighters, EMTs, paramedics, police officers, etc.) and gig economy workers with additional benefits:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-gray-700">
+              <li><strong>Asset Protection:</strong> Separate your personal assets from any liabilities associated with your side business or gig work.</li>
+              <li><strong>Tax Advantages:</strong> Potential deductions for business expenses related to your side gig that may not be available as an individual.</li>
+              <li><strong>Simplified Accounting:</strong> Clearer separation between personal and business finances.</li>
+              <li><strong>Credibility:</strong> Enhanced professional image when providing services outside your primary role.</li>
+              <li><strong>Gig Income Optimization:</strong> Structure your rideshare, delivery, freelance, or other gig income in the most advantageous way possible.</li>
+            </ul>
           </div>
         </section>
 
