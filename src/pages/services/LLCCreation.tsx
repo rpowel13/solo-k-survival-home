@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { 
   Briefcase, Shield, Clock, FileText, PieChart, CheckCircle2, 
   DollarSign, Building, LineChart, Target, Car, CreditCard, 
-  FileCheck, Receipt, ArrowRight
+  FileCheck, Receipt, ArrowRight, Wallet, Landmark, Users,
+  BadgeDollarSign, PiggyBank, ShieldCheck, Handshake
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -83,6 +84,42 @@ const LLCCreation = () => {
               </CardHeader>
               <CardContent className="pt-6">
                 <p>Establish credibility with clients, vendors, and partners by operating as a formal business entity.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-gray-200 hover:shadow-md transition-all duration-300 h-full">
+              <CardHeader className="bg-gradient-to-r from-white to-survival-50 border-b border-gray-100">
+                <CardTitle className="flex items-center gap-2">
+                  <Landmark className="h-5 w-5 text-finance-600" />
+                  Legal Entity Status
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <p>Operate as a recognized legal entity with the ability to enter contracts, own property, and establish business credit.</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border border-gray-200 hover:shadow-md transition-all duration-300 h-full">
+              <CardHeader className="bg-gradient-to-r from-white to-survival-50 border-b border-gray-100">
+                <CardTitle className="flex items-center gap-2">
+                  <Wallet className="h-5 w-5 text-finance-600" />
+                  Pass-Through Taxation
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <p>Avoid double taxation with pass-through taxation, where business profits are only taxed once on your personal tax return.</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="border border-gray-200 hover:shadow-md transition-all duration-300 h-full">
+              <CardHeader className="bg-gradient-to-r from-white to-survival-50 border-b border-gray-100">
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-finance-600" />
+                  Ownership Flexibility
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <p>Enjoy flexible ownership structures with multiple members and various profit distribution options.</p>
               </CardContent>
             </Card>
           </div>
@@ -310,7 +347,7 @@ const LLCCreation = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <div className="flex items-start bg-white p-4 rounded-lg shadow-sm">
-              <Shield className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+              <ShieldCheck className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-survival-800">Asset Protection</h3>
                 <p className="text-sm text-gray-600">Separate your personal assets from any liabilities associated with your side business or gig work.</p>
@@ -318,7 +355,7 @@ const LLCCreation = () => {
             </div>
             
             <div className="flex items-start bg-white p-4 rounded-lg shadow-sm">
-              <DollarSign className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+              <BadgeDollarSign className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-survival-800">Tax Advantages</h3>
                 <p className="text-sm text-gray-600">Potential deductions for business expenses related to your side gig that may not be available as an individual.</p>
@@ -334,63 +371,26 @@ const LLCCreation = () => {
             </div>
             
             <div className="flex items-start bg-white p-4 rounded-lg shadow-sm">
-              <Briefcase className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+              <Handshake className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
               <div>
                 <h3 className="font-medium text-survival-800">Credibility</h3>
                 <p className="text-sm text-gray-600">Enhanced professional image when providing services outside your primary role.</p>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* LLC Formation Process - Process Map Style */}
-        <section>
-          <SectionHeading className="text-3xl font-bold mb-8 text-survival-800 border-b border-gray-200 pb-2">
-            Our LLC Formation Process
-          </SectionHeading>
-          <div className="relative">
-            {/* Process timeline line */}
-            <div className="absolute left-8 top-10 bottom-10 w-1 bg-survival-100 hidden md:block"></div>
             
-            <div className="space-y-12">
-              <div className="flex flex-col md:flex-row gap-6 relative">
-                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">1</div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
-                  <h3 className="text-xl font-semibold mb-3">Consultation</h3>
-                  <p className="text-gray-700">We start with a detailed consultation to understand your business needs, goals, and specific requirements for your LLC.</p>
-                </div>
+            <div className="flex items-start bg-white p-4 rounded-lg shadow-sm">
+              <PiggyBank className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+              <div>
+                <h3 className="font-medium text-survival-800">Retirement Planning</h3>
+                <p className="text-sm text-gray-600">Access to business retirement plans like Solo 401(k)s with higher contribution limits.</p>
               </div>
-              
-              <div className="flex flex-col md:flex-row gap-6 relative">
-                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">2</div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
-                  <h3 className="text-xl font-semibold mb-3">Document Preparation</h3>
-                  <p className="text-gray-700">Our team prepares all necessary formation documents, including Articles of Organization, Operating Agreement, and EIN application.</p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row gap-6 relative">
-                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">3</div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
-                  <h3 className="text-xl font-semibold mb-3">Filing & Registration</h3>
-                  <p className="text-gray-700">We file your documents with the appropriate state agency and secure your LLC registration.</p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row gap-6 relative">
-                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">4</div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
-                  <h3 className="text-xl font-semibold mb-3">EIN & Banking Setup</h3>
-                  <p className="text-gray-700">We obtain your Federal Employer Identification Number (EIN) and provide banking resolution documents to establish your business accounts.</p>
-                </div>
-              </div>
-              
-              <div className="flex flex-col md:flex-row gap-6 relative">
-                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">5</div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
-                  <h3 className="text-xl font-semibold mb-3">Compliance Support</h3>
-                  <p className="text-gray-700">We provide ongoing compliance support for your first year, ensuring you meet all state requirements and deadlines.</p>
-                </div>
+            </div>
+            
+            <div className="flex items-start bg-white p-4 rounded-lg shadow-sm">
+              <Building className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+              <div>
+                <h3 className="font-medium text-survival-800">Asset Acquisition</h3>
+                <p className="text-sm text-gray-600">Purchase assets like vehicles and equipment through your LLC for better tax treatment.</p>
               </div>
             </div>
           </div>
@@ -476,6 +476,59 @@ const LLCCreation = () => {
           </div>
         </section>
 
+        {/* LLC Formation Process - Process Map Style */}
+        <section>
+          <SectionHeading className="text-3xl font-bold mb-8 text-survival-800 border-b border-gray-200 pb-2">
+            Our LLC Formation Process
+          </SectionHeading>
+          <div className="relative">
+            {/* Process timeline line */}
+            <div className="absolute left-8 top-10 bottom-10 w-1 bg-survival-100 hidden md:block"></div>
+            
+            <div className="space-y-12">
+              <div className="flex flex-col md:flex-row gap-6 relative">
+                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">1</div>
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
+                  <h3 className="text-xl font-semibold mb-3">Consultation</h3>
+                  <p className="text-gray-700">We start with a detailed consultation to understand your business needs, goals, and specific requirements for your LLC.</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col md:flex-row gap-6 relative">
+                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">2</div>
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
+                  <h3 className="text-xl font-semibold mb-3">Document Preparation</h3>
+                  <p className="text-gray-700">Our team prepares all necessary formation documents, including Articles of Organization, Operating Agreement, and EIN application.</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col md:flex-row gap-6 relative">
+                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">3</div>
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
+                  <h3 className="text-xl font-semibold mb-3">Filing & Registration</h3>
+                  <p className="text-gray-700">We file your documents with the appropriate state agency and secure your LLC registration.</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col md:flex-row gap-6 relative">
+                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">4</div>
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
+                  <h3 className="text-xl font-semibold mb-3">EIN & Banking Setup</h3>
+                  <p className="text-gray-700">We obtain your Federal Employer Identification Number (EIN) and provide banking resolution documents to establish your business accounts.</p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col md:flex-row gap-6 relative">
+                <div className="md:w-16 h-16 bg-survival-100 text-survival-800 rounded-full flex items-center justify-center text-xl font-bold shadow-sm flex-shrink-0 z-10">5</div>
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 flex-grow">
+                  <h3 className="text-xl font-semibold mb-3">Compliance Support</h3>
+                  <p className="text-gray-700">We provide ongoing compliance support for your first year, ensuring you meet all state requirements and deadlines.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Pricing Section - Enhanced card format */}
         <section className="mb-12">
           <SectionHeading className="text-3xl font-bold mb-8 text-survival-800 border-b border-gray-200 pb-2">
@@ -528,4 +581,3 @@ const LLCCreation = () => {
 };
 
 export default LLCCreation;
-
