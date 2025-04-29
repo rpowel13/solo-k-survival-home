@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { X, ChevronDown, ChevronRight, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench } from "lucide-react";
@@ -175,27 +176,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
             
             {openSubmenu === 'payments' && (
               <div className="pl-4 space-y-3 mb-4">
-                <Link 
-                  to="/payment/solo-401k" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Solo 401(k) Payment
-                </Link>
-                <Link 
-                  to="/payment/llc" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  LLC Payment
-                </Link>
-                <Link 
-                  to="/payment/first-responder" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  First Responder Payment
-                </Link>
                 <Link 
                   to="/payment/annual-fee" 
                   className="block text-gray-600 hover:text-survival-600"
