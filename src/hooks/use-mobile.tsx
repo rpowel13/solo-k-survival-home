@@ -1,7 +1,7 @@
 
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 1024 // Changed from 768 to 1024 to include tablets
 const DEBOUNCE_DELAY = 250
 
 export function useIsMobile() {

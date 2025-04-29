@@ -34,7 +34,7 @@ const Header = () => {
           {/* Only show desktop nav on non-mobile */}
           {!isMobile && <DesktopNav />}
           
-          {/* Mobile menu button */}
+          {/* Mobile menu button - now shows on tablets too */}
           {isMobile && (
             <button
               onClick={toggleMenu}
@@ -45,7 +45,7 @@ const Header = () => {
             </button>
           )}
           
-          {/* Mobile navigation - always render it but control visibility with isOpen prop */}
+          {/* Mobile navigation */}
           <MobileNav isOpen={isMenuOpen} onClose={closeMenu} />
         </div>
       </div>
