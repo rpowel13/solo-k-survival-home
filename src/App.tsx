@@ -37,12 +37,6 @@ import New401kFormPage from "./pages/applications/New401kFormPage";
 import FirstResponderLLCPayment from "./pages/payments/FirstResponderLLCPayment";
 import FirstResponder401kPayment from "./pages/payments/FirstResponder401kPayment";
 import TestForm from "./pages/TestForm";
-import Articles from "./pages/Articles";
-import ArticleDetail from "./pages/ArticleDetail";
-import BlogEditor from "./pages/BlogEditor";
-import Resources from "./pages/Resources";
-import BlogPostPage from "./pages/BlogPost";
-import Blog from "./pages/Blog";
 
 const queryClient = new QueryClient();
 
@@ -84,13 +78,6 @@ const App = () => (
           <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
           <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
           <Route path="/test-form" element={<TestForm />} />
-          <Route path="/articles" element={<Articles />} />
-          <Route path="/articles/:slug" element={<ArticleDetail />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
-          <Route path="/blog/edit/:slug" element={<BlogEditor />} />
-          <Route path="/blog/new" element={<BlogEditor />} />
-          <Route path="/resources" element={<Resources />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
