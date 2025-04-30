@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { isAuthenticated } = useAdminAuth();
+  const isFromBlogPath = location.pathname.includes('/blog/');
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -53,7 +55,8 @@ const ArticleDetail = () => {
             description: "The article you're looking for doesn't exist",
             variant: "destructive",
           });
-          navigate("/articles");
+          // Navigate to the appropriate list page based on where they came from
+          navigate(isFromBlogPath ? "/blog" : "/articles");
           return;
         }
         
@@ -81,14 +84,14 @@ const ArticleDetail = () => {
           description: "Please try again later",
           variant: "destructive",
         });
-        navigate("/articles");
+        navigate(isFromBlogPath ? "/blog" : "/articles");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchArticle();
-  }, [slug, navigate, toast]);
+  }, [slug, navigate, toast, isFromBlogPath]);
 
   if (isLoading) {
     return (
@@ -110,8 +113,8 @@ const ArticleDetail = () => {
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-4">Article Not Found</h1>
             <p className="mb-6">The article you're looking for doesn't exist or has been removed.</p>
-            <Link to="/articles">
-              <Button>Back to Articles</Button>
+            <Link to={isFromBlogPath ? "/blog" : "/articles"}>
+              <Button>Back to {isFromBlogPath ? "Blog" : "Articles"}</Button>
             </Link>
           </div>
         </main>
@@ -143,10 +146,10 @@ const ArticleDetail = () => {
             <div className="flex justify-between mb-6">
               <Button 
                 variant="ghost" 
-                onClick={() => navigate('/articles')}
+                onClick={() => navigate(isFromBlogPath ? '/blog' : '/articles')}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Articles
+                Back to {isFromBlogPath ? 'Blog' : 'Articles'}
               </Button>
               
               {isAuthenticated && (
