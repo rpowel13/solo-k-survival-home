@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Spinner } from "lucide-react";
 
 const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,8 +17,15 @@ const Resources = () => {
       "Resources and educational content about Solo 401k plans, retirement planning, and investment strategies from Survival 401k."
     );
 
-    // Create and append the script tag
+    // Remove any existing script to avoid duplicates
+    const existingScript = document.getElementById('dib-script');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // Create and append the script tag with an id for tracking
     const script = document.createElement("script");
+    script.id = 'dib-script';
     script.src = "https://io.dropinblog.com/embedjs/40009ff3-3eb6-4102-85d7-25e628ed8391.js";
     script.async = true;
     document.body.appendChild(script);
@@ -26,36 +34,54 @@ const Resources = () => {
     script.onload = () => {
       console.log("Blog script loaded");
       setIsLoading(false);
-      fixBlogLinks();
+      // Give it a moment to render content before fixing links
+      setTimeout(() => {
+        fixBlogLinks();
+      }, 1000);
+    };
+
+    // Add error handling for script loading
+    script.onerror = () => {
+      console.error("Failed to load blog script");
+      setIsLoading(false);
     };
 
     // Fix links after the blog content has loaded
     const fixBlogLinks = () => {
-      // Wait for the blog to load and process links
-      setTimeout(() => {
-        console.log("Fixing blog links");
-        const blogLinks = document.querySelectorAll('#dib-posts a');
-        console.log("Found " + blogLinks.length + " links to process");
-        
-        blogLinks.forEach((link) => {
-          const href = link.getAttribute('href');
-          if (href && (href.includes('lovableproject.com') || href.includes('19612142-4b99-4012-9fb6-80aa52498c64'))) {
-            // Extract just the path part from the URL and make it relative
-            try {
-              const url = new URL(href);
-              const path = url.pathname;
-              link.setAttribute('href', path);
-              console.log("Fixed link: " + href + " -> " + path);
-            } catch (e) {
-              console.error('Invalid URL:', href);
-            }
+      console.log("Fixing blog links");
+      const blogLinks = document.querySelectorAll('#dib-posts a');
+      console.log("Found " + blogLinks.length + " links to process");
+      
+      blogLinks.forEach((link) => {
+        const href = link.getAttribute('href');
+        if (href && (href.includes('lovableproject.com') || href.includes('19612142-4b99-4012-9fb6-80aa52498c64'))) {
+          // Extract just the path part from the URL and make it relative
+          try {
+            const url = new URL(href);
+            const path = url.pathname;
+            link.setAttribute('href', path);
+            console.log("Fixed link: " + href + " -> " + path);
+          } catch (e) {
+            console.error('Invalid URL:', href);
           }
-        });
-      }, 1500); // Give the blog content time to load
+        }
+      });
     };
 
-    // Also run periodically in case of dynamic content changes
-    const interval = setInterval(fixBlogLinks, 3000);
+    // Set up a periodic check for blog content
+    const interval = setInterval(() => {
+      const posts = document.getElementById('dib-posts');
+      if (posts && posts.children.length > 0) {
+        console.log("Found blog content, fixing links");
+        fixBlogLinks();
+        // If we found content, we can stop the interval
+        if (posts.children.length > 1) {
+          clearInterval(interval);
+        }
+      } else {
+        console.log("No blog content found yet, waiting...");
+      }
+    }, 2000);
 
     // Check for mobile-specific adjustments
     if (isMobile) {
@@ -101,13 +127,31 @@ const Resources = () => {
       <Header />
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold text-center mb-8 text-survival-800">
+            Resources & Educational Content
+          </h1>
+          
           {isLoading && (
             <div className="flex flex-col items-center justify-center min-h-[300px]">
-              <div className="w-12 h-12 rounded-full border-4 border-survival-600 border-t-transparent animate-spin"></div>
+              <div className="animate-spin">
+                <Spinner className="h-12 w-12 text-survival-600" />
+              </div>
               <p className="mt-4 text-gray-600">Loading resources...</p>
             </div>
           )}
-          <div id="dib-posts" className="w-full max-w-full overflow-x-auto"></div>
+          
+          {/* The blog container with improved visibility */}
+          <div 
+            id="dib-posts" 
+            className="w-full max-w-full overflow-x-auto bg-white rounded-lg p-4 shadow-sm"
+          ></div>
+          
+          {/* Fallback message if blog doesn't load */}
+          <div id="blog-fallback" className="hidden">
+            <p className="text-center text-gray-600 mt-8">
+              Unable to load resources. Please try refreshing the page.
+            </p>
+          </div>
         </div>
       </main>
       <Footer />
@@ -116,4 +160,3 @@ const Resources = () => {
 };
 
 export default Resources;
-
