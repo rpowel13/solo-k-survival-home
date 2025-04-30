@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
@@ -53,15 +54,39 @@ const Resources = () => {
       
       blogLinks.forEach((link) => {
         const href = link.getAttribute('href');
-        if (href && (href.includes('lovableproject.com') || href.includes('19612142-4b99-4012-9fb6-80aa52498c64'))) {
-          // Extract just the path part from the URL and make it relative
-          try {
-            const url = new URL(href);
-            const path = url.pathname;
-            link.setAttribute('href', path);
-            console.log("Fixed link: " + href + " -> " + path);
-          } catch (e) {
-            console.error('Invalid URL:', href);
+        if (href) {
+          // Check for URLs that need fixing
+          if (href.includes('lovableproject.com') || 
+              href.includes('19612142-4b99-4012-9fb6-80aa52498c64') ||
+              href.includes('dropinblog.com/embed/') ||
+              href.includes('/resources?p=')) {
+            try {
+              // Get the current URL base (protocol + host)
+              const currentBase = window.location.origin;
+              
+              // For post links (those with p= parameter)
+              if (href.includes('p=')) {
+                // Extract the slug from the URL
+                const slugMatch = href.match(/p=([^&]+)/);
+                if (slugMatch && slugMatch[1]) {
+                  const slug = slugMatch[1];
+                  // Create a path with the current origin + blog path + slug
+                  const newPath = `${currentBase}/blog/${slug}`;
+                  link.setAttribute('href', newPath);
+                  console.log("Fixed post link: " + href + " -> " + newPath);
+                }
+              } 
+              // For category links or other internal links
+              else if (href.includes('lovableproject.com') || href.includes('19612142-4b99-4012-9fb6-80aa52498c64')) {
+                const url = new URL(href);
+                const path = url.pathname + url.search;
+                const newPath = `${currentBase}${path}`;
+                link.setAttribute('href', newPath);
+                console.log("Fixed internal link: " + href + " -> " + newPath);
+              }
+            } catch (e) {
+              console.error('Invalid URL:', href, e);
+            }
           }
         }
       });
