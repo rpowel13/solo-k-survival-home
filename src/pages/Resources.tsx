@@ -4,10 +4,12 @@ import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Loader } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   
   useEffect(() => {
     // Update page title and meta description
@@ -49,6 +51,38 @@ const Resources = () => {
     // Fix links after the blog content has loaded
     const fixBlogLinks = () => {
       console.log("Fixing blog links");
+      
+      // Add click event listener to the blog container to handle link clicks
+      const blogContainer = document.getElementById('dib-posts');
+      if (blogContainer) {
+        blogContainer.addEventListener('click', (e) => {
+          // Check if the clicked element is a link
+          const clickedElement = e.target as HTMLElement;
+          const linkElement = clickedElement.closest('a');
+          
+          if (linkElement) {
+            const href = linkElement.getAttribute('href');
+            if (href) {
+              // Handle post links (those with p= parameter)
+              if (href.includes('p=')) {
+                e.preventDefault(); // Prevent default navigation
+                
+                // Extract the slug from the URL
+                const slugMatch = href.match(/p=([^&]+)/);
+                if (slugMatch && slugMatch[1]) {
+                  const slug = slugMatch[1];
+                  console.log("Navigating to blog post:", slug);
+                  
+                  // Use React Router's navigate function
+                  navigate(`/blog/${slug}`);
+                }
+              }
+            }
+          }
+        });
+      }
+      
+      // Also fix all links for direct URL changes
       const blogLinks = document.querySelectorAll('#dib-posts a');
       console.log("Found " + blogLinks.length + " links to process");
       
@@ -74,6 +108,12 @@ const Resources = () => {
                   const newPath = `${currentBase}/blog/${slug}`;
                   link.setAttribute('href', newPath);
                   console.log("Fixed post link: " + href + " -> " + newPath);
+                  
+                  // Also add a click handler to use React Router
+                  link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigate(`/blog/${slug}`);
+                  });
                 }
               } 
               // For category links or other internal links
@@ -144,7 +184,7 @@ const Resources = () => {
       // Reset title to default
       document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
     };
-  }, [isMobile]);
+  }, [isMobile, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col">

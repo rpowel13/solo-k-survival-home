@@ -32,7 +32,7 @@ const ArticleDetail = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { isAuthenticated } = useAdminAuth();
-  const isFromBlogPath = location.pathname.includes('/blog/');
+  const isFromBlogPath = window.location.pathname.includes('/blog/');
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -76,6 +76,10 @@ const ArticleDetail = () => {
         };
         
         console.log("Formatted article data:", articleData);
+        
+        // Update the page title
+        document.title = `${articleData.title} | Survival 401k`;
+        
         setArticle(articleData);
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -91,6 +95,11 @@ const ArticleDetail = () => {
     };
 
     fetchArticle();
+    
+    // Cleanup function to reset the title
+    return () => {
+      document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
+    };
   }, [slug, navigate, toast, isFromBlogPath]);
 
   if (isLoading) {
@@ -165,7 +174,7 @@ const ArticleDetail = () => {
               excerpt={article.excerpt}
               content={article.content}
               tags={article.tags}
-              showWhyChooseSection={true}
+              showWhyChooseSection={false}
               cardBenefits={defaultArticleBenefits}
               cardTitle={article.title}
               cardSubtitle={article.excerpt}
