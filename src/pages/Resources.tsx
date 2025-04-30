@@ -26,6 +26,14 @@ const Resources = () => {
       existingScript.remove();
     }
 
+    // Clear any previous DIB content
+    const existingContainer = document.getElementById('dib-posts');
+    if (existingContainer) {
+      existingContainer.innerHTML = '';
+    }
+
+    console.log("Creating and appending DropInBlog script");
+    
     // Create and append the script tag
     const script = document.createElement("script");
     script.id = 'dib-script';
@@ -40,23 +48,33 @@ const Resources = () => {
         setHasLoadError(true);
         setIsLoading(false);
       }
-    }, 15000); // 15 second timeout
+    }, 20000); // Increase to 20 second timeout
 
     // Script load handler
     script.onload = () => {
-      console.log("Blog script loaded successfully");
-      // Add a small delay to let content render
+      console.log("DropInBlog script loaded successfully");
+      
+      // Add a bit longer delay to let content render completely
       setTimeout(() => {
         hideAdminPanel();
         fixBlogLinks();
         applyMobileStyles();
+        
+        // Check if posts are actually rendered
+        const postsContainer = document.getElementById('dib-posts');
+        if (postsContainer && postsContainer.children.length === 0) {
+          console.log("No posts found in container, forcing refresh");
+          // Force a refresh of the DIB content
+          window.dispatchEvent(new Event('resize'));
+        }
+        
         setIsLoading(false);
-      }, 1500);
+      }, 2500);
     };
 
     // Error handler
     script.onerror = () => {
-      console.error("Failed to load blog script");
+      console.error("Failed to load DropInBlog script");
       setHasLoadError(true);
       setIsLoading(false);
       clearTimeout(loadTimeout);
@@ -82,7 +100,12 @@ const Resources = () => {
     // Fix blog post links to use React Router
     const fixBlogLinks = () => {
       const blogContainer = document.getElementById('dib-posts');
-      if (!blogContainer) return;
+      if (!blogContainer) {
+        console.error("Blog container not found for link fixing");
+        return;
+      }
+      
+      console.log("Setting up blog link handler");
       
       // Add a container-level click handler to capture link clicks
       blogContainer.addEventListener('click', (e) => {
@@ -157,12 +180,8 @@ const Resources = () => {
 
     // Cleanup function
     return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
       clearTimeout(loadTimeout);
-      
-      document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
+      clearInterval(adminCheckInterval);
     };
   }, [isMobile, navigate, isLoading]);
 
@@ -184,8 +203,12 @@ const Resources = () => {
             </div>
           )}
           
-          {/* The blog container */}
-          <div id="dib-posts" className="w-full max-w-full overflow-x-auto bg-white rounded-lg p-4 shadow-sm"></div>
+          {/* The blog container with explicit styling */}
+          <div 
+            id="dib-posts" 
+            className="w-full max-w-full overflow-hidden bg-white rounded-lg p-4 shadow-sm"
+            style={{ minHeight: '400px', display: isLoading ? 'none' : 'block' }}
+          ></div>
           
           {/* Fallback message if blog doesn't load */}
           {hasLoadError && (
