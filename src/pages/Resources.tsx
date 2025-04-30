@@ -135,6 +135,15 @@ const Resources = () => {
     // Set up a periodic check for blog content
     const interval = setInterval(() => {
       const posts = document.getElementById('dib-posts');
+      const adminTools = document.getElementById('dib-admin');
+      
+      // If admin tools are showing, hide them
+      if (adminTools) {
+        adminTools.style.display = 'none';
+        console.log("Hidden admin tools");
+      }
+      
+      // Check for blog content
       if (posts && posts.children.length > 0) {
         console.log("Found blog content, fixing links");
         fixBlogLinks();
