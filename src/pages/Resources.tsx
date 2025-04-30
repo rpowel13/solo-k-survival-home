@@ -1,189 +1,14 @@
 
+import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useEffect, useState } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Loader } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useDropInBlog } from "@/hooks/use-dropinblog";
+import LoadingSpinner from "@/components/resources/LoadingSpinner";
+import ErrorMessage from "@/components/resources/ErrorMessage";
+import BlogContainer from "@/components/resources/BlogContainer";
 
 const Resources = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasLoadError, setHasLoadError] = useState(false);
-  const isMobile = useIsMobile();
-  const navigate = useNavigate();
-  
-  useEffect(() => {
-    // Update page title and meta description
-    document.title = "Resources - Survival 401k";
-    document.querySelector('meta[name="description"]')?.setAttribute(
-      "content",
-      "Resources and educational content about Solo 401k plans, retirement planning, and investment strategies from Survival 401k."
-    );
-
-    // Remove any existing script to avoid duplicates
-    const existingScript = document.getElementById('dib-script');
-    if (existingScript) {
-      existingScript.remove();
-    }
-
-    // Clear any previous DIB content
-    const existingContainer = document.getElementById('dib-posts');
-    if (existingContainer) {
-      existingContainer.innerHTML = '';
-    }
-
-    console.log("Creating and appending DropInBlog script");
-    
-    // Create and append the script tag
-    const script = document.createElement("script");
-    script.id = 'dib-script';
-    script.src = "https://io.dropinblog.com/embedjs/40009ff3-3eb6-4102-85d7-25e628ed8391.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    // Setup a load timeout in case the script doesn't load
-    const loadTimeout = setTimeout(() => {
-      if (isLoading) {
-        console.error("Blog script load timeout");
-        setHasLoadError(true);
-        setIsLoading(false);
-      }
-    }, 20000); // Increase to 20 second timeout
-
-    // Script load handler
-    script.onload = () => {
-      console.log("DropInBlog script loaded successfully");
-      
-      // Add a bit longer delay to let content render completely
-      setTimeout(() => {
-        hideAdminPanel();
-        fixBlogLinks();
-        applyMobileStyles();
-        
-        // Check if posts are actually rendered
-        const postsContainer = document.getElementById('dib-posts');
-        if (postsContainer && postsContainer.children.length === 0) {
-          console.log("No posts found in container, forcing refresh");
-          // Force a refresh of the DIB content
-          window.dispatchEvent(new Event('resize'));
-        }
-        
-        setIsLoading(false);
-      }, 2500);
-    };
-
-    // Error handler
-    script.onerror = () => {
-      console.error("Failed to load DropInBlog script");
-      setHasLoadError(true);
-      setIsLoading(false);
-      clearTimeout(loadTimeout);
-    };
-    
-    // Hide the admin panel if it exists
-    const hideAdminPanel = () => {
-      const adminTools = document.getElementById('dib-admin');
-      if (adminTools) {
-        console.log("Admin panel found, hiding it");
-        adminTools.style.display = 'none';
-      }
-      
-      // Also hide any other admin elements that might appear
-      const adminElements = document.querySelectorAll('[id^="dib-admin"], .dib-admin');
-      adminElements.forEach(el => {
-        if (el instanceof HTMLElement) {
-          el.style.display = 'none';
-        }
-      });
-    };
-    
-    // Fix blog post links to use React Router
-    const fixBlogLinks = () => {
-      const blogContainer = document.getElementById('dib-posts');
-      if (!blogContainer) {
-        console.error("Blog container not found for link fixing");
-        return;
-      }
-      
-      console.log("Setting up blog link handler");
-      
-      // Add a container-level click handler to capture link clicks
-      blogContainer.addEventListener('click', (e) => {
-        const target = e.target as HTMLElement;
-        const linkElement = target.closest('a');
-        
-        if (linkElement) {
-          const href = linkElement.getAttribute('href');
-          if (!href) return;
-          
-          // Check for post links (those with p= parameter)
-          if (href.includes('p=')) {
-            e.preventDefault();
-            try {
-              // Extract the slug from the URL
-              const slugMatch = href.match(/p=([^&]+)/);
-              if (slugMatch && slugMatch[1]) {
-                const slug = slugMatch[1];
-                console.log(`Intercepted click, navigating to: /blog/${slug}`);
-                navigate(`/blog/${slug}`);
-              }
-            } catch (e) {
-              console.error('Invalid URL:', href, e);
-            }
-          }
-        }
-      });
-      
-      console.log("Blog link handler added");
-    };
-    
-    // Apply mobile-specific styles
-    const applyMobileStyles = () => {
-      if (!isMobile) return;
-      
-      // Target the blog container and ensure it's responsive
-      const blogContainer = document.getElementById('dib-posts');
-      if (blogContainer) {
-        blogContainer.style.width = '100%';
-        blogContainer.style.maxWidth = '100%';
-        blogContainer.style.overflowX = 'hidden';
-        
-        // Ensure images don't overflow
-        const images = blogContainer.querySelectorAll('img');
-        images.forEach(img => {
-          img.style.maxWidth = '100%';
-          img.style.height = 'auto';
-        });
-      }
-    };
-    
-    // Set up an interval to periodically check and hide the admin panel
-    // This helps with cases where the admin panel loads after our initial check
-    const adminCheckInterval = setInterval(() => {
-      hideAdminPanel();
-    }, 1000);
-    
-    // Clear the interval after 10 seconds
-    setTimeout(() => {
-      clearInterval(adminCheckInterval);
-    }, 10000);
-    
-    // Apply mobile styles with a delay to ensure content is loaded
-    setTimeout(() => {
-      applyMobileStyles();
-    }, 1500);
-    
-    // And again a bit later just to be safe
-    setTimeout(() => {
-      applyMobileStyles();
-    }, 3000);
-
-    // Cleanup function
-    return () => {
-      clearTimeout(loadTimeout);
-      clearInterval(adminCheckInterval);
-    };
-  }, [isMobile, navigate, isLoading]);
+  const { isLoading, hasLoadError } = useDropInBlog();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -194,34 +19,11 @@ const Resources = () => {
             Resources & Educational Content
           </h1>
           
-          {isLoading && (
-            <div className="flex flex-col items-center justify-center min-h-[300px]">
-              <div className="animate-spin">
-                <Loader className="h-12 w-12 text-survival-600" />
-              </div>
-              <p className="mt-4 text-gray-600">Loading resources...</p>
-            </div>
-          )}
+          {isLoading && <LoadingSpinner />}
           
-          {/* The blog container with explicit styling */}
-          <div 
-            id="dib-posts" 
-            className="w-full max-w-full overflow-hidden bg-white rounded-lg p-4 shadow-sm"
-            style={{ minHeight: '400px', display: isLoading ? 'none' : 'block' }}
-          ></div>
+          <BlogContainer isLoading={isLoading} />
           
-          {/* Fallback message if blog doesn't load */}
-          {hasLoadError && (
-            <div className="text-center text-gray-600 mt-8 p-6 bg-gray-100 rounded-lg">
-              <p className="mb-2">Unable to load resources. Please try refreshing the page.</p>
-              <button 
-                onClick={() => window.location.reload()} 
-                className="text-survival-600 hover:text-survival-700 font-medium"
-              >
-                Refresh Page
-              </button>
-            </div>
-          )}
+          {hasLoadError && <ErrorMessage />}
         </div>
       </main>
       <Footer />
