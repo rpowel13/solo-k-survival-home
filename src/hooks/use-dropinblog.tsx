@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function useDropInBlog() {
@@ -8,6 +8,7 @@ export function useDropInBlog() {
   const [hasLoadError, setHasLoadError] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // Remove any existing script to avoid duplicates
@@ -106,15 +107,28 @@ export function useDropInBlog() {
           const href = linkElement.getAttribute('href');
           if (!href) return;
           
-          // Check for post links (those with p= parameter)
-          if (href.includes('p=')) {
+          // Check for post links (those with p= parameter or internal blog links)
+          if (href.includes('p=') || href.includes('/blog/')) {
             e.preventDefault();
             try {
+              let slug;
+              
               // Extract the slug from the URL
-              const slugMatch = href.match(/p=([^&]+)/);
-              if (slugMatch && slugMatch[1]) {
-                const slug = slugMatch[1];
+              if (href.includes('p=')) {
+                const slugMatch = href.match(/p=([^&]+)/);
+                if (slugMatch && slugMatch[1]) {
+                  slug = slugMatch[1];
+                }
+              } else if (href.includes('/blog/')) {
+                const blogPathMatch = href.match(/\/blog\/([^\/]+)/);
+                if (blogPathMatch && blogPathMatch[1]) {
+                  slug = blogPathMatch[1];
+                }
+              }
+              
+              if (slug) {
                 console.log(`Intercepted click, navigating to: /blog/${slug}`);
+                e.stopPropagation();
                 navigate(`/blog/${slug}`);
               }
             } catch (e) {
@@ -190,7 +204,7 @@ export function useDropInBlog() {
       clearInterval(adminCheckInterval);
       clearInterval(contentCheckInterval);
     };
-  }, [isMobile, navigate, isLoading]);
+  }, [isMobile, navigate, isLoading, location.pathname]);
 
   // Update page metadata
   useEffect(() => {

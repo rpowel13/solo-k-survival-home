@@ -6,6 +6,8 @@ import { useDropInBlog } from "@/hooks/use-dropinblog";
 import LoadingSpinner from "@/components/resources/LoadingSpinner";
 import ErrorMessage from "@/components/resources/ErrorMessage";
 import BlogContainer from "@/components/resources/BlogContainer";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Resources = () => {
   const { isLoading, hasLoadError } = useDropInBlog();
@@ -31,6 +33,14 @@ const Resources = () => {
           <BlogContainer isLoading={isLoading} />
           
           {hasLoadError && <ErrorMessage />}
+          
+          <div className="mt-8 text-center">
+            <Link to="/blog">
+              <Button className="bg-survival-600 hover:bg-survival-700">
+                View All Blog Posts
+              </Button>
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />

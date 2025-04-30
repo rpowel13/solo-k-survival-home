@@ -41,6 +41,8 @@ import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import BlogEditor from "./pages/BlogEditor";
 import Resources from "./pages/Resources";
+import BlogPostPage from "./pages/BlogPost";
+import Blog from "./pages/Blog";
 
 const queryClient = new QueryClient();
 
@@ -84,8 +86,8 @@ const App = () => (
           <Route path="/test-form" element={<TestForm />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<ArticleDetail />} />
-          <Route path="/blog" element={<Resources />} /> {/* Updated to point to Resources */}
-          <Route path="/blog/:slug" element={<ArticleDetail />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/blog/edit/:slug" element={<BlogEditor />} />
           <Route path="/blog/new" element={<BlogEditor />} />
           <Route path="/resources" element={<Resources />} />
