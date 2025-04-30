@@ -24,7 +24,7 @@ export function useDropInBlog() {
 
     console.log("Creating and appending DropInBlog script");
     
-    // Create and append the script tag
+    // Create and append the script tag with the exact URL
     const script = document.createElement("script");
     script.id = 'dib-script';
     script.src = "https://io.dropinblog.com/embedjs/40009ff3-3eb6-4102-85d7-25e628ed8391.js";
@@ -44,7 +44,7 @@ export function useDropInBlog() {
     script.onload = () => {
       console.log("DropInBlog script loaded successfully");
       
-      // Add a bit longer delay to let content render completely
+      // Add a longer delay to let content render completely
       setTimeout(() => {
         hideAdminPanel();
         fixBlogLinks();
@@ -52,14 +52,14 @@ export function useDropInBlog() {
         
         // Check if posts are actually rendered
         const postsContainer = document.getElementById('dib-posts');
-        if (postsContainer && postsContainer.children.length === 0) {
+        if (postsContainer && (!postsContainer.children.length || postsContainer.innerHTML === '')) {
           console.log("No posts found in container, forcing refresh");
           // Force a refresh of the DIB content
           window.dispatchEvent(new Event('resize'));
         }
         
         setIsLoading(false);
-      }, 2500);
+      }, 3000);
     };
 
     // Error handler
@@ -168,10 +168,27 @@ export function useDropInBlog() {
       applyMobileStyles();
     }, 3000);
 
+    // Force the blog to refresh periodically if it appears empty
+    const contentCheckInterval = setInterval(() => {
+      const postsContainer = document.getElementById('dib-posts');
+      if (postsContainer && (!postsContainer.children.length || postsContainer.innerHTML === '')) {
+        console.log("Blog container still empty, triggering refresh");
+        window.dispatchEvent(new Event('resize'));
+      } else {
+        clearInterval(contentCheckInterval);
+      }
+    }, 2000);
+
+    // Stop checking after 20 seconds regardless
+    setTimeout(() => {
+      clearInterval(contentCheckInterval);
+    }, 20000);
+
     // Cleanup function
     return () => {
       clearTimeout(loadTimeout);
       clearInterval(adminCheckInterval);
+      clearInterval(contentCheckInterval);
     };
   }, [isMobile, navigate, isLoading]);
 

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useDropInBlog } from "@/hooks/use-dropinblog";
@@ -9,6 +9,13 @@ import BlogContainer from "@/components/resources/BlogContainer";
 
 const Resources = () => {
   const { isLoading, hasLoadError } = useDropInBlog();
+  
+  useEffect(() => {
+    // Force refresh the blog content when the component mounts
+    if (!isLoading && !hasLoadError) {
+      window.dispatchEvent(new Event('resize'));
+    }
+  }, [isLoading, hasLoadError]);
 
   return (
     <div className="min-h-screen flex flex-col">
