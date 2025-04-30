@@ -1,3 +1,4 @@
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
@@ -25,7 +26,7 @@ const Resources = () => {
       existingScript.remove();
     }
 
-    // Create and append the script tag with an id for tracking
+    // Create and append the script tag
     const script = document.createElement("script");
     script.id = 'dib-script';
     script.src = "https://io.dropinblog.com/embedjs/40009ff3-3eb6-4102-85d7-25e628ed8391.js";
@@ -41,49 +42,24 @@ const Resources = () => {
       }
     }, 15000); // 15 second timeout
 
-    // Run when script loads
+    // Script load handler
     script.onload = () => {
-      console.log("Blog script loaded");
-      setupBlogContent();
-      clearTimeout(loadTimeout);
-    };
-
-    // Add error handling for script loading
-    script.onerror = () => {
-      console.error("Failed to load blog script");
-      setHasLoadError(true);
-      setIsLoading(false);
-      clearTimeout(loadTimeout);
-    };
-
-    // Function to handle all blog content setup
-    const setupBlogContent = () => {
-      // Add a small delay to let the blog content render
+      console.log("Blog script loaded successfully");
+      // Add a small delay to let content render
       setTimeout(() => {
         hideAdminPanel();
         fixBlogLinks();
         applyMobileStyles();
         setIsLoading(false);
-      }, 1000);
-      
-      // Set up periodic checks for late-loading content
-      const interval = setInterval(() => {
-        hideAdminPanel();
-        fixBlogLinks();
-        
-        const posts = document.getElementById('dib-posts');
-        // If we found content with more than 1 child, we can stop the interval
-        if (posts && posts.children.length > 1) {
-          clearInterval(interval);
-          console.log("Blog content fully loaded, stopping checks");
-        }
-      }, 2000);
-      
-      // Clear the interval after 30 seconds regardless
-      setTimeout(() => {
-        clearInterval(interval);
-        console.log("Stopped periodic blog content checks");
-      }, 30000);
+      }, 1500);
+    };
+
+    // Error handler
+    script.onerror = () => {
+      console.error("Failed to load blog script");
+      setHasLoadError(true);
+      setIsLoading(false);
+      clearTimeout(loadTimeout);
     };
     
     // Hide the admin panel if it exists
@@ -93,71 +69,49 @@ const Resources = () => {
         console.log("Admin panel found, hiding it");
         adminTools.style.display = 'none';
       }
+      
+      // Also hide any other admin elements that might appear
+      const adminElements = document.querySelectorAll('[id^="dib-admin"], .dib-admin');
+      adminElements.forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.style.display = 'none';
+        }
+      });
     };
     
-    // Fix all blog post links to use React Router
+    // Fix blog post links to use React Router
     const fixBlogLinks = () => {
-      console.log("Fixing blog links");
+      const blogContainer = document.getElementById('dib-posts');
+      if (!blogContainer) return;
       
       // Add a container-level click handler to capture link clicks
-      const blogContainer = document.getElementById('dib-posts');
-      if (blogContainer) {
-        // Remove any existing listener first to avoid duplicates
-        blogContainer.removeEventListener('click', handleBlogContainerClick);
-        blogContainer.addEventListener('click', handleBlogContainerClick);
-        console.log("Added blog container click listener");
-      }
-      
-      // Fix direct links
-      const blogLinks = document.querySelectorAll('#dib-posts a');
-      if (blogLinks.length) {
-        console.log(`Found ${blogLinks.length} links to process`);
+      blogContainer.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const linkElement = target.closest('a');
         
-        blogLinks.forEach((link) => {
-          const href = link.getAttribute('href');
+        if (linkElement) {
+          const href = linkElement.getAttribute('href');
           if (!href) return;
           
           // Check for post links (those with p= parameter)
           if (href.includes('p=')) {
+            e.preventDefault();
             try {
               // Extract the slug from the URL
               const slugMatch = href.match(/p=([^&]+)/);
               if (slugMatch && slugMatch[1]) {
                 const slug = slugMatch[1];
-                const newPath = `/blog/${slug}`;
-                console.log(`Fixed post link: ${href} -> ${newPath}`);
-                
-                // Set a data attribute to store the slug for easier retrieval later
-                link.setAttribute('data-blog-slug', slug);
-                link.setAttribute('href', newPath);
+                console.log(`Intercepted click, navigating to: /blog/${slug}`);
+                navigate(`/blog/${slug}`);
               }
             } catch (e) {
               console.error('Invalid URL:', href, e);
             }
           }
-        });
-      } else {
-        console.log("No blog links found yet");
-      }
-    };
-    
-    // Handler for clicks inside the blog container
-    const handleBlogContainerClick = (e) => {
-      const clickedElement = e.target;
-      const linkElement = clickedElement.closest('a');
-      
-      if (linkElement) {
-        const href = linkElement.getAttribute('href');
-        const slug = linkElement.getAttribute('data-blog-slug');
-        
-        // If it's a blog post link (either from href or data attribute)
-        if ((href && href.startsWith('/blog/')) || slug) {
-          e.preventDefault();
-          const targetSlug = slug || href.split('/blog/')[1];
-          console.log(`Intercepted click, navigating to: /blog/${targetSlug}`);
-          navigate(`/blog/${targetSlug}`);
         }
-      }
+      });
+      
+      console.log("Blog link handler added");
     };
     
     // Apply mobile-specific styles
@@ -178,28 +132,35 @@ const Resources = () => {
             img.style.maxWidth = '100%';
             img.style.height = 'auto';
           });
-          
-          console.log("Mobile blog view adjusted");
         }
       };
       
-      // Run multiple times to catch dynamically loaded content
-      setTimeout(adjustMobileView, 1000);
-      setTimeout(adjustMobileView, 2500);
-      setTimeout(adjustMobileView, 5000);
+      // Apply styles with a delay to ensure content is loaded
+      setTimeout(adjustMobileStyles, 1500);
+      setTimeout(adjustMobileStyles, 3000);
     };
+    
+    // Set up an interval to periodically check and hide the admin panel
+    // This helps with cases where the admin panel loads after our initial check
+    const adminCheckInterval = setInterval(() => {
+      hideAdminPanel();
+    }, 1000);
+    
+    // Clear the interval after 10 seconds
+    setTimeout(() => {
+      clearInterval(adminCheckInterval);
+    }, 10000);
 
     // Cleanup function
     return () => {
-      // Remove the script when component unmounts
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
+      clearTimeout(loadTimeout);
       
-      // Reset page title
       document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
     };
-  }, [isMobile, navigate]);
+  }, [isMobile, navigate, isLoading]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -219,11 +180,8 @@ const Resources = () => {
             </div>
           )}
           
-          {/* The blog container with improved visibility */}
-          <div 
-            id="dib-posts" 
-            className="w-full max-w-full overflow-x-auto bg-white rounded-lg p-4 shadow-sm"
-          ></div>
+          {/* The blog container */}
+          <div id="dib-posts" className="w-full max-w-full overflow-x-auto bg-white rounded-lg p-4 shadow-sm"></div>
           
           {/* Fallback message if blog doesn't load */}
           {hasLoadError && (
