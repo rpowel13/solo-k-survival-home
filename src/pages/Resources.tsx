@@ -1,9 +1,8 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Spinner } from "lucide-react";
+import { Loader } from "lucide-react";
 
 const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -134,7 +133,7 @@ const Resources = () => {
           {isLoading && (
             <div className="flex flex-col items-center justify-center min-h-[300px]">
               <div className="animate-spin">
-                <Spinner className="h-12 w-12 text-survival-600" />
+                <Loader className="h-12 w-12 text-survival-600" />
               </div>
               <p className="mt-4 text-gray-600">Loading resources...</p>
             </div>
