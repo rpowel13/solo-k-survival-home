@@ -118,26 +118,20 @@ const Resources = () => {
     const applyMobileStyles = () => {
       if (!isMobile) return;
       
-      const adjustMobileView = () => {
-        // Target the blog container and ensure it's responsive
-        const blogContainer = document.getElementById('dib-posts');
-        if (blogContainer) {
-          blogContainer.style.width = '100%';
-          blogContainer.style.maxWidth = '100%';
-          blogContainer.style.overflowX = 'hidden';
-          
-          // Ensure images don't overflow
-          const images = blogContainer.querySelectorAll('img');
-          images.forEach(img => {
-            img.style.maxWidth = '100%';
-            img.style.height = 'auto';
-          });
-        }
-      };
-      
-      // Apply styles with a delay to ensure content is loaded
-      setTimeout(adjustMobileStyles, 1500);
-      setTimeout(adjustMobileStyles, 3000);
+      // Target the blog container and ensure it's responsive
+      const blogContainer = document.getElementById('dib-posts');
+      if (blogContainer) {
+        blogContainer.style.width = '100%';
+        blogContainer.style.maxWidth = '100%';
+        blogContainer.style.overflowX = 'hidden';
+        
+        // Ensure images don't overflow
+        const images = blogContainer.querySelectorAll('img');
+        images.forEach(img => {
+          img.style.maxWidth = '100%';
+          img.style.height = 'auto';
+        });
+      }
     };
     
     // Set up an interval to periodically check and hide the admin panel
@@ -150,6 +144,16 @@ const Resources = () => {
     setTimeout(() => {
       clearInterval(adminCheckInterval);
     }, 10000);
+    
+    // Apply mobile styles with a delay to ensure content is loaded
+    setTimeout(() => {
+      applyMobileStyles();
+    }, 1500);
+    
+    // And again a bit later just to be safe
+    setTimeout(() => {
+      applyMobileStyles();
+    }, 3000);
 
     // Cleanup function
     return () => {
