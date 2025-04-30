@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [hasLoadError, setHasLoadError] = useState(false);
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   
@@ -32,132 +33,138 @@ const Resources = () => {
     script.async = true;
     document.body.appendChild(script);
 
+    // Setup a load timeout in case the script doesn't load
+    const loadTimeout = setTimeout(() => {
+      if (isLoading) {
+        console.error("Blog script load timeout");
+        setHasLoadError(true);
+        setIsLoading(false);
+      }
+    }, 15000); // 15 second timeout
+
     // Run when script loads
     script.onload = () => {
       console.log("Blog script loaded");
-      setIsLoading(false);
-      // Give it a moment to render content before fixing links
-      setTimeout(() => {
-        fixBlogLinks();
-      }, 1000);
+      setupBlogContent();
+      clearTimeout(loadTimeout);
     };
 
     // Add error handling for script loading
     script.onerror = () => {
       console.error("Failed to load blog script");
+      setHasLoadError(true);
       setIsLoading(false);
+      clearTimeout(loadTimeout);
     };
 
-    // Fix links after the blog content has loaded
+    // Function to handle all blog content setup
+    const setupBlogContent = () => {
+      // Add a small delay to let the blog content render
+      setTimeout(() => {
+        hideAdminPanel();
+        fixBlogLinks();
+        applyMobileStyles();
+        setIsLoading(false);
+      }, 1000);
+      
+      // Set up periodic checks for late-loading content
+      const interval = setInterval(() => {
+        hideAdminPanel();
+        fixBlogLinks();
+        
+        const posts = document.getElementById('dib-posts');
+        // If we found content with more than 1 child, we can stop the interval
+        if (posts && posts.children.length > 1) {
+          clearInterval(interval);
+          console.log("Blog content fully loaded, stopping checks");
+        }
+      }, 2000);
+      
+      // Clear the interval after 30 seconds regardless
+      setTimeout(() => {
+        clearInterval(interval);
+        console.log("Stopped periodic blog content checks");
+      }, 30000);
+    };
+    
+    // Hide the admin panel if it exists
+    const hideAdminPanel = () => {
+      const adminTools = document.getElementById('dib-admin');
+      if (adminTools) {
+        console.log("Admin panel found, hiding it");
+        adminTools.style.display = 'none';
+      }
+    };
+    
+    // Fix all blog post links to use React Router
     const fixBlogLinks = () => {
       console.log("Fixing blog links");
       
-      // Add click event listener to the blog container to handle link clicks
+      // Add a container-level click handler to capture link clicks
       const blogContainer = document.getElementById('dib-posts');
       if (blogContainer) {
-        blogContainer.addEventListener('click', (e) => {
-          // Check if the clicked element is a link
-          const clickedElement = e.target as HTMLElement;
-          const linkElement = clickedElement.closest('a');
-          
-          if (linkElement) {
-            const href = linkElement.getAttribute('href');
-            if (href) {
-              // Handle post links (those with p= parameter)
-              if (href.includes('p=')) {
-                e.preventDefault(); // Prevent default navigation
-                
-                // Extract the slug from the URL
-                const slugMatch = href.match(/p=([^&]+)/);
-                if (slugMatch && slugMatch[1]) {
-                  const slug = slugMatch[1];
-                  console.log("Navigating to blog post:", slug);
-                  
-                  // Use React Router's navigate function
-                  navigate(`/blog/${slug}`);
-                }
-              }
-            }
-          }
-        });
+        // Remove any existing listener first to avoid duplicates
+        blogContainer.removeEventListener('click', handleBlogContainerClick);
+        blogContainer.addEventListener('click', handleBlogContainerClick);
+        console.log("Added blog container click listener");
       }
       
-      // Also fix all links for direct URL changes
+      // Fix direct links
       const blogLinks = document.querySelectorAll('#dib-posts a');
-      console.log("Found " + blogLinks.length + " links to process");
-      
-      blogLinks.forEach((link) => {
-        const href = link.getAttribute('href');
-        if (href) {
-          // Check for URLs that need fixing
-          if (href.includes('lovableproject.com') || 
-              href.includes('19612142-4b99-4012-9fb6-80aa52498c64') ||
-              href.includes('dropinblog.com/embed/') ||
-              href.includes('/resources?p=')) {
+      if (blogLinks.length) {
+        console.log(`Found ${blogLinks.length} links to process`);
+        
+        blogLinks.forEach((link) => {
+          const href = link.getAttribute('href');
+          if (!href) return;
+          
+          // Check for post links (those with p= parameter)
+          if (href.includes('p=')) {
             try {
-              // Get the current URL base (protocol + host)
-              const currentBase = window.location.origin;
-              
-              // For post links (those with p= parameter)
-              if (href.includes('p=')) {
-                // Extract the slug from the URL
-                const slugMatch = href.match(/p=([^&]+)/);
-                if (slugMatch && slugMatch[1]) {
-                  const slug = slugMatch[1];
-                  // Create a path with the current origin + blog path + slug
-                  const newPath = `${currentBase}/blog/${slug}`;
-                  link.setAttribute('href', newPath);
-                  console.log("Fixed post link: " + href + " -> " + newPath);
-                  
-                  // Also add a click handler to use React Router
-                  link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navigate(`/blog/${slug}`);
-                  });
-                }
-              } 
-              // For category links or other internal links
-              else if (href.includes('lovableproject.com') || href.includes('19612142-4b99-4012-9fb6-80aa52498c64')) {
-                const url = new URL(href);
-                const path = url.pathname + url.search;
-                const newPath = `${currentBase}${path}`;
+              // Extract the slug from the URL
+              const slugMatch = href.match(/p=([^&]+)/);
+              if (slugMatch && slugMatch[1]) {
+                const slug = slugMatch[1];
+                const newPath = `/blog/${slug}`;
+                console.log(`Fixed post link: ${href} -> ${newPath}`);
+                
+                // Set a data attribute to store the slug for easier retrieval later
+                link.setAttribute('data-blog-slug', slug);
                 link.setAttribute('href', newPath);
-                console.log("Fixed internal link: " + href + " -> " + newPath);
               }
             } catch (e) {
               console.error('Invalid URL:', href, e);
             }
           }
-        }
-      });
-    };
-
-    // Set up a periodic check for blog content
-    const interval = setInterval(() => {
-      const posts = document.getElementById('dib-posts');
-      const adminTools = document.getElementById('dib-admin');
-      
-      // If admin tools are showing, hide them
-      if (adminTools) {
-        adminTools.style.display = 'none';
-        console.log("Hidden admin tools");
-      }
-      
-      // Check for blog content
-      if (posts && posts.children.length > 0) {
-        console.log("Found blog content, fixing links");
-        fixBlogLinks();
-        // If we found content, we can stop the interval
-        if (posts.children.length > 1) {
-          clearInterval(interval);
-        }
+        });
       } else {
-        console.log("No blog content found yet, waiting...");
+        console.log("No blog links found yet");
       }
-    }, 2000);
-
-    // Check for mobile-specific adjustments
-    if (isMobile) {
+    };
+    
+    // Handler for clicks inside the blog container
+    const handleBlogContainerClick = (e) => {
+      const clickedElement = e.target;
+      const linkElement = clickedElement.closest('a');
+      
+      if (linkElement) {
+        const href = linkElement.getAttribute('href');
+        const slug = linkElement.getAttribute('data-blog-slug');
+        
+        // If it's a blog post link (either from href or data attribute)
+        if ((href && href.startsWith('/blog/')) || slug) {
+          e.preventDefault();
+          const targetSlug = slug || href.split('/blog/')[1];
+          console.log(`Intercepted click, navigating to: /blog/${targetSlug}`);
+          navigate(`/blog/${targetSlug}`);
+        }
+      }
+    };
+    
+    // Apply mobile-specific styles
+    const applyMobileStyles = () => {
+      if (!isMobile) return;
+      
       const adjustMobileView = () => {
         // Target the blog container and ensure it's responsive
         const blogContainer = document.getElementById('dib-posts');
@@ -181,16 +188,16 @@ const Resources = () => {
       setTimeout(adjustMobileView, 1000);
       setTimeout(adjustMobileView, 2500);
       setTimeout(adjustMobileView, 5000);
-    }
+    };
 
+    // Cleanup function
     return () => {
-      // Cleanup: remove the script when component unmounts
+      // Remove the script when component unmounts
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }
-      // Clear the interval
-      clearInterval(interval);
-      // Reset title to default
+      
+      // Reset page title
       document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
     };
   }, [isMobile, navigate]);
@@ -220,11 +227,17 @@ const Resources = () => {
           ></div>
           
           {/* Fallback message if blog doesn't load */}
-          <div id="blog-fallback" className="hidden">
-            <p className="text-center text-gray-600 mt-8">
-              Unable to load resources. Please try refreshing the page.
-            </p>
-          </div>
+          {hasLoadError && (
+            <div className="text-center text-gray-600 mt-8 p-6 bg-gray-100 rounded-lg">
+              <p className="mb-2">Unable to load resources. Please try refreshing the page.</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="text-survival-600 hover:text-survival-700 font-medium"
+              >
+                Refresh Page
+              </button>
+            </div>
+          )}
         </div>
       </main>
       <Footer />
