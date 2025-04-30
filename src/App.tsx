@@ -84,7 +84,7 @@ const App = () => (
           <Route path="/test-form" element={<TestForm />} />
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/:slug" element={<ArticleDetail />} />
-          <Route path="/blog" element={<Articles />} />
+          <Route path="/blog" element={<Resources />} /> {/* Updated to point to Resources */}
           <Route path="/blog/:slug" element={<ArticleDetail />} />
           <Route path="/blog/edit/:slug" element={<BlogEditor />} />
           <Route path="/blog/new" element={<BlogEditor />} />
