@@ -25,7 +25,7 @@ export const DesktopNav = () => {
         to="/learning" 
         className="text-gray-700 hover:text-survival-600 transition flex items-center"
       >
-        <GraduationCap className="h-4 w-4 mr-1" />
+        <BookOpen className="h-4 w-4 mr-1" />
         Learning
       </Link>
       <Link 
