@@ -37,6 +37,7 @@ import New401kFormPage from "./pages/applications/New401kFormPage";
 import FirstResponderLLCPayment from "./pages/payments/FirstResponderLLCPayment";
 import FirstResponder401kPayment from "./pages/payments/FirstResponder401kPayment";
 import TestForm from "./pages/TestForm";
+import Learning from "./pages/Learning";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +79,7 @@ const App = () => (
           <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
           <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
           <Route path="/test-form" element={<TestForm />} />
+          <Route path="/learning" element={<Learning />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
