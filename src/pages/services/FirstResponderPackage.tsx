@@ -87,7 +87,7 @@ const FirstResponderPackage = () => {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Key Benefits</h2>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Benefits of Solo 401k for First Responders</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
               <CardHeader>
