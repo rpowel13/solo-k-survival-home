@@ -15,7 +15,10 @@ const Learning = () => {
     
     // Cleanup function to remove script when component unmounts
     return () => {
-      document.head.removeChild(script);
+      // Check if script is still in the document before attempting to remove it
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
     };
   }, []);
 
