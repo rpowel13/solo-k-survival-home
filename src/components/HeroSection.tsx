@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -131,8 +132,18 @@ const HeroSection = () => {
           </div>
           
           <div className="relative">
+            <div className="rounded-xl overflow-hidden shadow-2xl border-8 border-survival-100 transform hover:scale-[1.02] transition-all duration-300">
+              <iframe 
+                className="w-full aspect-video"
+                src="https://www.youtube.com/embed/5WWYz9ZAF4I?si=iUigG-FMgYcGNoh-" 
+                title="Solo 401k and LLC Benefits Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen>
+              </iframe>
+            </div>
+            
             <div 
-                className="bg-white rounded-xl p-10 shadow-2xl border-8 border-survival-100 transform hover:scale-[1.02] transition-all duration-300" 
+                className="bg-white rounded-xl p-10 shadow-2xl border-8 border-survival-100 transform hover:scale-[1.02] transition-all duration-300 mt-8" 
                 style={{ 
                   boxShadow: "0 25px 60px rgba(8, 28, 86, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.4)"
                 }}>
