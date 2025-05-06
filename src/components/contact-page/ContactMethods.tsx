@@ -16,7 +16,7 @@ const ContactMethods = () => {
             <Phone className="h-5 w-5 mr-3 text-survival-600 mt-0.5" />
             <div>
               <h3 className="font-medium">Phone</h3>
-              <p className="text-gray-600">(833) 224-5517</p>
+              <p className="text-gray-600">210-639-7227</p>
               <p className="text-sm text-gray-500 mt-1">Monday-Friday, 9am-6pm CT</p>
             </div>
           </div>
