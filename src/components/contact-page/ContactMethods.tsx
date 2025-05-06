@@ -27,9 +27,14 @@ const ContactMethods = () => {
               <h3 className="font-medium">Email</h3>
               <p className="text-gray-600">info@survival401k.com</p>
               <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
-              
-              <div className="mt-2 flex items-center">
-                <Calendar className="h-4 w-4 mr-2 text-survival-600" />
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm">
+            <div className="flex items-center">
+              <Calendar className="h-5 w-5 mr-3 text-survival-600" />
+              <div>
+                <h3 className="font-medium">Schedule a Consultation</h3>
                 <a 
                   href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke&staff=sdpi7niilv7t6k07" 
                   target="_blank" 
@@ -39,8 +44,9 @@ const ContactMethods = () => {
                   data-staff="sdpi7niilv7t6k07"
                   className="text-survival-600 font-medium hover:underline"
                 >
-                  Schedule a Consultation
+                  Book your appointment online
                 </a>
+                <p className="text-sm text-gray-500 mt-1">Get personalized guidance for your retirement needs</p>
               </div>
             </div>
           </div>
