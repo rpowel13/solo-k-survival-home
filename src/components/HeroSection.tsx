@@ -97,7 +97,7 @@ const HeroSection = () => {
             <div className="mt-8 flex flex-col gap-3 items-center md:items-start">
               <Link to="/services/solo-401k">
                 <Button className="bg-white text-survival-800 hover:bg-gray-100 shadow-md">
-                  Explore Solo 401k
+                  Get Started Now!
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
