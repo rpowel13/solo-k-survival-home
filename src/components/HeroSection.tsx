@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -75,7 +76,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative overflow-hidden bg-survival-800 py-12 md:py-20">
+    <section className="relative overflow-hidden bg-survival-800 pt-6 pb-12 md:pt-10 md:pb-20">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 z-0 opacity-15 bg-cover bg-center"
@@ -85,8 +86,8 @@ const HeroSection = () => {
       ></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div className="pt-4">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 bg-opacity-80 p-4 rounded-lg shadow-lg">
               Retirement Plans for Entrepreneurs & First Responders
             </h1>
@@ -94,7 +95,7 @@ const HeroSection = () => {
               Self-directed retirement solutions designed for entrepreneurs, First Responders, small business owners, independent professionals, and gig economy workers.
             </p>
             
-            <div className="mt-8 flex flex-col gap-3 items-center md:items-start">
+            <div className="mt-6 flex flex-col gap-3 items-center md:items-start">
               <Link to="/services/solo-401k">
                 <Button className="bg-white text-survival-800 hover:bg-gray-100 shadow-md">
                   Get Started Now!
