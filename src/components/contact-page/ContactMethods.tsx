@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Phone, Mail } from "lucide-react";
+import { Phone, Mail, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const ContactMethods = () => {
@@ -27,6 +27,21 @@ const ContactMethods = () => {
               <h3 className="font-medium">Email</h3>
               <p className="text-gray-600">info@survival401k.com</p>
               <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
+              
+              <div className="mt-2 flex items-center">
+                <Calendar className="h-4 w-4 mr-2 text-survival-600" />
+                <a 
+                  href="https://live.vcita.com/site/izk040b42jnjcf3c/online-scheduling?service=mscylmpg3ioi58ke&staff=sdpi7niilv7t6k07" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  data-id="livesite-widget" 
+                  data-service="mscylmpg3ioi58ke" 
+                  data-staff="sdpi7niilv7t6k07"
+                  className="text-survival-600 font-medium hover:underline"
+                >
+                  Schedule a Consultation
+                </a>
+              </div>
             </div>
           </div>
         </div>
