@@ -1,9 +1,13 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import ContactForm from "@/components/ContactForm";
+import VCitaIframe from "@/components/contact/VCitaIframe";
 
 const MessageCard: React.FC = () => {
+  const handleIframeError = () => {
+    console.error("Failed to load vCita iframe");
+  };
+
   return (
     <Card className="shadow-md">
       <CardHeader>
@@ -11,7 +15,7 @@ const MessageCard: React.FC = () => {
         <CardDescription>Get in touch with our team</CardDescription>
       </CardHeader>
       <CardContent>
-        <ContactForm />
+        <VCitaIframe onError={handleIframeError} />
       </CardContent>
     </Card>
   );
