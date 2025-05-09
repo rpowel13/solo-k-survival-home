@@ -117,10 +117,10 @@ const Index = () => {
         <Phone className="h-5 w-5 mr-2 text-survival-600" />
         Sales and Support Line: 
         <a 
-          href="tel:+12106397227" 
+          href="tel:+18332245517" 
           className="ml-2 text-survival-600 font-bold hover:underline"
         >
-          210-639-7227
+          833-224-5517
         </a>
       </div>
       
