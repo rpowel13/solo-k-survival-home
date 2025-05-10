@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -45,43 +46,49 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <HelmetProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/legal-disclosures" element={<LegalDisclosures />} />
-          <Route path="/services/solo-401k" element={<Solo401k />} />
-          <Route path="/services/llc-creation" element={<LLCCreation />} />
-          <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />
-          <Route path="/services/alternative-investments" element={<AlternativeInvestments />} />
-          <Route path="/tools/retirement-calculator" element={<RetirementCalculator />} />
-          <Route path="/tools/loan-calculator" element={<LoanCalculator />} />
-          <Route path="/tools/solo-401k-calculator" element={<Solo401kCalculator />} />
-          <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
-          <Route path="/apply/llc" element={<LLCApplication />} />
-          <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
-          <Route path="/apply/alternative-investments" element={<AlternativeInvestmentsApplication />} />
-          <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
-          <Route path="/payment/llc" element={<LLCPayment />} />
-          <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
-          <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
-          <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
-          <Route path="/payment/first-responder-llc" element={<FirstResponderLLCPayment />} />
-          <Route path="/payment/first-responder-401k" element={<FirstResponder401kPayment />} />
-          <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
-          <Route path="/apply/new-solo-401k" element={<New401kApplication />} />
-          <Route path="/apply/new-401k-form" element={<New401kFormPage />} />
-          <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
-          <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
-          <Route path="/test-form" element={<TestForm />} />
-          <Route path="/learning" element={<Learning />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/legal-disclosures" element={<LegalDisclosures />} />
+              <Route path="/services/solo-401k" element={<Solo401k />} />
+              <Route path="/services/llc-creation" element={<LLCCreation />} />
+              <Route path="/services/first-responder-package" element={<FirstResponderPackage />} />
+              <Route path="/services/alternative-investments" element={<AlternativeInvestments />} />
+              <Route path="/tools/retirement-calculator" element={<RetirementCalculator />} />
+              <Route path="/tools/loan-calculator" element={<LoanCalculator />} />
+              <Route path="/tools/solo-401k-calculator" element={<Solo401kCalculator />} />
+              <Route path="/apply/solo-401k" element={<Solo401kApplication />} />
+              <Route path="/apply/llc" element={<LLCApplication />} />
+              <Route path="/apply/first-responder" element={<FirstResponderApplication />} />
+              <Route path="/apply/alternative-investments" element={<AlternativeInvestmentsApplication />} />
+              <Route path="/payment/solo-401k" element={<Solo401kPayment />} />
+              <Route path="/payment/llc" element={<LLCPayment />} />
+              <Route path="/payment/annual-fee" element={<AnnualFeePayment />} />
+              <Route path="/payment/reinstatement-fee" element={<ReinstatementFeePayment />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/zapier-settings" element={<ZapierSettings />} />
+              <Route path="/payment/first-responder" element={<FirstResponderPayment />} />
+              <Route path="/payment/first-responder-llc" element={<FirstResponderLLCPayment />} />
+              <Route path="/payment/first-responder-401k" element={<FirstResponder401kPayment />} />
+              <Route path="/tools/rmd-calculator" element={<RMDCalculator />} />
+              <Route path="/apply/new-solo-401k" element={<New401kApplication />} />
+              <Route path="/apply/new-401k-form" element={<New401kFormPage />} />
+              <Route path="/apply/first-responder-llc" element={<FirstResponderLLCApplication />} />
+              <Route path="/apply/first-responder-401k" element={<FirstResponder401kApplication />} />
+              <Route path="/test-form" element={<TestForm />} />
+              <Route path="/learning" element={<Learning />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Router>
+          <Toaster />
+          <Sonner />
+        </TooltipProvider>
+      </QueryClientProvider>
     </HelmetProvider>
   );
 }
