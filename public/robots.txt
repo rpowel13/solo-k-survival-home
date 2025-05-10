@@ -21,12 +21,15 @@ Sitemap: https://survival401k.com/sitemap.xml
 # Specific search engine directives
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 5
 
 User-agent: DuckDuckBot
 Allow: /
+Crawl-delay: 5
 
 # Social media crawlers
 User-agent: Twitterbot
@@ -34,6 +37,3 @@ Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
-
-# Rate limiting
-Crawl-delay: 10

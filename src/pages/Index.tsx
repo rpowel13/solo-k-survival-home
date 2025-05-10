@@ -17,6 +17,7 @@ import InvestmentOptionsSection from "@/components/InvestmentOptionsSection";
 import { useState, useEffect } from "react";
 import { getZapierWebhookUrl, isWebhookConfigured, validateZapierWebhook, initZapierConfig } from "@/services/zapierConfigService";
 import { useToast } from "@/components/ui/use-toast";
+import { Helmet } from "react-helmet-async";
 
 const sectionBackgrounds = {
   services: "bg-gradient-to-br from-soft-blue/20 to-soft-blue/10",
@@ -36,11 +37,8 @@ const Index = () => {
   const { toast } = useToast();
   
   useEffect(() => {
-    document.title = "Survival 401k - Solo 401k Plans for Self-Employed Professionals";
-    document.querySelector('meta[name="description"]')?.setAttribute(
-      "content",
-      "Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings."
-    );
+    // No longer need to set document title and meta description here
+    // as we're now using Helmet for this purpose
     
     const webhookTypes = ['crm', 'consultation', 'solo401k', 'llc', 'first_responder'];
     webhookTypes.forEach(type => initZapierConfig(type as any));
@@ -111,6 +109,112 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Survival 401k - Solo 401k Plans for Self-Employed Professionals</title>
+        <meta name="description" content="Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings." />
+        <meta name="keywords" content="solo 401k, self-employed retirement, small business 401k, individual 401k, retirement planning, tax-advantaged retirement, first responder retirement, alternative investments" />
+        <link rel="canonical" href="https://survival401k.com/" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://survival401k.com/" />
+        <meta property="og:title" content="Survival 401k - Solo 401k Plans for Self-Employed Professionals" />
+        <meta property="og:description" content="Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings." />
+        <meta property="og:image" content="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Survival 401k - Solo 401k Plans for Self-Employed Professionals" />
+        <meta name="twitter:description" content="Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings." />
+        <meta name="twitter:image" content="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" />
+        
+        {/* Structured Data for Local Business */}
+        <script type="application/ld+json">{`
+          {
+            "@context": "https://schema.org",
+            "@type": "FinancialService",
+            "name": "Survival 401k",
+            "url": "https://survival401k.com/",
+            "logo": "/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png",
+            "description": "Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals.",
+            "telephone": "+18332245517",
+            "address": {
+              "@type": "PostalAddress",
+              "addressCountry": "US"
+            },
+            "sameAs": [
+              "https://www.facebook.com/survival401k",
+              "https://twitter.com/survival401k",
+              "https://www.linkedin.com/company/survival401k"
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "401k Services",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Solo 401k Plans",
+                    "description": "Customized retirement plans for self-employed individuals."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "LLC Creation",
+                    "description": "Business formation services for entrepreneurs."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "First Responder Package",
+                    "description": "Specialized retirement solutions for first responders."
+                  }
+                }
+              ]
+            }
+          }
+        `}</script>
+        
+        {/* FAQ Structured Data */}
+        <script type="application/ld+json">{`
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is a Solo 401k?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A Solo 401k is a tax-advantaged retirement plan specifically designed for self-employed individuals and small business owners with no full-time employees other than themselves and possibly a spouse."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Who qualifies for a Solo 401k?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "To qualify for a Solo 401k, you must have self-employment income (full-time or part-time), have no full-time employees other than yourself and your spouse, and generate self-employment income through a sole proprietorship, LLC, partnership, or corporation."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What are the benefits of a Solo 401k?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Solo 401ks offer high contribution limits, tax advantages with both traditional and Roth options, investment flexibility, potential for loans, asset protection, and simplified administration compared to other retirement plans."
+                }
+              }
+            ]
+          }
+        `}</script>
+      </Helmet>
+      
       <Header />
       
       <div className="bg-survival-100 py-3 text-center flex items-center justify-center text-survival-800 font-medium">
