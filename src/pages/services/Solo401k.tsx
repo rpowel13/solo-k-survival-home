@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import ServiceLayout from '@/components/ServiceLayout';
@@ -16,6 +17,16 @@ const Solo401k = () => {
   const location = useLocation();
   const prequalSectionRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  
+  // Top features to display in the header
+  const topFeatures = [
+    "High contribution limits up to $73,500 (2025)",
+    "Both traditional and Roth contribution options",
+    "Alternative investments including real estate & crypto",
+    "Full checkbook control of your investments",
+    "Loan provisions up to $50,000",
+    "Protection from creditors in most states"
+  ];
   
   useEffect(() => {
     // Log that the Solo401k page is loaded for webhook validation
@@ -67,6 +78,7 @@ const Solo401k = () => {
       title="Solo 401k Plans"
       description="Maximize your retirement savings with a personalized Solo 401k plan designed specifically for self-employed professionals and small business owners."
       callToAction={{ text: "Apply Now", link: "/apply/solo-401k" }}
+      topFeatures={topFeatures}
     >
       <ZapierConfig />
       

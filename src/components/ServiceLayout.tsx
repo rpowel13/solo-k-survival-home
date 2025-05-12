@@ -4,6 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
+import { CheckCircle } from 'lucide-react';
 
 interface ServiceLayoutProps {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ interface ServiceLayoutProps {
     text: string;
     link: string;
   };
+  topFeatures?: string[];
 }
 
 const ServiceLayout = ({ 
@@ -21,7 +23,8 @@ const ServiceLayout = ({
   title, 
   description, 
   image = "/images/service-default.jpg",
-  callToAction = { text: "Contact Us", link: "/contact" }
+  callToAction = { text: "Contact Us", link: "/contact" },
+  topFeatures = []
 }: ServiceLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
@@ -42,7 +45,22 @@ const ServiceLayout = ({
                 </Link>
               </div>
               <div className="hidden md:block">
-                {/* Placeholder for service-specific illustration */}
+                {topFeatures && topFeatures.length > 0 ? (
+                  <div className="bg-purple-100 bg-opacity-90 rounded-xl p-6 shadow-lg border border-purple-200">
+                    <h3 className="text-xl font-semibold text-survival-900 mb-4">Top Features & Benefits</h3>
+                    <ul className="space-y-3">
+                      {topFeatures.map((feature, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className="h-5 w-5 text-purple-600 mr-2 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-800">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  /* Placeholder for service-specific illustration */
+                  null
+                )}
               </div>
             </div>
           </div>
