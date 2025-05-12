@@ -3,7 +3,7 @@ import React from 'react';
 
 const IntroSection = () => {
   return (
-    <section>
+    <section className="w-full">
       <h2 className="text-2xl font-bold mb-6 text-survival-800">Beyond the Stock Market</h2>
       <div className="prose max-w-none">
         <p className="text-lg">

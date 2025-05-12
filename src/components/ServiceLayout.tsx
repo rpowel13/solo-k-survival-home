@@ -27,12 +27,12 @@ const ServiceLayout = ({
   topFeatures = []
 }: ServiceLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full">
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow w-full">
         {/* Hero Section - Mobile Optimized */}
-        <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white">
-          <div className="container mx-auto px-4 py-8 sm:py-12 lg:py-24">
+        <div className="bg-gradient-to-r from-survival-800 to-survival-900 text-white w-full">
+          <div className="container mx-auto px-4 py-8 sm:py-12 lg:py-24 max-w-none">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
               <div className="text-center md:text-left">
                 <p className="text-xs sm:text-sm text-white/70 mb-2">Common Sense Wealth Management</p>
@@ -67,8 +67,10 @@ const ServiceLayout = ({
         </div>
         
         {/* Service Content */}
-        <div className="container mx-auto py-6 sm:py-8 lg:py-12 px-4 sm:px-6">
-          {children}
+        <div className="w-full py-6 sm:py-8 lg:py-12 px-4 sm:px-6">
+          <div className="container mx-auto max-w-7xl">
+            {children}
+          </div>
         </div>
       </main>
       <Footer />
