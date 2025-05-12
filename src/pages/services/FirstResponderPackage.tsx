@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,62 +38,69 @@ const FirstResponderPackage = () => {
           </div>
         </section>
 
-        {/* New expanded LLC Benefits Section */}
-        <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">LLC Benefits for First Responders</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="prose max-w-none">
-              <p className="text-lg mb-4">
-                First responders have unique financial needs and opportunities. Forming an LLC offers specific advantages for those in emergency services who often have second income streams through:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 mb-4">
-                <li>Training and consulting services</li>
-                <li>Security consulting work</li>
-                <li>Event safety planning</li>
-                <li>Side businesses related to tactical gear, equipment, etc.</li>
-                <li>Writing and speaking engagements</li>
-              </ul>
+        {/* Reformatted LLC Benefits Section */}
+        <section className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <h2 className="text-2xl font-bold px-6 pt-6 mb-4 text-survival-800">LLC Benefits for First Responders</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            <div className="space-y-6">
+              <div className="bg-survival-50 rounded-lg p-5 border border-survival-100">
+                <h3 className="text-xl font-semibold mb-3 text-survival-700">Common Side Income Sources</h3>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Training and consulting services</li>
+                  <li>Security consulting work</li>
+                  <li>Event safety planning</li>
+                  <li>Side businesses related to tactical gear, equipment, etc.</li>
+                  <li>Writing and speaking engagements</li>
+                </ul>
+              </div>
               
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="liability">
-                  <AccordionTrigger className="text-survival-700 font-medium">Personal Asset Protection</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
+              <div className="bg-finance-50 rounded-lg p-5 border border-finance-100">
+                <h3 className="text-xl font-semibold mb-3 text-finance-700">Key Advantages</h3>
+                
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="liability" className="border-b border-finance-100">
+                    <AccordionTrigger className="text-survival-700 font-medium py-3">
+                      Personal Asset Protection
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-600">
                       First responders face unique liability concerns due to the nature of their work. An LLC creates a legal separation between personal and business assets, helping protect personal savings, property, and investments from business-related liabilities and lawsuits.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="tax-benefits">
-                  <AccordionTrigger className="text-survival-700 font-medium">Enhanced Tax Benefits</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="tax-benefits" className="border-b border-finance-100">
+                    <AccordionTrigger className="text-survival-700 font-medium py-3">
+                      Enhanced Tax Benefits
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-600">
                       Gain access to tax deductions specifically valuable for first responders, including equipment purchases, specialized training costs, home office expenses for side consulting, and business use of personal vehicles for travel between work sites.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="retirement">
-                  <AccordionTrigger className="text-survival-700 font-medium">Retirement Planning Enhancement</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="retirement" className="border-b border-finance-100">
+                    <AccordionTrigger className="text-survival-700 font-medium py-3">
+                      Retirement Planning Enhancement
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-600">
                       An LLC structure is the foundation for setting up a Solo 401(k), allowing you to build significant additional retirement savings beyond your department pension. This two-tier approach creates financial security while maximizing tax advantages.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-                
-                <AccordionItem value="equipment">
-                  <AccordionTrigger className="text-survival-700 font-medium">Equipment Acquisition</AccordionTrigger>
-                  <AccordionContent>
-                    <p>
+                    </AccordionContent>
+                  </AccordionItem>
+                  
+                  <AccordionItem value="equipment">
+                    <AccordionTrigger className="text-survival-700 font-medium py-3">
+                      Equipment Acquisition
+                    </AccordionTrigger>
+                    <AccordionContent className="text-gray-600">
                       Purchase specialized equipment, vehicles, and tactical gear through your LLC for significant tax advantages. This is particularly valuable for first responders who often invest in high-quality personal equipment for both official duties and side work.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
             </div>
             
-            <FirstResponderBenefitsSection />
+            <div className="bg-gradient-to-r from-survival-50 to-finance-50 rounded-lg p-6 border border-survival-100">
+              <FirstResponderBenefitsSection />
+            </div>
           </div>
         </section>
 
