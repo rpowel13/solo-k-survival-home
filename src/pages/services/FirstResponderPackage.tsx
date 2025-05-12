@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -213,7 +212,7 @@ const FirstResponderPackage = () => {
                   <BadgePercent className="h-5 w-5 text-finance-600" />
                   First Responder Vehicle Use Cases
                 </h3>
-                <ul className="space-y-2 text-gray-700 list-disc pl-5">
+                <ul className="space-y-2 text-gray-700 list-disc pl-5 text-left">
                   <li>Training and instruction vehicles for tactical driving courses</li>
                   <li>Emergency response vehicles for private security or consulting work</li>
                   <li>Equipment transport for training events or demonstrations</li>
