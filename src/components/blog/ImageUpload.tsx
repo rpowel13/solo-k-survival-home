@@ -51,27 +51,70 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
         fileToUpload = await compressImage(file);
       }
       
-      // Upload the file
-      const { error: uploadError, data } = await supabase.storage
-        .from('blog-images')
-        .upload(fileName, fileToUpload);
-
-      if (uploadError) {
-        throw uploadError;
+      // Upload the file using a Web Worker if available
+      if (window.Worker) {
+        const workerBlob = new Blob([`
+          onmessage = async function(e) {
+            const { fileData, fileName, apiKey, url } = e.data;
+            
+            try {
+              const file = new File([fileData], fileName, { type: fileData.type });
+              const formData = new FormData();
+              formData.append('file', file);
+              
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'apikey': apiKey },
+                body: formData
+              });
+              
+              if (!response.ok) throw new Error('Upload failed');
+              const result = await response.json();
+              
+              postMessage({ success: true, data: result });
+            } catch (error) {
+              postMessage({ success: false, error: error.message });
+            }
+          }
+        `], { type: 'application/javascript' });
+        
+        const workerURL = URL.createObjectURL(workerBlob);
+        const worker = new Worker(workerURL);
+        
+        worker.onmessage = (e) => {
+          if (e.data.success) {
+            processUploadSuccess(fileName);
+          } else {
+            throw new Error(e.data.error);
+          }
+          URL.revokeObjectURL(workerURL);
+          worker.terminate();
+        };
+        
+        worker.onerror = (e) => {
+          console.error('Worker error:', e);
+          fallbackUpload(fileToUpload, fileName);
+          URL.revokeObjectURL(workerURL);
+        };
+        
+        // Try worker-based upload, fallback to direct if needed
+        try {
+          worker.postMessage({
+            fileData: fileToUpload,
+            fileName,
+            apiKey: supabase.auth.apiKey,
+            url: `${supabase.supabaseUrl}/storage/v1/object/blog-images/${fileName}`
+          });
+        } catch (e) {
+          console.warn('Worker upload failed, using fallback:', e);
+          fallbackUpload(fileToUpload, fileName);
+          URL.revokeObjectURL(workerURL);
+          worker.terminate();
+        }
+      } else {
+        // Fallback for browsers without Worker support
+        fallbackUpload(fileToUpload, fileName);
       }
-
-      // Get the public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('blog-images')
-        .getPublicUrl(fileName);
-      
-      // Return the URL to the parent component
-      onUploadComplete(publicUrl);
-      
-      toast({
-        title: "Image uploaded",
-        description: "Your image has been uploaded successfully",
-      });
     } catch (error) {
       console.error('Error uploading image:', error);
       toast({
@@ -79,12 +122,51 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
         description: "There was an error uploading your image. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsUploading(false);
+    } finally {
       // Reset input value
       const input = event.target;
       if (input) input.value = '';
     }
+  };
+  
+  const fallbackUpload = async (fileToUpload: File, fileName: string) => {
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(fileName, fileToUpload);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      processUploadSuccess(fileName);
+    } catch (error) {
+      console.error('Fallback upload error:', error);
+      toast({
+        title: "Upload failed",
+        description: "There was an error uploading your image. Please try again.",
+        variant: "destructive",
+      });
+      setIsUploading(false);
+    }
+  };
+  
+  const processUploadSuccess = (fileName: string) => {
+    // Get the public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('blog-images')
+      .getPublicUrl(fileName);
+    
+    // Return the URL to the parent component
+    onUploadComplete(publicUrl);
+    
+    toast({
+      title: "Image uploaded",
+      description: "Your image has been uploaded successfully",
+    });
+    
+    setIsUploading(false);
   };
   
   // Function to compress images before uploading

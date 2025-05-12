@@ -36,7 +36,12 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       return undefined; // No processing for uploaded images
     }
     
-    return undefined; // For now, return undefined until we have proper image processing
+    // Simple responsive srcset for local images
+    if (!isExternal && width) {
+      return `${imgSrc} 1x, ${imgSrc} 2x`;
+    }
+    
+    return undefined;
   };
   
   return (
@@ -55,7 +60,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         const target = e.target as HTMLImageElement;
         target.onerror = null;
         target.src = '/placeholder.svg';
+        console.log(`Image load error: ${imgSrc}`);
       }}
+      fetchPriority={loading === 'eager' ? 'high' : 'auto'}
     />
   );
 };

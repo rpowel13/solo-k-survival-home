@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Preconnect to critical domains for faster loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+    <link rel="preconnect" href="https://daorpdnaganfugudqkmk.supabase.co" crossorigin>
     
     <!-- Basic SEO meta tags - more detailed ones will be added by PageSEO -->
     <title>Survival 401k - Solo 401k Plans for Self-Employed Professionals</title>
@@ -21,14 +22,23 @@
     <!-- Favicon - optimized sizes -->
     <link rel="icon" type="image/png" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png">
+
+    <!-- Preload critical logo image -->
+    <link rel="preload" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" as="image" fetchpriority="high" />
     
-    <!-- Google Analytics - load asynchronously -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NJX7VTWTSJ"></script>
+    <!-- Google Analytics - load with defer to prevent parser blocking -->
+    <script defer src="https://www.googletagmanager.com/gtag/js?id=G-NJX7VTWTSJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-NJX7VTWTSJ');
+      gtag('config', 'G-NJX7VTWTSJ', {
+        'send_page_view': false, // Disable auto pageview to control timing
+      });
+      // Send pageview when the page finishes loading for better accuracy
+      window.addEventListener('load', function() {
+        gtag('event', 'page_view');
+      });
     </script>
     
     <!-- LiveSite Widget - load asynchronously -->
@@ -45,6 +55,7 @@
         if (d.getElementById(id)) {return;}
         js = d.createElement(s); js.id = id;
         js.src = p + "d2ra6nuwn69ktl.cloudfront.net/assets/livesite.js?" + r;
+        js.async = true;
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'livesite-jssdk'));
     </script>
@@ -54,6 +65,25 @@
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     </noscript>
+    
+    <!-- Performance monitoring -->
+    <script>
+      // Simple performance monitoring
+      window.addEventListener('DOMContentLoaded', () => {
+        if (window.performance) {
+          const navigationTiming = performance.getEntriesByType('navigation')[0];
+          if (navigationTiming) {
+            setTimeout(() => {
+              console.log('Page load performance:', {
+                domComplete: Math.round(navigationTiming.domComplete),
+                loadEventEnd: Math.round(navigationTiming.loadEventEnd),
+                domInteractive: Math.round(navigationTiming.domInteractive)
+              });
+            }, 0);
+          }
+        }
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

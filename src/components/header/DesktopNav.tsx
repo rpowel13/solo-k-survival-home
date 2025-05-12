@@ -1,11 +1,14 @@
 
+import React, { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import { ServiceDropdown } from "./ServiceDropdown";
-import { ToolsDropdown } from "./ToolsDropdown";
-import { ApplicationDropdown } from "./ApplicationDropdown";
-import { PaymentDropdown } from "./PaymentDropdown";
-import { Home, Contact, LogIn, BookOpen, GraduationCap } from "lucide-react";
+import { Home, Contact, LogIn, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+// Lazy load dropdown components
+const ServiceDropdown = lazy(() => import("./ServiceDropdown").then(module => ({ default: module.ServiceDropdown })));
+const ToolsDropdown = lazy(() => import("./ToolsDropdown").then(module => ({ default: module.ToolsDropdown })));
+const ApplicationDropdown = lazy(() => import("./ApplicationDropdown").then(module => ({ default: module.ApplicationDropdown })));
+const PaymentDropdown = lazy(() => import("./PaymentDropdown").then(module => ({ default: module.PaymentDropdown })));
 
 export const DesktopNav = () => {
   return (
@@ -17,10 +20,23 @@ export const DesktopNav = () => {
         <Home className="h-4 w-4 mr-1" />
         Home
       </Link>
-      <ServiceDropdown />
-      <ApplicationDropdown />
-      <PaymentDropdown />
-      <ToolsDropdown />
+      
+      <Suspense fallback={<span className="text-gray-500">Services</span>}>
+        <ServiceDropdown />
+      </Suspense>
+      
+      <Suspense fallback={<span className="text-gray-500">Applications</span>}>
+        <ApplicationDropdown />
+      </Suspense>
+      
+      <Suspense fallback={<span className="text-gray-500">Payments</span>}>
+        <PaymentDropdown />
+      </Suspense>
+      
+      <Suspense fallback={<span className="text-gray-500">Tools</span>}>
+        <ToolsDropdown />
+      </Suspense>
+      
       <Link 
         to="/learning" 
         className="text-gray-700 hover:text-survival-600 transition flex items-center"
@@ -28,6 +44,7 @@ export const DesktopNav = () => {
         <BookOpen className="h-4 w-4 mr-1" />
         Learning
       </Link>
+      
       <Link 
         to="/contact" 
         className="text-gray-700 hover:text-survival-600 transition flex items-center"
@@ -35,6 +52,7 @@ export const DesktopNav = () => {
         <Contact className="h-4 w-4 mr-1" />
         Contact
       </Link>
+      
       <Button 
         asChild
         className="bg-blue-500 hover:bg-blue-600"

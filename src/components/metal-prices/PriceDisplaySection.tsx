@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { ExternalLink } from 'lucide-react';
 import MetalPriceCard from './MetalPriceCard';
 

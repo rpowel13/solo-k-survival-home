@@ -47,8 +47,20 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       {/* Robots control */}
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
       
-      {/* Viewport for mobile responsiveness - adding explicitly */}
+      {/* Viewport for mobile responsiveness */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      {/* Performance optimization meta tags */}
+      <meta http-equiv="x-dns-prefetch-control" content="on" />
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+      <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+      <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="" />
+      
+      {/* Preload critical assets */}
+      <link rel="preload" as="image" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -71,6 +83,8 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
       <meta name="rating" content="general" />
+      <meta name="theme-color" content="#ffffff" />
+      <meta name="format-detection" content="telephone=no" />
       
       {/* Focus Keywords - only include if provided */}
       {focusKeywords.length > 0 && (

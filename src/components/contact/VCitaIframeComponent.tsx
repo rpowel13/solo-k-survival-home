@@ -34,9 +34,26 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
             const iframe = entry.target as HTMLIFrameElement;
             iframe.src = "https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true";
             observer.unobserve(iframe);
+            
+            // Add performance monitoring
+            if ('PerformanceObserver' in window) {
+              try {
+                const perfObserver = new PerformanceObserver((list) => {
+                  const entries = list.getEntries();
+                  entries.forEach(entry => {
+                    if (entry.entryType === 'resource' && entry.name.includes('vcita')) {
+                      console.log('VCita iframe loaded in:', entry.duration, 'ms');
+                    }
+                  });
+                });
+                perfObserver.observe({entryTypes: ['resource']});
+              } catch (e) {
+                console.error('Performance monitoring error:', e);
+              }
+            }
           }
         });
-      }, { threshold: 0.1 });
+      }, { threshold: 0.1, rootMargin: '200px' });  // Increased root margin for earlier loading
       
       observer.observe(iframeRef.current);
     }
@@ -71,6 +88,7 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
         title="Contact Form"
         className="w-full min-h-[600px]"
         loading="lazy"
+        importance="low"
       >
         <p>Please contact me via my contact form at vcita:</p>
         <a href='https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c'>
