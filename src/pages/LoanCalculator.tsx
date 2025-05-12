@@ -16,9 +16,9 @@ const LoanCalculatorPage = () => {
       <main className="flex-grow bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-3xl md:text-4xl font-bold text-center mb-4">Loan Calculator</h1>
-          <p className="text-center text-gray-600 max-w-3xl mx-auto mb-8">
+          <h2 className="text-xl text-center text-gray-600 max-w-3xl mx-auto mb-8">
             Calculate your loan payments and view a detailed amortization schedule to understand your loan terms better.
-          </p>
+          </h2>
           <Separator className="mb-8" />
           <LoanCalculator />
         </div>

@@ -137,7 +137,7 @@ const HeroSection = () => {
                 style={{ 
                   boxShadow: "0 25px 60px rgba(8, 28, 86, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.4)"
                 }}>
-              <h3 className="text-2xl font-bold text-survival-800 mb-6">Why Professionals Choose Us</h3>
+              <h2 className="text-2xl font-bold text-survival-800 mb-6">Why Professionals Choose Us</h2>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />

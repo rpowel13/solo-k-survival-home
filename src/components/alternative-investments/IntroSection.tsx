@@ -4,7 +4,7 @@ import React from 'react';
 const IntroSection = () => {
   return (
     <section className="w-full">
-      <h2 className="text-2xl font-bold mb-4 text-survival-800">Beyond the Stock Market</h2>
+      <h1 className="text-3xl font-bold mb-4 text-survival-800">Beyond the Stock Market</h1>
       <div className="prose max-w-none">
         <p className="text-lg">
           One of the most powerful benefits of a <strong>self-directed Solo 401k</strong> is the ability to invest in a wide range of <em>alternative assets</em> beyond traditional stocks, bonds, and mutual funds.
