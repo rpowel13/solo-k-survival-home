@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,10 +10,21 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import FirstResponderBenefitsSection from '@/components/llc/service-page/FirstResponderBenefitsSection';
 
 const FirstResponderPackage = () => {
+  // Top features to display in the header
+  const topFeatures = [
+    "Asset protection through LLC formation",
+    "Enhanced retirement planning with Solo 401k",
+    "Tax advantages specific to first responders",
+    "Vehicle purchase tax benefits",
+    "High contribution limits up to $73,500 (2025)",
+    "Special discounts for firefighters, police, and EMTs"
+  ];
+  
   return (
     <ServiceLayout
       title="First Responder Services"
       description="Specialized retirement and asset protection solutions designed exclusively for firefighters, police officers, EMTs, and other first responders."
+      topFeatures={topFeatures}
     >
       <div className="space-y-12">
         <section>
