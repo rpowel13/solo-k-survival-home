@@ -2,12 +2,28 @@
 import fs from 'fs';
 import path from 'path';
 
+interface SitemapImage {
+  loc: string;
+  title?: string;
+  caption?: string;
+  geoLocation?: string;
+  license?: string;
+}
+
 interface SitemapURL {
   url: string;
   changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
   priority: number;
   lastmod?: string;
   keywords?: string[]; // Added keywords for better SEO
+  images?: SitemapImage[]; // Support for image sitemaps
+  alternateLanguages?: {code: string, url: string}[]; // For multilingual sites
+  news?: {
+    publication: string;
+    publicationDate: string;
+    title: string;
+    keywords?: string;
+  }; // For news articles
 }
 
 const generateSitemapXML = (urls: SitemapURL[]): string => {
@@ -25,6 +41,49 @@ const generateSitemapXML = (urls: SitemapURL[]): string => {
     }
     xml += `    <changefreq>${url.changefreq}</changefreq>\n`;
     xml += `    <priority>${url.priority.toFixed(1)}</priority>\n`;
+    
+    // Add alternate language versions if available
+    if (url.alternateLanguages && url.alternateLanguages.length > 0) {
+      url.alternateLanguages.forEach(alt => {
+        xml += `    <xhtml:link rel="alternate" hreflang="${alt.code}" href="${alt.url}" />\n`;
+      });
+    }
+    
+    // Add news-specific data if this is a news article
+    if (url.news) {
+      xml += '    <news:news>\n';
+      xml += '      <news:publication>\n';
+      xml += `        <news:name>${url.news.publication}</news:name>\n`;
+      xml += '        <news:language>en</news:language>\n';
+      xml += '      </news:publication>\n';
+      xml += `      <news:publication_date>${url.news.publicationDate}</news:publication_date>\n`;
+      xml += `      <news:title>${url.news.title}</news:title>\n`;
+      if (url.news.keywords) {
+        xml += `      <news:keywords>${url.news.keywords}</news:keywords>\n`;
+      }
+      xml += '    </news:news>\n';
+    }
+    
+    // Add images if available
+    if (url.images && url.images.length > 0) {
+      url.images.forEach(image => {
+        xml += '    <image:image>\n';
+        xml += `      <image:loc>${image.loc}</image:loc>\n`;
+        if (image.title) {
+          xml += `      <image:title>${image.title}</image:title>\n`;
+        }
+        if (image.caption) {
+          xml += `      <image:caption>${image.caption}</image:caption>\n`;
+        }
+        if (image.geoLocation) {
+          xml += `      <image:geo_location>${image.geoLocation}</image:geo_location>\n`;
+        }
+        if (image.license) {
+          xml += `      <image:license>${image.license}</image:license>\n`;
+        }
+        xml += '    </image:image>\n';
+      });
+    }
     
     // Add keyword hints in XML comments
     if (url.keywords && url.keywords.length > 0) {
@@ -47,7 +106,13 @@ export const generateSitemap = async (baseUrl: string, outputPath: string): Prom
       changefreq: 'weekly', 
       priority: 1.0, 
       lastmod: today,
-      keywords: ['solo 401k', 'self employed retirement', 'retirement planning', 'small business 401k'] 
+      keywords: ['solo 401k', 'self employed retirement', 'retirement planning', 'small business 401k'],
+      images: [
+        {
+          loc: `${baseUrl}/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png`,
+          title: 'Survival 401k Logo'
+        }
+      ]
     },
     { 
       url: `${baseUrl}/services/solo-401k`, 
@@ -110,7 +175,13 @@ export const generateSitemap = async (baseUrl: string, outputPath: string): Prom
       changefreq: 'monthly', 
       priority: 0.6, 
       lastmod: today,
-      keywords: ['retirement calculator', 'retirement savings projection', 'retirement planning tools'] 
+      keywords: ['retirement calculator', 'retirement savings projection', 'retirement planning tools'],
+      images: [
+        {
+          loc: `${baseUrl}/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png`,
+          title: 'Retirement Calculator Tool'
+        }
+      ]
     },
     { 
       url: `${baseUrl}/tools/loan-calculator`, 

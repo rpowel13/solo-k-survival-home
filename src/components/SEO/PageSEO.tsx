@@ -13,6 +13,9 @@ interface PageSEOProps {
   noindex?: boolean;
   structuredData?: Record<string, any>[];
   focusKeywords?: string[];
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
 }
 
 const PageSEO: React.FC<PageSEOProps> = ({
@@ -25,6 +28,9 @@ const PageSEO: React.FC<PageSEOProps> = ({
   noindex = false,
   structuredData = [],
   focusKeywords = [],
+  author,
+  publishedTime,
+  modifiedTime,
 }) => {
   // Combine title with site name for consistency
   const fullTitle = `${title} | Survival 401k`;
@@ -47,6 +53,9 @@ const PageSEO: React.FC<PageSEOProps> = ({
       structuredData={structuredData}
       noindex={noindex}
       focusKeywords={focusKeywords}
+      author={author}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
     />
   );
 };
