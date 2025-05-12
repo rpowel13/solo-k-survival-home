@@ -46,12 +46,12 @@ const ServiceLayout = ({
               </div>
               <div className="hidden md:block">
                 {topFeatures && topFeatures.length > 0 ? (
-                  <div className="bg-purple-100 bg-opacity-90 rounded-xl p-6 shadow-lg border border-purple-200">
+                  <div className="bg-survival-100 bg-opacity-90 rounded-xl p-6 shadow-lg border border-survival-200">
                     <h3 className="text-xl font-semibold text-survival-900 mb-4">Top Features & Benefits</h3>
                     <ul className="space-y-3">
                       {topFeatures.map((feature, index) => (
                         <li key={index} className="flex items-start">
-                          <CheckCircle className="h-5 w-5 text-purple-600 mr-2 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-5 w-5 text-survival-600 mr-2 mt-0.5 flex-shrink-0" />
                           <span className="text-gray-800">{feature}</span>
                         </li>
                       ))}
