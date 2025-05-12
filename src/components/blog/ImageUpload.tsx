@@ -55,7 +55,7 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       if (window.Worker) {
         const workerBlob = new Blob([`
           onmessage = async function(e) {
-            const { fileData, fileName, apiKey, url } = e.data;
+            const { fileData, fileName, url } = e.data;
             
             try {
               const file = new File([fileData], fileName, { type: fileData.type });
@@ -64,7 +64,6 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
               
               const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'apikey': apiKey },
                 body: formData
               });
               
@@ -102,8 +101,7 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
           worker.postMessage({
             fileData: fileToUpload,
             fileName,
-            apiKey: supabase.auth.apiKey,
-            url: `${supabase.supabaseUrl}/storage/v1/object/blog-images/${fileName}`
+            url: `${window.location.origin}/api/upload/${fileName}`
           });
         } catch (e) {
           console.warn('Worker upload failed, using fallback:', e);

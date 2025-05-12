@@ -88,7 +88,6 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
         title="Contact Form"
         className="w-full min-h-[600px]"
         loading="lazy"
-        importance="low"
       >
         <p>Please contact me via my contact form at vcita:</p>
         <a href='https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&invite=vr_cf_pb-izk040b42jnjcf3c'>
