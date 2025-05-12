@@ -1,5 +1,5 @@
 
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { PageSEO } from "@/components/SEO";
 import Header from "@/components/Header";
@@ -36,13 +36,14 @@ const NotFound = () => {
             <p className="text-gray-500 mb-6">
               Sorry, we couldn't find the page you're looking for. Please check the URL or navigate back to our homepage.
             </p>
-            <Button 
-              href="/" 
-              className="inline-flex items-center bg-survival-600 hover:bg-survival-700"
-            >
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Return to Home
-            </Button>
+            <Link to="/">
+              <Button 
+                className="inline-flex items-center bg-survival-600 hover:bg-survival-700"
+              >
+                <HomeIcon className="mr-2 h-4 w-4" />
+                Return to Home
+              </Button>
+            </Link>
           </div>
         </main>
         
