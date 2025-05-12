@@ -103,6 +103,24 @@ const Index = () => {
     setTimeout(() => setValidateWebhook(false), 1000);
   };
 
+  // Enhanced SEO keywords
+  const primaryKeywords = "solo 401k, self-employed retirement, small business 401k, individual 401k, retirement planning, tax-advantaged retirement, first responder retirement, alternative investments";
+  
+  const focusKeywords = [
+    "best solo 401k provider",
+    "tax benefits self-employed retirement",
+    "retirement plans for entrepreneurs",
+    "checkbook control retirement",
+    "high contribution limits 401k",
+    "small business retirement solutions",
+    "self-directed retirement accounts",
+    "retirement tax strategies",
+    "first responder retirement benefits",
+    "solo 401k vs. sep ira",
+    "retirement investing options",
+    "business owner retirement planning"
+  ];
+
   // Structured data for homepage
   const structuredData = [
     // Local Business Schema
@@ -118,6 +136,7 @@ const Index = () => {
         "@type": "PostalAddress",
         "addressCountry": "US"
       },
+      "keywords": focusKeywords.join(', '),
       "sameAs": [
         "https://www.facebook.com/survival401k",
         "https://twitter.com/survival401k",
@@ -213,10 +232,11 @@ const Index = () => {
       <PageSEO
         title="Solo 401k Plans for Self-Employed Professionals"
         description="Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings."
-        keywords="solo 401k, self-employed retirement, small business 401k, individual 401k, retirement planning, tax-advantaged retirement, first responder retirement, alternative investments"
+        keywords={primaryKeywords}
         canonicalPath="/"
         type="website"
         structuredData={structuredData}
+        focusKeywords={focusKeywords}
       />
       
       <Header />

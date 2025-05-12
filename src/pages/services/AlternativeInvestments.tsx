@@ -20,6 +20,21 @@ const AlternativeInvestments = () => {
     "Tax lien certificates with potential returns of 8-36%"
   ];
 
+  // Enhanced SEO keywords
+  const primaryKeywords = "alternative investments, self-directed 401k investments, real estate investing, precious metals retirement, private lending, tax liens, cryptocurrency retirement";
+  const focusKeywords = [
+    "alternative retirement investments",
+    "self-directed retirement accounts",
+    "real estate in 401k",
+    "invest in gold with 401k",
+    "tax lien investing retirement",
+    "private equity retirement",
+    "crypto in retirement accounts",
+    "retirement portfolio diversification",
+    "checkbook control investing",
+    "non-traditional retirement assets"
+  ];
+
   // Structured data for this page
   const structuredData = [
     {
@@ -33,6 +48,7 @@ const AlternativeInvestments = () => {
       },
       "description": "Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options.",
       "serviceType": "Retirement Investment Services",
+      "keywords": focusKeywords.join(', '),
       "offers": {
         "@type": "Offer",
         "description": "Alternative investment options for self-directed retirement accounts"
@@ -45,10 +61,11 @@ const AlternativeInvestments = () => {
       <PageSEO 
         title="Alternative Investments for Self-Directed Retirement"
         description="Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options including real estate, precious metals, private equity, and more."
-        keywords="alternative investments, self-directed 401k investments, real estate investing, precious metals retirement, private lending, tax liens, cryptocurrency retirement"
+        keywords={primaryKeywords}
         canonicalPath="/services/alternative-investments"
         type="website"
         structuredData={structuredData}
+        focusKeywords={focusKeywords}
       />
       <ServiceLayout
         title="Alternative Investments"

@@ -9,6 +9,7 @@ import ZapierConfig from "@/components/common/ZapierConfig";
 import WebhookStatus from "@/components/contact-page/WebhookStatus";
 import ContactMethods from "@/components/contact-page/ContactMethods";
 import MessageCard from "@/components/contact-page/MessageCard";
+import { PageSEO } from "@/components/SEO";
 
 const Contact = () => {
   const [validateWebhook, setValidateWebhook] = useState(false);
@@ -16,6 +17,40 @@ const Contact = () => {
   const [lastTestedTime, setLastTestedTime] = useState<string | null>(null);
   const [webhookUrl, setWebhookUrl] = useState<string>("");
   const { toast } = useToast();
+  
+  // Enhanced SEO keywords
+  const primaryKeywords = "contact retirement specialist, 401k consultation, retirement planning help, financial advisor contact, retirement questions";
+  
+  const focusKeywords = [
+    "retirement planning consultation",
+    "solo 401k specialist",
+    "retirement account setup help",
+    "financial advisor appointment",
+    "retirement strategy meeting",
+    "investment options consultation",
+    "retirement tax planning",
+    "self-directed retirement help",
+    "401k rollover assistance",
+    "retirement savings consultation"
+  ];
+  
+  // Structured data for this page
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact Survival 401k",
+      "description": "Get in touch with our retirement specialists for personalized assistance with Solo 401k plans and retirement solutions.",
+      "url": "https://survival401k.com/contact",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+18332245517",
+        "contactType": "customer service",
+        "availableLanguage": "English"
+      },
+      "keywords": focusKeywords.join(', ')
+    }
+  ];
   
   useEffect(() => {
     console.log(`[${new Date().toISOString()}] Contact page mounted, running comprehensive diagnostics`);
@@ -146,6 +181,15 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative">
+      <PageSEO 
+        title="Contact Our Retirement Specialists"
+        description="Have questions about Solo 401(k) plans? Contact our retirement specialists for personalized assistance with your retirement planning needs and investment options."
+        keywords={primaryKeywords}
+        canonicalPath="/contact"
+        type="website"
+        structuredData={structuredData}
+        focusKeywords={focusKeywords}
+      />
       <Header />
       <main className="flex-grow">
         <section className="container mx-auto py-12 px-4 sm:px-6 lg:px-8">

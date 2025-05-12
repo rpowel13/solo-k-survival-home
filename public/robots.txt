@@ -4,11 +4,15 @@
 User-agent: *
 Allow: /
 
-# Main pages
-Allow: /services/
-Allow: /apply/
-Allow: /tools/
-Allow: /contact
+# Main pages - enhanced with keywords for better SEO indexing
+Allow: /services/solo-401k       # Solo 401k plans for self-employed
+Allow: /services/llc-creation    # LLC formation and business services
+Allow: /services/first-responder-package   # Special retirement plans for first responders
+Allow: /services/alternative-investments   # Self-directed investment options
+Allow: /services/metal-prices    # Precious metals investment info
+Allow: /apply/                   # Application pages for retirement plans
+Allow: /tools/                   # Financial calculators and resources
+Allow: /contact                  # Contact our retirement specialists
 
 # Disallow admin and internal pages
 Disallow: /admin/
@@ -61,3 +65,4 @@ Disallow: /
 
 User-agent: anthropic-ai
 Disallow: /
+

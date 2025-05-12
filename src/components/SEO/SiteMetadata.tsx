@@ -11,6 +11,7 @@ interface SiteMetadataProps {
   type?: 'website' | 'article';
   structuredData?: Record<string, any>[];
   noindex?: boolean;
+  focusKeywords?: string[]; // Added focus keywords array
 }
 
 const SiteMetadata: React.FC<SiteMetadataProps> = ({
@@ -22,6 +23,7 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
   type = 'website',
   structuredData = [],
   noindex = false,
+  focusKeywords = [], // Default to empty array
 }) => {
   const siteUrl = 'https://survival401k.com';
   const canonicalUrl = `${siteUrl}${canonicalPath}`;
@@ -54,6 +56,21 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageFullUrl} />
+      
+      {/* Focus Keywords in meta description for better SEO */}
+      {focusKeywords.length > 0 && (
+        <>
+          <meta name="focus-keywords" content={focusKeywords.join(', ')} />
+          {/* Schema.org keywords markup */}
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "keywords": focusKeywords.join(', ')
+            })}
+          </script>
+        </>
+      )}
       
       {/* Structured Data */}
       {structuredData.map((data, index) => (
