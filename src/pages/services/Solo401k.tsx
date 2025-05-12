@@ -85,10 +85,10 @@ const Solo401k = () => {
       <div className="space-y-8 sm:space-y-12 px-4 sm:px-0">
         <IntroSection />
         <QualificationSection />
-        <BenefitsSection />
         <div ref={prequalSectionRef} id="prequalification">
           <PrequalificationSection />
         </div>
+        <BenefitsSection />
         <WhyChooseSection />
         <PricingSection />
         <ReinstatementSection />
