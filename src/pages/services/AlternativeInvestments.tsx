@@ -7,6 +7,7 @@ import {
   BenefitsSection,
   SupportSection
 } from '@/components/alternative-investments';
+import { PageSEO } from '@/components/SEO';
 
 const AlternativeInvestments = () => {
   // Define the top investment opportunities to display in the header
@@ -19,20 +20,50 @@ const AlternativeInvestments = () => {
     "Tax lien certificates with potential returns of 8-36%"
   ];
 
+  // Structured data for this page
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Alternative Investment Options",
+      "provider": {
+        "@type": "FinancialService",
+        "name": "Survival 401k",
+        "url": "https://survival401k.com"
+      },
+      "description": "Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options.",
+      "serviceType": "Retirement Investment Services",
+      "offers": {
+        "@type": "Offer",
+        "description": "Alternative investment options for self-directed retirement accounts"
+      }
+    }
+  ];
+
   return (
-    <ServiceLayout
-      title="Alternative Investments"
-      description="Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options."
-      callToAction={{ text: "Schedule Consultation", link: "/contact" }}
-      topFeatures={topOpportunities}
-    >
-      <div id="top" className="space-y-12">
-        <IntroSection />
-        <InvestmentOptionsSection />
-        <BenefitsSection />
-        <SupportSection />
-      </div>
-    </ServiceLayout>
+    <>
+      <PageSEO 
+        title="Alternative Investments for Self-Directed Retirement"
+        description="Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options including real estate, precious metals, private equity, and more."
+        keywords="alternative investments, self-directed 401k investments, real estate investing, precious metals retirement, private lending, tax liens, cryptocurrency retirement"
+        canonicalPath="/services/alternative-investments"
+        type="website"
+        structuredData={structuredData}
+      />
+      <ServiceLayout
+        title="Alternative Investments"
+        description="Diversify your retirement portfolio beyond traditional stocks and bonds with self-directed alternative investment options."
+        callToAction={{ text: "Schedule Consultation", link: "/contact" }}
+        topFeatures={topOpportunities}
+      >
+        <div id="top" className="space-y-12">
+          <IntroSection />
+          <InvestmentOptionsSection />
+          <BenefitsSection />
+          <SupportSection />
+        </div>
+      </ServiceLayout>
+    </>
   );
 };
 

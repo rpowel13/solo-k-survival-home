@@ -61,4 +61,11 @@ export const generateSitemap = async (baseUrl: string, outputPath: string): Prom
   }
 };
 
+// Function to generate the sitemap on build/deployment
+export const generateSitemapOnDeploy = () => {
+  const baseUrl = 'https://survival401k.com';
+  const outputPath = './public/sitemap.xml';
+  generateSitemap(baseUrl, outputPath);
+};
+
 export default generateSitemap;
