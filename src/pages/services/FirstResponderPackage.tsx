@@ -39,6 +39,155 @@ const FirstResponderPackage = () => {
           </div>
         </section>
 
+        <section>
+          <h2 className="text-2xl font-bold mb-6 text-survival-800">Benefits of Solo 401k for First Responders</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Wallet className="h-5 w-5 text-finance-600" />
+                  Tax-Smart Savings
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Choose between traditional pre-tax or Roth contributions to complement your pension. Perfect for first responders looking to maximize their retirement benefits beyond standard department plans.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <PiggyBank className="h-5 w-5 text-finance-600" />
+                  High Contribution Potential
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Perfect for your off-duty or consulting income. In 2025, eligible first responders can contribute up to $73,500, significantly boosting their retirement savings beyond pension benefits.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Briefcase className="h-5 w-5 text-finance-600" />
+                  Investment Freedom
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Take control of your investments beyond standard pension options. Explore real estate, precious metals, and other alternative investments that align with your long-term security goals.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Users className="h-5 w-5 text-finance-600" />
+                  Family Protection
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">If your spouse helps with your side business or consulting work, they can participate in the plan, creating an additional layer of financial security for your family.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <CircleDollarSign className="h-5 w-5 text-finance-600" />
+                  Emergency Access
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Access loans up to $50,000 when needed. Perfect for unexpected expenses or opportunities, with the flexibility first responders need while keeping your retirement funds working for you.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Receipt className="h-5 w-5 text-finance-600" />
+                  Tax Benefits
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Deduct contributions from your side business income, reducing your tax burden while building a secure future. Especially valuable for first responders with additional income streams.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Key className="h-5 w-5 text-finance-600" />
+                  Direct Control
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Enjoy "checkbook control" over your retirement funds. No need to wait for third-party approvals, giving you the quick response time first responders are accustomed to.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <ArrowLeftRight className="h-5 w-5 text-finance-600" />
+                  Easy Transfers
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Seamlessly roll over existing retirement accounts. Perfect for consolidating various retirement funds from previous departments or private sector employment.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <UserMinus className="h-5 w-5 text-finance-600" />
+                  Perfect for Side Work
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Ideal for first responders with independent consulting, training, or other off-duty business activities. No full-time employees needed to qualify.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <TrendingUp className="h-5 w-5 text-finance-600" />
+                  Growth Potential
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Build substantial retirement savings alongside your pension. Perfect for first responders wanting to maximize their long-term financial security through diversified investments.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Shield className="h-5 w-5 text-finance-600" />
+                  Asset Protection
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Enjoy strong legal protections for your retirement savings, crucial for first responders who face unique liability concerns in their line of duty.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Clock className="h-5 w-5 text-finance-600" />
+                  Flexible Timing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">Make contributions until your tax filing deadline, giving first responders the flexibility needed to manage contributions around shift work and varying income schedules.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Enhanced Vehicle Purchase Section */}
         <section className="py-8">
           <h2 className="text-2xl font-bold mb-6 text-survival-800 border-b border-gray-200 pb-2">Vehicle Purchase Benefits for First Responders</h2>
@@ -190,155 +339,6 @@ const FirstResponderPackage = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-bold mb-6 text-survival-800">Benefits of Solo 401k for First Responders</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Wallet className="h-5 w-5 text-finance-600" />
-                  Tax-Smart Savings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Choose between traditional pre-tax or Roth contributions to complement your pension. Perfect for first responders looking to maximize their retirement benefits beyond standard department plans.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <PiggyBank className="h-5 w-5 text-finance-600" />
-                  High Contribution Potential
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Perfect for your off-duty or consulting income. In 2025, eligible first responders can contribute up to $73,500, significantly boosting their retirement savings beyond pension benefits.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Briefcase className="h-5 w-5 text-finance-600" />
-                  Investment Freedom
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Take control of your investments beyond standard pension options. Explore real estate, precious metals, and other alternative investments that align with your long-term security goals.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Users className="h-5 w-5 text-finance-600" />
-                  Family Protection
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">If your spouse helps with your side business or consulting work, they can participate in the plan, creating an additional layer of financial security for your family.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <CircleDollarSign className="h-5 w-5 text-finance-600" />
-                  Emergency Access
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Access loans up to $50,000 when needed. Perfect for unexpected expenses or opportunities, with the flexibility first responders need while keeping your retirement funds working for you.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Receipt className="h-5 w-5 text-finance-600" />
-                  Tax Benefits
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Deduct contributions from your side business income, reducing your tax burden while building a secure future. Especially valuable for first responders with additional income streams.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Key className="h-5 w-5 text-finance-600" />
-                  Direct Control
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Enjoy "checkbook control" over your retirement funds. No need to wait for third-party approvals, giving you the quick response time first responders are accustomed to.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <ArrowLeftRight className="h-5 w-5 text-finance-600" />
-                  Easy Transfers
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Seamlessly roll over existing retirement accounts. Perfect for consolidating various retirement funds from previous departments or private sector employment.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <UserMinus className="h-5 w-5 text-finance-600" />
-                  Perfect for Side Work
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Ideal for first responders with independent consulting, training, or other off-duty business activities. No full-time employees needed to qualify.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="h-5 w-5 text-finance-600" />
-                  Growth Potential
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Build substantial retirement savings alongside your pension. Perfect for first responders wanting to maximize their long-term financial security through diversified investments.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Shield className="h-5 w-5 text-finance-600" />
-                  Asset Protection
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Enjoy strong legal protections for your retirement savings, crucial for first responders who face unique liability concerns in their line of duty.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Clock className="h-5 w-5 text-finance-600" />
-                  Flexible Timing
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Make contributions until your tax filing deadline, giving first responders the flexibility needed to manage contributions around shift work and varying income schedules.</p>
-              </CardContent>
-            </Card>
           </div>
         </section>
 
