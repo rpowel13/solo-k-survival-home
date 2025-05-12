@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -426,19 +425,19 @@ const FirstResponderPackage = () => {
               First responders trust Survival 401k because we understand the unique financial circumstances of public service careers. Our team includes specialists with experience in serving the first responder community, and we're committed to helping those who serve our communities secure their financial futures.
             </p>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-start">
+              <div className="flex items-start text-left">
                 <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
                 <span>Specialized knowledge of first responder benefits and compensation structures</span>
               </div>
-              <div className="flex items-start">
+              <div className="flex items-start text-left">
                 <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
                 <span>Experience with shift work and side business optimization</span>
               </div>
-              <div className="flex items-start">
+              <div className="flex items-start text-left">
                 <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
                 <span>Understanding of pension systems and how to complement them</span>
               </div>
-              <div className="flex items-start">
+              <div className="flex items-start text-left">
                 <CheckCircle2 className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
                 <span>Dedicated support team for ongoing assistance</span>
               </div>
