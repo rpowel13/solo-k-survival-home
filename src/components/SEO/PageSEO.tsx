@@ -12,7 +12,7 @@ interface PageSEOProps {
   type?: 'website' | 'article';
   noindex?: boolean;
   structuredData?: Record<string, any>[];
-  focusKeywords?: string[]; // Added focus keywords array
+  focusKeywords?: string[];
 }
 
 const PageSEO: React.FC<PageSEOProps> = ({
@@ -24,15 +24,17 @@ const PageSEO: React.FC<PageSEOProps> = ({
   type = 'website',
   noindex = false,
   structuredData = [],
-  focusKeywords = [], // Default to empty array
+  focusKeywords = [],
 }) => {
   // Combine title with site name for consistency
   const fullTitle = `${title} | Survival 401k`;
   
   // Enhanced keywords with focus keywords if provided
-  const enhancedKeywords = focusKeywords.length > 0 
-    ? `${keywords || ''}, ${focusKeywords.join(', ')}`
-    : keywords;
+  const enhancedKeywords = focusKeywords.length > 0 && keywords 
+    ? `${keywords}, ${focusKeywords.join(', ')}`
+    : focusKeywords.length > 0 
+      ? focusKeywords.join(', ')
+      : keywords;
 
   return (
     <SiteMetadata

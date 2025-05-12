@@ -11,7 +11,7 @@ interface SiteMetadataProps {
   type?: 'website' | 'article';
   structuredData?: Record<string, any>[];
   noindex?: boolean;
-  focusKeywords?: string[]; // Added focus keywords array
+  focusKeywords?: string[];
 }
 
 const SiteMetadata: React.FC<SiteMetadataProps> = ({
@@ -23,12 +23,13 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
   type = 'website',
   structuredData = [],
   noindex = false,
-  focusKeywords = [], // Default to empty array
+  focusKeywords = [],
 }) => {
   const siteUrl = 'https://survival401k.com';
   const canonicalUrl = `${siteUrl}${canonicalPath}`;
   const imageFullUrl = imageUrl.startsWith('http') ? imageUrl : `${siteUrl}${imageUrl}`;
 
+  // Minimize SEO markup to essential elements only
   return (
     <Helmet>
       {/* Basic Meta Tags */}
@@ -38,11 +39,7 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       <link rel="canonical" href={canonicalUrl} />
       
       {/* Robots control */}
-      {noindex ? (
-        <meta name="robots" content="noindex, nofollow" />
-      ) : (
-        <meta name="robots" content="index, follow" />
-      )}
+      <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -57,23 +54,13 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageFullUrl} />
       
-      {/* Focus Keywords in meta description for better SEO */}
+      {/* Focus Keywords - only include if provided */}
       {focusKeywords.length > 0 && (
-        <>
-          <meta name="focus-keywords" content={focusKeywords.join(', ')} />
-          {/* Schema.org keywords markup */}
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebPage",
-              "keywords": focusKeywords.join(', ')
-            })}
-          </script>
-        </>
+        <meta name="focus-keywords" content={focusKeywords.join(', ')} />
       )}
       
-      {/* Structured Data */}
-      {structuredData.map((data, index) => (
+      {/* Structured Data - only include if provided */}
+      {structuredData.length > 0 && structuredData.map((data, index) => (
         <script key={index} type="application/ld+json">
           {JSON.stringify(data)}
         </script>

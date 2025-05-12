@@ -1,5 +1,5 @@
 
-# robots.txt for Survival401k.com
+# robots.txt for Survival401k.com - Optimized for search engines
 
 User-agent: *
 Allow: /
@@ -22,19 +22,6 @@ Disallow: /payment/
 # Allow search engines to access sitemap
 Sitemap: https://survival401k.com/sitemap.xml
 
-# Specific search engine directives
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 5
-
-User-agent: DuckDuckBot
-Allow: /
-Crawl-delay: 5
-
 # Social media crawlers
 User-agent: Twitterbot
 Allow: /
@@ -42,11 +29,9 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-# LinkedIn bot
 User-agent: LinkedInBot
 Allow: /
 
-# Pinterest bot
 User-agent: Pinterestbot
 Allow: /
 
@@ -65,4 +50,3 @@ Disallow: /
 
 User-agent: anthropic-ai
 Disallow: /
-

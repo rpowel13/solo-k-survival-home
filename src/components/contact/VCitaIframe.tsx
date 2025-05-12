@@ -29,7 +29,6 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
   
   // Direct function to show consent dialog
   const showConsent = useCallback(() => {
-    console.log("✅ Showing consent dialog");
     setShowConsentDialog(true);
     setSubmitAttempted(true);
   }, [setShowConsentDialog, setSubmitAttempted]);
@@ -47,13 +46,11 @@ const VCitaIframe: React.FC<VCitaIframeProps> = ({ onError }) => {
     // If click is in the bottom region (likely submit button)
     const y = e.clientY - rect.top;
     if (y > rect.height * 0.7) {
-      console.log("Submit area click detected");
       setTimeout(showConsent, 300);
     }
   };
 
   const handleConsentAccept = () => {
-    console.log("Consent accepted, proceeding with form submission");
     setConsentAccepted(true);
     setShowConsentDialog(false);
     

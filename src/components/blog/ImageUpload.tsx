@@ -27,12 +27,12 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       return;
     }
 
-    // Validate file size (5MB max)
-    const maxSize = 5 * 1024 * 1024;
+    // Validate file size (max 2MB for better performance)
+    const maxSize = 2 * 1024 * 1024;
     if (file.size > maxSize) {
       toast({
         title: "File too large",
-        description: "Please upload an image smaller than 5MB",
+        description: "Please upload an image smaller than 2MB for better page performance",
         variant: "destructive",
       });
       return;
@@ -41,28 +41,29 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
     setIsUploading(true);
     
     try {
-      // Create a unique filename to prevent overwriting
+      // Create a unique filename
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       
-      console.log(`Uploading image: ${fileName}`);
+      // Compress the image before uploading if it's a jpeg or png
+      let fileToUpload = file;
+      if (file.type === 'image/jpeg' || file.type === 'image/png') {
+        fileToUpload = await compressImage(file);
+      }
       
       // Upload the file
       const { error: uploadError, data } = await supabase.storage
         .from('blog-images')
-        .upload(fileName, file);
+        .upload(fileName, fileToUpload);
 
       if (uploadError) {
-        console.error("Upload error:", uploadError);
         throw uploadError;
       }
 
-      // Get the public URL for the uploaded file
+      // Get the public URL
       const { data: { publicUrl } } = supabase.storage
         .from('blog-images')
         .getPublicUrl(fileName);
-
-      console.log(`Image uploaded successfully. URL: ${publicUrl}`);
       
       // Return the URL to the parent component
       onUploadComplete(publicUrl);
@@ -80,10 +81,69 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       });
     } finally {
       setIsUploading(false);
-      // Reset input value to allow uploading the same file again if needed
+      // Reset input value
       const input = event.target;
       if (input) input.value = '';
     }
+  };
+  
+  // Function to compress images before uploading
+  const compressImage = async (file: File): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        
+        img.onload = () => {
+          // Create a canvas to resize the image
+          const canvas = document.createElement('canvas');
+          
+          // Calculate new dimensions (max 1200px width or height)
+          let width = img.width;
+          let height = img.height;
+          const maxDimension = 1200;
+          
+          if (width > height && width > maxDimension) {
+            height = Math.round(height * maxDimension / width);
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = Math.round(width * maxDimension / height);
+            height = maxDimension;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          // Draw and compress the image
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Convert to blob
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) {
+                reject(new Error('Failed to compress image'));
+                return;
+              }
+              // Create a new file with the compressed blob
+              const compressedFile = new File(
+                [blob], 
+                file.name, 
+                { type: file.type, lastModified: Date.now() }
+              );
+              resolve(compressedFile);
+            },
+            file.type,
+            0.8 // Quality (0.8 = 80%)
+          );
+        };
+        
+        img.onerror = () => reject(new Error('Failed to load image'));
+      };
+      reader.onerror = () => reject(new Error('Failed to read file'));
+    });
   };
 
   return (
