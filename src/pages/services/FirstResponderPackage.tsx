@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,99 +39,155 @@ const FirstResponderPackage = () => {
           </div>
         </section>
 
-        {/* Reformatted LLC Benefits Section with Linear Bands */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold px-6 text-survival-800">LLC Benefits for First Responders</h2>
+        {/* Enhanced Vehicle Purchase Section */}
+        <section className="py-8">
+          <h2 className="text-2xl font-bold mb-6 text-survival-800 border-b border-gray-200 pb-2">Vehicle Purchase Benefits for First Responders</h2>
           
-          <div className="bg-finance-50 rounded-lg p-6 border border-finance-100">
-            <h3 className="text-xl font-semibold mb-4 text-finance-700 flex items-center gap-2">
-              <Shield className="h-5 w-5 text-finance-600" />
-              Personal Asset Protection
-            </h3>
-            <p className="text-gray-700">
-              First responders face unique liability concerns due to the nature of their work. An LLC creates a legal separation between personal and business assets, helping protect personal savings, property, and investments from business-related liabilities and lawsuits.
+          <div className="space-y-8">
+            <p className="text-lg">
+              As a first responder, purchasing vehicles through your LLC can provide significant tax advantages and liability protection, especially for vehicles used in side businesses, training, or consulting work.
             </p>
-          </div>
-          
-          <div className="bg-purple-50 rounded-lg p-6 border border-purple-100">
-            <h3 className="text-xl font-semibold mb-4 text-purple-700 flex items-center gap-2">
-              <BadgePercent className="h-5 w-5 text-finance-600" />
-              Enhanced Tax Benefits
-            </h3>
-            <p className="text-gray-700">
-              Gain access to tax deductions specifically valuable for first responders, including equipment purchases, specialized training costs, home office expenses for side consulting, and business use of personal vehicles for travel between work sites.
-            </p>
-          </div>
-          
-          <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
-            <h3 className="text-xl font-semibold mb-4 text-blue-700 flex items-center gap-2">
-              <PiggyBank className="h-5 w-5 text-finance-600" />
-              Retirement Planning Enhancement
-            </h3>
-            <p className="text-gray-700">
-              An LLC structure is the foundation for setting up a Solo 401(k), allowing you to build significant additional retirement savings beyond your department pension. This two-tier approach creates financial security while maximizing tax advantages.
-            </p>
-          </div>
-          
-          <div className="bg-green-50 rounded-lg p-6 border border-green-100">
-            <h3 className="text-xl font-semibold mb-4 text-green-700 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-finance-600" />
-              Equipment Acquisition
-            </h3>
-            <p className="text-gray-700">
-              Purchase specialized equipment, vehicles, and tactical gear through your LLC for significant tax advantages. This is particularly valuable for first responders who often invest in high-quality personal equipment for both official duties and side work.
-            </p>
-          </div>
-          
-          <div className="bg-gradient-to-r from-survival-50 to-finance-50 rounded-lg p-6 border border-survival-100">
-            <h3 className="text-xl font-semibold mb-4 text-survival-800">First Responder Specific Benefits</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="bg-white p-4 rounded-md shadow-sm">
-                <h4 className="font-medium text-survival-800 mb-2 flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-finance-600" />
-                  Asset Protection
-                </h4>
-                <p className="text-sm text-gray-600">Separate personal assets from liabilities associated with side business work.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="bg-finance-50 rounded-lg p-6 border border-finance-100 h-full">
+                <h3 className="text-xl font-semibold mb-4 text-finance-700 flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-finance-600" />
+                  Equipment & Vehicle Tax Benefits
+                </h3>
+                <p className="text-gray-700">
+                  First responders can purchase specialized equipment, tactical gear, and vehicles through their LLC, potentially allowing for accelerated depreciation and immediate write-offs under Section 179 deductions up to $1,160,000 (2023). This is particularly valuable for emergency response vehicles, specialized trucks, or equipment transport vehicles.
+                </p>
               </div>
               
-              <div className="bg-white p-4 rounded-md shadow-sm">
-                <h4 className="font-medium text-survival-800 mb-2 flex items-center gap-2">
-                  <BadgePercent className="h-4 w-4 text-finance-600" />
-                  Tax Advantages
-                </h4>
-                <p className="text-sm text-gray-600">Deductions for business expenses related to your first responder side gig.</p>
+              <div className="bg-purple-50 rounded-lg p-6 border border-purple-100 h-full">
+                <h3 className="text-xl font-semibold mb-4 text-purple-700 flex items-center gap-2">
+                  <BadgePercent className="h-5 w-5 text-finance-600" />
+                  First Responder Vehicle Use Cases
+                </h3>
+                <ul className="space-y-2 text-gray-700 list-disc pl-5">
+                  <li>Training and instruction vehicles for tactical driving courses</li>
+                  <li>Emergency response vehicles for private security or consulting work</li>
+                  <li>Equipment transport for training events or demonstrations</li>
+                  <li>Mobile command centers for event security operations</li>
+                  <li>Specialized vehicles for safety consulting or disaster preparedness</li>
+                </ul>
               </div>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card className="shadow-sm border-l-4 border-l-finance-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Receipt className="h-5 w-5 text-finance-600" />
+                    Documentation Requirements
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Detailed mileage log separating personal and business use</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Business purpose documentation for each trip</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Vehicle expense receipts (maintenance, fuel, insurance)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Purchase documentation showing LLC as vehicle owner</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
               
-              <div className="bg-white p-4 rounded-md shadow-sm">
-                <h4 className="font-medium text-survival-800 mb-2 flex items-center gap-2">
-                  <Receipt className="h-4 w-4 text-finance-600" />
-                  Simplified Accounting
-                </h4>
-                <p className="text-sm text-gray-600">Clear separation between personal and business finances for easier tax filing.</p>
-              </div>
+              <Card className="shadow-sm border-l-4 border-l-survival-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-finance-600" />
+                    Tax Deduction Methods
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Standard mileage rate: $0.67 per business mile (2024)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Actual expenses method: all operating costs + depreciation</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Section 179 deduction for immediate write-offs</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Bonus depreciation options for qualifying vehicles</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
               
-              <div className="bg-white p-4 rounded-md shadow-sm">
-                <h4 className="font-medium text-survival-800 mb-2 flex items-center gap-2">
-                  <Users className="h-4 w-4 text-finance-600" />
-                  Credibility
-                </h4>
-                <p className="text-sm text-gray-600">Enhanced professional image when providing services outside your primary role.</p>
-              </div>
-              
-              <div className="bg-white p-4 rounded-md shadow-sm">
-                <h4 className="font-medium text-survival-800 mb-2 flex items-center gap-2">
-                  <PiggyBank className="h-4 w-4 text-finance-600" />
-                  Retirement Planning
-                </h4>
-                <p className="text-sm text-gray-600">Access to business retirement plans like Solo 401(k)s with higher contribution limits.</p>
-              </div>
-              
-              <div className="bg-white p-4 rounded-md shadow-sm">
-                <h4 className="font-medium text-survival-800 mb-2 flex items-center gap-2">
-                  <Briefcase className="h-4 w-4 text-finance-600" />
-                  Asset Acquisition
-                </h4>
-                <p className="text-sm text-gray-600">Purchase vehicles and equipment through your LLC for better tax treatment.</p>
+              <Card className="shadow-sm border-l-4 border-l-purple-500">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-finance-600" />
+                    Liability Protection
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Personal asset protection from vehicle-related incidents</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Commercial auto insurance coverage for business use</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Separation between personal and business liabilities</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-finance-600 flex-shrink-0 mt-0.5" />
+                      <span>Additional lawsuit protection when properly structured</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div className="bg-survival-50 rounded-xl p-6 border border-survival-100 mt-8">
+              <h3 className="text-xl font-semibold mb-4 text-survival-800">First Responder Vehicle Purchase Strategy</h3>
+              <p className="mb-4">
+                We'll help you develop a comprehensive strategy for vehicle purchases that maximizes tax benefits while maintaining compliance with IRS regulations. Our approach includes:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <h4 className="font-semibold text-finance-700 mb-2">Purchase Analysis</h4>
+                  <p className="text-sm text-gray-700">We'll analyze whether leasing or purchasing is more advantageous for your specific situation, factoring in your service type, expected usage patterns, and financial goals.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <h4 className="font-semibold text-finance-700 mb-2">Documentation System</h4>
+                  <p className="text-sm text-gray-700">Set up proper record-keeping systems to track business vs. personal use, maintenance records, and all vehicle-related expenses for maximum tax benefits.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <h4 className="font-semibold text-finance-700 mb-2">Insurance Optimization</h4>
+                  <p className="text-sm text-gray-700">Guidance on proper insurance coverage for vehicles owned by your LLC, including commercial auto policies tailored to first responder business activities.</p>
+                </div>
+                
+                <div className="bg-white p-5 rounded-lg shadow-sm">
+                  <h4 className="font-semibold text-finance-700 mb-2">Tax Planning</h4>
+                  <p className="text-sm text-gray-700">Strategic timing of vehicle purchases to optimize tax deductions across tax years and maximize available incentives and depreciation benefits.</p>
+                </div>
               </div>
             </div>
           </div>
