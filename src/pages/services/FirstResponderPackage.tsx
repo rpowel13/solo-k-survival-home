@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,20 +41,6 @@ const FirstResponderPackage = () => {
         {/* Reformatted LLC Benefits Section with Linear Bands */}
         <section className="space-y-6">
           <h2 className="text-2xl font-bold px-6 text-survival-800">LLC Benefits for First Responders</h2>
-          
-          <div className="bg-survival-50 rounded-lg p-6 border border-survival-100">
-            <h3 className="text-xl font-semibold mb-4 text-survival-700 flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-finance-600" />
-              Common Side Income Sources
-            </h3>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-6 list-disc">
-              <li className="text-gray-700">Training and consulting services</li>
-              <li className="text-gray-700">Security consulting work</li>
-              <li className="text-gray-700">Event safety planning</li>
-              <li className="text-gray-700">Side businesses related to tactical gear, equipment, etc.</li>
-              <li className="text-gray-700">Writing and speaking engagements</li>
-            </ul>
-          </div>
           
           <div className="bg-finance-50 rounded-lg p-6 border border-finance-100">
             <h3 className="text-xl font-semibold mb-4 text-finance-700 flex items-center gap-2">
