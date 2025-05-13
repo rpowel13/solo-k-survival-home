@@ -22,7 +22,7 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
     }
   }, [onWrapper]);
   
-  // Lazy load the iframe content
+  // Lazy load the iframe content with improved performance tracking
   useEffect(() => {
     let observer: IntersectionObserver;
     
@@ -32,17 +32,27 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
           if (entry.isIntersecting) {
             // Load the iframe source when it comes into view
             const iframe = entry.target as HTMLIFrameElement;
+            
+            // Add loading event listener before setting src
+            iframe.addEventListener('load', () => {
+              console.log('vCita iframe loaded successfully');
+            });
+            
             iframe.src = "https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true";
             observer.unobserve(iframe);
             
-            // Add performance monitoring
+            // Add performance monitoring with more details
             if ('PerformanceObserver' in window) {
               try {
                 const perfObserver = new PerformanceObserver((list) => {
                   const entries = list.getEntries();
                   entries.forEach(entry => {
                     if (entry.entryType === 'resource' && entry.name.includes('vcita')) {
-                      console.log('VCita iframe loaded in:', entry.duration, 'ms');
+                      console.log('vCita resource loaded:', {
+                        name: entry.name,
+                        duration: Math.round(entry.duration) + 'ms',
+                        size: entry.encodedBodySize ? (entry.encodedBodySize / 1024).toFixed(1) + 'KB' : 'unknown'
+                      });
                     }
                   });
                 });
@@ -53,7 +63,7 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
             }
           }
         });
-      }, { threshold: 0.1, rootMargin: '200px' });  // Increased root margin for earlier loading
+      }, { threshold: 0.1, rootMargin: '300px' });  // Increased root margin for even earlier loading
       
       observer.observe(iframeRef.current);
     }

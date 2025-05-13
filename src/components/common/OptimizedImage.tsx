@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -22,6 +22,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   onClick,
   decoding = 'async',
 }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
   // Check if the image is from an external source or local
   const isExternal = src.startsWith('http') || src.startsWith('//');
   
@@ -45,25 +47,36 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
   
   return (
-    <img
-      src={imgSrc}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      loading={loading}
-      onClick={onClick}
-      decoding={decoding}
-      srcSet={calculateSrcSet()}
-      onError={(e) => {
-        // Fallback to placeholder if image fails to load
-        const target = e.target as HTMLImageElement;
-        target.onerror = null;
-        target.src = '/placeholder.svg';
-        console.log(`Image load error: ${imgSrc}`);
-      }}
-      fetchPriority={loading === 'eager' ? 'high' : 'auto'}
-    />
+    <>
+      {/* Low-quality image placeholder (LQIP) for better perceived performance */}
+      {!isLoaded && (
+        <div 
+          className={`${className} bg-gray-200 animate-pulse`} 
+          style={{ width: width ? `${width}px` : '100%', height: height ? `${height}px` : '100%' }}
+        />
+      )}
+      <img
+        src={imgSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+        loading={loading}
+        onClick={onClick}
+        decoding={decoding}
+        srcSet={calculateSrcSet()}
+        onLoad={() => setIsLoaded(true)}
+        onError={(e) => {
+          // Fallback to placeholder if image fails to load
+          const target = e.target as HTMLImageElement;
+          target.onerror = null;
+          target.src = '/placeholder.svg';
+          setIsLoaded(true);
+          console.log(`Image load error: ${imgSrc}`);
+        }}
+        fetchPriority={loading === 'eager' ? 'high' : 'auto'}
+      />
+    </>
   );
 };
 

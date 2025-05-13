@@ -1,15 +1,17 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ServiceLayout from '@/components/ServiceLayout';
 import IntroSection from '@/components/llc/service-page/IntroSection';
-import KeyBenefitsSection from '@/components/llc/service-page/KeyBenefitsSection';
-import FinancialFutureSection from '@/components/llc/service-page/FinancialFutureSection';
-import VehiclePurchaseSection from '@/components/llc/service-page/VehiclePurchaseSection';
-import FirstResponderBenefitsSection from '@/components/llc/service-page/FirstResponderBenefitsSection';
-import WhatsIncludedSection from '@/components/llc/service-page/WhatsIncludedSection';
-import ProcessMapSection from '@/components/llc/service-page/ProcessMapSection';
-import PricingSection from '@/components/llc/service-page/PricingSection';
 import { PageSEO } from '@/components/SEO';
+
+// Lazy load non-critical components
+const KeyBenefitsSection = lazy(() => import('@/components/llc/service-page/KeyBenefitsSection'));
+const FinancialFutureSection = lazy(() => import('@/components/llc/service-page/FinancialFutureSection'));
+const VehiclePurchaseSection = lazy(() => import('@/components/llc/service-page/VehiclePurchaseSection'));
+const FirstResponderBenefitsSection = lazy(() => import('@/components/llc/service-page/FirstResponderBenefitsSection'));
+const WhatsIncludedSection = lazy(() => import('@/components/llc/service-page/WhatsIncludedSection'));
+const ProcessMapSection = lazy(() => import('@/components/llc/service-page/ProcessMapSection'));
+const PricingSection = lazy(() => import('@/components/llc/service-page/PricingSection'));
 
 const LLCCreation = () => {
   // Top features to display in the header
@@ -82,6 +84,13 @@ const LLCCreation = () => {
       ]
     }
   ];
+
+  // Loading fallback component
+  const SectionLoading = () => (
+    <div className="w-full py-8 flex justify-center items-center">
+      <div className="animate-pulse bg-gray-200 rounded-lg h-64 w-full"></div>
+    </div>
+  );
   
   return (
     <>
@@ -100,14 +109,37 @@ const LLCCreation = () => {
         topFeatures={topFeatures}
       >
         <div className="space-y-16 max-w-4xl mx-auto">
+          {/* Critical section loaded immediately */}
           <IntroSection />
-          <KeyBenefitsSection />
-          <FinancialFutureSection />
-          <VehiclePurchaseSection />
-          <FirstResponderBenefitsSection />
-          <WhatsIncludedSection />
-          <ProcessMapSection />
-          <PricingSection />
+          
+          {/* Remaining sections lazy loaded */}
+          <Suspense fallback={<SectionLoading />}>
+            <KeyBenefitsSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoading />}>
+            <FinancialFutureSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoading />}>
+            <VehiclePurchaseSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoading />}>
+            <FirstResponderBenefitsSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoading />}>
+            <WhatsIncludedSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoading />}>
+            <ProcessMapSection />
+          </Suspense>
+          
+          <Suspense fallback={<SectionLoading />}>
+            <PricingSection />
+          </Suspense>
         </div>
       </ServiceLayout>
     </>

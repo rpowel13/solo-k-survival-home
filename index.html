@@ -5,6 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- DNS Prefetch for critical domains -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://daorpdnaganfugudqkmk.supabase.co">
+    <link rel="dns-prefetch" href="https://d2ra6nuwn69ktl.cloudfront.net">
+    
     <!-- Preconnect to critical domains for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,8 +30,14 @@
     <link rel="icon" type="image/png" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png">
 
-    <!-- Preload critical logo image -->
+    <!-- Preload critical assets -->
     <link rel="preload" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" as="image" fetchpriority="high" />
+    <link rel="preload" href="/src/main.tsx" as="script" />
+    <link rel="modulepreload" href="/src/App.tsx" />
+    
+    <!-- Preload critical CSS -->
+    <link rel="preload" href="/src/index.css" as="style" />
+    <link rel="preload" href="/src/App.css" as="style" />
     
     <!-- Google Analytics - load with defer to prevent parser blocking -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-NJX7VTWTSJ"></script>
@@ -68,18 +81,48 @@
     
     <!-- Performance monitoring -->
     <script>
-      // Simple performance monitoring
+      // Enhanced performance monitoring with Core Web Vitals
       window.addEventListener('DOMContentLoaded', () => {
-        if (window.performance) {
-          const navigationTiming = performance.getEntriesByType('navigation')[0];
-          if (navigationTiming) {
-            setTimeout(() => {
-              console.log('Page load performance:', {
-                domComplete: Math.round(navigationTiming.domComplete),
-                loadEventEnd: Math.round(navigationTiming.loadEventEnd),
-                domInteractive: Math.round(navigationTiming.domInteractive)
-              });
-            }, 0);
+        if ('PerformanceObserver' in window) {
+          try {
+            // Track Core Web Vitals
+            const vitalsObserver = new PerformanceObserver((list) => {
+              for (const entry of list.getEntries()) {
+                console.log(`Core Web Vital: ${entry.name}`, entry);
+              }
+            });
+            vitalsObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+            vitalsObserver.observe({ type: 'first-input', buffered: true });
+            vitalsObserver.observe({ type: 'layout-shift', buffered: true });
+            
+            // Track navigation timing
+            if (performance.getEntriesByType) {
+              setTimeout(() => {
+                const navTiming = performance.getEntriesByType('navigation')[0];
+                if (navTiming) {
+                  console.log('Page Performance:', {
+                    domContentLoaded: Math.round(navTiming.domContentLoadedEventEnd),
+                    loadComplete: Math.round(navTiming.loadEventEnd),
+                    domInteractive: Math.round(navTiming.domInteractive),
+                    firstContentfulPaint: Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0)
+                  });
+                }
+              }, 0);
+            }
+            
+            // Resource timing
+            const resourceObserver = new PerformanceObserver((list) => {
+              const entries = list.getEntries();
+              const slowResources = entries.filter(e => e.duration > 1000);
+              if (slowResources.length > 0) {
+                console.log('Slow resources detected:', 
+                  slowResources.map(r => ({name: r.name, duration: Math.round(r.duration) + 'ms'}))
+                );
+              }
+            });
+            resourceObserver.observe({entryTypes: ['resource']});
+          } catch (e) {
+            console.warn('Performance monitoring error:', e);
           }
         }
       });

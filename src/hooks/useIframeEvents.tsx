@@ -1,5 +1,5 @@
 
-import { useEffect, RefObject, useCallback } from "react";
+import { useEffect, RefObject, useState } from "react";
 
 interface UseIframeEventsProps {
   iframeRef: RefObject<HTMLIFrameElement>;
@@ -8,9 +8,18 @@ interface UseIframeEventsProps {
 }
 
 export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: UseIframeEventsProps) {
+  const [isObserving, setIsObserving] = useState(false);
+  
+  // Performance tracking for iframe interactions
+  const logPerformance = (interaction: string) => {
+    const timestamp = performance.now();
+    console.log(`Iframe ${interaction} at ${Math.round(timestamp)}ms`);
+  };
+
   // Listen for messages from iframe
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      logPerformance("message received");
       console.log("Message from iframe:", event.data);
       
       // Check for form submission indicators in the message
@@ -22,6 +31,7 @@ export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: Use
           dataString.includes("success") || 
           dataString.includes("complete")
         ) {
+          logPerformance("form interaction detected");
           console.log("Form interaction detected via message");
           showConsent();
         }
@@ -34,7 +44,7 @@ export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: Use
 
   // Monitor iframe for changes that might indicate submission
   useEffect(() => {
-    if (!iframeRef.current) return;
+    if (!iframeRef.current || isObserving || submitAttempted) return;
     
     const observer = new MutationObserver(() => {
       if (submitAttempted) return; // Skip if submission was already detected
@@ -45,10 +55,12 @@ export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: Use
           const buttons = iframeRef.current.contentDocument.querySelectorAll('button[type="submit"], input[type="submit"], .submit-button');
           buttons.forEach(button => {
             button.addEventListener("click", () => {
+              logPerformance("submit button clicked");
               console.log("Submit button clicked");
               showConsent();
             });
           });
+          setIsObserving(true);
         }
       } catch (e) {
         // Silent catch for CORS issues
@@ -64,19 +76,20 @@ export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: Use
     }
     
     return () => observer.disconnect();
-  }, [iframeRef, submitAttempted, showConsent]);
+  }, [iframeRef, submitAttempted, showConsent, isObserving]);
 
   // Extra listener for iframe load event
   useEffect(() => {
     const handleLoad = () => {
+      logPerformance("iframe loaded");
       console.log("Iframe loaded");
+      
       if (!iframeRef.current) return;
       
       // Add failsafe click handler to the iframe itself
       try {
         iframeRef.current.contentWindow?.addEventListener("click", (e) => {
           // This may not work due to CORS, but we try
-          console.log("Click inside iframe detected");
           const target = e.target as HTMLElement;
           if (
             target.tagName === "BUTTON" || 
@@ -85,10 +98,11 @@ export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: Use
             target.closest("button") || 
             target.closest('input[type="submit"]')
           ) {
+            logPerformance("submit element clicked inside iframe");
             console.log("Submit element clicked inside iframe");
             showConsent();
           }
-        });
+        }, { passive: true }); // Using passive listener for better performance
       } catch (e) {
         // CORS will likely block this
         console.log("Could not add iframe content click handler due to CORS");
@@ -106,27 +120,43 @@ export function useIframeEvents({ iframeRef, showConsent, submitAttempted }: Use
     };
   }, [iframeRef, showConsent]);
 
-  // Periodic check for submit buttons
+  // Optimized periodic check for submit buttons using requestAnimationFrame for better performance
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (iframeRef.current && !submitAttempted) {
-        try {
-          const doc = iframeRef.current.contentDocument;
-          if (doc) {
-            const buttons = doc.querySelectorAll('button[type="submit"], input[type="submit"], .vcita-form-submit, .button-container button');
-            buttons.forEach(button => {
-              button.addEventListener("click", () => {
-                console.log("Submit button clicked via interval check");
-                showConsent();
-              });
-            });
+    let rafId: number;
+    let lastCheck = 0;
+    const checkInterval = 2000;
+    
+    const checkButtons = (timestamp: number) => {
+      if (timestamp - lastCheck > checkInterval) {
+        lastCheck = timestamp;
+        
+        if (iframeRef.current && !submitAttempted) {
+          try {
+            const doc = iframeRef.current.contentDocument;
+            if (doc) {
+              const buttons = doc.querySelectorAll('button[type="submit"], input[type="submit"], .vcita-form-submit, .button-container button');
+              if (buttons.length > 0 && !isObserving) {
+                buttons.forEach(button => {
+                  button.addEventListener("click", () => {
+                    logPerformance("submit button clicked via interval check");
+                    console.log("Submit button clicked via interval check");
+                    showConsent();
+                  });
+                });
+                setIsObserving(true);
+              }
+            }
+          } catch (e) {
+            // Silent catch for CORS
           }
-        } catch (e) {
-          // Silent catch for CORS
         }
       }
-    }, 2000);
+      
+      rafId = requestAnimationFrame(checkButtons);
+    };
     
-    return () => clearInterval(interval);
-  }, [iframeRef, submitAttempted, showConsent]);
+    rafId = requestAnimationFrame(checkButtons);
+    
+    return () => cancelAnimationFrame(rafId);
+  }, [iframeRef, submitAttempted, showConsent, isObserving]);
 }
