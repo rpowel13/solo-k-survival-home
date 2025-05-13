@@ -5,9 +5,9 @@ export interface HomeStructuredDataProps {
   focusKeywords: string[];
 }
 
-const HomeStructuredData: React.FC<HomeStructuredDataProps> = ({ 
+const HomeStructuredData = ({ 
   focusKeywords 
-}) => {
+}: HomeStructuredDataProps): { structuredData: Record<string, any>[] } => {
   // Structured data for homepage with enhanced keywords
   const structuredData = [
     // Local Business Schema

@@ -11,7 +11,7 @@ interface WebhookStatusSectionProps {
   onValidateWebhook: () => void;
 }
 
-const WebhookStatusSection: React.FC<WebhookStatusSectionProps> = ({
+const WebhookStatusSection: React.FC<WebhookStatusSectionProps> = React.memo(({
   webhookStatus,
   lastTestedTime,
   webhookUrl,
@@ -30,6 +30,8 @@ const WebhookStatusSection: React.FC<WebhookStatusSectionProps> = ({
       <ZapierConfig webhookType="crm" validateWebhook={validateWebhook} />
     </>
   );
-};
+});
+
+WebhookStatusSection.displayName = 'WebhookStatusSection';
 
 export default WebhookStatusSection;

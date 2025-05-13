@@ -8,7 +8,7 @@ interface HomePageSEOProps {
   structuredData: Record<string, any>[];
 }
 
-const HomePageSEO: React.FC<HomePageSEOProps> = ({
+const HomePageSEO: React.FC<HomePageSEOProps> = React.memo(({
   homepageKeywords,
   focusKeywords,
   structuredData
@@ -25,6 +25,8 @@ const HomePageSEO: React.FC<HomePageSEOProps> = ({
       keywordCategories={["Solo 401k", "Investment Options", "Alternative Assets", "Special Programs", "Tax Benefits"]}
     />
   );
-};
+});
+
+HomePageSEO.displayName = 'HomePageSEO';
 
 export default HomePageSEO;

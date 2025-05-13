@@ -23,7 +23,7 @@ interface HomeContentProps {
   };
 }
 
-const HomeContent: React.FC<HomeContentProps> = ({ sectionBackgrounds }) => {
+const HomeContent: React.FC<HomeContentProps> = React.memo(({ sectionBackgrounds }) => {
   return (
     <main className="flex-grow">
       <HeroSection />
@@ -53,6 +53,8 @@ const HomeContent: React.FC<HomeContentProps> = ({ sectionBackgrounds }) => {
       </div>
     </main>
   );
-};
+});
+
+HomeContent.displayName = 'HomeContent';
 
 export default HomeContent;

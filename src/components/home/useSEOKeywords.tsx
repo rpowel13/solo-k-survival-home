@@ -1,7 +1,12 @@
 
 import { primaryKeywords } from "@/components/SEO";
 
-export const useSEOKeywords = () => {
+interface SEOKeywordsResult {
+  homepageKeywords: string;
+  focusKeywords: string[];
+}
+
+export const useSEOKeywords = (): SEOKeywordsResult => {
   // Enhanced SEO keywords combining all requested topics
   const homepageKeywords = `${primaryKeywords.solo401k}, ${primaryKeywords.investments}, self-directed retirement plans, 401k investment options, alternative investments for retirement, precious metals in 401k, real estate investing with 401k, cryptocurrency in 401k, first responder retirement plans, LLC creation for retirement accounts, tax advantages of solo 401k`;
   
