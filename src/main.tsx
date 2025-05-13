@@ -44,23 +44,18 @@ const initPerformanceMonitoring = () => {
   }
 };
 
-// Make sure loader is visible before attempting to render
-const ensureLoaderVisible = () => {
-  const loader = document.getElementById('page-loader');
-  if (loader) {
-    // Ensure loader is visible
-    loader.style.opacity = '1';
-    loader.style.display = 'flex';
-  }
-};
-
 // Run optimizations
 preloadCriticalCSS();
 initPerformanceMonitoring();
-ensureLoaderVisible();
 
-// Render the app with priority but with a small delay to ensure loader is seen
+// Render the app immediately for faster loading
 const renderApp = () => {
+  // Hide loader immediately if it exists
+  const loader = document.getElementById('page-loader');
+  if (loader) {
+    loader.style.display = 'none';
+  }
+  
   createRoot(document.getElementById("root")!).render(
     <HelmetProvider>
       <App />
@@ -68,13 +63,9 @@ const renderApp = () => {
   );
 };
 
+// Render as soon as possible
 if (document.readyState === 'loading') {
-  // Wait for DOMContentLoaded if still loading
-  document.addEventListener('DOMContentLoaded', () => {
-    // Small delay to ensure loader is visible on mobile
-    setTimeout(renderApp, 100);
-  });
+  document.addEventListener('DOMContentLoaded', renderApp);
 } else {
-  // Small delay even if DOM is already loaded
-  setTimeout(renderApp, 100);
+  renderApp();
 }
