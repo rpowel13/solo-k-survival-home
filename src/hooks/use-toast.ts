@@ -189,3 +189,4 @@ function useToast() {
 }
 
 export { useToast, toast }
+export type { ToasterToast as ToastProps, ToastActionElement }

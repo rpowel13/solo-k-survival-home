@@ -8,7 +8,7 @@ import { type ToastProps } from "@/components/ui/toast";
  */
 export const validateImageFile = (
   file: File,
-  showToast: (toast: ToastProps) => void
+  showToast: (props: { title: string; description: string; variant?: "default" | "destructive" }) => void
 ): { isValid: boolean } => {
   // Validate file type
   if (!file.type.startsWith('image/')) {
