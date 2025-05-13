@@ -1,7 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInView } from "react-intersection-observer";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface OptimizedImageProps {
   src: string;
@@ -13,6 +14,7 @@ interface OptimizedImageProps {
   onClick?: () => void;
   decoding?: 'async' | 'sync' | 'auto';
   priority?: boolean;
+  aspectRatio?: number;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -25,6 +27,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   onClick,
   decoding = 'async',
   priority = false,
+  aspectRatio,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { ref, inView } = useInView({
@@ -57,6 +60,30 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   // Use native loading="lazy" except for priority images
   const loadingAttribute = priority ? 'eager' : loading;
   
+  const imageElement = (
+    <img
+      src={imgSrc}
+      alt={alt}
+      width={width}
+      height={height}
+      className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+      loading={loadingAttribute}
+      onClick={onClick}
+      decoding={decoding}
+      srcSet={calculateSrcSet()}
+      onLoad={() => setIsLoaded(true)}
+      onError={(e) => {
+        // Fallback to placeholder if image fails to load
+        const target = e.target as HTMLImageElement;
+        target.onerror = null;
+        target.src = '/placeholder.svg';
+        setIsLoaded(true);
+        console.log(`Image load error: ${imgSrc}`);
+      }}
+      fetchPriority={priority || loading === 'eager' ? 'high' : 'auto'}
+    />
+  );
+  
   return (
     <div ref={ref} className="relative">
       {(!isLoaded) && (
@@ -65,31 +92,19 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{ width: width ? `${width}px` : '100%', height: height ? `${height}px` : '100%' }}
         />
       )}
+      
       {(inView || priority) && (
-        <img
-          src={imgSrc}
-          alt={alt}
-          width={width}
-          height={height}
-          className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-          loading={loadingAttribute}
-          onClick={onClick}
-          decoding={decoding}
-          srcSet={calculateSrcSet()}
-          onLoad={() => setIsLoaded(true)}
-          onError={(e) => {
-            // Fallback to placeholder if image fails to load
-            const target = e.target as HTMLImageElement;
-            target.onerror = null;
-            target.src = '/placeholder.svg';
-            setIsLoaded(true);
-            console.log(`Image load error: ${imgSrc}`);
-          }}
-          fetchPriority={priority || loading === 'eager' ? 'high' : 'auto'}
-        />
+        aspectRatio ? (
+          <AspectRatio ratio={aspectRatio}>
+            {imageElement}
+          </AspectRatio>
+        ) : (
+          imageElement
+        )
       )}
     </div>
   );
 };
 
-export default React.memo(OptimizedImage);
+// Use memo to prevent unnecessary re-renders
+export default memo(OptimizedImage);

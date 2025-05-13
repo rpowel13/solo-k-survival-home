@@ -1,11 +1,11 @@
 
-import React from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { ArrowDown, ArrowUp, Coins, ExternalLink, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatPrice, formatChange, getChangeColor } from '@/utils/metalPriceUtils';
 import { useMetalPrices } from '@/services/metalPriceService';
 
-const MetalPriceItem = React.memo(({ 
+const MetalPriceItem = memo(({ 
   label, 
   price, 
   change 
@@ -30,7 +30,7 @@ const MetalPriceItem = React.memo(({
 
 MetalPriceItem.displayName = 'MetalPriceItem';
 
-const LoadingState = () => (
+const LoadingState = memo(() => (
   <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-2 border-b border-gray-200">
     <div className="container mx-auto px-4 text-center">
       <div className="text-sm text-gray-600 flex items-center justify-center">
@@ -39,13 +39,15 @@ const LoadingState = () => (
       </div>
     </div>
   </div>
-);
+));
+
+LoadingState.displayName = 'LoadingState';
 
 const MetalPriceBanner: React.FC = () => {
   const { data, isLoading, refetch, error } = useMetalPrices();
-  const [lastUpdated, setLastUpdated] = React.useState<Date>(new Date());
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
 
-  const handleRefresh = React.useCallback(() => {
+  const handleRefresh = useCallback(() => {
     refetch();
     setLastUpdated(new Date());
   }, [refetch]);
@@ -116,4 +118,4 @@ const MetalPriceBanner: React.FC = () => {
   );
 };
 
-export default React.memo(MetalPriceBanner);
+export default memo(MetalPriceBanner);

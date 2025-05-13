@@ -1,16 +1,17 @@
 
-import React from 'react';
-import { useInView } from '@/hooks/useInView';
+import React, { useState, useRef, memo } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
+import { useInView } from "react-intersection-observer";
 
 const GoldPriceWidget = () => {
   const { ref, inView } = useInView({
     triggerOnce: true,
     rootMargin: '200px', // Load when 200px from viewport
+    threshold: 0.1,
   });
   
-  const [isLoaded, setIsLoaded] = React.useState(false);
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   
   // Track iframe loading performance
   const handleIframeLoad = () => {
@@ -20,7 +21,7 @@ const GoldPriceWidget = () => {
   };
 
   return (
-    <div ref={ref as React.RefObject<HTMLDivElement>} id="gold-price-widget-container" className="border border-gray-200 w-[280px] h-[250px] bg-white">
+    <div ref={ref} id="gold-price-widget-container" className="border border-gray-200 w-[280px] h-[250px] bg-white">
       {!inView ? (
         <Skeleton className="w-full h-full" />
       ) : (
@@ -67,4 +68,4 @@ const GoldPriceWidget = () => {
   );
 };
 
-export default React.memo(GoldPriceWidget);
+export default memo(GoldPriceWidget);
