@@ -51,7 +51,8 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
                       console.log('vCita resource loaded:', {
                         name: entry.name,
                         duration: Math.round(entry.duration) + 'ms',
-                        size: entry.encodedBodySize ? (entry.encodedBodySize / 1024).toFixed(1) + 'KB' : 'unknown'
+                        size: entry instanceof PerformanceResourceTiming ? 
+                              (entry.transferSize / 1024).toFixed(1) + 'KB' : 'unknown'
                       });
                     }
                   });

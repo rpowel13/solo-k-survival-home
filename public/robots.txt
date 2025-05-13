@@ -1,28 +1,31 @@
 
-# robots.txt for Survival401k.com - Optimized for search engines
+# robots.txt for Survival401k.com - Enhanced for search engines
 
 User-agent: *
 Allow: /
 
-# Main pages - enhanced with keywords for better SEO indexing
-Allow: /services/solo-401k       # Solo 401k plans for self-employed
-Allow: /services/llc-creation    # LLC formation and business services
-Allow: /services/first-responder-package   # Special retirement plans for first responders
-Allow: /services/alternative-investments   # Self-directed investment options
-Allow: /services/metal-prices    # Precious metals investment info
-Allow: /apply/                   # Application pages for retirement plans
-Allow: /tools/                   # Financial calculators and resources
-Allow: /contact                  # Contact our retirement specialists
+# Main sections - enhanced with detailed descriptions for better SEO indexing
+Allow: /services/solo-401k       # Solo 401k plans for self-employed individuals with high contribution limits
+Allow: /services/llc-creation    # LLC formation and business structure services for entrepreneurs
+Allow: /services/first-responder-package   # Specialized retirement plans for police, firefighters and EMTs
+Allow: /services/alternative-investments   # Self-directed investment options including real estate and precious metals
+Allow: /services/metal-prices    # Latest precious metals investment information and pricing
+Allow: /apply/                   # Application processes for retirement plans
+Allow: /tools/                   # Financial calculators and retirement planning resources
+Allow: /contact                  # Contact our retirement specialists for personalized assistance
 
 # Disallow admin and internal pages
 Disallow: /admin/
 Disallow: /test-form
 Disallow: /payment/
 
-# Allow search engines to access sitemap
+# Allow search engines to access sitemaps
 Sitemap: https://survival401k.com/sitemap.xml
 
-# Social media crawlers
+# Rate limiting directives
+Crawl-delay: 5
+
+# Social media crawlers - allowed full access
 User-agent: Twitterbot
 Allow: /
 
@@ -49,4 +52,13 @@ User-agent: CCBot
 Disallow: /
 
 User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Bard
 Disallow: /

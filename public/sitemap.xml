@@ -3,124 +3,129 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://survival401k.com/</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <!-- Keywords: solo 401k, self employed retirement, retirement planning, small business 401k -->
+    <image:image>
+      <image:loc>https://survival401k.com/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png</image:loc>
+      <image:title>Survival 401k Logo</image:title>
+    </image:image>
+    <!-- Keywords: solo 401k, self employed retirement, retirement planning, small business 401k, retirement tax advantages -->
   </url>
   <url>
     <loc>https://survival401k.com/services/solo-401k</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
-    <!-- Keywords: solo 401k plans, individual 401k, self employed retirement plans, high contribution retirement -->
+    <!-- Keywords: solo 401k plans, individual 401k, self employed retirement plans, high contribution retirement, tax advantaged retirement -->
   </url>
   <url>
     <loc>https://survival401k.com/services/llc-creation</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <!-- Keywords: llc formation, business structure, asset protection, pass through taxation -->
+    <!-- Keywords: llc formation, business structure, asset protection, pass through taxation, small business formation -->
   </url>
   <url>
     <loc>https://survival401k.com/services/first-responder-package</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <!-- Keywords: first responder retirement, police retirement plans, firefighter 401k, EMT retirement benefits -->
+    <!-- Keywords: first responder retirement, police retirement plans, firefighter 401k, EMT retirement benefits, special retirement packages -->
   </url>
   <url>
     <loc>https://survival401k.com/services/alternative-investments</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <!-- Keywords: alternative investments, real estate investing, precious metals, private equity, cryptocurrency retirement -->
+    <!-- Keywords: alternative investments, real estate investing, precious metals, private equity, cryptocurrency retirement, self-directed investing -->
   </url>
   <url>
     <loc>https://survival401k.com/services/metal-prices</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <!-- Keywords: gold prices, silver investing, precious metals ira, metals in 401k, inflation protection -->
+    <!-- Keywords: gold prices, silver investing, precious metals ira, metals in 401k, inflation protection, gold investment -->
   </url>
   <url>
     <loc>https://survival401k.com/apply/solo-401k</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <!-- Keywords: apply for solo 401k, 401k application, retirement plan setup -->
+    <!-- Keywords: apply for solo 401k, 401k application, retirement plan setup, start solo 401k -->
   </url>
   <url>
     <loc>https://survival401k.com/apply/llc</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <!-- Keywords: llc application, form llc online, business formation -->
+    <!-- Keywords: llc application, form llc online, business formation, start an llc -->
   </url>
   <url>
     <loc>https://survival401k.com/apply/first-responder</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <!-- Keywords: first responder benefits, special retirement packages, first responder financial planning -->
+    <!-- Keywords: first responder benefits, special retirement packages, first responder financial planning, police retirement plans -->
   </url>
   <url>
     <loc>https://survival401k.com/tools/retirement-calculator</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <image:image>
       <image:loc>https://survival401k.com/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png</image:loc>
       <image:title>Retirement Calculator Tool</image:title>
     </image:image>
-    <!-- Keywords: retirement calculator, retirement savings projection, retirement planning tools -->
+    <!-- Keywords: retirement calculator, retirement savings projection, retirement planning tools, savings calculator -->
   </url>
   <url>
     <loc>https://survival401k.com/tools/loan-calculator</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <!-- Keywords: 401k loan calculator, retirement loan, borrow from 401k -->
+    <!-- Keywords: 401k loan calculator, retirement loan, borrow from 401k, retirement plan loans -->
   </url>
   <url>
     <loc>https://survival401k.com/tools/rmd-calculator</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <!-- Keywords: required minimum distribution, rmd calculation, 401k withdrawals -->
+    <!-- Keywords: required minimum distribution, rmd calculation, 401k withdrawals, retirement distributions -->
   </url>
   <url>
     <loc>https://survival401k.com/tools/solo-401k-calculator</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <!-- Keywords: solo 401k contribution calculator, self employed contribution limits, maximum 401k contributions -->
+    <!-- Keywords: solo 401k contribution calculator, self employed contribution limits, maximum 401k contributions, retirement contribution calculator -->
   </url>
   <url>
     <loc>https://survival401k.com/contact</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-    <!-- Keywords: contact retirement specialist, financial advisor consultation, 401k expert help -->
+    <!-- Keywords: contact retirement specialist, financial advisor consultation, 401k expert help, retirement planning consultation -->
   </url>
   <url>
     <loc>https://survival401k.com/terms-of-service</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://survival401k.com/privacy-policy</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://survival401k.com/legal-disclosures</loc>
-    <lastmod>2025-05-12</lastmod>
+    <lastmod>2025-05-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
