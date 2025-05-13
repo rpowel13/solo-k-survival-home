@@ -1,5 +1,6 @@
 
-import { type ToastType } from "@/hooks/use-toast";
+import { toast } from "@/components/ui/use-toast";
+import { type ToastProps } from "@/components/ui/toast";
 
 /**
  * Validates a file to ensure it meets size and type requirements
@@ -7,7 +8,7 @@ import { type ToastType } from "@/hooks/use-toast";
  */
 export const validateImageFile = (
   file: File,
-  showToast: (toast: ToastType) => void
+  showToast: (toast: ToastProps) => void
 ): { isValid: boolean } => {
   // Validate file type
   if (!file.type.startsWith('image/')) {

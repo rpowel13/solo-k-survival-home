@@ -1,8 +1,8 @@
 
-import { useState } from 'react';
+import { useState, memo, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { Upload, Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { compressImage } from "@/utils/imageUtils";
 import { validateImageFile } from "./ImageValidator";
 import { 
@@ -16,11 +16,12 @@ interface ImageUploadProps {
   onUploadComplete: (url: string) => void;
 }
 
-export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
+const ImageUploadComponent = ({ onUploadComplete }: ImageUploadProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Memoize the upload handler to prevent unnecessary recreations
+  const handleUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -105,7 +106,7 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
       const input = event.target;
       if (input) input.value = '';
     }
-  };
+  }, [onUploadComplete, toast]);
 
   return (
     <div className="flex items-center gap-4">
@@ -115,6 +116,8 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
         onChange={handleUpload}
         className="hidden"
         id="image-upload"
+        // Add lazy loading attribute
+        loading="lazy"
       />
       <label htmlFor="image-upload">
         <Button 
@@ -142,3 +145,6 @@ export const ImageUpload = ({ onUploadComplete }: ImageUploadProps) => {
     </div>
   );
 };
+
+// Memoize the component to prevent unnecessary re-renders
+export const ImageUpload = memo(ImageUploadComponent);
