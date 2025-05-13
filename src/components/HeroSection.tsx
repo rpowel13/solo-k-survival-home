@@ -137,36 +137,67 @@ const HeroSection = () => {
                 style={{ 
                   boxShadow: "0 25px 60px rgba(8, 28, 86, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.4)"
                 }}>
-              <h2 className="text-2xl font-bold text-survival-800 mb-6">Why Professionals Choose Us</h2>
-              <ul className="space-y-4">
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">Specialized expertise in self-directed retirement plans</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">Tailored solutions for entrepreneurs and First Responders</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">Personalized support throughout the entire process</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">Transparent pricing with no hidden fees</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-                  <span className="text-gray-700 font-medium">Educational resources to help you make informed decisions</span>
-                </li>
-              </ul>
-
-              <div className="mt-6 rounded-lg overflow-hidden shadow-md">
-                <img 
-                  src="/lovable-uploads/03c2b188-6efe-4b43-840a-f5b7fcbac2f0.png" 
-                  alt="Financial planning and investment" 
-                  className="w-full h-auto object-cover"
-                />
+              <h2 className="text-2xl font-bold text-survival-800 mb-6">Top Benefits</h2>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* LLC Benefits */}
+                <div>
+                  <h3 className="text-lg font-semibold text-survival-700 mb-3 border-b border-survival-100 pb-2">LLC Benefits</h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Personal liability protection</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Pass-through taxation</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Management flexibility</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Credibility with customers</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                {/* Solo 401k Benefits */}
+                <div>
+                  <h3 className="text-lg font-semibold text-finance-700 mb-3 border-b border-finance-100 pb-2">Solo 401k Benefits</h3>
+                  <ul className="space-y-3">
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Higher contribution limits</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Self-directed investing options</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Loan provisions available</span>
+                    </li>
+                    <li className="flex items-start">
+                      <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
+                      <span className="text-gray-700">Traditional and Roth options</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="mt-6 flex justify-center space-x-6">
+                <Link to="/services/llc-creation">
+                  <Button variant="outline" size="sm" className="border-survival-600 text-survival-700 hover:bg-survival-50">
+                    Learn about LLCs
+                  </Button>
+                </Link>
+                <Link to="/services/solo-401k">
+                  <Button variant="outline" size="sm" className="border-finance-600 text-finance-700 hover:bg-finance-50">
+                    Explore Solo 401k
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
