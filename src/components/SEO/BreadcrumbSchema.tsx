@@ -4,41 +4,37 @@ import { Helmet } from 'react-helmet-async';
 
 export interface Breadcrumb {
   name: string;
-  item: string;
+  url: string;
   position: number;
 }
 
 interface BreadcrumbSchemaProps {
   breadcrumbs: Breadcrumb[];
-  /**
-   * Optional custom ID for the breadcrumb schema
-   */
-  id?: string;
+  baseUrl?: string;
 }
 
-/**
- * Generates schema.org BreadcrumbList structured data for SEO
- */
 const BreadcrumbSchema: React.FC<BreadcrumbSchemaProps> = ({ 
-  breadcrumbs,
-  id = 'breadcrumb-schema'
+  breadcrumbs, 
+  baseUrl = 'https://survival401k.com' 
 }) => {
-  const schemaData = {
+  // Ensure URLs are absolute
+  const itemListElement = breadcrumbs.map(crumb => ({
+    "@type": "ListItem",
+    "position": crumb.position,
+    "name": crumb.name,
+    "item": crumb.url.startsWith('http') ? crumb.url : `${baseUrl}${crumb.url}`
+  }));
+
+  const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "@id": `https://survival401k.com/#${id}`,
-    "itemListElement": breadcrumbs.map(crumb => ({
-      "@type": "ListItem",
-      "position": crumb.position,
-      "name": crumb.name,
-      "item": crumb.item
-    }))
+    "itemListElement": itemListElement
   };
 
   return (
     <Helmet>
       <script type="application/ld+json">
-        {JSON.stringify(schemaData)}
+        {JSON.stringify(breadcrumbSchema)}
       </script>
     </Helmet>
   );

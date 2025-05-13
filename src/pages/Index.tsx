@@ -16,7 +16,7 @@ import InvestmentOptionsSection from "@/components/InvestmentOptionsSection";
 import { useState, useEffect } from "react";
 import { getZapierWebhookUrl, isWebhookConfigured, validateZapierWebhook, initZapierConfig } from "@/services/zapierConfigService";
 import { useToast } from "@/components/ui/use-toast";
-import { PageSEO } from "@/components/SEO";
+import { PageSEO, primaryKeywords, keywordCategories } from "@/components/SEO";
 
 const sectionBackgrounds = {
   services: "bg-gradient-to-br from-soft-blue/20 to-soft-blue/10",
@@ -103,25 +103,26 @@ const Index = () => {
     setTimeout(() => setValidateWebhook(false), 1000);
   };
 
-  // Enhanced SEO keywords
-  const primaryKeywords = "solo 401k, self-employed retirement, small business 401k, individual 401k, retirement planning, tax-advantaged retirement, first responder retirement, alternative investments";
+  // Enhanced SEO keywords combining all requested topics
+  const homepageKeywords = `${primaryKeywords.solo401k}, ${primaryKeywords.investments}, self-directed retirement plans, 401k investment options, alternative investments for retirement, precious metals in 401k, real estate investing with 401k, cryptocurrency in 401k, first responder retirement plans, LLC creation for retirement accounts, tax advantages of solo 401k`;
   
   const focusKeywords = [
-    "best solo 401k provider",
-    "tax benefits self-employed retirement",
-    "retirement plans for entrepreneurs",
-    "checkbook control retirement",
-    "high contribution limits 401k",
-    "small business retirement solutions",
-    "self-directed retirement accounts",
-    "retirement tax strategies",
-    "first responder retirement benefits",
-    "solo 401k vs. sep ira",
-    "retirement investing options",
-    "business owner retirement planning"
+    // Solo 401k keywords
+    "Solo 401k for self-employed",
+    "Self-directed retirement plans",
+    "401k investment options",
+    "Alternative investments for retirement",
+    "Precious metals in 401k",
+    "Real estate investing with 401k",
+    "Cryptocurrency in 401k",
+    "First responder retirement plans",
+    "LLC creation for retirement accounts",
+    "Tax advantages of solo 401k",
+    "Checkbook control retirement",
+    "High contribution retirement plans"
   ];
 
-  // Structured data for homepage
+  // Structured data for homepage with enhanced keywords
   const structuredData = [
     // Local Business Schema
     {
@@ -169,6 +170,14 @@ const Index = () => {
               "name": "First Responder Package",
               "description": "Specialized retirement solutions for first responders."
             }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Alternative Investment Options",
+              "description": "Self-directed investments including real estate, precious metals, and cryptocurrency."
+            }
           }
         ]
       }
@@ -209,6 +218,22 @@ const Index = () => {
             "@type": "Answer",
             "text": "Yes, one of the key advantages of a self-directed Solo 401k is the ability to invest in alternative assets like real estate, precious metals, private lending, tax liens, and more beyond traditional stocks and mutual funds."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I invest in cryptocurrency with my Solo 401k?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, with a self-directed Solo 401k, you can invest in cryptocurrency and other digital assets as part of your retirement portfolio diversification strategy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are there special retirement plans for first responders?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we offer specialized retirement planning services for first responders that take into account their unique career circumstances, pension options, and retirement needs."
+          }
         }
       ]
     },
@@ -231,12 +256,13 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <PageSEO
         title="Solo 401k Plans for Self-Employed Professionals"
-        description="Expert Solo 401k plans and retirement solutions for entrepreneurs, First Responders, and self-employed professionals. Get personalized support and maximize your retirement savings."
-        keywords={primaryKeywords}
+        description="Expert Solo 401k plans and retirement solutions with alternative investment options including real estate, precious metals, and cryptocurrency for entrepreneurs, First Responders, and self-employed professionals."
+        keywords={homepageKeywords}
         canonicalPath="/"
         type="website"
         structuredData={structuredData}
         focusKeywords={focusKeywords}
+        keywordCategories={["Solo 401k", "Investment Options", "Alternative Assets", "Special Programs", "Tax Benefits"]}
       />
       
       <Header />

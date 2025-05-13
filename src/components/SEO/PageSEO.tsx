@@ -2,6 +2,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import SiteMetadata from './SiteMetadata';
+import { getRelevantKeywords, combineKeywords } from './SEOKeywords';
 
 interface PageSEOProps {
   title: string;
@@ -16,6 +17,7 @@ interface PageSEOProps {
   author?: string;
   publishedTime?: string;
   modifiedTime?: string;
+  keywordCategories?: string[]; // New prop for keyword categories
 }
 
 const PageSEO: React.FC<PageSEOProps> = ({
@@ -31,15 +33,24 @@ const PageSEO: React.FC<PageSEOProps> = ({
   author,
   publishedTime,
   modifiedTime,
+  keywordCategories = [], // Default to empty array
 }) => {
   // Combine title with site name for consistency
   const fullTitle = `${title} | Survival 401k`;
   
+  // Get additional keywords from categories if specified
+  const categoryKeywords = keywordCategories.length > 0 
+    ? getRelevantKeywords(keywordCategories) 
+    : [];
+  
+  // Combine all keyword sources
+  const allFocusKeywords = [...focusKeywords, ...categoryKeywords];
+  
   // Enhanced keywords with focus keywords if provided
-  const enhancedKeywords = focusKeywords.length > 0 && keywords 
-    ? `${keywords}, ${focusKeywords.join(', ')}`
-    : focusKeywords.length > 0 
-      ? focusKeywords.join(', ')
+  const enhancedKeywords = allFocusKeywords.length > 0 && keywords 
+    ? `${keywords}, ${allFocusKeywords.join(', ')}`
+    : allFocusKeywords.length > 0 
+      ? allFocusKeywords.join(', ')
       : keywords;
 
   return (
@@ -52,7 +63,7 @@ const PageSEO: React.FC<PageSEOProps> = ({
       type={type}
       structuredData={structuredData}
       noindex={noindex}
-      focusKeywords={focusKeywords}
+      focusKeywords={allFocusKeywords}
       author={author}
       publishedTime={publishedTime}
       modifiedTime={modifiedTime}

@@ -86,9 +86,19 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       <meta name="theme-color" content="#ffffff" />
       <meta name="format-detection" content="telephone=no" />
       
-      {/* Focus Keywords - only include if provided */}
+      {/* Focus Keywords - additional detailed keywords */}
       {focusKeywords.length > 0 && (
         <meta name="focus-keywords" content={focusKeywords.join(', ')} />
+      )}
+      
+      {/* Topics - for content categorization */}
+      {focusKeywords.length > 0 && (
+        <meta name="page-topic" content={focusKeywords.slice(0, 3).join(', ')} />
+      )}
+      
+      {/* Subject - for content categorization */}
+      {focusKeywords.length > 0 && (
+        <meta name="subject" content={focusKeywords[0]} />
       )}
       
       {/* Structured Data - only include if provided */}
