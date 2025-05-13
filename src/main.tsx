@@ -4,6 +4,9 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App.tsx';
 import './index.css';
 
+// Initialize performance monitoring and mark start
+performance.mark('app-init-start');
+
 // Preload critical CSS
 const preloadCriticalCSS = () => {
   const links = [
@@ -24,7 +27,7 @@ const preloadCriticalCSS = () => {
 const initPerformanceMonitoring = () => {
   if ('PerformanceObserver' in window) {
     try {
-      // Web Vitals monitoring
+      // Observe important performance metrics
       const observer = new PerformanceObserver((list) => {
         list.getEntries().forEach(entry => {
           // Log important metrics
@@ -36,36 +39,36 @@ const initPerformanceMonitoring = () => {
         });
       });
       
-      // Observe important performance metrics
-      observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] });
+      observer.observe({ 
+        entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift'] 
+      });
     } catch (e) {
       console.warn('Performance monitoring error:', e);
     }
   }
 };
 
-// Run optimizations
-preloadCriticalCSS();
-initPerformanceMonitoring();
-
-// Render the app immediately for faster loading
-const renderApp = () => {
-  // Hide loader immediately if it exists
-  const loader = document.getElementById('page-loader');
-  if (loader) {
-    loader.style.display = 'none';
-  }
-  
+// Run optimizations in parallel
+Promise.all([
+  new Promise(resolve => {
+    preloadCriticalCSS();
+    resolve(true);
+  }),
+  new Promise(resolve => {
+    initPerformanceMonitoring();
+    resolve(true);
+  })
+]).then(() => {
+  // Render the app immediately
   createRoot(document.getElementById("root")!).render(
     <HelmetProvider>
       <App />
     </HelmetProvider>
   );
-};
-
-// Render as soon as possible
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', renderApp);
-} else {
-  renderApp();
-}
+  
+  // Mark render completed
+  performance.mark('app-render-complete');
+  performance.measure('time-to-render', 'app-init-start', 'app-render-complete');
+  const renderTime = performance.getEntriesByName('time-to-render')[0];
+  console.log(`App rendered in ${Math.round(renderTime.duration)}ms`);
+});

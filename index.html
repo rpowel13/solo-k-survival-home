@@ -3,7 +3,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     
     <!-- DNS Prefetch and Preconnect for critical domains -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -59,7 +60,7 @@
       });
       // Send pageview when the interaction is ready
       document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(() => gtag('event', 'page_view'), 1000);
+        setTimeout(() => gtag('event', 'page_view'), 2000);
       });
     </script>
     
@@ -82,7 +83,7 @@
           js.async = true;
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'livesite-jssdk'));
-      }, 2000); // Delay by 2 seconds
+      }, 3000); // Delay by 3 seconds for better initial performance
     </script>
     
     <!-- Load font asynchronously with font-display:swap for better performance -->

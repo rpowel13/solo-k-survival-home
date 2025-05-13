@@ -1,8 +1,8 @@
 
+/**
+ * Fast validation helper for Zapier payloads
+ */
 export const validateZapierPayload = (data: unknown): boolean => {
-  if (!data || typeof data !== 'object') {
-    console.error(`[${new Date().toISOString()}] Invalid data format for Zapier webhook:`, data);
-    return false;
-  }
-  return true;
+  // Simple type check - avoid deep validation for performance
+  return !!data && typeof data === 'object';
 };

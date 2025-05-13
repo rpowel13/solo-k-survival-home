@@ -17,7 +17,7 @@ interface OptimizedImageProps {
   aspectRatio?: number;
 }
 
-const OptimizedImage: React.FC<OptimizedImageProps> = ({
+const OptimizedImage: React.FC<OptimizedImageProps> = memo(({
   src,
   alt,
   width,
@@ -32,7 +32,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: '200px 0px', // Load images 200px before they enter viewport
+    rootMargin: '300px 0px', // Increased from 200px to 300px for earlier loading
+    threshold: 0.1,
   });
   
   // Check if the image is from an external source or local
@@ -60,6 +61,12 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   // Use native loading="lazy" except for priority images
   const loadingAttribute = priority ? 'eager' : loading;
   
+  // Apply size hint for layout stability
+  const sizeStyle = {
+    width: width ? `${width}px` : '100%',
+    height: height ? `${height}px` : 'auto',
+  };
+  
   const imageElement = (
     <img
       src={imgSrc}
@@ -85,11 +92,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   );
   
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative" style={sizeStyle}>
       {(!isLoaded) && (
         <Skeleton 
           className={`${className} absolute inset-0`} 
-          style={{ width: width ? `${width}px` : '100%', height: height ? `${height}px` : '100%' }}
+          style={sizeStyle}
         />
       )}
       
@@ -104,7 +111,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       )}
     </div>
   );
-};
+});
 
-// Use memo to prevent unnecessary re-renders
-export default memo(OptimizedImage);
+OptimizedImage.displayName = 'OptimizedImage';
+
+export default OptimizedImage;

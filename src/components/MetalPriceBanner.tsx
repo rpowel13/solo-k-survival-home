@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp, Coins, ExternalLink, RefreshCw } from 'lucide-react
 import { Link } from 'react-router-dom';
 import { formatPrice, formatChange, getChangeColor } from '@/utils/metalPriceUtils';
 import { useMetalPrices } from '@/services/metalPriceService';
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const MetalPriceItem = memo(({ 
   label, 
@@ -14,10 +15,10 @@ const MetalPriceItem = memo(({
   price: number; 
   change: number;
 }) => (
-  <div className="flex items-center">
-    <span className="text-sm font-medium mr-2">{label}:</span>
-    <span className="text-sm font-bold">{formatPrice(price)}</span>
-    <span className={`text-xs ml-1 ${getChangeColor(change)}`}>
+  <div className="flex items-center space-x-1">
+    <span className="text-xs sm:text-sm font-medium">{label}:</span>
+    <span className="text-xs sm:text-sm font-bold">{formatPrice(price)}</span>
+    <span className={`text-xs ${getChangeColor(change)}`}>
       {change > 0 ? (
         <ArrowUp className="h-3 w-3 inline" />
       ) : change < 0 ? (
@@ -31,11 +32,11 @@ const MetalPriceItem = memo(({
 MetalPriceItem.displayName = 'MetalPriceItem';
 
 const LoadingState = memo(() => (
-  <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-2 border-b border-gray-200">
-    <div className="container mx-auto px-4 text-center">
-      <div className="text-sm text-gray-600 flex items-center justify-center">
+  <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-1 border-b border-gray-200">
+    <div className="container mx-auto px-2 text-center">
+      <div className="text-xs text-gray-600 flex items-center justify-center">
         <RefreshCw className="h-3 w-3 animate-spin mr-2" />
-        Loading precious metal prices...
+        Loading prices...
       </div>
     </div>
   </div>
@@ -46,6 +47,7 @@ LoadingState.displayName = 'LoadingState';
 const MetalPriceBanner: React.FC = () => {
   const { data, isLoading, refetch, error } = useMetalPrices();
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const isMobile = useIsMobile();
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -67,23 +69,15 @@ const MetalPriceBanner: React.FC = () => {
   }
 
   return (
-    <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-2 border-b border-gray-200">
-      <div className="container mx-auto px-4">
+    <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-1 border-b border-gray-200">
+      <div className="container mx-auto px-2">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <Coins className="h-4 w-4 mr-2 text-yellow-600" />
-            <a 
-              href="https://www.kitco.com/market/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-gray-700 hover:text-survival-700 flex items-center"
-            >
-              Live Precious Metals
-              <ExternalLink className="h-3 w-3 ml-1" />
-            </a>
+            <Coins className="h-3 w-3 mr-1 text-yellow-600" />
+            <span className="text-xs font-medium text-gray-700">Live Metals</span>
           </div>
           
-          <div className="flex space-x-6">
+          <div className="flex space-x-2 sm:space-x-6">
             {/* Gold Price */}
             <MetalPriceItem 
               label="Gold" 
@@ -91,26 +85,24 @@ const MetalPriceBanner: React.FC = () => {
               change={data!.gold.change}
             />
             
-            {/* Silver Price */}
-            <MetalPriceItem 
-              label="Silver" 
-              price={data!.silver.price}
-              change={data!.silver.change}
-            />
+            {/* Silver Price - Hide on small mobile */}
+            {!isMobile && (
+              <MetalPriceItem 
+                label="Silver" 
+                price={data!.silver.price}
+                change={data!.silver.change}
+              />
+            )}
           </div>
           
           <div className="flex items-center">
             <button 
               onClick={handleRefresh} 
-              className="mr-3 text-xs text-finance-600 hover:text-finance-700 flex items-center"
+              className="mr-1 text-xs text-finance-600 hover:text-finance-700 flex items-center"
             >
-              <RefreshCw className="h-3 w-3 mr-1" />
-              Refresh
+              <RefreshCw className="h-3 w-3" />
+              <span className="sr-only sm:not-sr-only sm:ml-1">Refresh</span>
             </button>
-            <Link to="/services/metal-prices" className="text-xs text-finance-600 hover:text-finance-700 font-medium flex items-center">
-              View All Prices
-              <ExternalLink className="h-3 w-3 ml-1" />
-            </Link>
           </div>
         </div>
       </div>
