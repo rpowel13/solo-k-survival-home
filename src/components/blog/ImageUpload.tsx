@@ -116,8 +116,7 @@ const ImageUploadComponent = ({ onUploadComplete }: ImageUploadProps) => {
         onChange={handleUpload}
         className="hidden"
         id="image-upload"
-        // Add lazy loading attribute
-        loading="lazy"
+        // Remove the loading attribute as it's not valid for input elements
       />
       <label htmlFor="image-upload">
         <Button 

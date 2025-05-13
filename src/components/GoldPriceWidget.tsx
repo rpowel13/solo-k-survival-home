@@ -20,7 +20,7 @@ const GoldPriceWidget = () => {
   };
 
   return (
-    <div ref={ref} id="gold-price-widget-container" className="border border-gray-200 w-[280px] h-[250px] bg-white">
+    <div ref={ref as React.RefObject<HTMLDivElement>} id="gold-price-widget-container" className="border border-gray-200 w-[280px] h-[250px] bg-white">
       {!inView ? (
         <Skeleton className="w-full h-full" />
       ) : (
