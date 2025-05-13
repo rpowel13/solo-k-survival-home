@@ -5,14 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- DNS Prefetch for critical domains -->
+    <!-- DNS Prefetch and Preconnect for critical domains -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://www.googletagmanager.com">
     <link rel="dns-prefetch" href="https://daorpdnaganfugudqkmk.supabase.co">
     <link rel="dns-prefetch" href="https://d2ra6nuwn69ktl.cloudfront.net">
     
-    <!-- Preconnect to critical domains for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
@@ -32,14 +31,55 @@
 
     <!-- Preload critical assets -->
     <link rel="preload" href="/lovable-uploads/0f83d653-06a8-405a-93ad-63c001f058bc.png" as="image" fetchpriority="high" />
-    <link rel="preload" href="/src/main.tsx" as="script" />
+    
+    <!-- Critical CSS -->
+    <style>
+      /* Inline critical CSS for faster rendering */
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f9fafb;
+      }
+      .page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        transition: opacity 0.3s ease-in-out;
+      }
+      .page-loader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(59, 130, 246, 0.2);
+        border-radius: 50%;
+        border-top-color: #3b82f6;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    
+    <!-- Preload critical JS -->
+    <link rel="modulepreload" href="/src/main.tsx" />
     <link rel="modulepreload" href="/src/App.tsx" />
     
-    <!-- Preload critical CSS -->
-    <link rel="preload" href="/src/index.css" as="style" />
-    <link rel="preload" href="/src/App.css" as="style" />
-    
-    <!-- Google Analytics - load with defer to prevent parser blocking -->
+    <!-- Load Google Analytics with low priority -->
     <script defer src="https://www.googletagmanager.com/gtag/js?id=G-NJX7VTWTSJ"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -48,33 +88,36 @@
       gtag('config', 'G-NJX7VTWTSJ', {
         'send_page_view': false, // Disable auto pageview to control timing
       });
-      // Send pageview when the page finishes loading for better accuracy
-      window.addEventListener('load', function() {
-        gtag('event', 'page_view');
+      // Send pageview when the interaction is ready
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => gtag('event', 'page_view'), 1000);
       });
     </script>
     
     <!-- LiveSite Widget - load asynchronously -->
-    <script type='text/javascript' charset='utf-8'>
-      window.liveSiteAsyncInit = function() {
-        LiveSite.init({
-          id : 'WI-8IL6YV1XGF8DPNLLLS8Z'
-        });
-      };
-      (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0],
-            p = 'https://',
-            r = Math.floor(new Date().getTime() / 1000000);
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = p + "d2ra6nuwn69ktl.cloudfront.net/assets/livesite.js?" + r;
-        js.async = true;
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'livesite-jssdk'));
+    <script type='text/javascript' charset='utf-8' defer>
+      // Delay non-critical third-party scripts
+      setTimeout(() => {
+        window.liveSiteAsyncInit = function() {
+          LiveSite.init({
+            id : 'WI-8IL6YV1XGF8DPNLLLS8Z'
+          });
+        };
+        (function(d, s, id){
+          var js, fjs = d.getElementsByTagName(s)[0],
+              p = 'https://',
+              r = Math.floor(new Date().getTime() / 1000000);
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = p + "d2ra6nuwn69ktl.cloudfront.net/assets/livesite.js?" + r;
+          js.async = true;
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'livesite-jssdk'));
+      }, 2000); // Delay by 2 seconds
     </script>
     
     <!-- Load font asynchronously with font-display:swap for better performance -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media='all'" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     </noscript>
@@ -82,55 +125,80 @@
     <!-- Performance monitoring -->
     <script>
       // Enhanced performance monitoring with Core Web Vitals
-      window.addEventListener('DOMContentLoaded', () => {
+      const initPerformanceMonitoring = () => {
         if ('PerformanceObserver' in window) {
           try {
+            // Create initial page load marker
+            performance.mark('app-init-start');
+            
             // Track Core Web Vitals
-            const vitalsObserver = new PerformanceObserver((list) => {
-              for (const entry of list.getEntries()) {
-                console.log(`Core Web Vital: ${entry.name}`, entry);
-              }
-            });
-            vitalsObserver.observe({ type: 'largest-contentful-paint', buffered: true });
-            vitalsObserver.observe({ type: 'first-input', buffered: true });
-            vitalsObserver.observe({ type: 'layout-shift', buffered: true });
+            const observePerformanceMetrics = (type) => {
+              const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(entry => {
+                  const metric = {
+                    name: entry.name,
+                    value: entry.name === 'CLS' ? entry.value : Math.round(entry.startTime || entry.value)
+                  };
+                  console.log(`Core Web Vital: ${metric.name} = ${metric.value}`);
+                });
+              });
+              observer.observe({ type, buffered: true });
+              return observer;
+            };
             
-            // Track navigation timing
-            if (performance.getEntriesByType) {
-              setTimeout(() => {
-                const navTiming = performance.getEntriesByType('navigation')[0];
-                if (navTiming) {
-                  console.log('Page Performance:', {
-                    domContentLoaded: Math.round(navTiming.domContentLoadedEventEnd),
-                    loadComplete: Math.round(navTiming.loadEventEnd),
-                    domInteractive: Math.round(navTiming.domInteractive),
-                    firstContentfulPaint: Math.round(performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0)
-                  });
-                }
-              }, 0);
-            }
+            // Observe key metrics
+            const observers = [
+              observePerformanceMetrics('largest-contentful-paint'),
+              observePerformanceMetrics('first-input'),
+              observePerformanceMetrics('layout-shift')
+            ];
             
-            // Resource timing
-            const resourceObserver = new PerformanceObserver((list) => {
-              const entries = list.getEntries();
-              const slowResources = entries.filter(e => e.duration > 1000);
-              if (slowResources.length > 0) {
-                console.log('Slow resources detected:', 
-                  slowResources.map(r => ({name: r.name, duration: Math.round(r.duration) + 'ms'}))
-                );
-              }
+            // Measure time to interactive
+            window.addEventListener('load', () => {
+              performance.mark('app-load-complete');
+              performance.measure('time-to-load', 'app-init-start', 'app-load-complete');
+              const loadTime = performance.getEntriesByName('time-to-load')[0];
+              console.log(`Page fully loaded in ${Math.round(loadTime.duration)}ms`);
             });
-            resourceObserver.observe({entryTypes: ['resource']});
+            
+            // Cleanup observers after 10 seconds
+            setTimeout(() => {
+              observers.forEach(obs => obs.disconnect());
+            }, 10000);
           } catch (e) {
             console.warn('Performance monitoring error:', e);
           }
         }
-      });
+      };
+      
+      // Run immediately
+      initPerformanceMonitoring();
     </script>
   </head>
   <body>
+    <!-- Page loading indicator -->
+    <div id="page-loader" class="page-loader">
+      <div class="spinner"></div>
+      <p>Loading Survival 401k...</p>
+    </div>
+    
     <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Remove loader when content is ready -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const loader = document.getElementById('page-loader');
+          if (loader) {
+            loader.classList.add('fade-out');
+            setTimeout(() => {
+              loader.style.display = 'none';
+            }, 300);
+          }
+        }, 500);
+      });
+    </script>
   </body>
 </html>

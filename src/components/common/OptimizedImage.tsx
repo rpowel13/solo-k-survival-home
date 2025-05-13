@@ -1,5 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useInView } from "react-intersection-observer";
 
 interface OptimizedImageProps {
   src: string;
@@ -10,6 +12,7 @@ interface OptimizedImageProps {
   loading?: 'lazy' | 'eager';
   onClick?: () => void;
   decoding?: 'async' | 'sync' | 'auto';
+  priority?: boolean;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -21,8 +24,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   loading = 'lazy',
   onClick,
   decoding = 'async',
+  priority = false,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: '200px 0px', // Load images 200px before they enter viewport
+  });
   
   // Check if the image is from an external source or local
   const isExternal = src.startsWith('http') || src.startsWith('//');
@@ -45,39 +53,43 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     
     return undefined;
   };
+
+  // Use native loading="lazy" except for priority images
+  const loadingAttribute = priority ? 'eager' : loading;
   
   return (
-    <>
-      {/* Low-quality image placeholder (LQIP) for better perceived performance */}
-      {!isLoaded && (
-        <div 
-          className={`${className} bg-gray-200 animate-pulse`} 
+    <div ref={ref} className="relative">
+      {(!isLoaded) && (
+        <Skeleton 
+          className={`${className} absolute inset-0`} 
           style={{ width: width ? `${width}px` : '100%', height: height ? `${height}px` : '100%' }}
         />
       )}
-      <img
-        src={imgSrc}
-        alt={alt}
-        width={width}
-        height={height}
-        className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-        loading={loading}
-        onClick={onClick}
-        decoding={decoding}
-        srcSet={calculateSrcSet()}
-        onLoad={() => setIsLoaded(true)}
-        onError={(e) => {
-          // Fallback to placeholder if image fails to load
-          const target = e.target as HTMLImageElement;
-          target.onerror = null;
-          target.src = '/placeholder.svg';
-          setIsLoaded(true);
-          console.log(`Image load error: ${imgSrc}`);
-        }}
-        fetchPriority={loading === 'eager' ? 'high' : 'auto'}
-      />
-    </>
+      {(inView || priority) && (
+        <img
+          src={imgSrc}
+          alt={alt}
+          width={width}
+          height={height}
+          className={`${className} ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+          loading={loadingAttribute}
+          onClick={onClick}
+          decoding={decoding}
+          srcSet={calculateSrcSet()}
+          onLoad={() => setIsLoaded(true)}
+          onError={(e) => {
+            // Fallback to placeholder if image fails to load
+            const target = e.target as HTMLImageElement;
+            target.onerror = null;
+            target.src = '/placeholder.svg';
+            setIsLoaded(true);
+            console.log(`Image load error: ${imgSrc}`);
+          }}
+          fetchPriority={priority || loading === 'eager' ? 'high' : 'auto'}
+        />
+      )}
+    </div>
   );
 };
 
-export default OptimizedImage;
+export default React.memo(OptimizedImage);

@@ -1,49 +1,31 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { useInView } from '@/hooks/useInView';
+import { Skeleton } from "@/components/ui/skeleton";
 
 const GoldPriceWidget = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: '200px', // Load when 200px from viewport
+  });
   
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1, rootMargin: '200px' }
-    );
-    
-    const widgetContainer = document.getElementById('gold-price-widget-container');
-    if (widgetContainer) {
-      observer.observe(widgetContainer);
-    }
-    
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  
   // Track iframe loading performance
   const handleIframeLoad = () => {
     setIsLoaded(true);
-    if (performance && performance.getEntriesByType) {
-      const resources = performance.getEntriesByType('resource');
-      const widgetResource = resources.find(r => r.name.includes('goldeneaglecoin'));
-      if (widgetResource) {
-        console.log('Gold price widget loaded in:', Math.round(widgetResource.duration), 'ms');
-      }
-    }
+    const loadTime = performance.now();
+    console.log('Gold price widget loaded in:', Math.round(loadTime), 'ms');
   };
 
   return (
-    <div id="gold-price-widget-container" className="border border-gray-200 w-[280px] h-[250px] bg-white">
-      {isVisible ? (
+    <div ref={ref} id="gold-price-widget-container" className="border border-gray-200 w-[280px] h-[250px] bg-white">
+      {!inView ? (
+        <Skeleton className="w-full h-full" />
+      ) : (
         <div>
-          <div id="gec-widget-price-frame">
+          <div id="gec-widget-price-frame" className="relative">
             {!isLoaded && (
               <div className="flex items-center justify-center h-[215px] w-full">
                 <div className="text-sm text-gray-400">Loading price data...</div>
@@ -80,13 +62,9 @@ const GoldPriceWidget = () => {
             </a>
           </div>
         </div>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-sm text-gray-400">Loading price widget...</div>
-        </div>
       )}
     </div>
   );
 };
 
-export default GoldPriceWidget;
+export default React.memo(GoldPriceWidget);

@@ -8,7 +8,35 @@ interface VCitaIframeComponentProps {
   iframeRef: React.RefObject<HTMLIFrameElement>;
 }
 
-const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({ 
+// Use intersection observer for lazy loading
+const useIntersectionObserver = (ref: React.RefObject<HTMLElement>, callback: () => void) => {
+  useEffect(() => {
+    if (!ref.current) return;
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            callback();
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '300px' }
+    );
+    
+    observer.observe(ref.current);
+    
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+      observer.disconnect();
+    };
+  }, [ref, callback]);
+};
+
+const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = React.memo(({ 
   onError,
   onWrapper,
   iframeRef
@@ -22,59 +50,42 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
     }
   }, [onWrapper]);
   
-  // Lazy load the iframe content with improved performance tracking
-  useEffect(() => {
-    let observer: IntersectionObserver;
-    
+  // Load iframe when it comes into view to improve page load time
+  useIntersectionObserver(wrapperRef, () => {
     if (iframeRef.current) {
-      observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // Load the iframe source when it comes into view
-            const iframe = entry.target as HTMLIFrameElement;
-            
-            // Add loading event listener before setting src
-            iframe.addEventListener('load', () => {
-              console.log('vCita iframe loaded successfully');
-            });
-            
-            iframe.src = "https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true";
-            observer.unobserve(iframe);
-            
-            // Add performance monitoring with more details
-            if ('PerformanceObserver' in window) {
-              try {
-                const perfObserver = new PerformanceObserver((list) => {
-                  const entries = list.getEntries();
-                  entries.forEach(entry => {
-                    if (entry.entryType === 'resource' && entry.name.includes('vcita')) {
-                      console.log('vCita resource loaded:', {
-                        name: entry.name,
-                        duration: Math.round(entry.duration) + 'ms',
-                        size: entry instanceof PerformanceResourceTiming ? 
-                              (entry.transferSize / 1024).toFixed(1) + 'KB' : 'unknown'
-                      });
-                    }
-                  });
-                });
-                perfObserver.observe({entryTypes: ['resource']});
-              } catch (e) {
-                console.error('Performance monitoring error:', e);
-              }
-            }
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '300px' });  // Increased root margin for even earlier loading
+      // Add loading event listener before setting src
+      iframeRef.current.addEventListener('load', () => {
+        console.log('vCita iframe loaded successfully');
+      });
       
-      observer.observe(iframeRef.current);
-    }
-    
-    return () => {
-      if (observer && iframeRef.current) {
-        observer.disconnect();
+      iframeRef.current.src = "https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true";
+      
+      // Add performance monitoring
+      if ('PerformanceObserver' in window) {
+        try {
+          const perfObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach(entry => {
+              if (entry.entryType === 'resource' && entry.name.includes('vcita')) {
+                console.log('vCita resource loaded:', {
+                  name: entry.name,
+                  duration: Math.round(entry.duration) + 'ms',
+                  size: entry instanceof PerformanceResourceTiming ? 
+                        (entry.transferSize / 1024).toFixed(1) + 'KB' : 'unknown'
+                });
+              }
+            });
+          });
+          perfObserver.observe({entryTypes: ['resource']});
+          
+          // Disconnect after 10 seconds to avoid memory leaks
+          setTimeout(() => perfObserver.disconnect(), 10000);
+        } catch (e) {
+          console.error('Performance monitoring error:', e);
+        }
       }
-    };
-  }, [iframeRef]);
+    }
+  });
   
   const handleIframeError = () => {
     console.error("Failed to load vCita iframe");
@@ -90,7 +101,6 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
     <div ref={wrapperRef} className="w-full cursor-pointer">
       <iframe 
         ref={iframeRef}
-        data-src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true" 
         width="100%" 
         height="600" 
         scrolling="no" 
@@ -107,6 +117,8 @@ const VCitaIframeComponent: React.FC<VCitaIframeComponentProps> = ({
       </iframe>
     </div>
   );
-};
+});
+
+VCitaIframeComponent.displayName = 'VCitaIframeComponent';
 
 export default VCitaIframeComponent;

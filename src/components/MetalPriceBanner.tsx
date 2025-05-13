@@ -1,36 +1,63 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ArrowDown, ArrowUp, Coins, ExternalLink, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatPrice, formatChange, getChangeColor } from '@/utils/metalPriceUtils';
 import { useMetalPrices } from '@/services/metalPriceService';
 
-const MetalPriceBanner = () => {
-  const { data, isLoading, refetch, error } = useMetalPrices();
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+const MetalPriceItem = React.memo(({ 
+  label, 
+  price, 
+  change 
+}: { 
+  label: string; 
+  price: number; 
+  change: number;
+}) => (
+  <div className="flex items-center">
+    <span className="text-sm font-medium mr-2">{label}:</span>
+    <span className="text-sm font-bold">{formatPrice(price)}</span>
+    <span className={`text-xs ml-1 ${getChangeColor(change)}`}>
+      {change > 0 ? (
+        <ArrowUp className="h-3 w-3 inline" />
+      ) : change < 0 ? (
+        <ArrowDown className="h-3 w-3 inline" />
+      ) : null}
+      {formatChange(change)}
+    </span>
+  </div>
+));
 
-  const handleRefresh = () => {
+MetalPriceItem.displayName = 'MetalPriceItem';
+
+const LoadingState = () => (
+  <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-2 border-b border-gray-200">
+    <div className="container mx-auto px-4 text-center">
+      <div className="text-sm text-gray-600 flex items-center justify-center">
+        <RefreshCw className="h-3 w-3 animate-spin mr-2" />
+        Loading precious metal prices...
+      </div>
+    </div>
+  </div>
+);
+
+const MetalPriceBanner: React.FC = () => {
+  const { data, isLoading, refetch, error } = useMetalPrices();
+  const [lastUpdated, setLastUpdated] = React.useState<Date>(new Date());
+
+  const handleRefresh = React.useCallback(() => {
     refetch();
     setLastUpdated(new Date());
-  };
+  }, [refetch]);
 
   // Set up auto-refresh every 5 minutes
-  useEffect(() => {
+  React.useEffect(() => {
     const intervalId = setInterval(handleRefresh, 5 * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [handleRefresh]);
 
   if (isLoading && !data) {
-    return (
-      <div className="bg-gradient-to-r from-survival-50 to-finance-50 py-2 border-b border-gray-200">
-        <div className="container mx-auto px-4 text-center">
-          <div className="text-sm text-gray-600 flex items-center justify-center">
-            <RefreshCw className="h-3 w-3 animate-spin mr-2" />
-            Loading precious metal prices...
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (error && !data) {
@@ -56,32 +83,18 @@ const MetalPriceBanner = () => {
           
           <div className="flex space-x-6">
             {/* Gold Price */}
-            <div className="flex items-center">
-              <span className="text-sm font-medium mr-2">Gold:</span>
-              <span className="text-sm font-bold">{formatPrice(data!.gold.price)}</span>
-              <span className={`text-xs ml-1 ${getChangeColor(data!.gold.change)}`}>
-                {data!.gold.change > 0 ? (
-                  <ArrowUp className="h-3 w-3 inline" />
-                ) : data!.gold.change < 0 ? (
-                  <ArrowDown className="h-3 w-3 inline" />
-                ) : null}
-                {formatChange(data!.gold.change)}
-              </span>
-            </div>
+            <MetalPriceItem 
+              label="Gold" 
+              price={data!.gold.price}
+              change={data!.gold.change}
+            />
             
             {/* Silver Price */}
-            <div className="flex items-center">
-              <span className="text-sm font-medium mr-2">Silver:</span>
-              <span className="text-sm font-bold">{formatPrice(data!.silver.price)}</span>
-              <span className={`text-xs ml-1 ${getChangeColor(data!.silver.change)}`}>
-                {data!.silver.change > 0 ? (
-                  <ArrowUp className="h-3 w-3 inline" />
-                ) : data!.silver.change < 0 ? (
-                  <ArrowDown className="h-3 w-3 inline" />
-                ) : null}
-                {formatChange(data!.silver.change)}
-              </span>
-            </div>
+            <MetalPriceItem 
+              label="Silver" 
+              price={data!.silver.price}
+              change={data!.silver.change}
+            />
           </div>
           
           <div className="flex items-center">
@@ -103,4 +116,4 @@ const MetalPriceBanner = () => {
   );
 };
 
-export default MetalPriceBanner;
+export default React.memo(MetalPriceBanner);
