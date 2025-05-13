@@ -141,7 +141,7 @@ const HeroSection = () => {
               
               <div className="grid md:grid-cols-2 gap-6">
                 {/* LLC Benefits */}
-                <div>
+                <div className="text-left">
                   <h3 className="text-lg font-semibold text-survival-700 mb-3 border-b border-survival-100 pb-2">LLC Benefits</h3>
                   <ul className="space-y-3">
                     <li className="flex items-start">
@@ -164,7 +164,7 @@ const HeroSection = () => {
                 </div>
                 
                 {/* Solo 401k Benefits */}
-                <div>
+                <div className="text-left">
                   <h3 className="text-lg font-semibold text-finance-700 mb-3 border-b border-finance-100 pb-2">Solo 401k Benefits</h3>
                   <ul className="space-y-3">
                     <li className="flex items-start">
