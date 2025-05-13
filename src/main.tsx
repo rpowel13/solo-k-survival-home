@@ -1,3 +1,4 @@
+
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App.tsx';
@@ -43,11 +44,22 @@ const initPerformanceMonitoring = () => {
   }
 };
 
+// Make sure loader is visible before attempting to render
+const ensureLoaderVisible = () => {
+  const loader = document.getElementById('page-loader');
+  if (loader) {
+    // Ensure loader is visible
+    loader.style.opacity = '1';
+    loader.style.display = 'flex';
+  }
+};
+
 // Run optimizations
 preloadCriticalCSS();
 initPerformanceMonitoring();
+ensureLoaderVisible();
 
-// Render the app with priority
+// Render the app with priority but with a small delay to ensure loader is seen
 const renderApp = () => {
   createRoot(document.getElementById("root")!).render(
     <HelmetProvider>
@@ -58,8 +70,11 @@ const renderApp = () => {
 
 if (document.readyState === 'loading') {
   // Wait for DOMContentLoaded if still loading
-  document.addEventListener('DOMContentLoaded', renderApp);
+  document.addEventListener('DOMContentLoaded', () => {
+    // Small delay to ensure loader is visible on mobile
+    setTimeout(renderApp, 100);
+  });
 } else {
-  // Otherwise render immediately
-  renderApp();
+  // Small delay even if DOM is already loaded
+  setTimeout(renderApp, 100);
 }

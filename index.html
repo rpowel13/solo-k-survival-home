@@ -69,6 +69,11 @@
         animation: spin 1s linear infinite;
         margin-bottom: 1rem;
       }
+      .loading-text {
+        font-size: 16px;
+        font-weight: 500;
+        color: #4b5563;
+      }
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -179,7 +184,7 @@
     <!-- Page loading indicator -->
     <div id="page-loader" class="page-loader">
       <div class="spinner"></div>
-      <p>Loading Survival 401k...</p>
+      <p class="loading-text">Loading Survival 401k...</p>
     </div>
     
     <div id="root"></div>
@@ -188,7 +193,9 @@
     
     <!-- Remove loader when content is ready -->
     <script>
+      // Make sure the loader shows consistently on mobile
       document.addEventListener('DOMContentLoaded', () => {
+        // Force loader to be visible for at least 800ms for better UX
         setTimeout(() => {
           const loader = document.getElementById('page-loader');
           if (loader) {
@@ -197,7 +204,7 @@
               loader.style.display = 'none';
             }, 300);
           }
-        }, 500);
+        }, 800); // Increased from 500ms to 800ms for more visibility
       });
     </script>
   </body>
