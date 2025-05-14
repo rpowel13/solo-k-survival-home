@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -91,8 +90,10 @@ const HeroSection = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 bg-opacity-80 p-4 rounded-lg shadow-lg">
               Retirement Plans for Entrepreneurs & First Responders
             </h1>
-            <p className="mt-4 text-xl text-gray-200 bg-survival-900 bg-opacity-50 p-3 rounded-md">
-              Self-directed retirement solutions designed for entrepreneurs, First Responders, small business owners, independent professionals, and gig economy workers.
+            <p className="mt-4 text-xl text-gray-200 bg-survival-900 bg-opacity-50 p-3 rounded-md text-left">
+              Smart Money Solutions for Entrepreneurs & First Responders.
+              <br />
+              Strategic financial tools to build wealth, invest wisely, and secure your future.
             </p>
             
             <div className="mt-6 flex flex-col gap-3 items-center md:items-start">
