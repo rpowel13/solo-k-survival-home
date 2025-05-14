@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 1024 // Changed from 768 to 1024 to include tablets
@@ -13,9 +14,9 @@ export function useIsMobile() {
 
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     let timeoutId: NodeJS.Timeout | null = null;
-    
+
     const cleanupTimeout = () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -25,17 +26,19 @@ export function useIsMobile() {
 
     const handleResize = () => {
       cleanupTimeout();
-      timeoutId = setTimeout(() => {
+      setTimeout(() => {
         setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
       }, DEBOUNCE_DELAY);
     };
 
+    let mql: MediaQueryList | null = null;
     if ('matchMedia' in window) {
-      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+      mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       if (mql) {
         // Modern browsers
         if (typeof mql.addEventListener === 'function') {
-          mql.addEventListener('change', handleResize);
+          // addEventListener expects 'change' and a function
+          mql.addEventListener('change', handleResize as EventListener);
         }
         // Older browsers fallback
         else if (typeof (mql as any).addListener === 'function') {
@@ -48,7 +51,7 @@ export function useIsMobile() {
         cleanupTimeout();
         if (mql) {
           if (typeof mql.removeEventListener === 'function') {
-            mql.removeEventListener('change', handleResize);
+            mql.removeEventListener('change', handleResize as EventListener);
           } else if (typeof (mql as any).removeListener === 'function') {
             (mql as any).removeListener(handleResize);
           }
@@ -65,3 +68,4 @@ export function useIsMobile() {
 
   return isMobile;
 }
+
