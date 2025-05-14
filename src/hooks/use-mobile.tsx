@@ -32,8 +32,8 @@ export function useIsMobile() {
     };
 
     if ('matchMedia' in window) {
-      let mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-      // Modern browsers: only call addEventListener if mql has addEventListener
+      const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+
       if (typeof mql.addEventListener === 'function') {
         mql.addEventListener('change', handleResize as EventListener);
       }
