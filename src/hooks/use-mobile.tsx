@@ -31,13 +31,13 @@ export function useIsMobile() {
       }, DEBOUNCE_DELAY);
     };
 
+    // Always declare mql as MediaQueryList | null
     let mql: MediaQueryList | null = null;
     if ('matchMedia' in window) {
       mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       if (mql) {
-        // Modern browsers
+        // Modern browsers: only call addEventListener if mql is not null and has addEventListener
         if (typeof mql.addEventListener === 'function') {
-          // addEventListener expects 'change' and a function
           mql.addEventListener('change', handleResize as EventListener);
         }
         // Older browsers fallback
