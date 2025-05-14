@@ -36,48 +36,42 @@ export function useIsMobile() {
 
     // Use matchMedia for better performance
     if ('matchMedia' in window) {
-      // Create the media query
-      const mediaQueryString = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`;
-      const mql = window.matchMedia(mediaQueryString);
+      // Explicitly type the MediaQueryList object
+      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       
-      // Ensure mql is defined and valid
-      if (mql) {
-        // Handle both modern and legacy browsers
-        const addHandler = () => {
-          // Safe feature detection
-          if (typeof mql.addEventListener === 'function') {
-            mql.addEventListener('change', handleResize);
-          } else if (typeof (mql as any).addListener === 'function') {
-            (mql as any).addListener(handleResize);
-          }
-        };
-        
-        // Add the appropriate event listener
-        addHandler();
-        
-        // Initial check
-        setIsMobile(mql.matches);
-        
-        // Cleanup function
-        return () => {
-          cleanupTimeout();
-          
-          // Safe removal of event listeners
-          if (typeof mql.removeEventListener === 'function') {
-            mql.removeEventListener('change', handleResize);
-          } else if (typeof (mql as any).removeListener === 'function') {
-            (mql as any).removeListener(handleResize);
-          }
-        };
+      // Modern browsers - safely check if addEventListener exists
+      if (mql && 'addEventListener' in mql) {
+        mql.addEventListener('change', handleResize);
+      } 
+      // Older browsers fallback - safely check if addListener exists
+      else if (mql && 'addListener' in mql) {
+        // Use type assertion for older interface
+        (mql as any).addListener(handleResize);
       }
-    }
-    
+      
+      // Initial check
+      if (mql) {
+        setIsMobile(mql.matches);
+      }
+      
+      return () => {
+        cleanupTimeout();
+        if (mql && 'removeEventListener' in mql) {
+          mql.removeEventListener('change', handleResize);
+        } else if (mql && 'removeListener' in mql) {
+          // Use type assertion for older interface
+          (mql as any).removeListener(handleResize);
+        }
+      };
+    } 
     // Fallback for browsers without matchMedia
-    window.addEventListener('resize', handleResize);
-    return () => {
-      cleanupTimeout();
-      window.removeEventListener('resize', handleResize);
-    };
+    else {
+      window.addEventListener('resize', handleResize);
+      return () => {
+        cleanupTimeout();
+        window.removeEventListener('resize', handleResize);
+      };
+    }
   }, []);
 
   return isMobile;

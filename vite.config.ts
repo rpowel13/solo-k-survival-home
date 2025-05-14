@@ -30,9 +30,7 @@ export default defineConfig(({ mode }) => ({
       output: {
         // Add cache headers to output assets
         assetFileNames: (assetInfo) => {
-          if (!assetInfo.name) return 'assets/[name]-[hash][extname]';
-          
-          const extType = assetInfo.name.split('.').at(1) || '';
+          const extType = assetInfo.name.split('.').at(1);
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             return `assets/images/[name]-[hash][extname]`;
           }
