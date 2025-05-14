@@ -39,28 +39,31 @@ export function useIsMobile() {
       // Explicitly type the MediaQueryList object
       const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       
-      // Modern browsers - safely check if addEventListener exists
-      if (mql && 'addEventListener' in mql) {
-        mql.addEventListener('change', handleResize);
-      } 
-      // Older browsers fallback - safely check if addListener exists
-      else if (mql && 'addListener' in mql) {
-        // Use type assertion for older interface
-        (mql as any).addListener(handleResize);
-      }
-      
-      // Initial check
+      // Check if mql is valid before using it
       if (mql) {
+        // Modern browsers - safely check if addEventListener exists
+        if ('addEventListener' in mql) {
+          mql.addEventListener('change', handleResize);
+        } 
+        // Older browsers fallback - safely check if addListener exists
+        else if ('addListener' in mql) {
+          // Use type assertion for older interface
+          (mql as any).addListener(handleResize);
+        }
+        
+        // Initial check
         setIsMobile(mql.matches);
       }
       
       return () => {
         cleanupTimeout();
-        if (mql && 'removeEventListener' in mql) {
-          mql.removeEventListener('change', handleResize);
-        } else if (mql && 'removeListener' in mql) {
-          // Use type assertion for older interface
-          (mql as any).removeListener(handleResize);
+        if (mql) {
+          if ('removeEventListener' in mql) {
+            mql.removeEventListener('change', handleResize);
+          } else if ('removeListener' in mql) {
+            // Use type assertion for older interface
+            (mql as any).removeListener(handleResize);
+          }
         }
       };
     } 
