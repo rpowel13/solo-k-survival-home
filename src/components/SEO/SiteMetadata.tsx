@@ -34,6 +34,9 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
   const siteUrl = 'https://survival401k.com';
   const canonicalUrl = `${siteUrl}${canonicalPath}`;
   const imageFullUrl = imageUrl.startsWith('http') ? imageUrl : `${siteUrl}${imageUrl}`;
+  
+  // Calculate cache expiration date (1 year from now)
+  const expiresDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
 
   return (
     <Helmet>
@@ -43,6 +46,11 @@ const SiteMetadata: React.FC<SiteMetadataProps> = ({
       {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonicalUrl} />
       <meta name="author" content={author} />
+      
+      {/* Cache control headers */}
+      <meta http-equiv="Cache-Control" content="public, max-age=31536000" />
+      <meta http-equiv="Expires" content={expiresDate} />
+      <meta http-equiv="Pragma" content="cache" />
       
       {/* Robots control */}
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />

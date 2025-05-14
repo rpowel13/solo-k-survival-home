@@ -7,12 +7,24 @@ import './index.css';
 // Initialize performance monitoring and mark start
 performance.mark('app-init-start');
 
-// Preload critical CSS
+// Preload critical CSS and set cache metadata
 const preloadCriticalCSS = () => {
   const links = [
     '/src/index.css',
     '/src/App.css'
   ];
+  
+  // Add meta tag for cache control
+  const metaCache = document.createElement('meta');
+  metaCache.httpEquiv = 'Cache-Control';
+  metaCache.content = 'public, max-age=31536000';
+  document.head.appendChild(metaCache);
+  
+  // Add meta tag for expires header
+  const metaExpires = document.createElement('meta');
+  metaExpires.httpEquiv = 'Expires';
+  metaExpires.content = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString();
+  document.head.appendChild(metaExpires);
   
   links.forEach(href => {
     const link = document.createElement('link');
