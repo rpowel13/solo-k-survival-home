@@ -61,8 +61,8 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
           Start Over
         </Button>
       </div>
+      {/* Only one vCita iframe below */}
       <div className="pt-8 max-w-lg mx-auto">
-        {/* vCita Contact Form Iframe (Lead Generation) */}
         <iframe
           src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true"
           width="100%"
