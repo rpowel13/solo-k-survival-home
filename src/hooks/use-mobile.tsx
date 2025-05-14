@@ -31,30 +31,24 @@ export function useIsMobile() {
       }, DEBOUNCE_DELAY);
     };
 
-    // Always declare mql as MediaQueryList | null
-    let mql: MediaQueryList | null = null;
     if ('matchMedia' in window) {
-      mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-      if (mql) {
-        // Modern browsers: only call addEventListener if mql is not null and has addEventListener
-        if (typeof mql.addEventListener === 'function') {
-          mql.addEventListener('change', handleResize as EventListener);
-        }
-        // Older browsers fallback
-        else if (typeof (mql as any).addListener === 'function') {
-          (mql as any).addListener(handleResize);
-        }
-        setIsMobile(mql.matches);
+      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+      // Modern browsers: only call addEventListener if mql is not null and has addEventListener
+      if (typeof mql.addEventListener === 'function') {
+        mql.addEventListener('change', handleResize as EventListener);
       }
+      // Older browsers fallback
+      else if (typeof (mql as any).addListener === 'function') {
+        (mql as any).addListener(handleResize);
+      }
+      setIsMobile(mql.matches);
 
       return () => {
         cleanupTimeout();
-        if (mql) {
-          if (typeof mql.removeEventListener === 'function') {
-            mql.removeEventListener('change', handleResize as EventListener);
-          } else if (typeof (mql as any).removeListener === 'function') {
-            (mql as any).removeListener(handleResize);
-          }
+        if (typeof mql.removeEventListener === 'function') {
+          mql.removeEventListener('change', handleResize as EventListener);
+        } else if (typeof (mql as any).removeListener === 'function') {
+          (mql as any).removeListener(handleResize);
         }
       };
     } else {
@@ -68,4 +62,3 @@ export function useIsMobile() {
 
   return isMobile;
 }
-
