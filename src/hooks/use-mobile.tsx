@@ -14,6 +14,9 @@ export function useIsMobile() {
   });
 
   React.useEffect(() => {
+    // Return early if not in a browser environment
+    if (typeof window === 'undefined') return;
+    
     let timeoutId: NodeJS.Timeout | null = null;
     
     const cleanupTimeout = () => {
@@ -32,7 +35,7 @@ export function useIsMobile() {
     };
 
     // Use matchMedia for better performance
-    if (typeof window !== 'undefined' && 'matchMedia' in window) {
+    if ('matchMedia' in window) {
       const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       
       // Modern browsers
