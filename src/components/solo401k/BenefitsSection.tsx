@@ -86,20 +86,25 @@ const BenefitsSection = () => {
       <SectionHeading className="text-2xl font-bold mb-6 text-survival-800">
         Key Benefits
       </SectionHeading>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {benefits.map((benefit, index) => (
-          <Card key={index} className="transition-all duration-300 hover:scale-105 hover:shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <benefit.icon className="h-5 w-5 text-finance-600" />
-                {benefit.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">{benefit.description}</p>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="w-full flex justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {benefits.map((benefit, index) => (
+            <Card 
+              key={index} 
+              className="transition-all duration-300 hover:scale-105 hover:shadow-lg h-full flex flex-col"
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <benefit.icon className="h-5 w-5 text-finance-600" />
+                  {benefit.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">{benefit.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
