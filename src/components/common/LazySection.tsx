@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useInView } from '@/hooks/useInView'; // Use the local custom hook
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -18,18 +19,17 @@ const LazySection: React.FC<LazySectionProps> = ({
   placeholder
 }) => {
   const isMobile = useIsMobile();
-  const { ref, inView } = useInView({
+  // Use generic to ensure ref is correctly typed for div
+  const { ref, inView } = useInView<HTMLDivElement>({
     triggerOnce: true,
     rootMargin: isMobile ? '50px' : '200px',
     threshold,
   });
 
-  // Always render high priority sections or when in view
   if (priority || inView) {
     return <div className={className}>{children}</div>;
   }
 
-  // Otherwise show placeholder or empty div with same height
   return (
     <div ref={ref} className={`${className} min-h-[100px]`}>
       {placeholder || null}
