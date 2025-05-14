@@ -32,21 +32,25 @@ export function useIsMobile() {
     };
 
     if ('matchMedia' in window) {
-      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-      // Add a guard using typeof to prevent type issues
+      // Explicitly assert the type
+      const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`) as MediaQueryList;
       if (mql) {
-        if (typeof mql.addEventListener === 'function') {
-          mql.addEventListener('change', handleResize);
-        } else if (typeof (mql as any).addListener === 'function') {
+        // Modern browsers
+        if (typeof (mql as MediaQueryList).addEventListener === 'function') {
+          (mql as MediaQueryList).addEventListener('change', handleResize);
+        }
+        // Older browsers fallback
+        else if (typeof (mql as any).addListener === 'function') {
           (mql as any).addListener(handleResize);
         }
         setIsMobile(mql.matches);
       }
+
       return () => {
         cleanupTimeout();
         if (mql) {
-          if (typeof mql.removeEventListener === 'function') {
-            mql.removeEventListener('change', handleResize);
+          if (typeof (mql as MediaQueryList).removeEventListener === 'function') {
+            (mql as MediaQueryList).removeEventListener('change', handleResize);
           } else if (typeof (mql as any).removeListener === 'function') {
             (mql as any).removeListener(handleResize);
           }
