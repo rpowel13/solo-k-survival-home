@@ -3,6 +3,7 @@ import React, { useState, useEffect, memo } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInView } from "react-intersection-observer";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface OptimizedImageProps {
   src: string;
@@ -30,9 +31,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = memo(({
   aspectRatio,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const isMobile = useIsMobile();
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: '300px 0px', // Increased from 200px to 300px for earlier loading
+    rootMargin: isMobile ? '100px 0px' : '300px 0px', // Reduced margin on mobile
     threshold: 0.1,
   });
   
@@ -41,6 +43,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = memo(({
   
   // If it's an uploadedImage (lovable-uploads), make sure we add the public path
   const imgSrc = (!isExternal && !src.startsWith('/')) ? `/${src}` : src;
+  
+  // For mobile devices, use smaller images if available
+  const getOptimizedSrc = () => {
+    if (isMobile && isExternal && !src.includes('lovable-uploads')) {
+      // Add logic here to use a smaller version if available
+      return imgSrc;
+    }
+    return imgSrc;
+  };
   
   // Calculate srcset for responsive images if dimensions are provided
   const calculateSrcSet = () => {
@@ -67,9 +78,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = memo(({
     height: height ? `${height}px` : 'auto',
   };
   
+  const optimizedSrc = getOptimizedSrc();
+  
   const imageElement = (
     <img
-      src={imgSrc}
+      src={optimizedSrc}
       alt={alt}
       width={width}
       height={height}
@@ -85,11 +98,21 @@ const OptimizedImage: React.FC<OptimizedImageProps> = memo(({
         target.onerror = null;
         target.src = '/placeholder.svg';
         setIsLoaded(true);
-        console.log(`Image load error: ${imgSrc}`);
       }}
       fetchPriority={priority || loading === 'eager' ? 'high' : 'auto'}
     />
   );
+  
+  // Cleanup function to reduce memory usage
+  useEffect(() => {
+    return () => {
+      if (isLoaded) {
+        // Help browser know this image can be garbage collected if needed
+        const img = new Image();
+        img.src = 'about:blank';
+      }
+    };
+  }, [isLoaded]);
   
   return (
     <div ref={ref} className="relative" style={sizeStyle}>

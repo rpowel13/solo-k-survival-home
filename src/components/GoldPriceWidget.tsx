@@ -1,12 +1,14 @@
 
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef, memo, useEffect } from 'react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInView } from "react-intersection-observer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const GoldPriceWidget = () => {
+  const isMobile = useIsMobile();
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: '300px', // Increased from 200px for earlier loading
+    rootMargin: isMobile ? '100px' : '300px',
     threshold: 0.1,
   });
   
@@ -15,12 +17,9 @@ const GoldPriceWidget = () => {
   
   // Don't load iframe content on mobile until user interaction
   const [userInteracted, setUserInteracted] = useState(false);
-  const isMobile = window.innerWidth < 768;
   
   const handleIframeLoad = () => {
     setIsLoaded(true);
-    const loadTime = performance.now();
-    console.log('Gold price widget loaded in:', Math.round(loadTime), 'ms');
   };
   
   const handleWidgetClick = () => {
@@ -31,6 +30,15 @@ const GoldPriceWidget = () => {
 
   // Should we load the iframe content?
   const shouldLoadIframe = inView && (!isMobile || userInteracted);
+
+  // Cleanup iframe when component unmounts to free memory
+  useEffect(() => {
+    return () => {
+      if (iframeRef.current) {
+        iframeRef.current.src = 'about:blank';
+      }
+    };
+  }, []);
 
   return (
     <div 
