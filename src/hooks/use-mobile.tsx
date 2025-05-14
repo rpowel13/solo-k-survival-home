@@ -39,11 +39,11 @@ export function useIsMobile() {
       const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       
       // Modern browsers
-      if (mql.addEventListener) {
+      if (typeof mql.addEventListener === 'function') {
         mql.addEventListener('change', handleResize);
       } 
       // Older browsers fallback
-      else if (mql.addListener) {
+      else if (typeof mql.addListener === 'function') {
         mql.addListener(handleResize);
       }
       
@@ -52,9 +52,9 @@ export function useIsMobile() {
       
       return () => {
         cleanupTimeout();
-        if (mql.removeEventListener) {
+        if (typeof mql.removeEventListener === 'function') {
           mql.removeEventListener('change', handleResize);
-        } else if (mql.removeListener) {
+        } else if (typeof mql.removeListener === 'function') {
           mql.removeListener(handleResize);
         }
       };

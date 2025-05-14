@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import PrequalificationQuiz from '../solo401k/prequalification/PrequalificationQuiz';
 import { Question } from '../solo401k/prequalification/types';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const questions: Question[] = [
   {
@@ -31,18 +32,20 @@ const questions: Question[] = [
 ];
 
 const HeroContent: React.FC = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <div className="pt-4">
-      <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white bg-survival-700 bg-opacity-80 p-4 rounded-lg shadow-lg">
+      <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white ${isMobile ? 'p-3' : 'bg-survival-700 bg-opacity-80 p-4'} rounded-lg shadow-lg`}>
         Retirement Plans for Entrepreneurs & First Responders
       </h1>
-      <p className="mt-4 text-xl text-gray-200 bg-survival-900 bg-opacity-50 p-3 rounded-md text-left">
+      <p className={`mt-4 text-lg md:text-xl text-gray-200 ${isMobile ? 'p-2' : 'bg-survival-900 bg-opacity-50 p-3'} rounded-md text-left`}>
         Smart Money Solutions for Entrepreneurs & First Responders to build wealth, invest wisely, and secure their future.
       </p>
       
       <div className="mt-6 flex flex-col gap-3 items-center md:items-start">
         <Link to="/services/solo-401k">
-          <Button className="bg-white text-survival-800 hover:bg-gray-100 shadow-md">
+          <Button className="bg-white text-survival-800 hover:bg-gray-100 shadow-md w-full md:w-auto">
             Get Started Now!
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
@@ -54,7 +57,7 @@ const HeroContent: React.FC = () => {
               Check if you qualify →
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-96">
+          <PopoverContent className="w-[95vw] max-w-[380px] md:w-96">
             <PrequalificationQuiz questions={questions} />
           </PopoverContent>
         </Popover>

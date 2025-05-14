@@ -3,65 +3,69 @@ import React from 'react';
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const HeroBenefitsCard: React.FC = () => {
+  const isMobile = useIsMobile();
+
   return (
     <div 
-      className="bg-white rounded-xl p-10 shadow-2xl border-8 border-survival-100 transform hover:scale-[1.02] transition-all duration-300" 
+      className={`bg-white rounded-xl ${isMobile ? 'p-6' : 'p-10'} shadow-2xl border-8 border-survival-100 transform hover:scale-[1.01] transition-all duration-300`} 
       style={{ 
-        boxShadow: "0 25px 60px rgba(8, 28, 86, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.4)"
+        boxShadow: isMobile ? "0 15px 30px rgba(8, 28, 86, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.4)" : 
+                  "0 25px 60px rgba(8, 28, 86, 0.6), 0 0 0 6px rgba(255, 255, 255, 0.4)"
       }}>
-      <h2 className="text-2xl font-bold text-survival-800 mb-6">Top Benefits</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-survival-800 mb-5">Top Benefits</h2>
       
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* LLC Benefits */}
         <div className="text-left">
-          <h3 className="text-lg font-semibold text-survival-700 mb-3 border-b border-survival-100 pb-2">LLC Benefits</h3>
-          <ul className="space-y-3">
+          <h3 className="text-lg font-semibold text-survival-700 mb-2 border-b border-survival-100 pb-1">LLC Benefits</h3>
+          <ul className="space-y-2">
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Personal liability protection</span>
+              <Check className="h-5 w-5 text-survival-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Personal liability protection</span>
             </li>
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Pass-through taxation</span>
+              <Check className="h-5 w-5 text-survival-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Pass-through taxation</span>
             </li>
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Management flexibility</span>
+              <Check className="h-5 w-5 text-survival-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Management flexibility</span>
             </li>
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-survival-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Credibility with customers</span>
+              <Check className="h-5 w-5 text-survival-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Credibility with customers</span>
             </li>
           </ul>
         </div>
         
         {/* Solo 401k Benefits */}
         <div className="text-left">
-          <h3 className="text-lg font-semibold text-finance-700 mb-3 border-b border-finance-100 pb-2">Solo 401k Benefits</h3>
-          <ul className="space-y-3">
+          <h3 className="text-lg font-semibold text-finance-700 mb-2 border-b border-finance-100 pb-1">Solo 401k Benefits</h3>
+          <ul className="space-y-2">
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Higher contribution limits</span>
+              <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Higher contribution limits</span>
             </li>
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Self-directed investing options</span>
+              <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Self-directed investing options</span>
             </li>
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Loan provisions available</span>
+              <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Loan provisions available</span>
             </li>
             <li className="flex items-start">
-              <Check className="h-5 w-5 text-finance-600 mr-3 mt-1 flex-shrink-0" />
-              <span className="text-gray-700">Traditional and Roth options</span>
+              <Check className="h-5 w-5 text-finance-600 mr-2 mt-1 flex-shrink-0" />
+              <span className="text-gray-700 text-sm">Traditional and Roth options</span>
             </li>
           </ul>
         </div>
       </div>
       
-      <div className="mt-6 flex justify-center space-x-6">
+      <div className="mt-5 flex flex-wrap gap-2 justify-center">
         <Link to="/services/llc-creation">
           <Button variant="outline" size="sm" className="border-survival-600 text-survival-700 hover:bg-survival-50">
             Learn about LLCs
