@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -91,7 +92,7 @@ const HeroSection = () => {
               Retirement Plans for Entrepreneurs & First Responders
             </h1>
             <p className="mt-4 text-xl text-gray-200 bg-survival-900 bg-opacity-50 p-3 rounded-md text-left">
-              Smart Money Solutions for Entrepreneurs & First Responders. Strategic financial tools to build wealth, invest wisely, and secure your future.
+              Smart Money Solutions for Entrepreneurs & First Responders to build wealth, invest wisely, and secure their future.
             </p>
             
             <div className="mt-6 flex flex-col gap-3 items-center md:items-start">
