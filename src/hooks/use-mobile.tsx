@@ -36,15 +36,17 @@ export function useIsMobile() {
 
     // Use matchMedia for better performance
     if ('matchMedia' in window) {
-      const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+      // Explicitly type the MediaQueryList object
+      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       
-      // Modern browsers
-      if (mql && typeof mql.addEventListener === 'function') {
+      // Modern browsers - safely check if addEventListener exists
+      if (mql && 'addEventListener' in mql) {
         mql.addEventListener('change', handleResize);
       } 
-      // Older browsers fallback
-      else if (mql && typeof mql.addListener === 'function') {
-        mql.addListener(handleResize);
+      // Older browsers fallback - safely check if addListener exists
+      else if (mql && 'addListener' in mql) {
+        // Use type assertion for older interface
+        (mql as any).addListener(handleResize);
       }
       
       // Initial check
@@ -54,10 +56,11 @@ export function useIsMobile() {
       
       return () => {
         cleanupTimeout();
-        if (mql && typeof mql.removeEventListener === 'function') {
+        if (mql && 'removeEventListener' in mql) {
           mql.removeEventListener('change', handleResize);
-        } else if (mql && typeof mql.removeListener === 'function') {
-          mql.removeListener(handleResize);
+        } else if (mql && 'removeListener' in mql) {
+          // Use type assertion for older interface
+          (mql as any).removeListener(handleResize);
         }
       };
     } 
