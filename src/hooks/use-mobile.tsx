@@ -1,4 +1,3 @@
-
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 1024 // Changed from 768 to 1024 to include tablets
@@ -32,12 +31,11 @@ export function useIsMobile() {
     };
 
     if ('matchMedia' in window) {
-      // Explicitly assert the type
-      const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`) as MediaQueryList;
+      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       if (mql) {
         // Modern browsers
-        if (typeof (mql as MediaQueryList).addEventListener === 'function') {
-          (mql as MediaQueryList).addEventListener('change', handleResize);
+        if (typeof mql.addEventListener === 'function') {
+          mql.addEventListener('change', handleResize);
         }
         // Older browsers fallback
         else if (typeof (mql as any).addListener === 'function') {
@@ -49,8 +47,8 @@ export function useIsMobile() {
       return () => {
         cleanupTimeout();
         if (mql) {
-          if (typeof (mql as MediaQueryList).removeEventListener === 'function') {
-            (mql as MediaQueryList).removeEventListener('change', handleResize);
+          if (typeof mql.removeEventListener === 'function') {
+            mql.removeEventListener('change', handleResize);
           } else if (typeof (mql as any).removeListener === 'function') {
             (mql as any).removeListener(handleResize);
           }
