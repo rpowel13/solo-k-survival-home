@@ -35,7 +35,7 @@ const resultConfigs = {
     description:
       'Based on your answers, you meet the basic requirements for a Solo 401k. Click below to securely send us your info and get started with a quick consultation.',
     primaryAction: {
-      text: 'Contact Us via vCita',
+      text: 'Contact Us',
     },
   },
   'not-eligible': {
@@ -46,7 +46,7 @@ const resultConfigs = {
     description:
       'Based on your answers, you may not meet the basic requirements for a Solo 401k. For personalized help, please contact us with your situation.',
     primaryAction: {
-      text: 'Contact Us via vCita',
+      text: 'Contact Us',
     },
   },
   'maybe-eligible': {
@@ -57,7 +57,7 @@ const resultConfigs = {
     description:
       'Based on your answers, you may qualify for a Solo 401k, but there are some factors that need further consideration. Reach out and our team will get in touch.',
     primaryAction: {
-      text: 'Contact Us via vCita',
+      text: 'Contact Us',
     },
   },
 };
