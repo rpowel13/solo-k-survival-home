@@ -1,5 +1,5 @@
 import React from 'react';
-import { useInView } from 'react-intersection-observer';
+import { useInView } from '@/hooks/useInView'; // Use the local custom hook
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LazySectionProps {
