@@ -39,22 +39,24 @@ export function useIsMobile() {
       const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
       
       // Modern browsers
-      if (typeof mql.addEventListener === 'function') {
+      if (mql && typeof mql.addEventListener === 'function') {
         mql.addEventListener('change', handleResize);
       } 
       // Older browsers fallback
-      else if (typeof mql.addListener === 'function') {
+      else if (mql && typeof mql.addListener === 'function') {
         mql.addListener(handleResize);
       }
       
       // Initial check
-      setIsMobile(mql.matches);
+      if (mql) {
+        setIsMobile(mql.matches);
+      }
       
       return () => {
         cleanupTimeout();
-        if (typeof mql.removeEventListener === 'function') {
+        if (mql && typeof mql.removeEventListener === 'function') {
           mql.removeEventListener('change', handleResize);
-        } else if (typeof mql.removeListener === 'function') {
+        } else if (mql && typeof mql.removeListener === 'function') {
           mql.removeListener(handleResize);
         }
       };
