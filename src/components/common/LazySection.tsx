@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { useInView } from '@/hooks/useInView'; // Use the local custom hook
+import { useInView } from '@/hooks/useInView'; // <-- This should be your local hook!
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LazySectionProps {

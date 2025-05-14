@@ -1,64 +1,28 @@
+import { useState, useEffect } from 'react';
 
-import * as React from "react"
+export const useIsMobile = (): boolean => {
+  const [isMobile, setIsMobile] = useState(false);
 
-const MOBILE_BREAKPOINT = 1024 // Changed from 768 to 1024 to include tablets
-const DEBOUNCE_DELAY = 250
-
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth < MOBILE_BREAKPOINT;
+  useEffect(() => {
+    if (!window.matchMedia) {
+      setIsMobile(window.innerWidth <= 1024);
+      return;
     }
-    return false;
-  });
+    const mql: MediaQueryList = window.matchMedia('(max-width: 1024px)');
+    const updateIsMobile = () => setIsMobile(mql.matches);
 
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
+    updateIsMobile();
 
-    let timeoutId: NodeJS.Timeout | null = null;
-
-    const cleanupTimeout = () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
-      }
-    };
-
-    const handleResize = () => {
-      cleanupTimeout();
-      setTimeout(() => {
-        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-      }, DEBOUNCE_DELAY);
-    };
-
-    if ('matchMedia' in window) {
-      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-
-      if (typeof mql.addEventListener === 'function') {
-        mql.addEventListener('change', handleResize as EventListener);
-      }
-      // Older browsers fallback
-      else if (typeof (mql as any).addListener === 'function') {
-        (mql as any).addListener(handleResize);
-      }
-      setIsMobile(mql.matches);
-
-      return () => {
-        cleanupTimeout();
-        if (typeof mql.removeEventListener === 'function') {
-          mql.removeEventListener('change', handleResize as EventListener);
-        } else if (typeof (mql as any).removeListener === 'function') {
-          (mql as any).removeListener(handleResize);
-        }
-      };
-    } else {
-      window.addEventListener('resize', handleResize);
-      return () => {
-        cleanupTimeout();
-        window.removeEventListener('resize', handleResize);
-      };
+    // Prefer addEventListener, fallback to addListener for older browsers
+    if (typeof mql.addEventListener === 'function') {
+      mql.addEventListener('change', updateIsMobile);
+      return () => mql.removeEventListener('change', updateIsMobile);
+    } else if (typeof mql.addListener === 'function') {
+      mql.addListener(updateIsMobile);
+      return () => mql.removeListener(updateIsMobile);
     }
   }, []);
 
   return isMobile;
-}
+};
+
