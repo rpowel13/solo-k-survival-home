@@ -32,7 +32,7 @@ export function useIsMobile() {
     };
 
     if ('matchMedia' in window) {
-      const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+      const mql: MediaQueryList = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
 
       if (typeof mql.addEventListener === 'function') {
         mql.addEventListener('change', handleResize as EventListener);
