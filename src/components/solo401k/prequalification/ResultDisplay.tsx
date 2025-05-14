@@ -66,10 +66,10 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
         <iframe
           src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true"
           width="100%"
-          height="337"
+          height="600"
           scrolling="no"
           frameBorder="0"
-          style={{ border: 'none', minHeight: 337 }}
+          style={{ border: 'none', minHeight: 600 }}
           title="Contact Form for Survival 401k, LLC"
         >
           <p>Please contact me via my contact form at vcita:</p>
@@ -86,4 +86,3 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
 };
 
 export default ResultDisplay;
-
