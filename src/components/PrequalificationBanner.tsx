@@ -172,7 +172,8 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           
-          {!isOnSolo401kPage && (
+          {/* QUIZ COLLAPSIBLE REMOVED for homepage */}
+          {isOnSolo401kPage && (
             <div className="mt-8 w-full">
               <Collapsible
                 open={isQuizOpen}

@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useIsMobile } from '@/hooks/use-mobile';
+import HeroPrequalificationQuiz from "./HeroPrequalificationQuiz";
 
 const HeroBenefitsCard: React.FC = () => {
   const isMobile = useIsMobile();
@@ -77,6 +77,9 @@ const HeroBenefitsCard: React.FC = () => {
           </Button>
         </Link>
       </div>
+
+      {/* Insert prequalification quiz under the benefits section */}
+      <HeroPrequalificationQuiz />
     </div>
   );
 };
