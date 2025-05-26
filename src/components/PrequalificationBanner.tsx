@@ -30,6 +30,7 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [result, setResult] = useState<Result>(null);
+  const isOnHomePage = location.pathname === "/";
 
   // Log webhook configuration when component mounts - for validation
   useEffect(() => {
@@ -172,45 +173,36 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           
-          {/* QUIZ COLLAPSIBLE REMOVED for homepage */}
-          {isOnSolo401kPage && (
-            <div className="mt-8 w-full">
-              <Collapsible
-                open={isQuizOpen}
-                onOpenChange={setIsQuizOpen}
-                className="w-full mx-auto"
-              >
-                <CollapsibleContent>
-                  <Card className="border-2 border-survival-200 rounded-xl shadow-lg bg-white transform transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
-                    <CardHeader className="bg-survival-50 rounded-t-xl">
-                      <CardTitle className="text-2xl text-center text-survival-800">
-                        Solo 401k Eligibility Quiz
-                      </CardTitle>
-                      <CardDescription className="text-center text-gray-600">
-                        Answer a few questions to see if you qualify for a Solo 401k plan.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-6">
-                      {result === null ? (
-                        <div className="space-y-6">
-                          <QuestionProgress
-                            currentQuestionIndex={currentQuestionIndex}
-                            totalQuestions={questions.length}
-                          />
-                          <QuestionDisplay
-                            question={questions[currentQuestionIndex]}
-                            onAnswer={handleAnswer}
-                          />
-                        </div>
-                      ) : (
-                        <div className="py-6">
-                          <ResultDisplay result={result} onReset={resetQuiz} />
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </CollapsibleContent>
-              </Collapsible>
+          {(isOnHomePage || isOnSolo401kPage) && isQuizOpen && (
+            <div className="mt-8 w-full flex justify-center">
+              <Card className="border-2 border-survival-200 rounded-xl shadow-lg bg-white w-full max-w-xl mx-auto">
+                <CardHeader className="bg-survival-50 rounded-t-xl">
+                  <CardTitle className="text-2xl text-center text-survival-800">
+                    Solo 401k Eligibility Quiz
+                  </CardTitle>
+                  <CardDescription className="text-center text-gray-600">
+                    Answer a few questions to see if you qualify for a Solo 401k plan.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  {result === null ? (
+                    <div className="space-y-6">
+                      <QuestionProgress
+                        currentQuestionIndex={currentQuestionIndex}
+                        totalQuestions={questions.length}
+                      />
+                      <QuestionDisplay
+                        question={questions[currentQuestionIndex]}
+                        onAnswer={handleAnswer}
+                      />
+                    </div>
+                  ) : (
+                    <div className="py-6">
+                      <ResultDisplay result={result} onReset={resetQuiz} />
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           )}
         </div>
