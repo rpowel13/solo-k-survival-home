@@ -45,7 +45,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
   const config = resultConfigs[result];
 
   return (
-    <div id="prequalification-result">
+    <div id="prequalification-result" className="scroll-mt-[120px]">
       <div className="text-center space-y-6">
         <div className="flex justify-center">
           <div className={`rounded-full ${config.bgColor} p-3 inline-block`}>
@@ -60,10 +60,10 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
             Start Over
           </Button>
         </div>
-        {/* Centered contact form for Lead Generation (vCita) */}
-        <div className="flex justify-center w-full mt-32 sm:mt-40">
-          {/* Extra mt-32 and sm:mt-40 to visually center form lower on screen */}
-          <div className="w-full max-w-[380px] bg-white rounded-lg shadow-lg p-4 sm:p-6">
+        {/* Visually center and push the contact form lower on the screen */}
+        <div className="flex justify-center w-full mt-24 sm:mt-32 lg:mt-40">
+          {/* On lg screens16rem (mt-64) is about 256px ~ header height, so starts below it */}
+          <div className="w-full max-w-[400px] bg-white rounded-lg shadow-lg p-4 sm:p-6">
             <iframe
               src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true"
               width="100%"
@@ -89,3 +89,4 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
 };
 
 export default ResultDisplay;
+

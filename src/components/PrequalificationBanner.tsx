@@ -141,7 +141,10 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
       const resultSection = document.getElementById('prequalification-result');
       if (resultSection) {
         setTimeout(() => {
-          resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Custom scroll to ensure it's pushed further below the header
+          const yOffset = -120; // height offset in px to account for sticky header and padding
+          const y = resultSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
         }, 200); // Small delay to ensure DOM is updated
       }
     }
