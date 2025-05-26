@@ -135,6 +135,19 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
     }
   };
 
+  // Scroll to the contact form/result section after quiz completion (on home)
+  useEffect(() => {
+    if (result !== null && !isOnSolo401kPage) {
+      const resultSection = document.getElementById('prequalification-result');
+      if (resultSection) {
+        setTimeout(() => {
+          resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 200); // Small delay to ensure DOM is updated
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result, isOnSolo401kPage]);
+  
   return (
     <section className={`bg-gradient-to-r from-survival-50 to-finance-50 py-16 border-y border-gray-100 ${className}`}>
       <div className="container mx-auto px-4">
