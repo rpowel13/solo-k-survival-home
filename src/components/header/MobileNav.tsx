@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { X, ChevronDown, ChevronRight, Home, Contact, BookOpen, FolderInput, CreditCard, Wrench, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import MobileNavMenuGroup from "./MobileNavMenuGroup";
+import MobileNavLinkGroup from "./MobileNavLinkGroup";
 
 interface MobileNavProps {
   isOpen: boolean;
@@ -46,7 +48,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
         </div>
         
         <div className="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-64px)]">
-          <div className="space-y-3 border-b pb-4">
+          <MobileNavLinkGroup className="border-b pb-4">
             <Link 
               to="/" 
               className="block font-medium hover:text-survival-600 flex items-center"
@@ -55,188 +57,132 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
               <Home className="h-4 w-4 mr-1" />
               Home
             </Link>
-          </div>
+          </MobileNavLinkGroup>
           
-          <div>
-            <button 
-              onClick={() => toggleSubmenu('services')}
-              className="flex items-center justify-between w-full mb-2 font-medium"
+          <MobileNavMenuGroup
+            label="Services"
+            icon={<BookOpen className="h-4 w-4 mr-1" />}
+            isOpen={openSubmenu === "services"}
+            onToggle={() => toggleSubmenu("services")}
+          >
+            <Link 
+              to="/services/solo-401k" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
             >
-              <div className="flex items-center">
-                <BookOpen className="h-4 w-4 mr-1" />
-                <span>Services</span>
-              </div>
-              {openSubmenu === 'services' ? (
-                <ChevronDown className="h-5 w-5" />
-              ) : (
-                <ChevronRight className="h-5 w-5" />
-              )}
-            </button>
-            
-            {openSubmenu === 'services' && (
-              <div className="pl-4 space-y-3 mb-4">
-                <Link 
-                  to="/services/solo-401k" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Solo 401(k)
-                </Link>
-                <Link 
-                  to="/services/llc-creation" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  LLC Creation
-                </Link>
-                <Link 
-                  to="/services/first-responder-package" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  First Responder Package
-                </Link>
-                <Link 
-                  to="/services/alternative-investments" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Alternative Investments
-                </Link>
-              </div>
-            )}
-          </div>
-          
-          <div>
-            <button 
-              onClick={() => toggleSubmenu('applications')}
-              className="flex items-center justify-between w-full mb-2 font-medium"
+              Solo 401(k)
+            </Link>
+            <Link 
+              to="/services/llc-creation" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
             >
-              <div className="flex items-center">
-                <FolderInput className="h-4 w-4 mr-1" />
-                <span>Applications</span>
-              </div>
-              {openSubmenu === 'applications' ? (
-                <ChevronDown className="h-5 w-5" />
-              ) : (
-                <ChevronRight className="h-5 w-5" />
-              )}
-            </button>
-            
-            {openSubmenu === 'applications' && (
-              <div className="pl-4 space-y-3 mb-4">
-                <Link 
-                  to="/apply/solo-401k" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Solo 401(k) Application
-                </Link>
-                <Link 
-                  to="/apply/llc" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  LLC Application
-                </Link>
-                <Link 
-                  to="/apply/alternative-investments" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Alternative Investments
-                </Link>
-              </div>
-            )}
-          </div>
-          
-          <div>
-            <button 
-              onClick={() => toggleSubmenu('payments')}
-              className="flex items-center justify-between w-full mb-2 font-medium"
+              LLC Creation
+            </Link>
+            <Link 
+              to="/services/first-responder-package" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
             >
-              <div className="flex items-center">
-                <CreditCard className="h-4 w-4 mr-1" />
-                <span>Payments</span>
-              </div>
-              {openSubmenu === 'payments' ? (
-                <ChevronDown className="h-5 w-5" />
-              ) : (
-                <ChevronRight className="h-5 w-5" />
-              )}
-            </button>
-            
-            {openSubmenu === 'payments' && (
-              <div className="pl-4 space-y-3 mb-4">
-                <Link 
-                  to="/payment/annual-fee" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Annual Fee Payment
-                </Link>
-                <Link 
-                  to="/payment/reinstatement-fee" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Reinstatement Fee Payment
-                </Link>
-              </div>
-            )}
-          </div>
-          
-          <div>
-            <button 
-              onClick={() => toggleSubmenu('tools')}
-              className="flex items-center justify-between w-full mb-2 font-medium"
+              First Responder Package
+            </Link>
+            <Link 
+              to="/services/alternative-investments" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
             >
-              <div className="flex items-center">
-                <Wrench className="h-4 w-4 mr-1" />
-                <span>Tools</span>
-              </div>
-              {openSubmenu === 'tools' ? (
-                <ChevronDown className="h-5 w-5" />
-              ) : (
-                <ChevronRight className="h-5 w-5" />
-              )}
-            </button>
-            
-            {openSubmenu === 'tools' && (
-              <div className="pl-4 space-y-3 mb-4">
-                <Link 
-                  to="/tools/retirement-calculator" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Retirement Calculator
-                </Link>
-                <Link 
-                  to="/tools/rmd-calculator" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  RMD Calculator
-                </Link>
-                <Link 
-                  to="/tools/loan-calculator" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Loan Calculator
-                </Link>
-                <Link 
-                  to="/tools/solo-401k-calculator" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  Solo 401(k) Calculator
-                </Link>
-              </div>
-            )}
-          </div>
+              Alternative Investments
+            </Link>
+          </MobileNavMenuGroup>
+
+          <MobileNavMenuGroup
+            label="Applications"
+            icon={<FolderInput className="h-4 w-4 mr-1" />}
+            isOpen={openSubmenu === "applications"}
+            onToggle={() => toggleSubmenu("applications")}
+          >
+            <Link 
+              to="/apply/solo-401k" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Solo 401(k) Application
+            </Link>
+            <Link 
+              to="/apply/llc" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              LLC Application
+            </Link>
+            <Link 
+              to="/apply/alternative-investments" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Alternative Investments
+            </Link>
+          </MobileNavMenuGroup>
+
+          <MobileNavMenuGroup
+            label="Payments"
+            icon={<CreditCard className="h-4 w-4 mr-1" />}
+            isOpen={openSubmenu === "payments"}
+            onToggle={() => toggleSubmenu("payments")}
+          >
+            <Link 
+              to="/payment/annual-fee" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Annual Fee Payment
+            </Link>
+            <Link 
+              to="/payment/reinstatement-fee" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Reinstatement Fee Payment
+            </Link>
+          </MobileNavMenuGroup>
+
+          <MobileNavMenuGroup
+            label="Tools"
+            icon={<Wrench className="h-4 w-4 mr-1" />}
+            isOpen={openSubmenu === "tools"}
+            onToggle={() => toggleSubmenu("tools")}
+          >
+            <Link 
+              to="/tools/retirement-calculator" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Retirement Calculator
+            </Link>
+            <Link 
+              to="/tools/rmd-calculator" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              RMD Calculator
+            </Link>
+            <Link 
+              to="/tools/loan-calculator" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Loan Calculator
+            </Link>
+            <Link 
+              to="/tools/solo-401k-calculator" 
+              className="block text-gray-600 hover:text-survival-600"
+              onClick={onClose}
+            >
+              Solo 401(k) Calculator
+            </Link>
+          </MobileNavMenuGroup>
           
-          <div className="space-y-3">
+          <MobileNavLinkGroup>
             <Link 
               to="/resources" 
               className="block font-medium hover:text-survival-600 flex items-center"
@@ -245,9 +191,9 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
               <BookOpen className="h-4 w-4 mr-1" />
               Resources
             </Link>
-          </div>
+          </MobileNavLinkGroup>
           
-          <div className="space-y-3">
+          <MobileNavLinkGroup>
             <Link 
               to="/learning" 
               className="block font-medium hover:text-survival-600 flex items-center"
@@ -256,9 +202,9 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
               <GraduationCap className="h-4 w-4 mr-1" />
               Learning
             </Link>
-          </div>
+          </MobileNavLinkGroup>
           
-          <div className="space-y-3 pt-2 border-t">
+          <MobileNavLinkGroup className="pt-2 border-t">
             <Link 
               to="/contact" 
               className="block font-medium hover:text-survival-600 flex items-center"
@@ -267,7 +213,7 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
               <Contact className="h-4 w-4 mr-1" />
               Contact
             </Link>
-          </div>
+          </MobileNavLinkGroup>
         </div>
       </div>
     </div>
