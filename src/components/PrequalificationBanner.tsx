@@ -25,6 +25,11 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   const { toast } = useToast();
   const isOnSolo401kPage = location.pathname.includes('/services/solo-401k');
 
+  // Only render this banner on the Solo 401k page.
+  if (!isOnSolo401kPage) {
+    return null;
+  }
+
   // State for the quiz when displayed on the home page
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -114,31 +119,25 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   };
 
   const handleEligibilityCheck = () => {
-    if (isOnSolo401kPage) {
-      // If already on the Solo401k page, scroll to the prequalification section
-      const quizSection = document.getElementById('prequalification');
-      if (quizSection) {
-        console.log(`[${new Date().toISOString()}] Scrolling to prequalification section on Solo401k page`);
-        quizSection.scrollIntoView({ behavior: 'smooth' });
-        
-        // Find and click the collapsible trigger button
-        setTimeout(() => {
-          const collapsibleTrigger = quizSection.querySelector('button');
-          if (collapsibleTrigger && window.getComputedStyle(collapsibleTrigger).display !== 'none') {
-            collapsibleTrigger.click();
-          }
-        }, 500); // Short delay to ensure smooth scrolling completes
-      }
-    } else {
-      // If on home page, open the quiz directly
-      console.log(`[${new Date().toISOString()}] Opening quiz on home page`);
-      setIsQuizOpen(true);
+    // If already on the Solo401k page, scroll to the prequalification section
+    const quizSection = document.getElementById('prequalification');
+    if (quizSection) {
+      console.log(`[${new Date().toISOString()}] Scrolling to prequalification section on Solo401k page`);
+      quizSection.scrollIntoView({ behavior: 'smooth' });
+      
+      // Find and click the collapsible trigger button
+      setTimeout(() => {
+        const collapsibleTrigger = quizSection.querySelector('button');
+        if (collapsibleTrigger && window.getComputedStyle(collapsibleTrigger).display !== 'none') {
+          collapsibleTrigger.click();
+        }
+      }, 500); // Short delay to ensure smooth scrolling completes
     }
   };
 
-  // Scroll to the contact form/result section after quiz completion (on home)
+  // Scroll to the contact form/result section after quiz completion (on Solo401k page)
   useEffect(() => {
-    if (result !== null && !isOnSolo401kPage) {
+    if (result !== null && isOnSolo401kPage) {
       const resultSection = document.getElementById('prequalification-result');
       if (resultSection) {
         setTimeout(() => {
@@ -173,7 +172,7 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           
-          {(isOnHomePage || isOnSolo401kPage) && isQuizOpen && (
+          {isQuizOpen && (
             <div className="mt-8 w-full flex justify-center">
               <Card className="border-2 border-survival-200 rounded-xl shadow-lg bg-white w-full max-w-xl mx-auto">
                 <CardHeader className="bg-survival-50 rounded-t-xl">
