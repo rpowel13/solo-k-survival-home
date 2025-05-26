@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { CheckCircle2, XCircle, ArrowRight, RefreshCw } from 'lucide-react';
+import { CheckCircle2, XCircle, RefreshCw } from 'lucide-react';
 import { Result } from './types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -10,6 +10,7 @@ interface ResultDisplayProps {
   onReset: () => void;
 }
 
+// Center the iframe and fix max width for popover/modal
 const resultConfigs = {
   eligible: {
     icon: <CheckCircle2 className="h-12 w-12 text-green-600" />,
@@ -52,33 +53,33 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
         </div>
       </div>
       <h3 className={`text-xl font-bold ${config.titleColor}`}>{config.title}</h3>
-      <p className="max-w-md mx-auto">
-        {config.description}
-      </p>
+      <p className="max-w-md mx-auto">{config.description}</p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
         <Button onClick={onReset} variant="outline" type="button" className="border-2">
           <RefreshCw className="mr-2 h-4 w-4" />
           Start Over
         </Button>
       </div>
-      <div className="pt-8 max-w-lg mx-auto">
-        {/* vCita Contact Form Iframe (Lead Generation) */}
-        <iframe
-          src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true"
-          width="100%"
-          height="600"
-          scrolling="no"
-          frameBorder="0"
-          style={{ border: 'none', minHeight: 600 }}
-          title="Contact Form for Survival 401k, LLC"
-        >
-          <p>Please contact me via my contact form at vcita:</p>
-          <a href="https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&amp;invite=vr_cf_pb-izk040b42jnjcf3c">
-            Contact Form for Survival 401k, LLC
-          </a>
-        </iframe>
-        <div className="mt-2 text-xs text-gray-500">
-          Secure lead capture powered by vCita.
+      {/* Centered contact form for Lead Generation (vCita) */}
+      <div className="pt-8 w-full flex justify-center">
+        <div className="w-full max-w-[380px]"> {/* Constrain to fit within popover or central area */}
+          <iframe
+            src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true"
+            width="100%"
+            height="600"
+            scrolling="no"
+            frameBorder="0"
+            style={{ border: 'none', minHeight: 600, borderRadius: 8, background: "white" }}
+            title="Contact Form for Survival 401k, LLC"
+          >
+            <p>Please contact me via my contact form at vcita:</p>
+            <a href="https://www.vcita.com/v/izk040b42jnjcf3c/contact?frontage_iframe=true&amp;invite=vr_cf_pb-izk040b42jnjcf3c">
+              Contact Form for Survival 401k, LLC
+            </a>
+          </iframe>
+          <div className="mt-2 text-xs text-gray-500 text-center">
+            Secure lead capture powered by vCita.
+          </div>
         </div>
       </div>
     </div>
@@ -86,3 +87,4 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
 };
 
 export default ResultDisplay;
+
