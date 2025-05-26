@@ -19,18 +19,18 @@ export const PaymentDropdown = () => {
             Payments
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4">
+            <ul className="grid w-[400px] gap-3 p-4 text-left">
               <li>
                 <NavigationMenuLink asChild>
                   <Link
                     to="/payment/annual-fee"
-                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
+                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800 text-left"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 text-left">
                       <Settings className="h-4 w-4 text-survival-600" />
                       <div className="text-sm font-medium leading-none">Annual Fee ($200)</div>
                     </div>
-                    <p className="line-clamp-2 text-sm leading-snug text-survival-700 pt-1">
+                    <p className="line-clamp-2 text-sm leading-snug text-survival-700 pt-1 text-left">
                       Pay your annual fee to maintain your Solo 401k plan in good standing.
                     </p>
                   </Link>
@@ -40,13 +40,13 @@ export const PaymentDropdown = () => {
                 <NavigationMenuLink asChild>
                   <Link
                     to="/payment/reinstatement-fee"
-                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800"
+                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-survival-50 hover:text-survival-800 focus:bg-survival-50 focus:text-survival-800 text-left"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 text-left">
                       <CreditCard className="h-4 w-4 text-survival-600" />
                       <div className="text-sm font-medium leading-none">Reinstatement Fee ($250)</div>
                     </div>
-                    <p className="line-clamp-2 text-sm leading-snug text-survival-700 pt-1">
+                    <p className="line-clamp-2 text-sm leading-snug text-survival-700 pt-1 text-left">
                       Reinstate your Solo 401k plan and bring it back into good standing.
                     </p>
                   </Link>

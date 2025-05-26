@@ -29,10 +29,10 @@ export function ToolsDropdown() {
           <ChevronDown className="h-4 w-4 ml-2" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-56 text-left">
         {items.map((item) => (
           <DropdownMenuItem key={item.href} asChild>
-            <Link to={item.href} className="flex items-center gap-2">
+            <Link to={item.href} className="flex items-center gap-2 text-left">
               <item.icon className="h-4 w-4" />
               {item.label}
             </Link>
