@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
@@ -30,7 +31,8 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [result, setResult] = useState<Result>(null);
-  const isOnHomePage = location.pathname === "/";
+
+  // REMOVE this: const isOnHomePage = location.pathname === "/";
 
   // Log webhook configuration when component mounts - for validation
   useEffect(() => {
@@ -129,29 +131,29 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
           }
         }, 500); // Short delay to ensure smooth scrolling completes
       }
-    } else {
-      // If on home page, open the quiz directly
-      console.log(`[${new Date().toISOString()}] Opening quiz on home page`);
-      setIsQuizOpen(true);
     }
+    // Removed: else setIsQuizOpen(true); // So on homepage the quiz doesn't open from this button anymore.
   };
 
-  // Scroll to the contact form/result section after quiz completion (on home)
+  // Scroll to the contact form/result section after quiz completion (on solo401k page only)
   useEffect(() => {
-    if (result !== null && !isOnSolo401kPage) {
+    if (result !== null && isOnSolo401kPage) {
       const resultSection = document.getElementById('prequalification-result');
       if (resultSection) {
         setTimeout(() => {
           // Custom scroll to ensure it's pushed further below the header
-          const yOffset = -120; // height offset in px to account for sticky header and padding
+          const yOffset = -120;
           const y = resultSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: 'smooth' });
-        }, 200); // Small delay to ensure DOM is updated
+        }, 200);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result, isOnSolo401kPage]);
   
+  // Only render PrequalificationBanner section on solo401k page (NOT homepage)
+  if (!isOnSolo401kPage) return null;
+
   return (
     <section className={`bg-gradient-to-r from-survival-50 to-finance-50 py-16 border-y border-gray-100 ${className}`}>
       <div className="container mx-auto px-4">
@@ -173,7 +175,8 @@ const PrequalificationBanner: React.FC<PrequalificationBannerProps> = ({ classNa
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
           
-          {(isOnHomePage || isOnSolo401kPage) && isQuizOpen && (
+          {/* Only show the collapsible quiz on solo401k page when quiz is open */}
+          {isQuizOpen && (
             <div className="mt-8 w-full flex justify-center">
               <Card className="border-2 border-survival-200 rounded-xl shadow-lg bg-white w-full max-w-xl mx-auto">
                 <CardHeader className="bg-survival-50 rounded-t-xl">
