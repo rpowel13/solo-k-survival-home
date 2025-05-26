@@ -140,13 +140,6 @@ export const MobileNav = ({ isOpen, onClose }: MobileNavProps) => {
                   LLC Application
                 </Link>
                 <Link 
-                  to="/apply/first-responder" 
-                  className="block text-gray-600 hover:text-survival-600"
-                  onClick={onClose}
-                >
-                  First Responder Application
-                </Link>
-                <Link 
                   to="/apply/alternative-investments" 
                   className="block text-gray-600 hover:text-survival-600"
                   onClick={onClose}
