@@ -61,8 +61,9 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onReset }) => {
         </Button>
       </div>
       {/* Centered contact form for Lead Generation (vCita) */}
-      <div className="pt-8 w-full flex justify-center">
-        <div className="w-full max-w-[380px]"> {/* Constrain to fit within popover or central area */}
+      <div className="flex justify-center w-full mt-16 sm:mt-24">
+        {/* mt-16: push down on all screens, sm:mt-24 for bigger screens (adjust as needed) */}
+        <div className="w-full max-w-[380px] bg-white rounded-lg shadow-lg p-4 sm:p-6">
           <iframe
             src="https://www.vcita.com/widgets/contact_form/izk040b42jnjcf3c?frontage_iframe=true"
             width="100%"
